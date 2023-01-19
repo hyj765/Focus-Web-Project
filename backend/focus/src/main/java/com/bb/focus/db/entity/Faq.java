@@ -28,4 +28,5 @@ public class Faq {
     private String content;
     private int range;  //3:기업관리자,평가자 열람 가능, 4:기업관리자,지원자 열람 가능
 
+
 }
