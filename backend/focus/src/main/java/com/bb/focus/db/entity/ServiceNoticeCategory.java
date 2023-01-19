@@ -18,7 +18,7 @@ public class ServiceNoticeCategory {
     @Id
     @GeneratedValue
     @Column(name = "service_notice_category_id")
-    private int id;
+    private Long id;
 
     private String name;
 }

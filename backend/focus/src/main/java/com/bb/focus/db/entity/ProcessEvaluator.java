@@ -16,8 +16,9 @@ public class ProcessEvaluator {
     @Id
     @GeneratedValue
     @Column(name = "process_evaluators_id")
-    private int id;
+    private Long id;
 
-    private int processId;
-    private int evaluatorId;
+    private Long processId;
+
+    private Long evaluatorId;
 }

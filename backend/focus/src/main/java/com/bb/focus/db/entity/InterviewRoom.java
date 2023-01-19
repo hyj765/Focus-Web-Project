@@ -17,11 +17,14 @@ public class InterviewRoom {
     @Id
     @GeneratedValue
     @Column(name = "interview_room_id")
-    private int id;
+    private Long id;
 
-    private int roomId;
-    private int companyAdminId;
-    private int roomChattingId;
+    private Long roomId;
+
+    private Long companyAdminId;
+
+    private Long roomChattingId;
+
 
     private String name;
     private LocalDateTime startTime;

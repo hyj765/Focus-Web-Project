@@ -18,7 +18,7 @@ public class ServiceAdmin {
     @Id
     @GeneratedValue
     @Column(name = "service_admin_id")
-    private int id;
+    private Long id;
 
     private String userId;
     private String pwd;

@@ -16,8 +16,9 @@ public class RoomChatting {
     @Id
     @GeneratedValue
     @Column(name = "room_chatting_id")
-    private int id;
+    private Long id;
 
     private String senderId;
+
     private String message;
 }

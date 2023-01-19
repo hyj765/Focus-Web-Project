@@ -19,7 +19,8 @@ public class Evaluator {
     @Column(name = "evaluator_id")
     private int id;
 
-    private int companyAdminId;
+    private Long companyAdminId;
+
     private String userId;
     private String pwd;
     private String name;

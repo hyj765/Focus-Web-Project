@@ -19,9 +19,10 @@ public class Faq {
     @Id
     @GeneratedValue
     @Column(name = "faq_id")
-    private int id;
+    private Long id;
 
-    private int serviceAdminId;
+    private Long serviceAdminId;
+
     private String title;
     private LocalDateTime createdAt;
     private String content;

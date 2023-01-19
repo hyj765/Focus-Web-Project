@@ -16,8 +16,9 @@ public class EvaluatorInterviewRoom {
     @Id
     @GeneratedValue
     @Column(name = "evaluator_interview_room_id")
-    private int id;
+    private Long id;
 
-    private int evaluatorId;
-    private int interviewRoomId;
+    private Long evaluatorId;
+
+    private Long interviewRoomId;
 }

@@ -19,11 +19,12 @@ public class ServiceNotice {
     @Id
     @GeneratedValue
     @Column(name = "service_notice_id")
-    private int id;
+    private Long id;
 
-    private int serviceAdminId;
+    private Long serviceAdminId;
+
     @Column(name = "service_notice_category_id")
-    private int categoryId;
+    private Long categoryId;
 
     private String title;
     private LocalDateTime createdAt;
