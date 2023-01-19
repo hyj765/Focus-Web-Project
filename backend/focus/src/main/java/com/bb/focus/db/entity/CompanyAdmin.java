@@ -1,6 +1,7 @@
 package com.bb.focus.db.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -11,12 +12,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 public class CompanyAdmin {
 
     @Id @GeneratedValue
     @Column(name="company_admin_id")
     private Long id;
-
     private String userId;
     private String pwd;
     private String companyName;
