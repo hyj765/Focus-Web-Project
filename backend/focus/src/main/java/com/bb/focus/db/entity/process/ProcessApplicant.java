@@ -1,6 +1,7 @@
 package com.bb.focus.db.entity.process;
 
 
+import com.bb.focus.db.entity.applicant.Applicant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,7 +23,7 @@ public class ProcessApplicant {
 
     @ManyToOne
     @JoinColumn(name="applicant_id")
-    private applicant applicantId;
+    private Applicant applicantId;
 
     @ManyToOne
     @JoinColumn(name="process_id")
