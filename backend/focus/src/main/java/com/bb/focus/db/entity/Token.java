@@ -20,10 +20,9 @@ public class Token {
 
     @Id
     @Column(name = "user_id")
-    private String user_id;
+    private String userId;
 
-    private String refresh_tokens;
-
-    private LocalDateTime expire_date;
+    private String refreshTokens;
+    private LocalDateTime expireDate;
 
 }

@@ -19,16 +19,12 @@ public class ApplicantEvaluator {
     @Column(name="applicant_evaluator_id")
     private Long id;
 
-    private Long evaluator_id;
-
-    private Long applicant_id;
-
-    private Long interview_id;
-
-    private Long evaluation_sheet_id;
+    private Long evaluatorId;
+    private Long applicantId;
+    private Long interviewId;
+    private Long evaluationSheetId;
 
     private String memo;
-
     private int score;
 
 }

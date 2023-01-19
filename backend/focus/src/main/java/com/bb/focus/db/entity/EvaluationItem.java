@@ -19,10 +19,10 @@ public class EvaluationItem {
     @Column(name = "evaluation_item_id")
     private Long id;
 
-    private Long evaluation_sheet_id;
+    private Long evaluationSheetId;
 
-    private String scale_content;
+    private String scaleContent;
 
-    private int score_range;
+    private int scoreRange;
 
 }

@@ -18,7 +18,7 @@ public class ApplicantInterviewRoom {
     @GeneratedValue
     @Column(name = "applicant_interview_room_id")
     private Long id;
-    private Long interview_room_id;
 
-    private Long applicant_id;
+    private Long interviewRoomId;
+    private Long applicantId;
 }

@@ -19,7 +19,7 @@ public class EvaluationSheet {
     @Column(name = "evaluation_sheet_id")
     private Long id;
 
-    private Long company_admin_id;
+    private Long companyAdminId;
 
     private String name;
 

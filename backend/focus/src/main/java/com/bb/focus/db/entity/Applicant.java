@@ -19,49 +19,28 @@ public class Applicant {
     @GeneratedValue
     @Column(name = "applicant_id")
     private Long id;
+    private Long applicationCollegeId;
+    private Long applicantsUnivId;
+    private Long applicantsGraduateId;
+    private Long companyAdminId;
+    private Long applicantsPassLogId;
 
-    private Long application_college_id;
-
-    private Long applicants_univ_id;
-
-    private Long applicants_graduate_id;
-
-    private Long company_admin_id;
-
-    private Long applicants_pass_log_id;
-
-    private String user_id;
-
+    private String userId;
     private String pwd;
-
     private String code;
-
     private String name;
-
     private String gender;
-
     private LocalDateTime birth;
-
     private String image;
-
     private String tel;
-
     private String resume;
-
     private int pass;
-
     private String degree;
-
-    private LocalDateTime expire_date;
-
-    private LocalDateTime real_enter_time;
-
-    private LocalDateTime real_exit_time;
-
-    private int user_role;
-
-    private int award_count;
-
-    private int activity_count;
+    private LocalDateTime expireDate;
+    private LocalDateTime realEnterTime;
+    private LocalDateTime realExitTime;
+    private int userRole;
+    private int awardCount;
+    private int activityCount;
 
 }

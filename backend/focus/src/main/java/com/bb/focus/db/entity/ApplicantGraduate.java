@@ -20,6 +20,5 @@ public class ApplicantGraduate {
     private Long id;
 
     private String name;
-
     private String area;
 }
