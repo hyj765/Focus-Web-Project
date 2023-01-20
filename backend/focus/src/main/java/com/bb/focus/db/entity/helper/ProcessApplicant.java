@@ -1,7 +1,8 @@
-package com.bb.focus.db.entity.process;
+package com.bb.focus.db.entity.helper;
 
 
 import com.bb.focus.db.entity.applicant.Applicant;
+import com.bb.focus.db.entity.process.Process;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

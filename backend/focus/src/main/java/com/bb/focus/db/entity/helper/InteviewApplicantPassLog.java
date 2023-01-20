@@ -1,5 +1,6 @@
-package com.bb.focus.db.entity.applicant;
+package com.bb.focus.db.entity.helper;
 
+import com.bb.focus.db.entity.applicant.ApplicantPassLog;
 import com.bb.focus.db.entity.interview.Interview;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
