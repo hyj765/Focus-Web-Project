@@ -18,7 +18,11 @@ public class ProcessEvaluator {
     @Column(name = "process_evaluators_id")
     private Long id;
 
-    private Long processId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="process_id")
+    private Process process;
 
-    private Long evaluatorId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "evaluator_id")
+    private Evaluator evaluator;
 }

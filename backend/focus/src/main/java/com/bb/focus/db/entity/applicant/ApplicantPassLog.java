@@ -7,10 +7,10 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Date;
 
+@Entity(name="applicants_pass_log")
 @Getter
 @Setter
-@Entity
-@NoArgsConstructor
+//@NoArgsConstructor
 @Table(name="applicants_pass_log")
 public class ApplicantPassLog {
 

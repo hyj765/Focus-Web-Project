@@ -18,14 +18,14 @@ public class ProcessApplicantPassLog
     @Id
     @GeneratedValue
     @Column(name="process_applicants_pass_log")
-    private int processPassLogId;
+    private int processPassLog;
 
     @ManyToOne
     @JoinColumn(name="process_id")
-    private Process processId;
+    private Process process;
 
     @ManyToOne
     @JoinColumn(name="applicants_pass_log_id")
-    private ApplicantPassLog applicantPassLogId;
+    private ApplicantPassLog applicantPassLog;
 
 }

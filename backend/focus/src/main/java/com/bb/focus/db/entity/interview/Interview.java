@@ -1,6 +1,12 @@
 package com.bb.focus.db.entity.interview;
 
+import com.bb.focus.db.entity.evaluation.EvaluationSheet;
+import com.bb.focus.db.entity.helper.ApplicantEvaluator;
+import com.bb.focus.db.entity.helper.InterviewEvaluator;
+import com.bb.focus.db.entity.helper.InteviewApplicantPassLog;
 import com.bb.focus.db.entity.process.Process;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +34,15 @@ public class Interview {
     private String startDate;
     private String endDate;
 
+    @OneToMany(mappedBy = "interview")
+    private List<ApplicantEvaluator> applicantEvaluatorList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "interview")
+    private List<Room> roomList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "interview")
+    private List<InteviewApplicantPassLog> InteviewApplicantPassLogList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "interview")
+    private List<InterviewEvaluator> interviewEvaluatorList = new ArrayList<>();
 }

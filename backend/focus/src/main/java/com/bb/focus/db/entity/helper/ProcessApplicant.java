@@ -20,15 +20,15 @@ public class ProcessApplicant {
     @Id
     @GeneratedValue
     @Column(name="process_applicants_id")
-    private int processApplicantId;
+    private int processApplicant;
 
     @ManyToOne
     @JoinColumn(name="applicant_id")
-    private Applicant applicantId;
+    private Applicant applicant;
 
     @ManyToOne
     @JoinColumn(name="process_id")
-    private Process procesId;
+    private Process process;
 
 
 

@@ -6,11 +6,11 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "evaluators_interview_rooms")
+@Entity(name = "evaluators_interview_rooms")
 @Getter
 @Setter
-@NoArgsConstructor
+//@NoArgsConstructor
+@Table(name = "evaluators_interview_rooms")
 public class EvaluatorInterviewRoom {
 
     @Id

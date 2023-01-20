@@ -9,10 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity
+@Entity(name = "service_notice_categories")
 @Getter
 @Setter
-@NoArgsConstructor
+//@NoArgsConstructor
+@Table(name = "service_notice_categories")
 public class ServiceNoticeCategory {
 
     @Id

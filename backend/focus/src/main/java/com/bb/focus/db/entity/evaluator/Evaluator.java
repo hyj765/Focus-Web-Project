@@ -7,11 +7,11 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "evaluators")
+@Entity(name = "evaluators")
 @Getter
 @Setter
-@NoArgsConstructor
+//@NoArgsConstructor
+@Table(name = "evaluators")
 public class Evaluator {
 
     @Id

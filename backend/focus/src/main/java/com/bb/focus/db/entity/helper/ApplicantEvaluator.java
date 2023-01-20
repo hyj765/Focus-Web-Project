@@ -7,24 +7,24 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "applicants_evaluators")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "applicants_evaluators")
 public class ApplicantEvaluator {
 
-    @Id
-    @GeneratedValue
-    @Column(name="applicant_evaluator_id")
-    private Long id;
+  @Id
+  @GeneratedValue
+  @Column(name = "applicant_evaluator_id")
+  private Long id;
 
     private Long evaluatorId;
     private Long applicantId;
     private Long interviewId;
     private Long evaluationSheetId;
 
-    private String memo;
-    private int score;
+  private String memo;
+  private int score;
 
 }

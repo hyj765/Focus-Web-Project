@@ -23,7 +23,9 @@ public class InterviewRoom {
 
     private Long companyAdminId;
 
-    private Long roomChattingId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_chat_id")
+    private RoomChat roomChat;
 
 
     private String name;

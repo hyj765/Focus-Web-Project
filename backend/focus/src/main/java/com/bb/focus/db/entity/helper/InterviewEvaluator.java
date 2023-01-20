@@ -6,11 +6,11 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "interview_evaluators")
+@Entity(name = "interview_evaluators")
 @Getter
 @Setter
-@NoArgsConstructor
+//@NoArgsConstructor
+@Table(name = "interview_evaluators")
 public class InterviewEvaluator {
 
     @Id
@@ -18,7 +18,12 @@ public class InterviewEvaluator {
     @Column(name = "interview_evaluators_id")
     private Long id;
 
-    private Long interviewId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="interview_id")
+    private Interview interview;
 
-    private Long evaluatorId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="evaluator_id")
+    private Evaluator evaluator;
+
 }

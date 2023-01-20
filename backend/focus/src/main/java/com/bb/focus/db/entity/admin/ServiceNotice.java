@@ -10,10 +10,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "service_notices")
 @Getter
 @Setter
-@NoArgsConstructor
+//@NoArgsConstructor
+@Table(name = "service_notices")
 public class ServiceNotice {
 
     @Id

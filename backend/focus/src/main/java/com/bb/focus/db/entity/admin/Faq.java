@@ -10,10 +10,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "faqs")
 @Getter
 @Setter
-@NoArgsConstructor
+//@NoArgsConstructor
+@Table(name = "faqs")
 public class Faq {
 
     @Id

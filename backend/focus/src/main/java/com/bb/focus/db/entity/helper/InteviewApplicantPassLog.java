@@ -18,15 +18,15 @@ public class InteviewApplicantPassLog {
     @Id
     @GeneratedValue
     @Column(name="interview_applicants_pass_log_id")
-    private Long interviewApplicantPassId;
+    private Long interviewApplicantPass;
 
     @ManyToOne
     @JoinColumn(name="interview_id")
-    private Interview interviewId;
+    private Interview interview;
 
     @ManyToOne
     @JoinColumn(name="applicants_pass_log_id")
-    private ApplicantPassLog applicantPassLogId;
+    private ApplicantPassLog applicantPassLog;
 
 
 
