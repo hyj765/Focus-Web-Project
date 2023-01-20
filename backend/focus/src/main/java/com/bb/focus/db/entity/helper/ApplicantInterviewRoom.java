@@ -1,4 +1,4 @@
-package com.bb.focus.db.entity.applicant;
+package com.bb.focus.db.entity.helper;
 
 import lombok.AccessLevel;
 import lombok.Getter;

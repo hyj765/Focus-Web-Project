@@ -1,4 +1,4 @@
-package com.bb.focus.db.entity.evaluator;
+package com.bb.focus.db.entity.helper;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,18 +7,18 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "interview_evaluators")
+@Table(name = "process_evaluators")
 @Getter
 @Setter
 @NoArgsConstructor
-public class InterviewEvaluator {
+public class ProcessEvaluator {
 
     @Id
     @GeneratedValue
-    @Column(name = "interview_evaluators_id")
+    @Column(name = "process_evaluators_id")
     private Long id;
 
-    private Long interviewId;
+    private Long processId;
 
     private Long evaluatorId;
 }

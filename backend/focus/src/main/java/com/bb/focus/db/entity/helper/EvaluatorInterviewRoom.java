@@ -1,4 +1,4 @@
-package com.bb.focus.db.entity.evaluator;
+package com.bb.focus.db.entity.helper;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
