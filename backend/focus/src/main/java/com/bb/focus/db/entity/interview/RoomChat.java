@@ -1,6 +1,7 @@
 package com.bb.focus.db.entity.interview;
 
-import com.bb.focus.db.entity.company.ChatRoom;
+import com.sun.istack.NotNull;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "room_chats")
 @Getter
 @Setter
-//@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomChat {
 
     @Id
@@ -19,8 +20,12 @@ public class RoomChat {
     @Column(name = "room_chat_id")
     private Long id;
 
+    @NotNull
+    @Column(length = 50)
     private String senderId;
 
+    @NotNull
+    @Column(length = 300)
     private String message;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "roomChat")

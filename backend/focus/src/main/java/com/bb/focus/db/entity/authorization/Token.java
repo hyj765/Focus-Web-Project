@@ -1,5 +1,6 @@
 package com.bb.focus.db.entity.authorization;
 
+import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,18 +12,21 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
-@Entity(name = "tokens")
+@Entity
 @Getter
 @Setter
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tokens")
 public class Token {
 
     @Id
-    @Column(name = "user_id")
     private String userId;
 
+    @NotNull
+    @Column(length = 1000)
     private String refreshTokens;
+
+    @NotNull
     private LocalDateTime expireDate;
 
 }

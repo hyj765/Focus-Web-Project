@@ -1,5 +1,8 @@
 package com.bb.focus.db.entity.helper;
 
+import com.bb.focus.db.entity.evaluator.Evaluator;
+import com.bb.focus.db.entity.process.Process;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +13,7 @@ import javax.persistence.*;
 @Table(name = "process_evaluators")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProcessEvaluator {
 
     @Id

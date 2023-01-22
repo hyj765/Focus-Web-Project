@@ -1,15 +1,18 @@
 package com.bb.focus.db.entity.helper;
 
+import com.bb.focus.db.entity.evaluator.Evaluator;
+import com.bb.focus.db.entity.interview.Interview;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity(name = "interview_evaluators")
+@Entity
 @Getter
 @Setter
-//@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "interview_evaluators")
 public class InterviewEvaluator {
 

@@ -1,5 +1,13 @@
 package com.bb.focus.db.entity.interview;
 
+import com.bb.focus.db.entity.applicant.Applicant;
+import com.bb.focus.db.entity.company.CompanyAdmin;
+import com.bb.focus.db.entity.helper.ApplicantInterviewRoom;
+import com.bb.focus.db.entity.helper.EvaluatorInterviewRoom;
+import com.sun.istack.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +19,7 @@ import java.time.LocalDateTime;
 @Table(name = "interview_rooms")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class InterviewRoom {
 
     @Id
@@ -19,19 +27,40 @@ public class InterviewRoom {
     @Column(name = "interview_room_id")
     private Long id;
 
-    private Long roomId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private Room room;
 
-    private Long companyAdminId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="company_admin_id")
+    private CompanyAdmin companyAdmin;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_chat_id")
     private RoomChat roomChat;
 
-
+    @NotNull
+    @Column(length = 45)
     private String name;
+
+    @NotNull
     private LocalDateTime startTime;
+
+    @NotNull
     private LocalDateTime endTime;
+
+    @NotNull
     private int duration;
-    private int curEvaluatorCount;
-    private int curApplicantCount;
+
+    @NotNull
+    private Byte curEvaluatorCount;
+
+    @NotNull
+    private Byte curApplicantCount;
+
+    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class, mappedBy = "interviewRoom")
+    private List<ApplicantInterviewRoom> applicantInterviewRoomList = new ArrayList<>();
+
+    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class, mappedBy = "interviewRoom")
+    private List<EvaluatorInterviewRoom> evaluatorInterviewRoomList = new ArrayList<>();
 }

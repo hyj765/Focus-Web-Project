@@ -1,15 +1,18 @@
 package com.bb.focus.db.entity.helper;
 
+import com.bb.focus.db.entity.evaluator.Evaluator;
+import com.bb.focus.db.entity.interview.InterviewRoom;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity(name = "evaluators_interview_rooms")
+@Entity
 @Getter
 @Setter
-//@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "evaluators_interview_rooms")
 public class EvaluatorInterviewRoom {
 
@@ -18,7 +21,11 @@ public class EvaluatorInterviewRoom {
     @Column(name = "evaluator_interview_room_id")
     private Long id;
 
-    private Long evaluatorId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="evaluator_id")
+    private Evaluator evaluator;
 
-    private Long interviewRoomId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="interview_room_id")
+    private InterviewRoom interviewRoom;
 }
