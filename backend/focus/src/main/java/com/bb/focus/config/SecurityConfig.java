@@ -28,6 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private ServiceAdminService serviceAdminService;
+
     // Password 인코딩 방식에 BCrypt 암호화 방식 사용
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -60,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), serviceAdminService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
                 .authorizeRequests()
                 .antMatchers("/").authenticated()       //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
-    	        	    .anyRequest().permitAll()
+                .anyRequest().permitAll()
                 .and().cors();
     }
 }

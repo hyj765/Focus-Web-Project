@@ -5,5 +5,6 @@ import com.bb.focus.db.entity.company.CompanyAdmin;
 
 public interface CompanyAdminService {
     CompanyAdmin createCompanyAdmin(CompanyAdminRegisterPostReq userRegisterInfo);
+
     CompanyAdmin getCompanyAdminByUserId(String userId);
 }

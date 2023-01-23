@@ -1,21 +1,14 @@
 package com.bb.focus.db.entity.admin;
 
 import com.sun.istack.NotNull;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -30,7 +23,7 @@ public class Faq {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="service_admin_id")
+    @JoinColumn(name = "service_admin_id")
     private ServiceAdmin serviceAdmin;
 
     @NotNull
@@ -41,7 +34,7 @@ public class Faq {
     private LocalDateTime createdAt;
 
     @NotNull
-    @Column(length=5000)
+    @Column(length = 5000)
     private String content;
 
     @NotNull

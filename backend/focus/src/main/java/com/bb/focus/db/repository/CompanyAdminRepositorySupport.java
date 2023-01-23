@@ -17,7 +17,7 @@ public class CompanyAdminRepositorySupport {
     public Optional<CompanyAdmin> findCompanyAdminByUserId(String userId) {
         CompanyAdmin companyAdmin = jpaQueryFactory.select(qCompanyAdmin).from(qCompanyAdmin)
                 .where(qCompanyAdmin.userId.eq(userId)).fetchOne();
-        if(companyAdmin == null) {
+        if (companyAdmin == null) {
             return Optional.empty();
         }
         return Optional.ofNullable(companyAdmin);

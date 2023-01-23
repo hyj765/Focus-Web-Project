@@ -30,9 +30,7 @@ public class ServiceAdminServiceImpl implements ServiceAdminService {
 
     @Override
     public ServiceAdmin getServiceAdminByUserId(String userId) {
-        System.out.println("ServiceAdminServiceImpl까지 도달 >> "+"userId : "+userId);
-        ServiceAdmin serviceAdmin = serviceAdminRepositorySupport.findServiceAdminByUserId(userId).orElse(new ServiceAdmin()); // 이 형식이 빈 ServiceAdmin이어야하는데 형식이 달라서 안되고 있는 상황
-        System.out.println("ServiceAdminServiceImpl에 serviceAdmin값 받아온 상태 >> "+serviceAdmin.toString());
+        ServiceAdmin serviceAdmin = serviceAdminRepositorySupport.findServiceAdminByUserId(userId).orElse(new ServiceAdmin());
         return serviceAdmin;
     }
 }

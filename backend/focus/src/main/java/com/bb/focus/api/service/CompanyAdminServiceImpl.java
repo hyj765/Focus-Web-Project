@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service("companyAdminService")
-public class CompanyAdminServiceImpl implements CompanyAdminService{
+public class CompanyAdminServiceImpl implements CompanyAdminService {
     @Autowired
     CompanyAdminRepository companyAdminRepository;
 
@@ -29,7 +29,7 @@ public class CompanyAdminServiceImpl implements CompanyAdminService{
 
     @Override
     public CompanyAdmin getCompanyAdminByUserId(String userId) {
-        CompanyAdmin companyAdmin = companyAdminRepositorySupport.findCompanyAdminByUserId(userId).get();
+        CompanyAdmin companyAdmin = companyAdminRepositorySupport.findCompanyAdminByUserId(userId).orElse(new CompanyAdmin());
         return companyAdmin;
     }
 }
