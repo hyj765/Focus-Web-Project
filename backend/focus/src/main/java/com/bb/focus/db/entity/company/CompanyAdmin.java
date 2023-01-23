@@ -92,6 +92,13 @@ public class CompanyAdmin {
   @OneToMany(targetEntity = com.bb.focus.db.entity.interview.InterviewRoom.class, mappedBy = "companyAdmin")
   private List<InterviewRoom> interviewRoomList = new ArrayList<>();
 
+  //연관관계 메서드
+  public void addEvaluator(Evaluator evaluator){
+    this.evaluatorList.add(evaluator);
+    if(evaluator.getCompanyAdmin() != this){
+      evaluator.setCompanyAdmin(this);
+    }
+  }
 
 
 
