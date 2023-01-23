@@ -16,15 +16,11 @@ public class ServiceAdminRepositorySupport {
     QServiceAdmin qServiceAdmin = QServiceAdmin.serviceAdmin;
 
     public Optional<ServiceAdmin> findServiceAdminByUserId(String userId) {
-        System.out.println("step1");
         ServiceAdmin serviceAdmin = jpaQueryFactory.select(qServiceAdmin).from(qServiceAdmin)
                 .where(qServiceAdmin.userId.eq(userId)).fetchOne();
-        System.out.println("step2");
         if(serviceAdmin == null) {
-            System.out.println("step3");
             return Optional.empty();
         }
-        System.out.println("step4");
         return Optional.ofNullable(serviceAdmin);
     }
 }

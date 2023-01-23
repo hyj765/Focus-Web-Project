@@ -2,6 +2,7 @@ package com.bb.focus.api.controller;
 
 import com.bb.focus.api.request.UserLoginPostReq;
 import com.bb.focus.api.response.UserLoginPostRes;
+import com.bb.focus.api.service.CompanyAdminService;
 import com.bb.focus.api.service.ServiceAdminService;
 import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.common.util.JwtTokenUtil;
@@ -27,6 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 	@Autowired
 	ServiceAdminService serviceAdminService;
+
+	@Autowired
+	CompanyAdminService companyAdminService;
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -55,13 +59,13 @@ public class AuthController {
 					return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
 				}
 				break;
-//			case 2: // 기업 관리자
-//				CompanyAdmin companyAdmin = companyAdminService.getUserByUserId(userId);
-//				if(passwordEncoder.matches(password, companyAdmin.getPwd())) {
-//					// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-//					return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
-//				}
-//				break;
+			case 2: // 기업 관리자
+				CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(userId);
+				if(passwordEncoder.matches(password, companyAdmin.getPwd())) {
+					// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+					return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+				}
+				break;
 //			case 3: // 평가자
 //				Evaluator evaluator = evaluatorService.getUserByUserId(userId);
 //				if(passwordEncoder.matches(password, evaluator.getPwd())) {

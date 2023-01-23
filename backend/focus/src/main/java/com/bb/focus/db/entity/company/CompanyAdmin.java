@@ -23,7 +23,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity(name="company_admins")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Table(name="company_admins")
 public class CompanyAdmin {
 
