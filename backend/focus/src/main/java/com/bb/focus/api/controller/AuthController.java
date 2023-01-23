@@ -7,7 +7,9 @@ import com.bb.focus.api.service.ServiceAdminService;
 import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.common.util.JwtTokenUtil;
 import com.bb.focus.db.entity.admin.ServiceAdmin;
+import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.company.CompanyAdmin;
+import com.bb.focus.db.entity.evaluator.Evaluator;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
 
 /**
  * 인증 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -56,26 +60,47 @@ public class AuthController {
             case 2: // 기업 관리자
                 CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(userId);
                 if (passwordEncoder.matches(password, companyAdmin.getPwd())) {
+                    // 계정이 만료된 경우 로그인 실패로 응답
+                    if (!canLogin(companyAdmin.getEndDate())) {
+                        return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "End of Contract", null));
+                    }
                     // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
                     return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
                 }
                 break;
-//			case 3: // 평가자
-//				Evaluator evaluator = evaluatorService.getUserByUserId(userId);
-//				if(passwordEncoder.matches(password, evaluator.getPwd())) {
-//					// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-//					return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
-//				}
-//				break;
-//			case 4: // 지원자
-//				Applicant applicant = applicantService.getUserByUserId(userId);
-//			if(passwordEncoder.matches(password, applicant.getPwd())) {
-//				// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-//				return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
-//			}
-//			break;
+//            case 3: // 평가자
+//                Evaluator evaluator = evaluatorService.getUserByUserId(userId);
+//                if (passwordEncoder.matches(password, evaluator.getPwd())) {
+//                    // 계정이 만료된 경우 로그인 실패로 응답
+//                    if (!canLogin(evaluator.getExpireDate())) {
+//                        return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "End of Contract", null));
+//                    }
+//                    // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+//                    return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+//                }
+//                break;
+//            case 4: // 지원자
+//                Applicant applicant = applicantService.getUserByUserId(userId);
+//                if (passwordEncoder.matches(password, applicant.getPwd())) {
+//                    // 계정이 만료된 경우 로그인 실패로 응답
+//                    if (!canLogin(applicant.getExpireDate())) {
+//                        return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "End of Contract", null));
+//                    }
+//                    // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+//                    return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+//                }
+//                break;
         }
         // 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
         return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null));
+    }
+
+    // 계정 만료 확인
+    private boolean canLogin(LocalDateTime endDate) {
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isBefore(endDate) || now.isEqual(endDate)) {
+            return true;
+        }
+        return false;
     }
 }

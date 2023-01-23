@@ -23,8 +23,12 @@ public class ServiceAdminServiceImpl implements ServiceAdminService {
     @Override
     public ServiceAdmin createUser(ServiceAdminRegisterPostReq serviceAdminRegisterInfo) {
         ServiceAdmin serviceAdmin = new ServiceAdmin();
-        serviceAdmin.setUserId(serviceAdminRegisterInfo.getId());
+        serviceAdmin.setUserId(serviceAdminRegisterInfo.getUserId());
         serviceAdmin.setPwd(passwordEncoder.encode(serviceAdminRegisterInfo.getPassword()));
+        serviceAdmin.setEmail(serviceAdminRegisterInfo.getEmail());
+        serviceAdmin.setTel(serviceAdminRegisterInfo.getTel());
+        serviceAdmin.setName(serviceAdminRegisterInfo.getName());
+        serviceAdmin.setUserRole(serviceAdminRegisterInfo.getUserRole());
         return serviceAdminRepository.save(serviceAdmin);
     }
 

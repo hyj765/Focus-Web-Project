@@ -24,6 +24,17 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
         CompanyAdmin companyAdmin = new CompanyAdmin();
         companyAdmin.setUserId(userRegisterInfo.getUserId());
         companyAdmin.setPwd(passwordEncoder.encode(userRegisterInfo.getPwd()));
+        companyAdmin.setCompanyName(userRegisterInfo.getCompanyName());
+        companyAdmin.setStartDate(userRegisterInfo.getStartDate());
+        companyAdmin.setEndDate(userRegisterInfo.getEndDate());
+        companyAdmin.setTel(userRegisterInfo.getTel());
+        companyAdmin.setEmail(userRegisterInfo.getEmail());
+        companyAdmin.setName(userRegisterInfo.getName());
+        companyAdmin.setIndustry(userRegisterInfo.getIndustry());
+        companyAdmin.setSize(userRegisterInfo.getSize());
+        companyAdmin.setLogoImage(userRegisterInfo.getLogoImage());
+        companyAdmin.setSkinColor(userRegisterInfo.getSkinColor());
+        companyAdmin.setUserRole(userRegisterInfo.getUserRole());
         return companyAdminRepository.save(companyAdmin);
     }
 

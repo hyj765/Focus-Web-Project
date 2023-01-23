@@ -8,10 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +21,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity(name="company_admins")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Table(name="company_admins")
 public class CompanyAdmin {

@@ -2,8 +2,12 @@ package com.bb.focus.api.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jdk.vm.ci.meta.Local;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * 기업 관리자 계정 생성 API
@@ -18,10 +22,10 @@ public class CompanyAdminRegisterPostReq {
     String pwd;
     @ApiModelProperty(name = "기업 이름", example = "삼성")
     String companyName;
-    @ApiModelProperty(name = "계약 시작 날짜", example = "2023-01-01")
-    String startDate;
-    @ApiModelProperty(name = "계약 종료 날짜", example = "2030-12-31")
-    String endDate;
+    @ApiModelProperty(name = "계약 시작 날짜", example = "2022-01-23T17:43:02.945175")
+    LocalDateTime startDate;
+    @ApiModelProperty(name = "계약 종료 날짜", example = "2023-01-23T17:43:02.945175")
+    LocalDateTime endDate;
     @ApiModelProperty(name = "기업 대표 전화 번호", example = "02-1234-1234")
     String tel;
     @ApiModelProperty(name = "기업 대표 이메일", example = "samsung@samsung.com")
