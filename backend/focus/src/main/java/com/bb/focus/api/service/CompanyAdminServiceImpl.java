@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service("companyAdminService")
 public class CompanyAdminServiceImpl implements CompanyAdminService {
     @Autowired
@@ -42,5 +45,31 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
     public CompanyAdmin getCompanyAdminByUserId(String userId) {
         CompanyAdmin companyAdmin = companyAdminRepositorySupport.findCompanyAdminByUserId(userId).orElse(new CompanyAdmin());
         return companyAdmin;
+    }
+
+    @Override
+    public List<CompanyAdmin> getAll() {
+        List<CompanyAdmin> companyAdminList = companyAdminRepositorySupport.findAll();
+        return companyAdminList;
+    }
+
+    @Override
+    public Long updateCompanyAdminByUserInfo(CompanyAdminRegisterPostReq userUpdateInfo) {
+        CompanyAdmin companyAdmin = new CompanyAdmin();
+        companyAdmin.setUserId(userUpdateInfo.getUserId());
+        companyAdmin.setPwd(passwordEncoder.encode(userUpdateInfo.getPwd()));
+        companyAdmin.setCompanyName(userUpdateInfo.getCompanyName());
+        companyAdmin.setStartDate(userUpdateInfo.getStartDate());
+        companyAdmin.setEndDate(userUpdateInfo.getEndDate());
+        companyAdmin.setTel(userUpdateInfo.getTel());
+        companyAdmin.setEmail(userUpdateInfo.getEmail());
+        companyAdmin.setName(userUpdateInfo.getName());
+        companyAdmin.setIndustry(userUpdateInfo.getIndustry());
+        companyAdmin.setSize(userUpdateInfo.getSize());
+        companyAdmin.setLogoImage(userUpdateInfo.getLogoImage());
+        companyAdmin.setSkinColor(userUpdateInfo.getSkinColor());
+        companyAdmin.setUserRole(userUpdateInfo.getUserRole());
+        Long companyAdminId = companyAdminRepositorySupport.updateCompanyAdminByUserId(companyAdmin);
+        return companyAdminId;
     }
 }

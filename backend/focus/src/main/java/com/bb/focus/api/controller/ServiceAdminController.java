@@ -2,6 +2,7 @@ package com.bb.focus.api.controller;
 
 import com.bb.focus.api.request.CompanyAdminRegisterPostReq;
 import com.bb.focus.api.request.ServiceAdminRegisterPostReq;
+import com.bb.focus.api.response.CompanyAdminRes;
 import com.bb.focus.api.service.CompanyAdminService;
 import com.bb.focus.api.service.ServiceAdminService;
 import com.bb.focus.common.model.response.BaseResponseBody;
@@ -10,10 +11,10 @@ import com.bb.focus.db.entity.company.CompanyAdmin;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -62,25 +63,48 @@ public class ServiceAdminController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
+    @GetMapping("/accounts/")
+    @ApiOperation(value = "기업 계정 리스트 정보 조회", notes = "서비스 관리자가 조회할 수 있으며, 등록되어 있는 기업 계정 리스트 정보를 응답한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<List<CompanyAdminRes>> getCompanyAdminInfoList() {
+        List<CompanyAdmin> companyAdminList = companyAdminService.getAll();
+        List<CompanyAdminRes> companyAdminResList = new ArrayList<>();
+        for (CompanyAdmin ca : companyAdminList) {
+            companyAdminResList.add(CompanyAdminRes.of(ca));
+        }
+        return ResponseEntity.status(200).body(companyAdminResList);
+    }
 
-//
-//	@GetMapping("/me")
-//	@ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
-//    @ApiResponses({
-//        @ApiResponse(code = 200, message = "성공"),
-//        @ApiResponse(code = 401, message = "인증 실패"),
-//        @ApiResponse(code = 404, message = "사용자 없음"),
-//        @ApiResponse(code = 500, message = "서버 오류")
-//    })
-//	public ResponseEntity<ServiceAdminRes> getUserInfo(@ApiIgnore Authentication authentication) {
-//		/**
-//		 * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
-//		 * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
-//		 */
-//		FocusUserDetails userDetails = (FocusUserDetails)authentication.getDetails();
-//		String userId = userDetails.getUsername();
-//		ServiceAdmin user = serviceAdminService.getServiceAdminByUserId(userId);
-//
-//		return ResponseEntity.status(200).body(ServiceAdminRes.of(user));
-//	}
+
+    @GetMapping("/accounts/{company-admin-id}")
+    @ApiOperation(value = "기업 계정 정보 조회", notes = "서비스 관리자가 조회할 수 있으며, 등록되어 있는 기업 계정 정보를 응답한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<CompanyAdminRes> getCompanyAdminInfo(String userId) {
+        CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(userId);
+        return ResponseEntity.status(200).body(CompanyAdminRes.of(companyAdmin));
+    }
+
+    @PutMapping("/accounts/{company-admin-id}")
+    @ApiOperation(value = "기업 계정 정보 조회", notes = "서비스 관리자가 조회할 수 있으며, 등록되어 있는 기업 계정 정보를 응답한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> updateCompanyAdminInfo(
+            @RequestBody @ApiParam(value = "기업 관리자 정보 수정 내역", required = true) CompanyAdminRegisterPostReq updateInfo) {
+        Long companyAdminId = companyAdminService.updateCompanyAdminByUserInfo(updateInfo);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
 }
