@@ -27,7 +27,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class Applicant {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "applicant_id")
     private Long id;
 

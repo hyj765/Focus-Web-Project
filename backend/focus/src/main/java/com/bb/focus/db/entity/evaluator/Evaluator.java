@@ -26,7 +26,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class Evaluator {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "evaluator_id")
     private Long id;
 

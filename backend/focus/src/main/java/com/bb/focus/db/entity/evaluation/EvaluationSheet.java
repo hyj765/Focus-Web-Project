@@ -19,7 +19,7 @@ import javax.persistence.*;
 public class EvaluationSheet {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "evaluation_sheet_id")
     private Long id;
 

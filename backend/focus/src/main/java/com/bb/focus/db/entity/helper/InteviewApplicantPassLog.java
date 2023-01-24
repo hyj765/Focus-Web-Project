@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class InteviewApplicantPassLog {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="interview_applicants_pass_log_id")
     private Long id;
 

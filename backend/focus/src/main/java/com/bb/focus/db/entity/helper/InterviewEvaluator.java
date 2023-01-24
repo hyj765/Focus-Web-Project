@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class InterviewEvaluator {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "interview_evaluators_id")
     private Long id;
 
