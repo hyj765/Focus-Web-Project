@@ -1,5 +1,6 @@
 package com.bb.focus.db.entity.company;
 
+import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.evaluation.EvaluationSheet;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.entity.interview.InterviewRoom;
@@ -89,6 +90,9 @@ public class CompanyAdmin {
   @OneToMany(targetEntity = com.bb.focus.db.entity.evaluator.Evaluator.class, mappedBy = "companyAdmin")
   private List<Evaluator> evaluatorList = new ArrayList<>();
 
+  @OneToMany(targetEntity = com.bb.focus.db.entity.applicant.Applicant.class, mappedBy = "companyAdmin")
+  private List<Applicant> applicantList = new ArrayList<>();
+
   @OneToMany(targetEntity = com.bb.focus.db.entity.interview.InterviewRoom.class, mappedBy = "companyAdmin")
   private List<InterviewRoom> interviewRoomList = new ArrayList<>();
 
@@ -97,6 +101,13 @@ public class CompanyAdmin {
     this.evaluatorList.add(evaluator);
     if(evaluator.getCompanyAdmin() != this){
       evaluator.setCompanyAdmin(this);
+    }
+  }
+
+  public void addApplicant(Applicant applicant){
+    this.applicantList.add(applicant);
+    if(applicant.getCompanyAdmin() != this){
+      applicant.setCompanyAdmin(this);
     }
   }
 
