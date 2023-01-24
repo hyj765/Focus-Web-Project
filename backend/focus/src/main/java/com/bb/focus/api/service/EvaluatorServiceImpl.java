@@ -4,7 +4,6 @@ import com.bb.focus.api.request.EvaluatorInfoReq;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.repository.CompanyAdminRepository;
-import com.bb.focus.db.repository.EvaluationRepositorySupport;
 import com.bb.focus.db.repository.EvaluatorRepository;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +19,6 @@ public class EvaluatorServiceImpl implements EvaluatorService{
 
   private final CompanyAdminRepository companyAdminRepository;
   private final EvaluatorRepository evaluatorRepository;
-  private final EvaluationRepositorySupport evaluationRepositorySupport;
 
   /**
    * 평가자 계정 생성
@@ -87,8 +85,9 @@ public class EvaluatorServiceImpl implements EvaluatorService{
   }
 
   @Override
-  public List<Evaluator> findAllEvaluators() {
-    List<Evaluator> evaluators = evaluationRepositorySupport.findAllWithCompanyAdmin();
+  public List<Evaluator> findAllEvaluators(Long companyAdminId) {
+    //현재 기업관리자의 시퀀스넘버(id)를 알아야 한다.
+    List<Evaluator> evaluators = evaluatorRepository.findAllEvaluatorsByCompanyAdminId(companyAdminId);
     return evaluators;
   }
 
@@ -103,7 +102,7 @@ public class EvaluatorServiceImpl implements EvaluatorService{
    */
   private void validateDuplicateEvaluator(Evaluator evaluator) {
 
-    Optional<Evaluator> findEvaluator = evaluatorRepository.findEvaluatorByEmail(evaluator.getEmail());
+    Optional<Evaluator> findEvaluator = evaluatorRepository.findAllByEmail(evaluator.getEmail());
     if(findEvaluator.isPresent()){
       throw new IllegalStateException("이미 존재하는 회원입니다.");
     }

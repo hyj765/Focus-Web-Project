@@ -69,10 +69,10 @@ public class CompanyAdminController {
   }
 
   @ApiOperation(value = "사내 평가자 계정 리스트 조회", notes = "사내 평가자 계정 리스트를 조회한다.")
-  @GetMapping("/evaluators")
-  public ResponseEntity<List<EvaluatorRes>> getEvaluators(){
+  @GetMapping("/evaluators/{company-admin-id}/list")
+  public ResponseEntity<List<EvaluatorRes>> getEvaluators(@PathVariable("company-admin-id") Long id){
 
-    List<Evaluator> evaluators = evaluatorService.findAllEvaluators();
+    List<Evaluator> evaluators = evaluatorService.findAllEvaluators(id);
 
     List<EvaluatorRes> result = evaluators.stream()
         .map(e -> new EvaluatorRes(e))

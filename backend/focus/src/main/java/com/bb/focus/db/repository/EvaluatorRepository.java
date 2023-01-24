@@ -8,9 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EvaluatorRepository extends JpaRepository<Evaluator, Long> {
+public interface EvaluatorRepository extends JpaRepository<Evaluator, Long>, EvaluatorCustomRepository {
 
-  Optional<Evaluator> findEvaluatorByEmail(String email);
-
+  Optional<Evaluator> findAllByEmail(String email);
 
 }

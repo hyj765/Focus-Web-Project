@@ -17,7 +17,7 @@ public interface EvaluatorService {
 
   public void removeEvaluator(Long id);
 
-  public List<Evaluator> findAllEvaluators();
+  public List<Evaluator> findAllEvaluators(Long companyAdminId);
 
   public Evaluator findEvaluator(Long id);
 
