@@ -4,7 +4,6 @@ import com.bb.focus.api.request.EvaluatorInfoReq;
 import com.bb.focus.api.response.EvaluatorDetailRes;
 import com.bb.focus.api.response.EvaluatorRes;
 import com.bb.focus.api.service.EvaluatorService;
-import com.bb.focus.constants.BaseResponseBody;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.common.model.response.BaseResponseBody;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +30,7 @@ public class CompanyAdminController {
 
   @ApiOperation(value="평가자 계정 생성", notes="기업관리자로부터 입력받은 정보로 평가자 계정을 생성한다.")
   @PostMapping("/evaluators/{company-admin-id}")
-  public ResponseEntity<? extends BaseResponseBody> createEvaluator(
+  public ResponseEntity<?> createEvaluator(
       @PathVariable("company-admin-id") Long companyAdminId,
       @RequestBody @ApiParam(value="평가자 계정 생성 정보", required = true) EvaluatorInfoReq evaluatorInfo){
 

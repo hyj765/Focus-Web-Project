@@ -74,7 +74,7 @@ public class DataInputController {
 
     // 지원자 데이터를 엑셀로 받아오는 함수. csv 연동 아직 안됨. xls과 xlxs 두 가지만 가능
     @PostMapping(value = "/input/applicant",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> AddApplicantIntoExcel(@RequestParam MultipartFile file) throws IOException
+    public ResponseEntity<?> AddApplicantIntoExcel(@RequestPart MultipartFile file) throws IOException
     {
         try {
             DataService.ReadExcel(file);
@@ -89,7 +89,7 @@ public class DataInputController {
 
     // 평가자 데이터를 엑셀로 받아오는 함수. csv 연동 아직 안됨. xls과 xlxs 두 가지만 가능
     @PostMapping(value = "/input/evaluator",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> AddEvaluatorIntoExcel(@RequestParam MultipartFile file) throws IOException
+    public ResponseEntity<?> AddEvaluatorIntoExcel(@RequestPart MultipartFile file) throws IOException
     {
         try {
             DataService.ReadExcel(file);
@@ -104,8 +104,11 @@ public class DataInputController {
 
     // 4년제 대학교 데이터를 엑셀로 받아오는 함수. csv 파일에 UTF-8 고정
     @PostMapping("/input/univ")
-    public ResponseEntity<?> UniversityIntoExcel(@RequestParam MultipartFile file) {
+    public ResponseEntity<?> UniversityIntoExcel(@RequestPart MultipartFile file) {
         List<SchoolDto> univList=null;
+        if(file.isEmpty()){
+            return new ResponseEntity<String>("fail to load data",HttpStatus.BAD_REQUEST);
+        }
         try {
             univList = DataService.ConvertMultiFileIntoList(file);
         }catch (IOException e){
@@ -120,7 +123,7 @@ public class DataInputController {
 
     // 2년제 대학교 데이터를 엑셀로 받아오는 함수. csv 파일에 UTF-8 고정
     @PostMapping("/input/college")
-    public ResponseEntity<?> CollegeIntoExcel(@RequestParam MultipartFile file) {
+    public ResponseEntity<?> CollegeIntoExcel(@RequestPart MultipartFile file) {
         List<SchoolDto> collegeList = null;
         try {
             collegeList = DataService.ConvertMultiFileIntoList(file);
@@ -136,10 +139,15 @@ public class DataInputController {
 
     // 대학원 데이터를 엑셀로 받아오는 함수. csv 파일에 UTF-8 고정
     @PostMapping("/input/graduateschool")
-    public ResponseEntity<?> GraduateSchoolIntoExcel(@RequestParam MultipartFile file){
+    public ResponseEntity<?> GraduateSchoolIntoExcel(@RequestPart MultipartFile file){
         List<SchoolDto> GraduateList = null;
+        if(file == null) {
+            return new ResponseEntity<String>("file not found",HttpStatus.BAD_REQUEST);
+        }
+
         try {
             GraduateList = DataService.ConvertMultiFileIntoList(file);
+
         }catch (IOException e){
             System.out.println(e.getStackTrace());
         }

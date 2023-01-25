@@ -1,4 +1,4 @@
-package com.bb.focus.db.Util;
+package com.bb.focus.common.util;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -11,11 +11,10 @@ public class ExcelUtils {
     //엑셀 확장자를 검사하는 함수
     public String FileNameFilter(String fileName){
         String extension = FilenameUtils.getExtension(fileName);
-
-        if(!extension.equals("xls") && !extension.equals("xlsx") && !extension.equals("csv")){
+        if(extension.equals("xls") || extension.equals("xlsx")  || extension.equals("csv")){
             return extension;
         }
-        return null;
+        return "invalid";
     }
     
     //엑셀 워크시트를 만드는 함수

@@ -2,7 +2,6 @@ package com.bb.focus.api.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jdk.vm.ci.meta.Local;
 import lombok.Getter;
 import lombok.Setter;
 

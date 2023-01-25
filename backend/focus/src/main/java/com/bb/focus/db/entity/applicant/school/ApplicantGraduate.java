@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class ApplicantGraduate {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "applicant_graduate_id")
     private Long id;
 
@@ -24,6 +24,9 @@ public class ApplicantGraduate {
     @Column(length = 50)
     private String name;
 
+    @NotNull
+    @Column(length = 20)
+    private String campus;
     @NotNull
     @Column(length = 30)
     private String area;
