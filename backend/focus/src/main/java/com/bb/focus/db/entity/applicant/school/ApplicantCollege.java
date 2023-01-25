@@ -25,6 +25,6 @@ public class ApplicantCollege {
     private String name;
 
     @NotNull
-    @Column(length=10)
+    @Column(length=30)
     private String area;
 }
