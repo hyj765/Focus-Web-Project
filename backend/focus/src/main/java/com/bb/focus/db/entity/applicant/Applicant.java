@@ -18,11 +18,13 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@DynamicInsert
 @Table(name = "applicants")
 public class Applicant {
 
@@ -118,5 +120,6 @@ public class Applicant {
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ProcessApplicant.class, mappedBy = "applicant")
     private List<ProcessApplicant> processApplicantList = new ArrayList<>();
+
 
 }
