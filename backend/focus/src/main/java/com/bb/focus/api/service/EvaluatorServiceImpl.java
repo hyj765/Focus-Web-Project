@@ -48,7 +48,7 @@ public class EvaluatorServiceImpl implements EvaluatorService{
   /**
    * 평가자 id, pwd 자동 생성 및 할당
    * 생성 규칙 ] 아이디 : 기업이름 + E + 평가자사번
-   *           비밀번호 : 랜덤 생성 문자열 + 평가자 이름
+   *           비밀번호 : 랜덤 생성 문자열
    */
   @Transactional
   public void autoAssignAccount(Long id) {
@@ -56,7 +56,7 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     Evaluator evaluator = evaluatorRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 
     String newId = evaluator.getCompanyAdmin().getCompanyName() + "E" + evaluator.getCode();
-    String newPwd = getRandomString() + evaluator.getName();
+    String newPwd = getRandomString();
 
     evaluator.setUserId(newId);
     evaluator.setPwd(newPwd);
@@ -118,7 +118,7 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     Random random = new Random();
 
     String generatedString = random.ints(leftLimit, rightLimit + 1)
-        .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+//        .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
         .limit(targetStringLength)
         .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
         .toString();

@@ -2,6 +2,7 @@ package com.bb.focus.api.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +25,7 @@ public class ApplicantInfoReq {
   private String gender;
 
   @ApiModelProperty(name="지원자 생일", example = "1998-08-01")
-  private LocalDateTime birth;
+  private LocalDate birth;
 
   @ApiModelProperty(name="지원자 사진 url", example = "사진")
   private String image;

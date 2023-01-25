@@ -8,6 +8,7 @@ import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.helper.ApplicantInterviewRoom;
 import com.bb.focus.db.entity.helper.ProcessApplicant;
 import com.sun.istack.NotNull;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -29,7 +30,7 @@ import org.hibernate.annotations.DynamicInsert;
 public class Applicant {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "applicant_id")
     private Long id;
 
@@ -68,7 +69,7 @@ public class Applicant {
     private String gender;
 
     @NotNull
-    private LocalDateTime birth;
+    private LocalDate birth;
 
     @NotNull
     @Column(length = 2090)
