@@ -28,7 +28,7 @@ import org.hibernate.annotations.DynamicInsert;
 public class Evaluator {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "evaluator_id")
     private Long id;
 

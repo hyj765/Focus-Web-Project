@@ -23,7 +23,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class ApplicantPassLog {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="applicant_pass_log_id")
     private Long id;
 

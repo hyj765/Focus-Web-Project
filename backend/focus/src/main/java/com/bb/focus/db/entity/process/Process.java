@@ -25,7 +25,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class Process {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="process_id")
   private Long id;
 

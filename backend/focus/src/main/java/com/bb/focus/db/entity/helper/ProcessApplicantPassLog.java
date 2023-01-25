@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class ProcessApplicantPassLog
 {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="process_applicants_pass_log")
     private Long id;
 

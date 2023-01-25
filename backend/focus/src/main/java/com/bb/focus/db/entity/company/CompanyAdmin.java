@@ -7,17 +7,13 @@ import com.bb.focus.db.entity.interview.InterviewRoom;
 import com.sun.istack.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -29,7 +25,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class CompanyAdmin {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "company_admin_id")
   private Long id;
 

@@ -23,7 +23,7 @@ import javax.persistence.*;
 public class ApplicantEvaluator {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "applicant_evaluator_id")
   private Long id;
 

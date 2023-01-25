@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 public class InterviewRoom {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "interview_room_id")
     private Long id;
 
