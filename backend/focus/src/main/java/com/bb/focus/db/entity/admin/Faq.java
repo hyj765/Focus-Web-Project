@@ -8,9 +8,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,7 +26,7 @@ public class Faq {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="service_admin_id")
+    @JoinColumn(name = "service_admin_id")
     private ServiceAdmin serviceAdmin;
 
     @NotNull
@@ -36,7 +37,7 @@ public class Faq {
     private LocalDateTime createdAt;
 
     @NotNull
-    @Column(length=5000)
+    @Column(length = 5000)
     private String content;
 
     @NotNull

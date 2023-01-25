@@ -15,7 +15,8 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Table(name = "service_admins")
 public class ServiceAdmin {
 
