@@ -6,6 +6,7 @@ import com.bb.focus.api.response.EvaluatorRes;
 import com.bb.focus.api.service.EvaluatorService;
 import com.bb.focus.constants.BaseResponseBody;
 import com.bb.focus.db.entity.evaluator.Evaluator;
+import com.bb.focus.common.model.response.BaseResponseBody;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.List;
@@ -41,7 +42,7 @@ public class CompanyAdminController {
 
   @ApiOperation(value="평가자 ID, PWD 자동생성", notes = "평가자의 id와 pwd를 자동생성한다.")
   @PostMapping("/evaluators/create/{evaluator-id}")
-  public ResponseEntity<? extends BaseResponseBody> autoSetEvaluatorAccount(@PathVariable("evaluator-id") Long id){
+  public ResponseEntity<?> autoSetEvaluatorAccount(@PathVariable("evaluator-id") Long id){
 
     evaluatorService.autoAssignAccount(id);
 
