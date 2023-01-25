@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class ApplicantInterviewRoom {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "applicant_interview_room_id")
     private Long id;
 

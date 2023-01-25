@@ -3,15 +3,13 @@ package com.bb.focus.db.entity.admin;
 import com.sun.istack.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
@@ -23,7 +21,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class ServiceAdmin {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "service_admin_id")
     private Long id;
 

@@ -1,20 +1,19 @@
 package com.bb.focus.db.entity.company;
 
+import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.evaluation.EvaluationSheet;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.entity.interview.InterviewRoom;
 import com.sun.istack.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -27,7 +26,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class CompanyAdmin {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "company_admin_id")
   private Long id;
 
@@ -88,9 +87,26 @@ public class CompanyAdmin {
   @OneToMany(targetEntity = com.bb.focus.db.entity.evaluator.Evaluator.class, mappedBy = "companyAdmin")
   private List<Evaluator> evaluatorList = new ArrayList<>();
 
+  @OneToMany(targetEntity = com.bb.focus.db.entity.applicant.Applicant.class, mappedBy = "companyAdmin")
+  private List<Applicant> applicantList = new ArrayList<>();
+
   @OneToMany(targetEntity = com.bb.focus.db.entity.interview.InterviewRoom.class, mappedBy = "companyAdmin")
   private List<InterviewRoom> interviewRoomList = new ArrayList<>();
 
+  //연관관계 메서드
+  public void addEvaluator(Evaluator evaluator){
+    this.evaluatorList.add(evaluator);
+    if(evaluator.getCompanyAdmin() != this){
+      evaluator.setCompanyAdmin(this);
+    }
+  }
+
+  public void addApplicant(Applicant applicant){
+    this.applicantList.add(applicant);
+    if(applicant.getCompanyAdmin() != this){
+      applicant.setCompanyAdmin(this);
+    }
+  }
 
 
 

@@ -1,6 +1,9 @@
 package com.bb.focus.db.entity.admin;
 
 import com.sun.istack.NotNull;
+
+import javax.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +21,7 @@ import java.time.LocalDateTime;
 public class Faq {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "faq_id")
     private Long id;
 

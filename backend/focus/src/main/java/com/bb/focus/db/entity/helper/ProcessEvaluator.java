@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class ProcessEvaluator {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "process_evaluators_id")
     private Long id;
 

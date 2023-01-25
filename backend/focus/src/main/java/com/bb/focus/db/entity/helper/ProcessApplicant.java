@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class ProcessApplicant {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="process_applicants_id")
     private Long id;
 

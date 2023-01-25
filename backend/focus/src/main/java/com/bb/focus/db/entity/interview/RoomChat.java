@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class RoomChat {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_chat_id")
     private Long id;
 

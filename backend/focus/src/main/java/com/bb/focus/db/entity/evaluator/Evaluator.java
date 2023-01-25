@@ -17,16 +17,18 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@DynamicInsert
 @Table(name = "evaluators")
 public class Evaluator {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "evaluator_id")
     private Long id;
 
@@ -82,4 +84,6 @@ public class Evaluator {
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ProcessEvaluator.class, mappedBy = "evaluator")
     private List<ProcessEvaluator> processEvaluatorList = new ArrayList<>();
+
+
 }
