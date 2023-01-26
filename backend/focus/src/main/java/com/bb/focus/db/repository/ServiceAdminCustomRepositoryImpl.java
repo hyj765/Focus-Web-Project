@@ -15,12 +15,9 @@ public class ServiceAdminCustomRepositoryImpl implements ServiceAdminCustomRepos
   QServiceAdmin qServiceAdmin = QServiceAdmin.serviceAdmin;
 
   @Override
-  public Optional<ServiceAdmin> findServiceAdminByUserId(String userId) {
+  public ServiceAdmin findServiceAdminByUserId(String userId) {
     ServiceAdmin serviceAdmin = jpaQueryFactory.select(qServiceAdmin).from(qServiceAdmin)
         .where(qServiceAdmin.userId.eq(userId)).fetchOne();
-    if (serviceAdmin == null) {
-      return Optional.empty();
-    }
-    return Optional.ofNullable(serviceAdmin);
+    return serviceAdmin;
   }
 }

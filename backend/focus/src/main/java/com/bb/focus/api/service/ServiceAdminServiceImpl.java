@@ -31,8 +31,7 @@ public class ServiceAdminServiceImpl implements ServiceAdminService {
 
   @Override
   public ServiceAdmin getServiceAdminByUserId(String userId) {
-    ServiceAdmin serviceAdmin = serviceAdminRepository.findServiceAdminByUserId(userId)
-        .orElse(new ServiceAdmin());
+    ServiceAdmin serviceAdmin = serviceAdminRepository.findServiceAdminByUserId(userId);
     return serviceAdmin;
   }
 }

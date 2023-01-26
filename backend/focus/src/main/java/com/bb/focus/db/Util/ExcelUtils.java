@@ -12,7 +12,7 @@ public class ExcelUtils {
     public String FileNameFilter(String fileName){
         String extension = FilenameUtils.getExtension(fileName);
 
-        if(!extension.equals("xls") && !extension.equals("xlsx") && !extension.equals("csv")){
+        if(!extension.equals("xls") || !extension.equals("xlsx") || !extension.equals("csv")){
             return extension;
         }
         return null;

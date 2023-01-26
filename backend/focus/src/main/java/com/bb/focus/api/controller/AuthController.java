@@ -97,10 +97,10 @@ public class AuthController {
 //                if (passwordEncoder.matches(password, evaluator.getPwd())) {
         if (password.equals(evaluator.getPwd())) {
           // 계정이 만료된 경우 로그인 실패로 응답
-          if (!canLogin(evaluator.getExpireDate())) {
-            return ResponseEntity.status(401)
-                .body(UserLoginPostRes.of(401, "End of Contract", null));
-          }
+//          if (!canLogin(evaluator.getExpireDate())) {
+//            return ResponseEntity.status(401)
+//                .body(UserLoginPostRes.of(401, "End of Contract", null));
+//          }
           // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
           return ResponseEntity.ok(
               UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
@@ -111,10 +111,10 @@ public class AuthController {
 //                if (passwordEncoder.matches(password, evaluator.getPwd())) {
         if (password.equals(applicant.getPwd())) {
           // 계정이 만료된 경우 로그인 실패로 응답
-          if (!canLogin(applicant.getExpireDate())) {
-            return ResponseEntity.status(401)
-                .body(UserLoginPostRes.of(401, "End of Contract", null));
-          }
+//          if (!canLogin(applicant.getExpireDate())) {
+//            return ResponseEntity.status(401)
+//                .body(UserLoginPostRes.of(401, "End of Contract", null));
+//          }
           // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
           return ResponseEntity.ok(
               UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));

@@ -104,7 +104,7 @@ public class DataInputController {
 
     // 4년제 대학교 데이터를 엑셀로 받아오는 함수. csv 파일에 UTF-8 고정
     @PostMapping("/input/univ")
-    public ResponseEntity<?> UniversityIntoExcel(@RequestParam MultipartFile file) {
+    public ResponseEntity<?> UniversityIntoExcel(@RequestPart MultipartFile file) {
         List<SchoolDto> univList=null;
         try {
             univList = DataService.ConvertMultiFileIntoList(file);
@@ -120,7 +120,7 @@ public class DataInputController {
 
     // 2년제 대학교 데이터를 엑셀로 받아오는 함수. csv 파일에 UTF-8 고정
     @PostMapping("/input/college")
-    public ResponseEntity<?> CollegeIntoExcel(@RequestParam MultipartFile file) {
+    public ResponseEntity<?> CollegeIntoExcel(@RequestPart MultipartFile file) {
         List<SchoolDto> collegeList = null;
         try {
             collegeList = DataService.ConvertMultiFileIntoList(file);
@@ -136,7 +136,7 @@ public class DataInputController {
 
     // 대학원 데이터를 엑셀로 받아오는 함수. csv 파일에 UTF-8 고정
     @PostMapping("/input/graduateschool")
-    public ResponseEntity<?> GraduateSchoolIntoExcel(@RequestParam MultipartFile file){
+    public ResponseEntity<?> GraduateSchoolIntoExcel(@RequestPart MultipartFile file){
         List<SchoolDto> GraduateList = null;
         try {
             GraduateList = DataService.ConvertMultiFileIntoList(file);

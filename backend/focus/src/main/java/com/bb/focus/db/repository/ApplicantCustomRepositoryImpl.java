@@ -29,6 +29,7 @@ public class ApplicantCustomRepositoryImpl implements ApplicantCustomRepository 
 
   @Override
   public Applicant findApplicantByUserId(String userId) {
+    System.out.println("repoimpl userId : "+userId);
     Applicant applicant = jpaQueryFactory.select(qApplicant).from(qApplicant)
         .where(qApplicant.userId.eq(userId)).fetchOne();
     return applicant;
