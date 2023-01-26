@@ -11,6 +11,7 @@ import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,14 +29,18 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    @Autowired
-    ServiceAdminService serviceAdminService;
+//    @Autowired
+//    ServiceAdminService serviceAdminService;
 
-    @Autowired
-    CompanyAdminService companyAdminService;
+    private CompanyAdminService companyAdminService;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
+
+    public AuthController(CompanyAdminService companyAdminService, PasswordEncoder passwordEncoder){
+        this.companyAdminService = companyAdminService;
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
     @PostMapping("/login")
     @ApiOperation(value = "로그인", notes = "<strong>아이디와 패스워드</strong>를 통해 로그인 한다.")
@@ -50,13 +55,13 @@ public class AuthController {
         String password = loginInfo.getPassword();
         Byte userInfo = loginInfo.getUserRole();
         switch (userInfo) {
-            case 1: // 서비스 관리자
-                ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminByUserId(userId);
-                if (passwordEncoder.matches(password, serviceAdmin.getPwd())) {
-                    // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-                    return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
-                }
-                break;
+//            case 1: // 서비스 관리자
+//                ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminByUserId(userId);
+//                if (passwordEncoder.matches(password, serviceAdmin.getPwd())) {
+//                    // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+//                    return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+//                }
+//                break;
             case 2: // 기업 관리자
                 CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(userId);
                 if (passwordEncoder.matches(password, companyAdmin.getPwd())) {

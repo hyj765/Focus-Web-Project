@@ -13,7 +13,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
@@ -27,7 +27,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class CompanyAdmin {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "company_admin_id")
   private Long id;
 
