@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,8 +100,13 @@ public class EvaluatorServiceImpl implements EvaluatorService{
   }
 
   @Override
+  public Page<Evaluator> findAllEvaluatorsUsePaging(Pageable pageable, Long companyAdminId) {
+    Page<Evaluator> evaluators = evaluatorRepository.findAllEvaluatorsByCompanyAdminIdUsePaging(pageable, companyAdminId);
+    return evaluators;
+  }
+
+  @Override
   public List<Evaluator> findAllEvaluators(Long companyAdminId) {
-    //현재 기업관리자의 시퀀스넘버(id)를 알아야 한다.
     List<Evaluator> evaluators = evaluatorRepository.findAllEvaluatorsByCompanyAdminId(companyAdminId);
     return evaluators;
   }
