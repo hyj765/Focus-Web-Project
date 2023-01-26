@@ -3,14 +3,21 @@ package com.bb.focus.api.service;
 import com.bb.focus.api.request.ApplicantInfoReq;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.applicant.school.ApplicantCollege;
+import com.bb.focus.db.entity.applicant.school.ApplicantGraduate;
+import com.bb.focus.db.entity.applicant.school.ApplicantUniv;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.repository.ApplicantRepository;
+import com.bb.focus.db.repository.CollegeRepository;
 import com.bb.focus.db.repository.CompanyAdminRepository;
+import com.bb.focus.db.repository.GraduateSchoolRepository;
+import com.bb.focus.db.repository.UniversityRepository;
 import java.util.List;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.security.util.Password;
 
 @Service
 @Transactional(readOnly = true)
@@ -19,10 +26,16 @@ public class ApplicantServiceImpl implements ApplicantService{
 
   private final ApplicantRepository applicantRepository;
   private final CompanyAdminRepository companyAdminRepository;
+  private final CollegeRepository collegeRepository;
+  private final UniversityRepository universityRepository;
+  private final GraduateSchoolRepository graduateSchoolRepository;
+  private final MailService mailService;
+  private final PasswordEncoder passwordEncoder;
 
   /**
    * 지원자 계정 생성
    */
+  @Transactional
   public Long create(Long comapnyAdminId, ApplicantInfoReq applicantInfoReq) {
     Applicant applicant = new Applicant();
 
@@ -38,17 +51,23 @@ public class ApplicantServiceImpl implements ApplicantService{
     applicant.setAwardCount(applicantInfoReq.getAwardCount());
     applicant.setActivityCount(applicantInfoReq.getActivityCount());
 
-    //대학교, 대학원 매핑
-    //아이디로 2년제 대학교, 4년제 대학교, 대학원의 정보를 가져온다.
-    //가져온 정보를 setter로 applicant에 매핑한다.
-    /*
     if(applicantInfoReq.getCollegeId() != null){
-      //조회
-      ApplicantCollege applicantCollege = ApplicantCollegeRepository.findById(applicantInfoReq.getCollegeId());
+      ApplicantCollege applicantCollege = collegeRepository.findById(applicantInfoReq.getCollegeId())
+          .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicationCollege(applicantCollege);
     }
-    ....
-     */
+
+    if(applicantInfoReq.getUnivId() != null){
+      ApplicantUniv applicantUniv = universityRepository.findById(applicantInfoReq.getUnivId())
+          .orElseThrow(IllegalArgumentException::new);
+      applicant.setApplicantsUniv(applicantUniv);
+    }
+
+    if(applicantInfoReq.getGraduateId() != null){
+      ApplicantGraduate applicantGraduate = graduateSchoolRepository.findById(applicantInfoReq.getGraduateId())
+          .orElseThrow(IllegalArgumentException::new);
+      applicant.setApplicantsGraduate(applicantGraduate);
+    }
 
     CompanyAdmin companyAdmin = companyAdminRepository.findById(comapnyAdminId).orElseThrow(IllegalArgumentException::new);
     companyAdmin.addApplicant(applicant);
@@ -62,6 +81,7 @@ public class ApplicantServiceImpl implements ApplicantService{
    * 생성 규칙] 아이디 : 기업이름 + A + 지원자 수험번호
    *          비밀번호 : 랜덤 생성 문자열
    */
+  @Transactional
   public void autoAssignAccount(Long id) {
 
     Applicant applicant = applicantRepository.findById(id).orElseThrow(IllegalArgumentException::new);
@@ -69,14 +89,24 @@ public class ApplicantServiceImpl implements ApplicantService{
     String newId = applicant.getCompanyAdmin().getCompanyName() + "A" + applicant.getCode();
     String newPwd = getRandomString();
 
+    //메일
+//    Map<String, String> content = new HashMap<>();
+//    content.put("id", newId);
+//    content.put("pwd", newPwd);
+//    mailService.sendAccountMail(evaluator.getEmail(), content);
+
+    //암호화
+    String encodedPwd = passwordEncoder.encode(newPwd);
+
     applicant.setUserId(newId);
-    applicant.setPwd(newPwd);
+    applicant.setPwd(encodedPwd);
   }
 
   /**
    * 지원자의 기본정보를 수정한다.
    * 수정 항목] 이름, 수험번호, 성별, 생년월일, 사진, 이메일, 전화번호, 자기소개서, 학위, 수상횟수, 대외활동 횟수, 대학정보(2, 4, 대학원)
    */
+  @Transactional
   public Long updateApplicantInfo(Long id, ApplicantInfoReq applicantInfoReq) {
     Applicant applicant = applicantRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 
@@ -93,6 +123,23 @@ public class ApplicantServiceImpl implements ApplicantService{
     applicant.setActivityCount(applicantInfoReq.getActivityCount());
 
     //대학 정보 수정..
+    if(applicantInfoReq.getCollegeId() != null){
+      ApplicantCollege applicantCollege = collegeRepository.findById(applicantInfoReq.getCollegeId())
+          .orElseThrow(IllegalArgumentException::new);
+      applicant.setApplicationCollege(applicantCollege);
+    }
+
+    if(applicantInfoReq.getUnivId() != null){
+      ApplicantUniv applicantUniv = universityRepository.findById(applicantInfoReq.getUnivId())
+          .orElseThrow(IllegalArgumentException::new);
+      applicant.setApplicantsUniv(applicantUniv);
+    }
+
+    if(applicantInfoReq.getGraduateId() != null){
+      ApplicantGraduate applicantGraduate = graduateSchoolRepository.findById(applicantInfoReq.getGraduateId())
+          .orElseThrow(IllegalArgumentException::new);
+      applicant.setApplicantsGraduate(applicantGraduate);
+    }
 
     return applicant.getId();
   }
@@ -100,6 +147,7 @@ public class ApplicantServiceImpl implements ApplicantService{
   /**
    * 지원자 삭제
    */
+  @Transactional
   public void removeApplicant(Long id) {
     applicantRepository.deleteById(id);
   }
