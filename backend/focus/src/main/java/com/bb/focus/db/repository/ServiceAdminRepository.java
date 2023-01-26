@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ServiceAdminRepository extends JpaRepository<ServiceAdmin, Long> {
+public interface ServiceAdminRepository extends JpaRepository<ServiceAdmin, Long>, ServiceAdminCustomRepository {
     Optional<ServiceAdmin> findByUserId(String userId);
 }

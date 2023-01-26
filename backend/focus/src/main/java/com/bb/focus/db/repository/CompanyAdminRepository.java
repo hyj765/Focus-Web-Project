@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CompanyAdminRepository extends JpaRepository<CompanyAdmin, Long> {
-    Optional<CompanyAdmin> findByUserId(String userId);
-
-    List<CompanyAdmin> findAll();
+public interface CompanyAdminRepository extends JpaRepository<CompanyAdmin, Long>, CompanyAdminCustomRepository {
 
 }

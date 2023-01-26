@@ -5,13 +5,12 @@ import com.bb.focus.db.entity.company.QCompanyAdmin;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class CompanyAdminRepositorySupport {
+public class CompanyAdmincustomRepositoryImpl implements CompanyAdminCustomRepository{
     @Autowired
     private JPAQueryFactory jpaQueryFactory;
     QCompanyAdmin qCompanyAdmin = QCompanyAdmin.companyAdmin;
