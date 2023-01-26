@@ -1,16 +1,11 @@
 package com.bb.focus.api.controller;
 
 import com.bb.focus.api.response.SchoolDto;
-import com.bb.focus.api.service.DataInputService;
+import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.SchoolService;
-import com.opencsv.exceptions.CsvValidationException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,13 +20,13 @@ import java.util.List;
 @CrossOrigin("*")
 @RequestMapping("/Data")
 public class DataInputController {
-    DataInputService DataService;
+    DataProcessService DataService;
     SchoolService schoolSerivce;
 
     //ApplicantService
     //EvaluatorService
     @Autowired
-    public DataInputController(DataInputService Dservice, SchoolService scService){
+    public DataInputController(DataProcessService Dservice, SchoolService scService){
         DataService = Dservice;
         schoolSerivce = scService;
 
