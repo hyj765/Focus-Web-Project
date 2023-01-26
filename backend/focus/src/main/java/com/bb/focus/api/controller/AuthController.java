@@ -39,11 +39,11 @@ public class AuthController {
   @Autowired
   CompanyAdminService companyAdminService;
 
-//  @Autowired
-//  EvaluatorService evaluatorService;
-//
-//  @Autowired
-//  ApplicantService applicantService;
+  @Autowired
+  EvaluatorService evaluatorService;
+
+  @Autowired
+  ApplicantService applicantService;
 
 //    private PasswordEncoder passwordEncoder;
 
@@ -92,34 +92,34 @@ public class AuthController {
               UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
         }
         break;
-//      case 3: // 평가자
-//        Evaluator evaluator = evaluatorService.getEvaluatorByUserId(userId);
-////                if (passwordEncoder.matches(password, evaluator.getPwd())) {
-//        if (password.equals(evaluator.getPwd())) {
-//          // 계정이 만료된 경우 로그인 실패로 응답
-//          if (!canLogin(evaluator.getExpireDate())) {
-//            return ResponseEntity.status(401)
-//                .body(UserLoginPostRes.of(401, "End of Contract", null));
-//          }
-//          // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-//          return ResponseEntity.ok(
-//              UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
-//        }
-//        break;
-//      case 4: // 지원자
-//        Applicant applicant = applicantService.getApplicantByUserId(userId);
-////                if (passwordEncoder.matches(password, evaluator.getPwd())) {
-//        if (password.equals(applicant.getPwd())) {
-//          // 계정이 만료된 경우 로그인 실패로 응답
-//          if (!canLogin(applicant.getExpireDate())) {
-//            return ResponseEntity.status(401)
-//                .body(UserLoginPostRes.of(401, "End of Contract", null));
-//          }
-//          // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-//          return ResponseEntity.ok(
-//              UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
-//        }
-//        break;
+      case 3: // 평가자
+        Evaluator evaluator = evaluatorService.getEvaluatorByUserId(userId);
+//                if (passwordEncoder.matches(password, evaluator.getPwd())) {
+        if (password.equals(evaluator.getPwd())) {
+          // 계정이 만료된 경우 로그인 실패로 응답
+          if (!canLogin(evaluator.getExpireDate())) {
+            return ResponseEntity.status(401)
+                .body(UserLoginPostRes.of(401, "End of Contract", null));
+          }
+          // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+          return ResponseEntity.ok(
+              UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+        }
+        break;
+      case 4: // 지원자
+        Applicant applicant = applicantService.getApplicantByUserId(userId);
+//                if (passwordEncoder.matches(password, evaluator.getPwd())) {
+        if (password.equals(applicant.getPwd())) {
+          // 계정이 만료된 경우 로그인 실패로 응답
+          if (!canLogin(applicant.getExpireDate())) {
+            return ResponseEntity.status(401)
+                .body(UserLoginPostRes.of(401, "End of Contract", null));
+          }
+          // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+          return ResponseEntity.ok(
+              UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+        }
+        break;
     }
     // 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
     return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null));

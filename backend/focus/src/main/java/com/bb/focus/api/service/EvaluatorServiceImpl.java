@@ -124,11 +124,11 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     return evaluator;
   }
 
-//  @Override
-//  public Evaluator getEvaluatorByUserId(String userId) {
-//    Evaluator evaluator = evaluatorRepository.findEvaluatorByUserId(userId);
-//    return evaluator;
-//  }
+  @Override
+  public Evaluator getEvaluatorByUserId(String userId) {
+    Evaluator evaluator = evaluatorRepository.findEvaluatorByUserId(userId);
+    return evaluator;
+  }
 
   /**
    * 평가자 이메일로 중복 회원 검증

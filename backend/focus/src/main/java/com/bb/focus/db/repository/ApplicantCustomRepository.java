@@ -7,6 +7,6 @@ public interface ApplicantCustomRepository {
 
   List<Applicant> findAllApplicantsByCompanyAdminId(Long companyAdminId);
 
-//  Applicant findApplicantByUserId(String userId);
+  Applicant findApplicantByUserId(String userId);
 
 }

@@ -27,12 +27,12 @@ public class ApplicantCustomRepositoryImpl implements ApplicantCustomRepository 
         .fetch();
   }
 
-//  @Override
-//  public Applicant findApplicantByUserId(String userId) {
-//    Applicant applicant = jpaQueryFactory.select(qApplicant).from(qApplicant)
-//        .where(qApplicant.userId.eq(userId)).fetchOne();
-//    return applicant;
-//  }
+  @Override
+  public Applicant findApplicantByUserId(String userId) {
+    Applicant applicant = jpaQueryFactory.select(qApplicant).from(qApplicant)
+        .where(qApplicant.userId.eq(userId)).fetchOne();
+    return applicant;
+  }
 
   private BooleanExpression eqCompanyAdminId(Long companyAdminId) {
     if (companyAdminId.equals(null)) {

@@ -27,12 +27,12 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository{
         .fetch();
   }
 
-//  @Override
-//  public Evaluator findEvaluatorByUserId(String userId) {
-//    Evaluator evaluator = jpaQueryFactory.select(qEvaluator).from(qEvaluator)
-//        .where(qEvaluator.userId.eq(userId)).fetchOne();
-//    return evaluator;
-//  }
+  @Override
+  public Evaluator findEvaluatorByUserId(String userId) {
+    Evaluator evaluator = jpaQueryFactory.select(qEvaluator).from(qEvaluator)
+        .where(qEvaluator.userId.eq(userId)).fetchOne();
+    return evaluator;
+  }
 
   private BooleanExpression eqCompanyAdminId(Long companyAdminId){
     if(companyAdminId.equals(null)) return null;

@@ -198,11 +198,11 @@ public class ApplicantServiceImpl implements ApplicantService{
     return applicantRepository.findById(id).orElseThrow(IllegalArgumentException::new);
   }
 
-//  @Override
-//  public Applicant getApplicantByUserId(String userId) {
-//    Applicant applicant = applicantRepository.findApplicantByUserId(userId);
-//    return applicant;
-//  }
+  @Override
+  public Applicant getApplicantByUserId(String userId) {
+    Applicant applicant = applicantRepository.findApplicantByUserId(userId);
+    return applicant;
+  }
 
   /**
    * 비밀번호 자동생성에 사용되는 랜덤 문자열 생성기

@@ -18,5 +18,5 @@ public interface ApplicantService {
 
   public Applicant findApplicant(Long id);
 
-//  public Applicant getApplicantByUserId(String userId);
+  public Applicant getApplicantByUserId(String userId);
 }
