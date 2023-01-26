@@ -11,12 +11,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class ApplicantCustomRepositoryImpl implements ApplicantCustomRepository{
+public class ApplicantCustomRepositoryImpl implements ApplicantCustomRepository {
 
   private final JPAQueryFactory jpaQueryFactory;
 
   QCompanyAdmin qCompanyAdmin = QCompanyAdmin.companyAdmin;
   QApplicant qApplicant = QApplicant.applicant;
+//  private final ApplicantRepository applicantRepository;
 
   public List<Applicant> findAllApplicantsByCompanyAdminId(Long companyAdminId) {
     return jpaQueryFactory
@@ -26,8 +27,17 @@ public class ApplicantCustomRepositoryImpl implements ApplicantCustomRepository{
         .fetch();
   }
 
-  private BooleanExpression eqCompanyAdminId(Long companyAdminId){
-    if(companyAdminId.equals(null)) return null;
+//  @Override
+//  public Applicant findApplicantByUserId(String userId) {
+//    Applicant applicant = jpaQueryFactory.select(qApplicant).from(qApplicant)
+//        .where(qApplicant.userId.eq(userId)).fetchOne();
+//    return applicant;
+//  }
+
+  private BooleanExpression eqCompanyAdminId(Long companyAdminId) {
+    if (companyAdminId.equals(null)) {
+      return null;
+    }
     return qCompanyAdmin.id.eq(companyAdminId);
   }
 }

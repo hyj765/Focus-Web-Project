@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +27,12 @@ import java.io.IOException;
  */
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     private CompanyAdminService companyAdminService;
+    private ServiceAdminService serviceAdminService;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, CompanyAdminService companyAdminService) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, CompanyAdminService companyAdminService, ServiceAdminService serviceAdminService) {
         super(authenticationManager);
         this.companyAdminService = companyAdminService;
+        this.serviceAdminService = serviceAdminService;
     }
 
     @Override
@@ -82,9 +85,18 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                 if (companyAdmin != null) {
                     // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
                     System.out.println("step5");
-                    FocusUserDetails userDetails = new FocusUserDetails(companyAdmin);
+                    User user = new User(companyAdmin.getUserId(), companyAdmin.getPwd(), companyAdmin.getUserRole());
+                    FocusUserDetails userDetails = new FocusUserDetails(user);
                     UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(userId,
                             null, userDetails.getAuthorities());
+                    jwtAuthentication.setDetails(userDetails);
+                    return jwtAuthentication;
+                } else {
+                    ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminByUserId(userId);
+                    User user = new User(serviceAdmin.getUserId(), serviceAdmin.getPwd(), serviceAdmin.getUserRole());
+                    FocusUserDetails userDetails = new FocusUserDetails(user);
+                    UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(userId,
+                        null, userDetails.getAuthorities());
                     jwtAuthentication.setDetails(userDetails);
                     return jwtAuthentication;
                 }

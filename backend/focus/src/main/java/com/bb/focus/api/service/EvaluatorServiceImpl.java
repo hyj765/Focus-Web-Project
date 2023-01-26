@@ -9,20 +9,33 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class EvaluatorServiceImpl implements EvaluatorService{
 
-  private final CompanyAdminRepository companyAdminRepository;
-  private final EvaluatorRepository evaluatorRepository;
+//  private final CompanyAdminRepository companyAdminRepository;
+//
+//  private final EvaluatorRepository evaluatorRepository;
 
-  private final MailService mailService;
-  private final PasswordEncoder passwordEncoder;
+  @Autowired
+  CompanyAdminRepository companyAdminRepository;
+
+  @Autowired
+  EvaluatorRepository evaluatorRepository;
+
+//  private final MailService mailService;
+//  private final PasswordEncoder passwordEncoder;
+
+//  EvaluatorServiceImpl(CompanyAdminRepository companyAdminRepository, EvaluatorRepository evaluatorRepository){
+//    this.companyAdminRepository = companyAdminRepository;
+//    this.evaluatorRepository = evaluatorRepository;
+//  }
 
   /**
    * 평가자 계정 생성
@@ -69,7 +82,8 @@ public class EvaluatorServiceImpl implements EvaluatorService{
 //    mailService.sendAccountMail(evaluator.getEmail(), content);
 
     //암호화
-    String encodedPwd = passwordEncoder.encode(newPwd);
+//    String encodedPwd = passwordEncoder.encode(newPwd);
+    String encodedPwd = newPwd;
 
     evaluator.setUserId(newId);
     evaluator.setPwd(encodedPwd);
@@ -109,6 +123,12 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     Evaluator evaluator = evaluatorRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     return evaluator;
   }
+
+//  @Override
+//  public Evaluator getEvaluatorByUserId(String userId) {
+//    Evaluator evaluator = evaluatorRepository.findEvaluatorByUserId(userId);
+//    return evaluator;
+//  }
 
   /**
    * 평가자 이메일로 중복 회원 검증

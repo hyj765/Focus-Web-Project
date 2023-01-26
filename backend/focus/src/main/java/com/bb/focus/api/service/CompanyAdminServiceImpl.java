@@ -14,14 +14,15 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
   @Autowired
   CompanyAdminRepository companyAdminRepository;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+//  @Autowired
+//  PasswordEncoder passwordEncoder;
 
   @Override
   public CompanyAdmin createCompanyAdmin(CompanyAdminRegisterPostReq userRegisterInfo) {
     CompanyAdmin companyAdmin = new CompanyAdmin();
     companyAdmin.setUserId(userRegisterInfo.getUserId());
-    companyAdmin.setPwd(passwordEncoder.encode(userRegisterInfo.getPwd()));
+//    companyAdmin.setPwd(passwordEncoder.encode(userRegisterInfo.getPwd()));
+    companyAdmin.setPwd(userRegisterInfo.getPwd());
     companyAdmin.setCompanyName(userRegisterInfo.getCompanyName());
     companyAdmin.setStartDate(userRegisterInfo.getStartDate());
     companyAdmin.setEndDate(userRegisterInfo.getEndDate());
@@ -52,7 +53,8 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
   public Long updateCompanyAdminByUserInfo(CompanyAdminRegisterPostReq userUpdateInfo) {
     CompanyAdmin companyAdmin = new CompanyAdmin();
     companyAdmin.setUserId(userUpdateInfo.getUserId());
-    companyAdmin.setPwd(passwordEncoder.encode(userUpdateInfo.getPwd()));
+//    companyAdmin.setPwd(passwordEncoder.encode(userUpdateInfo.getPwd()));
+    companyAdmin.setPwd(userUpdateInfo.getPwd());
     companyAdmin.setCompanyName(userUpdateInfo.getCompanyName());
     companyAdmin.setStartDate(userUpdateInfo.getStartDate());
     companyAdmin.setEndDate(userUpdateInfo.getEndDate());

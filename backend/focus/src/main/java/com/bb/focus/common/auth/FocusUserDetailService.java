@@ -16,17 +16,30 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class FocusUserDetailService implements UserDetailsService {
-    @Autowired
-    CompanyAdminService companyAdminService;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(username);
-        System.out.println("focusUserDetailService 왔다감");
-        if (companyAdmin != null) {
-            FocusUserDetails userDetails = new FocusUserDetails(companyAdmin);
-            return userDetails;
-        }
-        return null;
+  @Autowired
+  CompanyAdminService companyAdminService;
+
+  @Autowired
+  ServiceAdminService serviceAdminService;
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(username);
+    if (companyAdmin == null) {
+      ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminByUserId(username);
+      if (serviceAdmin != null) {
+        User user = new User(serviceAdmin.getUserId(), serviceAdmin.getPwd(),
+            serviceAdmin.getUserRole());
+        FocusUserDetails userDetails = new FocusUserDetails(user);
+        return userDetails;
+      }
+    } else {
+      User user = new User(companyAdmin.getUserId(), companyAdmin.getPwd(),
+          companyAdmin.getUserRole());
+      FocusUserDetails userDetails = new FocusUserDetails(user);
+      return userDetails;
     }
+    return null;
+  }
 }

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,14 +36,23 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @RequestMapping("/companyusers")
 public class CompanyAdminController {
 
-  private final EvaluatorService evaluatorService;
-  private final ApplicantService applicantService;
 
-  private final CompanyAdminService companyAdminService;
+//  private final EvaluatorService evaluatorService;
+//
+//  private final ApplicantService applicantService;
+//
+//  private final CompanyAdminService companyAdminService;
+
+  @Autowired
+  EvaluatorService evaluatorService;
+  @Autowired
+  ApplicantService applicantService;
+  @Autowired
+  CompanyAdminService companyAdminService;
 
   @ApiOperation(value = "평가자 계정 생성", notes = "기업관리자로부터 입력받은 정보로 평가자 계정을 생성한다.")
   @PostMapping("/evaluators/{company-admin-id}")
