@@ -2,7 +2,7 @@ package com.bb.focus.api.service;
 
 
 import com.bb.focus.api.response.SchoolDto;
-import com.bb.focus.db.Util.ExcelUtils;
+import com.bb.focus.common.util.ExcelUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
@@ -27,18 +27,20 @@ public class DataInputServiceImpl implements DataInputService{
 
 
     public List<SchoolDto> ConvertMultiFileIntoList(MultipartFile file) throws IOException {
-        if(exelUtils.FileNameFilter(file.getOriginalFilename())==null){
+        if(exelUtils.FileNameFilter(file.getOriginalFilename()).equals("invalid")){
             return null;
         }
         List<SchoolDto> schoolDtoList = new ArrayList<>();
         String[] f;
         String line;
         BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()));
+
         while ((line = br.readLine()) != null) {
             f = line.split(",");
 
             SchoolDto schoolDto = new SchoolDto();
             schoolDto.setName(f[1]);
+            schoolDto.setCampus(f[2]);
             schoolDto.setArea(f[3]);
             schoolDtoList.add(schoolDto);
         }
