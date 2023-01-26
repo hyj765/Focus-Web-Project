@@ -8,6 +8,7 @@ import com.bb.focus.api.response.EvaluatorDetailRes;
 import com.bb.focus.api.response.EvaluatorRes;
 import com.bb.focus.api.service.ApplicantService;
 import com.bb.focus.api.service.EvaluatorService;
+import com.bb.focus.api.service.MailService;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.common.model.response.BaseResponseBody;
@@ -17,9 +18,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,7 +67,8 @@ public class CompanyAdminController {
 
   @ApiOperation(value="평가자 ID, PWD 자동생성 : 단건", notes = "평가자의 1명의 id와 pwd를 자동생성한다.")
   @PostMapping("/evaluators/create/{evaluator-id}")
-  public ResponseEntity<? extends BaseResponseBody> autoSetEvaluatorAccount(@PathVariable("evaluator-id") Long id){
+  public ResponseEntity<? extends BaseResponseBody> autoSetEvaluatorAccount(@PathVariable("evaluator-id") Long id)
+      throws MessagingException {
 
     evaluatorService.autoAssignAccount(id);
 

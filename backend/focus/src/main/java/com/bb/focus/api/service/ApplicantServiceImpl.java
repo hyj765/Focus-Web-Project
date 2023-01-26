@@ -14,8 +14,10 @@ import com.bb.focus.db.repository.UniversityRepository;
 import java.util.List;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.security.util.Password;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,6 +29,8 @@ public class ApplicantServiceImpl implements ApplicantService{
   private final CollegeRepository collegeRepository;
   private final UniversityRepository universityRepository;
   private final GraduateSchoolRepository graduateSchoolRepository;
+  private final MailService mailService;
+  private final PasswordEncoder passwordEncoder;
 
   /**
    * 지원자 계정 생성
@@ -85,8 +89,17 @@ public class ApplicantServiceImpl implements ApplicantService{
     String newId = applicant.getCompanyAdmin().getCompanyName() + "A" + applicant.getCode();
     String newPwd = getRandomString();
 
+    //메일
+//    Map<String, String> content = new HashMap<>();
+//    content.put("id", newId);
+//    content.put("pwd", newPwd);
+//    mailService.sendAccountMail(evaluator.getEmail(), content);
+
+    //암호화
+    String encodedPwd = passwordEncoder.encode(newPwd);
+
     applicant.setUserId(newId);
-    applicant.setPwd(newPwd);
+    applicant.setPwd(encodedPwd);
   }
 
   /**

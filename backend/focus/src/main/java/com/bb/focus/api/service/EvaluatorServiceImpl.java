@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,9 @@ public class EvaluatorServiceImpl implements EvaluatorService{
 
   private final CompanyAdminRepository companyAdminRepository;
   private final EvaluatorRepository evaluatorRepository;
+
+  private final MailService mailService;
+  private final PasswordEncoder passwordEncoder;
 
   /**
    * 평가자 계정 생성
@@ -58,8 +62,17 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     String newId = evaluator.getCompanyAdmin().getCompanyName() + "E" + evaluator.getCode();
     String newPwd = getRandomString();
 
+    //메일
+//    Map<String, String> content = new HashMap<>();
+//    content.put("id", newId);
+//    content.put("pwd", newPwd);
+//    mailService.sendAccountMail(evaluator.getEmail(), content);
+
+    //암호화
+    String encodedPwd = passwordEncoder.encode(newPwd);
+
     evaluator.setUserId(newId);
-    evaluator.setPwd(newPwd);
+    evaluator.setPwd(encodedPwd);
   }
 
   /**
