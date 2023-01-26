@@ -1,7 +1,9 @@
 package com.bb.focus.common.auth;
 
+import com.bb.focus.api.service.CompanyAdminService;
 import com.bb.focus.api.service.ServiceAdminService;
 import com.bb.focus.db.entity.admin.ServiceAdmin;
+import com.bb.focus.db.entity.company.CompanyAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,13 +17,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class FocusUserDetailService implements UserDetailsService {
     @Autowired
-    ServiceAdminService serviceAdminService;
+    CompanyAdminService companyAdminService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminByUserId(username);
-        if (serviceAdmin != null) {
-            FocusUserDetails userDetails = new FocusUserDetails(serviceAdmin);
+        CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(username);
+        if (companyAdmin != null) {
+            FocusUserDetails userDetails = new FocusUserDetails(companyAdmin);
             return userDetails;
         }
         return null;

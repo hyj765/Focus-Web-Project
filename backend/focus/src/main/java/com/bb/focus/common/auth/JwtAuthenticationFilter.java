@@ -2,10 +2,12 @@ package com.bb.focus.common.auth;
 
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.bb.focus.api.service.CompanyAdminService;
 import com.bb.focus.api.service.ServiceAdminService;
 import com.bb.focus.common.util.JwtTokenUtil;
 import com.bb.focus.common.util.ResponseBodyWriteUtil;
 import com.bb.focus.db.entity.admin.ServiceAdmin;
+import com.bb.focus.db.entity.company.CompanyAdmin;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,11 +25,11 @@ import java.io.IOException;
  * 요청 헤더에 jwt 토큰이 있는 경우, 토큰 검증 및 인증 처리 로직 정의.
  */
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
-    private ServiceAdminService serviceAdminervice;
+    private CompanyAdminService companyAdminervice;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, ServiceAdminService serviceAdminervice) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, CompanyAdminService companyAdminervice) {
         super(authenticationManager);
-        this.serviceAdminervice = serviceAdminervice;
+        this.companyAdminervice = companyAdminervice;
     }
 
     @Override
@@ -70,10 +72,10 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             // If so, then grab user details and create spring auth token using username, pass, authorities/roles
             if (userId != null) {
                 // jwt 토큰에 포함된 계정 정보(userId) 통해 실제 디비에 해당 정보의 계정이 있는지 조회.
-                ServiceAdmin serviceAdmin = serviceAdminervice.getServiceAdminByUserId(userId);
-                if (serviceAdmin != null) {
+                CompanyAdmin companyAdmin = companyAdminervice.getCompanyAdminByUserId(userId);
+                if (companyAdmin != null) {
                     // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
-                    FocusUserDetails userDetails = new FocusUserDetails(serviceAdmin);
+                    FocusUserDetails userDetails = new FocusUserDetails(companyAdmin);
                     UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(userId,
                             null, userDetails.getAuthorities());
                     jwtAuthentication.setDetails(userDetails);

@@ -1,6 +1,6 @@
 package com.bb.focus.config;
 
-import com.bb.focus.api.service.ServiceAdminService;
+import com.bb.focus.api.service.CompanyAdminService;
 import com.bb.focus.common.auth.FocusUserDetailService;
 import com.bb.focus.common.auth.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private FocusUserDetailService focusUserDetailService;
 
     @Autowired
-    private ServiceAdminService serviceAdminService;
+    private CompanyAdminService companyAdminService;
 
     // Password 인코딩 방식에 BCrypt 암호화 방식 사용
     @Bean
@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     // DAO 기반으로 Authentication Provider를 생성
-    // BCrypt Password Encoder와 FocusUserDetailService 구현체를 설정
+    // BCrypt Password Encoder와 UserDetailService 구현체를 설정
     @Bean
     DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -58,9 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 사용 하지않음
                 .and()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), serviceAdminService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), companyAdminService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
                 .authorizeRequests()
-                .antMatchers("/").authenticated()       //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
+                .antMatchers("/api/v1/users/me").authenticated()       //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
                 .anyRequest().permitAll()
                 .and().cors();
     }

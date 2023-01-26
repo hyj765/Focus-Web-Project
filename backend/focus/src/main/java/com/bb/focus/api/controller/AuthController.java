@@ -28,8 +28,8 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    @Autowired
-    ServiceAdminService serviceAdminService;
+//    @Autowired
+//    ServiceAdminService serviceAdminService;
 
     @Autowired
     CompanyAdminService companyAdminService;
@@ -50,13 +50,13 @@ public class AuthController {
         String password = loginInfo.getPassword();
         Byte userInfo = loginInfo.getUserRole();
         switch (userInfo) {
-            case 1: // 서비스 관리자
-                ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminByUserId(userId);
-                if (passwordEncoder.matches(password, serviceAdmin.getPwd())) {
-                    // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-                    return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
-                }
-                break;
+//            case 1: // 서비스 관리자
+//                ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminByUserId(userId);
+//                if (passwordEncoder.matches(password, serviceAdmin.getPwd())) {
+//                    // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+//                    return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+//                }
+//                break;
             case 2: // 기업 관리자
                 CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(userId);
                 if (passwordEncoder.matches(password, companyAdmin.getPwd())) {

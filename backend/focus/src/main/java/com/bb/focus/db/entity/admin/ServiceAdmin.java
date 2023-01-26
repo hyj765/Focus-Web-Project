@@ -22,7 +22,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class ServiceAdmin {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "service_admin_id")
     private Long id;
 
