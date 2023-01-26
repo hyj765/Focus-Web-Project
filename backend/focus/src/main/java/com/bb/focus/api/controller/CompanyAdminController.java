@@ -6,7 +6,6 @@ import com.bb.focus.api.response.ApplicantDetailRes;
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.CompanyAdminRes;
 import com.bb.focus.api.response.EvaluatorDetailRes;
-import com.bb.focus.api.response.EvaluatorRes;
 import com.bb.focus.api.service.ApplicantService;
 import com.bb.focus.api.service.CompanyAdminService;
 import com.bb.focus.api.service.EvaluatorService;
@@ -15,7 +14,6 @@ import com.bb.focus.common.auth.FocusUserDetails;
 import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.company.CompanyAdmin;
-import com.bb.focus.db.entity.evaluator.Evaluator;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.HashMap;
@@ -23,6 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -172,16 +174,16 @@ public class CompanyAdminController {
 
   @ApiOperation(value = "사내 평가자 계정 리스트 조회", notes = "사내 평가자 계정 리스트를 조회한다.")
   @GetMapping("/evaluators/{company-admin-id}/list")
-  public ResponseEntity<List<EvaluatorRes>> getEvaluators(
-      @PathVariable("company-admin-id") Long id) {
+  public ResponseEntity<Page<Evaluator>> getEvaluators(
+      @PathVariable("company-admin-id") Long id, @PageableDefault(size=4, sort="department", direction = Direction.DESC) Pageable pageable) {
 
-    List<Evaluator> evaluators = evaluatorService.findAllEvaluators(id);
+    Page<Evaluator> evaluators = evaluatorService.findAllEvaluatorsUsePaging(pageable, id);
 
-    List<EvaluatorRes> result = evaluators.stream()
-        .map(e -> new EvaluatorRes(e))
-        .collect(Collectors.toList());
+//    List<EvaluatorRes> result = evaluators.stream()
+//        .map(e -> new EvaluatorRes(e))
+//        .collect(Collectors.toList());
 
-    return ResponseEntity.status(200).body(result);
+    return ResponseEntity.status(200).body(evaluators);
   }
 
   @ApiOperation(value = "사내 지원자 계정 리스트 조회", notes = "사내 지원자 계정 리스트를 조회한다.")
