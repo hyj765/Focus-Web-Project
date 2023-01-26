@@ -3,6 +3,7 @@ package com.bb.focus.api.service;
 import com.bb.focus.api.response.SchoolDto;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +18,24 @@ public interface DataProcessService {
   // 다운로드할 엑셀파일을 만드는 함수
   Workbook CreateWorkbook(String[] headers);
 
-  //Long GetAvgAge();
 
+  /*
+  select count(*)
+  from applicant
+  where company_code = companycode;
+  group by age;
+   */
+  long GetAvgAge(long processId);
+
+  Map<String,Integer> GetGenders(long processId);
+
+  Map<String,Integer> GetMajorPerApplicant(long processId);
+  long GetAwardPerApplicant(long processId);
+  long GetActivityPerApplicant(long processId);
+  Map<String,Integer> GetResultPerApplicant(long processId);
+
+
+
+  MultipartFile ExtractStaticResultIntoPDF();
 
 }
