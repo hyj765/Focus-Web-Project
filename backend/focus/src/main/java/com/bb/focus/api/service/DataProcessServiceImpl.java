@@ -17,11 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DataInputServiceImpl implements DataInputService{
+public class DataProcessServiceImpl implements DataProcessService{
 
     ExcelUtils exelUtils;
     @Autowired
-    public DataInputServiceImpl(ExcelUtils eutil){
+    public DataProcessServiceImpl(ExcelUtils eutil){
         exelUtils = eutil;
     }
 
