@@ -22,6 +22,7 @@ public class FocusUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(username);
+        System.out.println("focusUserDetailService 왔다감");
         if (companyAdmin != null) {
             FocusUserDetails userDetails = new FocusUserDetails(companyAdmin);
             return userDetails;
