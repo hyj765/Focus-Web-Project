@@ -38,8 +38,7 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
 
   @Override
   public CompanyAdmin getCompanyAdminByUserId(String userId) {
-    CompanyAdmin companyAdmin = companyAdminRepository.findCompanyAdminByUserId(userId)
-        .orElse(new CompanyAdmin());
+    CompanyAdmin companyAdmin = companyAdminRepository.findCompanyAdminByUserId(userId);
     return companyAdmin;
   }
 

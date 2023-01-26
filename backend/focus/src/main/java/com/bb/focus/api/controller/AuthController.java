@@ -11,6 +11,7 @@ import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,11 +32,15 @@ public class AuthController {
 //    @Autowired
 //    ServiceAdminService serviceAdminService;
 
-    @Autowired
-    CompanyAdminService companyAdminService;
+    private CompanyAdminService companyAdminService;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
+
+    public AuthController(CompanyAdminService companyAdminService, PasswordEncoder passwordEncoder){
+        this.companyAdminService = companyAdminService;
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
     @PostMapping("/login")
     @ApiOperation(value = "로그인", notes = "<strong>아이디와 패스워드</strong>를 통해 로그인 한다.")
