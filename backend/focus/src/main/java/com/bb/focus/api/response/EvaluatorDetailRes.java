@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ApiModel("EvaluatorRes")
+@ApiModel("EvaluatorDetailRes")
 public class EvaluatorDetailRes {
 
   @ApiModelProperty(name="평가자 시퀀스 넘버", example = "1")

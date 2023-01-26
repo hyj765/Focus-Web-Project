@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,9 @@ public class EvaluatorServiceImpl implements EvaluatorService{
 
   private final CompanyAdminRepository companyAdminRepository;
   private final EvaluatorRepository evaluatorRepository;
+
+  private final MailService mailService;
+  private final PasswordEncoder passwordEncoder;
 
   /**
    * 평가자 계정 생성
@@ -48,7 +52,7 @@ public class EvaluatorServiceImpl implements EvaluatorService{
   /**
    * 평가자 id, pwd 자동 생성 및 할당
    * 생성 규칙 ] 아이디 : 기업이름 + E + 평가자사번
-   *           비밀번호 : 랜덤 생성 문자열 + 평가자 이름
+   *           비밀번호 : 랜덤 생성 문자열
    */
   @Transactional
   public void autoAssignAccount(Long id) {
@@ -56,10 +60,19 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     Evaluator evaluator = evaluatorRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 
     String newId = evaluator.getCompanyAdmin().getCompanyName() + "E" + evaluator.getCode();
-    String newPwd = getRandomString() + evaluator.getName();
+    String newPwd = getRandomString();
+
+    //메일
+//    Map<String, String> content = new HashMap<>();
+//    content.put("id", newId);
+//    content.put("pwd", newPwd);
+//    mailService.sendAccountMail(evaluator.getEmail(), content);
+
+    //암호화
+    String encodedPwd = passwordEncoder.encode(newPwd);
 
     evaluator.setUserId(newId);
-    evaluator.setPwd(newPwd);
+    evaluator.setPwd(encodedPwd);
   }
 
   /**
@@ -118,7 +131,7 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     Random random = new Random();
 
     String generatedString = random.ints(leftLimit, rightLimit + 1)
-        .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+//        .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
         .limit(targetStringLength)
         .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
         .toString();
