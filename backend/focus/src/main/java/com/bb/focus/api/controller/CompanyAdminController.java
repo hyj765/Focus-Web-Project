@@ -12,6 +12,8 @@ import com.bb.focus.api.service.MailService;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.common.model.response.BaseResponseBody;
+import com.bb.focus.db.entity.company.CompanyAdmin;
+import com.bb.focus.db.entity.evaluator.Evaluator;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.HashMap;
@@ -49,8 +51,8 @@ public class CompanyAdminController {
       evaluatorService.create(companyAdminId, evaluator);
     }
 
-    return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-  }
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
 
   @ApiOperation(value = "지원자 계정 생성", notes = "기업관리자로부터 입력받은 정보로 지원자 계정을 생성한다.")
   @PostMapping("/applicants/{company-admin-id}")
@@ -70,10 +72,10 @@ public class CompanyAdminController {
   public ResponseEntity<? extends BaseResponseBody> autoSetEvaluatorAccount(@PathVariable("evaluator-id") Long id)
       throws MessagingException {
 
-    evaluatorService.autoAssignAccount(id);
+        evaluatorService.updateEvaluatorInfo(id, evaluatorInfo);
 
-    return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-  }
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
 
   @ApiOperation(value = "모든 평가자 ID, PWD 자동생성", notes = "사내 모든 평가자의 ID, PWD를 일괄 자동생성한다.")
   @PostMapping("/evaluators/create/all/{company-admin-id}")
@@ -119,7 +121,7 @@ public class CompanyAdminController {
       @PathVariable("evaluator-id") Long id,
       @RequestBody @ApiParam(value="평가자 계정 기본 정보", required = true) EvaluatorInfoReq evaluatorInfo){
 
-    evaluatorService.updateEvaluatorInfo(id, evaluatorInfo);
+        evaluatorService.removeEvaluator(id);
 
     Map<String, Long> result = new HashMap<>();
     result.put("id", id);
@@ -141,14 +143,15 @@ public class CompanyAdminController {
     return ResponseEntity.status(200).body(result);
   }
 
-  @ApiOperation(value = "평가자 계정 삭제", notes = "기업관리자가 평가자 계정을 삭제한다.")
-  @DeleteMapping("/evaluators/{evaluator-id}")
-  public ResponseEntity<? extends BaseResponseBody> deleteEvaluator(@PathVariable("evaluator-id") Long id){
+    @ApiOperation(value = "사내 평가자 계정 리스트 조회", notes = "사내 평가자 계정 리스트를 조회한다.")
+    @GetMapping("/evaluators/{company-admin-id}/list")
+    public ResponseEntity<List<EvaluatorRes>> getEvaluators(@PathVariable("company-admin-id") Long id) {
 
-    evaluatorService.removeEvaluator(id);
+        List<Evaluator> evaluators = evaluatorService.findAllEvaluators(id);
 
-    return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-  }
+        List<EvaluatorRes> result = evaluators.stream()
+                .map(e -> new EvaluatorRes(e))
+                .collect(Collectors.toList());
 
   @ApiOperation(value = "지원자 계정 삭제", notes = "기업관리자가 지원자 계정을 삭제한다.")
   @DeleteMapping("/applicants/{applicant-id}")
@@ -163,14 +166,13 @@ public class CompanyAdminController {
   @GetMapping("/evaluators/{company-admin-id}/list")
   public ResponseEntity<List<EvaluatorRes>> getEvaluators(@PathVariable("company-admin-id") Long id){
 
-    List<Evaluator> evaluators = evaluatorService.findAllEvaluators(id);
+    @ApiOperation(value = "평가자 상세 조회", notes = "특정 평가자 계정의 상세 정보를 조회한다.")
+    @GetMapping("/evaluators/{evaluator-id}")
+    public ResponseEntity<EvaluatorDetailRes> getEvaluatorDetail(@PathVariable("evaluator-id") Long id) {
 
-    List<EvaluatorRes> result = evaluators.stream()
-        .map(e -> new EvaluatorRes(e))
-        .collect(Collectors.toList());
+        Evaluator evaluator = evaluatorService.findEvaluator(id);
 
-    return ResponseEntity.status(200).body(result);
-  }
+        EvaluatorDetailRes result = new EvaluatorDetailRes(evaluator);
 
   @ApiOperation(value = "사내 지원자 계정 리스트 조회", notes = "사내 지원자 계정 리스트를 조회한다.")
   @GetMapping("/applicants/{company-admin-id}/list")
@@ -189,9 +191,19 @@ public class CompanyAdminController {
   @GetMapping("/evaluators/{evaluator-id}")
   public ResponseEntity<EvaluatorDetailRes> getEvaluatorDetail(@PathVariable("evaluator-id") Long id){
 
-    Evaluator evaluator = evaluatorService.findEvaluator(id);
+    @ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
+    @GetMapping("/me")
+    public ResponseEntity<CompanyAdminRes> getUserInfo(@ApiIgnore Authentication authentication) {
+        /**
+         * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
+         * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
+         */
+        FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
+        String userId = userDetails.getUsername();
+        CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(userId);
 
-    EvaluatorDetailRes result = new EvaluatorDetailRes(evaluator);
+        return ResponseEntity.status(200).body(CompanyAdminRes.of(companyAdmin));
+    }
 
     return ResponseEntity.status(200).body(result);
   }
