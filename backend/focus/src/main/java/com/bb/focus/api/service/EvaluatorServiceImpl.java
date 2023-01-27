@@ -1,6 +1,7 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.EvaluatorInfoReq;
+import com.bb.focus.api.response.EvaluatorRes;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.repository.CompanyAdminRepository;
@@ -102,8 +103,8 @@ public class EvaluatorServiceImpl implements EvaluatorService{
   }
 
   @Override
-  public Page<Evaluator> findAllEvaluatorsUsePaging(Pageable pageable, Long companyAdminId) {
-    Page<Evaluator> evaluators = evaluatorRepository.findAllEvaluatorsByCompanyAdminIdUsePaging(pageable, companyAdminId);
+  public Page<EvaluatorRes> findAllEvaluatorsUsePaging(Pageable pageable, String search, Long companyAdminId) {
+    Page<EvaluatorRes> evaluators = evaluatorRepository.findAllEvaluatorsByCompanyAdminIdUsePaging(pageable, search, companyAdminId);
     return evaluators;
   }
 
