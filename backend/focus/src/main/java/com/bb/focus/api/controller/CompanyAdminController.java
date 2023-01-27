@@ -22,7 +22,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,7 +52,7 @@ public class CompanyAdminController {
 
   @ApiOperation(value = "평가자 계정 생성", notes = "기업관리자로부터 입력받은 정보로 평가자 계정을 생성한다.")
   @PostMapping("/evaluators/{company-admin-id}")
-  public ResponseEntity<? extends BaseResponseBody> createEvaluator(
+  public ResponseEntity<?> createEvaluator(
       @PathVariable("company-admin-id") Long companyAdminId,
       @RequestBody @ApiParam(value = "평가자 계정 생성 정보", required = true) List<EvaluatorInfoReq> evaluatorInfoList) {
 
@@ -174,16 +177,16 @@ public class CompanyAdminController {
 
   @ApiOperation(value = "사내 평가자 계정 리스트 조회", notes = "사내 평가자 계정 리스트를 조회한다.")
   @GetMapping("/evaluators/{company-admin-id}/list")
-  public ResponseEntity<List<EvaluatorRes>> getEvaluators(
-      @PathVariable("company-admin-id") Long id) {
+  public ResponseEntity<Page<Evaluator>> getEvaluators(
+      @PathVariable("company-admin-id") Long id, @PageableDefault(size=4, sort="department", direction = Direction.DESC) Pageable pageable) {
 
-    List<Evaluator> evaluators = evaluatorService.findAllEvaluators(id);
+    Page<Evaluator> evaluators = evaluatorService.findAllEvaluatorsUsePaging(pageable, id);
 
-    List<EvaluatorRes> result = evaluators.stream()
-        .map(e -> new EvaluatorRes(e))
-        .collect(Collectors.toList());
+//    List<EvaluatorRes> result = evaluators.stream()
+//        .map(e -> new EvaluatorRes(e))
+//        .collect(Collectors.toList());
 
-    return ResponseEntity.status(200).body(result);
+    return ResponseEntity.status(200).body(evaluators);
   }
 
   @ApiOperation(value = "사내 지원자 계정 리스트 조회", notes = "사내 지원자 계정 리스트를 조회한다.")

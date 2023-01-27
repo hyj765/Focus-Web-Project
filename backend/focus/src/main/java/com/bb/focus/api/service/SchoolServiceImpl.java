@@ -61,6 +61,7 @@ public class SchoolServiceImpl extends ApplicantUniv implements SchoolService{
         ApplicantUniv univData = new ApplicantUniv();
         univData.setName(schooldata.getName());
         univData.setArea(schooldata.getArea());
+        univData.setCampus(schooldata.getCampus());
 
         if(univRepo.save(univData) != null){
             return true;
@@ -72,6 +73,7 @@ public class SchoolServiceImpl extends ApplicantUniv implements SchoolService{
         ApplicantCollege collegeData = new ApplicantCollege();
         collegeData.setName(schooldata.getName());
         collegeData.setArea(schooldata.getArea());
+        collegeData.setCampus(schooldata.getCampus());
 
         if(collegeRepo.save(collegeData) != null){
             return true;
@@ -83,6 +85,7 @@ public class SchoolServiceImpl extends ApplicantUniv implements SchoolService{
         ApplicantGraduate graduateData = new ApplicantGraduate();
         graduateData.setName(schooldata.getName());
         graduateData.setArea(schooldata.getArea());
+        graduateData.setCampus(schooldata.getCampus());
 
         if(graduateRepo.save(graduateData) != null){
             return true;

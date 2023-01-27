@@ -55,19 +55,19 @@ public class ApplicantServiceImpl implements ApplicantService{
     applicant.setAwardCount(applicantInfoReq.getAwardCount());
     applicant.setActivityCount(applicantInfoReq.getActivityCount());
 
-    if(applicantInfoReq.getCollegeId() != null){
+    if(applicantInfoReq.getCollegeId() != 1){
       ApplicantCollege applicantCollege = collegeRepository.findById(applicantInfoReq.getCollegeId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicationCollege(applicantCollege);
     }
 
-    if(applicantInfoReq.getUnivId() != null){
+    if(applicantInfoReq.getUnivId() != 1){
       ApplicantUniv applicantUniv = universityRepository.findById(applicantInfoReq.getUnivId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicantsUniv(applicantUniv);
     }
 
-    if(applicantInfoReq.getGraduateId() != null){
+    if(applicantInfoReq.getGraduateId() != 1){
       ApplicantGraduate applicantGraduate = graduateSchoolRepository.findById(applicantInfoReq.getGraduateId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicantsGraduate(applicantGraduate);
@@ -128,19 +128,19 @@ public class ApplicantServiceImpl implements ApplicantService{
     applicant.setActivityCount(applicantInfoReq.getActivityCount());
 
     //대학 정보 수정..
-    if(applicantInfoReq.getCollegeId() != null){
+    if(applicantInfoReq.getCollegeId() != 1){
       ApplicantCollege applicantCollege = collegeRepository.findById(applicantInfoReq.getCollegeId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicationCollege(applicantCollege);
     }
 
-    if(applicantInfoReq.getUnivId() != null){
+    if(applicantInfoReq.getUnivId() != 1){
       ApplicantUniv applicantUniv = universityRepository.findById(applicantInfoReq.getUnivId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicantsUniv(applicantUniv);
     }
 
-    if(applicantInfoReq.getGraduateId() != null){
+    if(applicantInfoReq.getGraduateId() != 1){
       ApplicantGraduate applicantGraduate = graduateSchoolRepository.findById(applicantInfoReq.getGraduateId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicantsGraduate(applicantGraduate);

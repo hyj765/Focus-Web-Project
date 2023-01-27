@@ -3,6 +3,8 @@ package com.bb.focus.api.service;
 import com.bb.focus.api.request.EvaluatorInfoReq;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface EvaluatorService {
 
@@ -16,6 +18,8 @@ public interface EvaluatorService {
   public void updateEvaluatorInfo(Long id, EvaluatorInfoReq evaluatorInfoReq);
 
   public void removeEvaluator(Long id);
+
+  public Page<Evaluator> findAllEvaluatorsUsePaging(Pageable pageable, Long companyAdminId);
 
   public List<Evaluator> findAllEvaluators(Long companyAdminId);
 

@@ -1,16 +1,11 @@
 package com.bb.focus.api.controller;
 
 import com.bb.focus.api.response.SchoolDto;
-import com.bb.focus.api.service.DataInputService;
+import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.SchoolService;
-import com.opencsv.exceptions.CsvValidationException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,13 +20,13 @@ import java.util.List;
 @CrossOrigin("*")
 @RequestMapping("/Data")
 public class DataInputController {
-    DataInputService DataService;
+    DataProcessService DataService;
     SchoolService schoolSerivce;
 
     //ApplicantService
     //EvaluatorService
     @Autowired
-    public DataInputController(DataInputService Dservice, SchoolService scService){
+    public DataInputController(DataProcessService Dservice, SchoolService scService){
         DataService = Dservice;
         schoolSerivce = scService;
 
@@ -74,7 +69,7 @@ public class DataInputController {
 
     // 지원자 데이터를 엑셀로 받아오는 함수. csv 연동 아직 안됨. xls과 xlxs 두 가지만 가능
     @PostMapping(value = "/input/applicant",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> AddApplicantIntoExcel(@RequestParam MultipartFile file) throws IOException
+    public ResponseEntity<?> AddApplicantIntoExcel(@RequestPart MultipartFile file) throws IOException
     {
         try {
             DataService.ReadExcel(file);
@@ -89,7 +84,7 @@ public class DataInputController {
 
     // 평가자 데이터를 엑셀로 받아오는 함수. csv 연동 아직 안됨. xls과 xlxs 두 가지만 가능
     @PostMapping(value = "/input/evaluator",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> AddEvaluatorIntoExcel(@RequestParam MultipartFile file) throws IOException
+    public ResponseEntity<?> AddEvaluatorIntoExcel(@RequestPart MultipartFile file) throws IOException
     {
         try {
             DataService.ReadExcel(file);
@@ -106,6 +101,9 @@ public class DataInputController {
     @PostMapping("/input/univ")
     public ResponseEntity<?> UniversityIntoExcel(@RequestPart MultipartFile file) {
         List<SchoolDto> univList=null;
+        if(file.isEmpty()){
+            return new ResponseEntity<String>("fail to load data",HttpStatus.BAD_REQUEST);
+        }
         try {
             univList = DataService.ConvertMultiFileIntoList(file);
         }catch (IOException e){
@@ -138,8 +136,13 @@ public class DataInputController {
     @PostMapping("/input/graduateschool")
     public ResponseEntity<?> GraduateSchoolIntoExcel(@RequestPart MultipartFile file){
         List<SchoolDto> GraduateList = null;
+        if(file == null) {
+            return new ResponseEntity<String>("file not found",HttpStatus.BAD_REQUEST);
+        }
+
         try {
             GraduateList = DataService.ConvertMultiFileIntoList(file);
+
         }catch (IOException e){
             System.out.println(e.getStackTrace());
         }

@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,8 @@ public class EvaluatorServiceImpl implements EvaluatorService{
 
   private final EvaluatorRepository evaluatorRepository;
 
+  private final MailService mailService;
+  private final PasswordEncoder passwordEncoder;
 
   /**
    * 평가자 계정 생성
@@ -96,6 +99,12 @@ public class EvaluatorServiceImpl implements EvaluatorService{
   @Transactional
   public void removeEvaluator(Long id) {
     evaluatorRepository.deleteById(id);
+  }
+
+  @Override
+  public Page<Evaluator> findAllEvaluatorsUsePaging(Pageable pageable, Long companyAdminId) {
+    Page<Evaluator> evaluators = evaluatorRepository.findAllEvaluatorsByCompanyAdminIdUsePaging(pageable, companyAdminId);
+    return evaluators;
   }
 
   @Override

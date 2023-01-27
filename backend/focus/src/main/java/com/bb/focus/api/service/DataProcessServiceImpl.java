@@ -2,7 +2,10 @@ package com.bb.focus.api.service;
 
 
 import com.bb.focus.api.response.SchoolDto;
-import com.bb.focus.db.Util.ExcelUtils;
+import com.bb.focus.common.util.ExcelUtils;
+import com.bb.focus.db.entity.applicant.Applicant;
+import com.bb.focus.db.entity.company.CompanyAdmin;
+import java.util.Map;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
@@ -17,28 +20,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DataInputServiceImpl implements DataInputService{
+public class DataProcessServiceImpl implements DataProcessService{
 
+    private List<Applicant> allapplicant = null;
+    ApplicantService applicantService;
     ExcelUtils exelUtils;
     @Autowired
-    public DataInputServiceImpl(ExcelUtils eutil){
+    public DataProcessServiceImpl(ExcelUtils eutil,ApplicantService aservice){
+        applicantService = aservice;
         exelUtils = eutil;
     }
 
+    public void initApplicant(long companyId){
+         allapplicant=applicantService.findAllApplicants(companyId);
+    }
 
     public List<SchoolDto> ConvertMultiFileIntoList(MultipartFile file) throws IOException {
-        if(exelUtils.FileNameFilter(file.getOriginalFilename())==null){
+        if(exelUtils.FileNameFilter(file.getOriginalFilename()).equals("invalid")){
             return null;
         }
         List<SchoolDto> schoolDtoList = new ArrayList<>();
         String[] f;
         String line;
         BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()));
+
         while ((line = br.readLine()) != null) {
             f = line.split(",");
 
             SchoolDto schoolDto = new SchoolDto();
             schoolDto.setName(f[1]);
+            schoolDto.setCampus(f[2]);
             schoolDto.setArea(f[3]);
             schoolDtoList.add(schoolDto);
         }
@@ -71,8 +82,57 @@ public class DataInputServiceImpl implements DataInputService{
         return exelUtils.CreateWorkbook(headers);
     }
 
+    public long GetAvgAge(long processId){
+
+        return 0;
+    }
+    public Map<String,Integer> GetGenders(long processId){
+        Map<String, Integer> Genders = null;
 
 
+
+        return Genders;
+
+    }
+    public Map<String,Integer> GetMajorPerApplicant(long processId){
+        Map<String, Integer> MajorPerApplicant = null;
+
+
+
+        return MajorPerApplicant;
+
+    }
+    public long GetAwardPerApplicant(long processId){
+        Map<String, Integer> AvgAge = null;
+
+
+
+        return 0;
+
+    }
+    public long GetActivityPerApplicant(long processId){
+
+
+
+
+        return 0;
+
+    }
+    public Map<String,Integer> GetResultPerApplicant(long processId){
+        Map<String, Integer> ResultPerApplicant = null;
+
+
+
+        return null;
+    }
+
+    public MultipartFile ExtractStaticResultIntoPDF(){
+
+
+
+
+        return null;
+    }
 
 
 }
