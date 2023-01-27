@@ -34,6 +34,6 @@ public class MajorPerApplicant {
 
   @NotNull
   @ColumnDefault("0")
-  private Long applicantCount;
+  private int applicantCount;
 
 }
