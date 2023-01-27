@@ -16,26 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class EvaluatorServiceImpl implements EvaluatorService{
 
-//  private final CompanyAdminRepository companyAdminRepository;
-//
-//  private final EvaluatorRepository evaluatorRepository;
+  private final CompanyAdminRepository companyAdminRepository;
 
-  @Autowired
-  CompanyAdminRepository companyAdminRepository;
+  private final EvaluatorRepository evaluatorRepository;
 
-  @Autowired
-  EvaluatorRepository evaluatorRepository;
-
-//  private final MailService mailService;
-//  private final PasswordEncoder passwordEncoder;
-
-//  EvaluatorServiceImpl(CompanyAdminRepository companyAdminRepository, EvaluatorRepository evaluatorRepository){
-//    this.companyAdminRepository = companyAdminRepository;
-//    this.evaluatorRepository = evaluatorRepository;
-//  }
 
   /**
    * 평가자 계정 생성

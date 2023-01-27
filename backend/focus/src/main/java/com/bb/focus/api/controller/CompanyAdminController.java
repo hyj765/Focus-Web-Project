@@ -36,23 +36,16 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/companyusers")
 public class CompanyAdminController {
 
 
-//  private final EvaluatorService evaluatorService;
-//
-//  private final ApplicantService applicantService;
-//
-//  private final CompanyAdminService companyAdminService;
+  private final EvaluatorService evaluatorService;
 
-  @Autowired
-  EvaluatorService evaluatorService;
-  @Autowired
-  ApplicantService applicantService;
-  @Autowired
-  CompanyAdminService companyAdminService;
+  private final ApplicantService applicantService;
+
+  private final CompanyAdminService companyAdminService;
 
   @ApiOperation(value = "평가자 계정 생성", notes = "기업관리자로부터 입력받은 정보로 평가자 계정을 생성한다.")
   @PostMapping("/evaluators/{company-admin-id}")

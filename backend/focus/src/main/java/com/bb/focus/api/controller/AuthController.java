@@ -47,13 +47,6 @@ public class AuthController {
 
 //    private PasswordEncoder passwordEncoder;
 
-//  public AuthController(CompanyAdminService companyAdminService, EvaluatorService evaluatorService,
-//      ApplicantService applicantService) {
-//    this.companyAdminService = companyAdminService;
-//    this.applicantService = applicantService;
-//    this.evaluatorService = evaluatorService;
-//  }
-
 
   @PostMapping("/login")
   @ApiOperation(value = "로그인", notes = "<strong>아이디와 패스워드</strong>를 통해 로그인 한다.")

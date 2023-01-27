@@ -22,45 +22,19 @@ import sun.security.util.Password;
 
 @Service
 @Transactional(readOnly = true)
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class ApplicantServiceImpl implements ApplicantService{
 
-//  private final ApplicantRepository applicantRepository;
-//
-//  private final CompanyAdminRepository companyAdminRepository;
-//
-//  private final CollegeRepository collegeRepository;
-//
-//  private final UniversityRepository universityRepository;
-//
-//  private final GraduateSchoolRepository graduateSchoolRepository;
+  private final ApplicantRepository applicantRepository;
 
-  @Autowired
-  ApplicantRepository applicantRepository;
+  private final CompanyAdminRepository companyAdminRepository;
 
-  @Autowired
-  CompanyAdminRepository companyAdminRepository;
+  private final CollegeRepository collegeRepository;
 
-  @Autowired
-  CollegeRepository collegeRepository;
+  private final UniversityRepository universityRepository;
 
-  @Autowired
-  UniversityRepository universityRepository;
+  private final GraduateSchoolRepository graduateSchoolRepository;
 
-  @Autowired
-  GraduateSchoolRepository graduateSchoolRepository;
-
-//  private final MailService mailService;
-//  private final PasswordEncoder passwordEncoder;
-
-//  ApplicantServiceImpl(ApplicantRepository applicantRepository, CompanyAdminRepository companyAdminRepository, CollegeRepository collegeRo
-//  , UniversityRepository universityRepository, GraduateSchoolRepository graduateSchoolRepository){
-//    this.applicantRepository=applicantRepository;
-//    this.companyAdminRepository=companyAdminRepository;
-//    this.collegeRepository=collegeRepository;
-//    this.universityRepository=universityRepository;
-//    this.graduateSchoolRepository = graduateSchoolRepository;
-//  }
 
   /**
    * 지원자 계정 생성
