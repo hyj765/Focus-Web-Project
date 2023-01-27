@@ -6,6 +6,7 @@ import com.bb.focus.api.response.ApplicantDetailRes;
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.CompanyAdminRes;
 import com.bb.focus.api.response.EvaluatorDetailRes;
+import com.bb.focus.api.response.EvaluatorRes;
 import com.bb.focus.api.service.ApplicantService;
 import com.bb.focus.api.service.CompanyAdminService;
 import com.bb.focus.api.service.EvaluatorService;
@@ -19,6 +20,7 @@ import io.swagger.annotations.ApiParam;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -173,15 +175,14 @@ public class CompanyAdminController {
   }
 
   @ApiOperation(value = "사내 평가자 계정 리스트 조회", notes = "사내 평가자 계정 리스트를 조회한다.")
-  @GetMapping("/evaluators/{company-admin-id}/list")
-  public ResponseEntity<Page<Evaluator>> getEvaluators(
-      @PathVariable("company-admin-id") Long id, @PageableDefault(size=4, sort="department", direction = Direction.DESC) Pageable pageable) {
+  @GetMapping("/evaluators/{company-admin-id}/list/{search-name}")
+  public ResponseEntity<Page<EvaluatorRes>> getEvaluators(
+      @PathVariable("company-admin-id") Long id,
+      @PathVariable(value = "search-name", required = false) Optional<String> search ,
+      @PageableDefault(size=10, sort="code", direction = Direction.ASC) Pageable pageable) {
 
-    Page<Evaluator> evaluators = evaluatorService.findAllEvaluatorsUsePaging(pageable, id);
-
-//    List<EvaluatorRes> result = evaluators.stream()
-//        .map(e -> new EvaluatorRes(e))
-//        .collect(Collectors.toList());
+    Page<EvaluatorRes> evaluators =
+        evaluatorService.findAllEvaluatorsUsePaging(pageable, String.valueOf(search), id);
 
     return ResponseEntity.status(200).body(evaluators);
   }

@@ -10,6 +10,7 @@ import com.bb.focus.db.entity.evaluator.QEvaluator;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -34,23 +35,26 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository{
   /**
    * 페이징 사용 + 기업관리자 아이디로 모든 평가자 조회
    */
-  public Page<Evaluator> findAllEvaluatorsByCompanyAdminIdUsePaging(Pageable pageable, Long companyAdminId) {
+  public Page<EvaluatorRes> findAllEvaluatorsByCompanyAdminIdUsePaging(Pageable pageable, String search, Long companyAdminId) {
 
     List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
-    List<Evaluator> results = jpaQueryFactory
-        .selectFrom(qEvaluator)
+    List<EvaluatorRes> results = jpaQueryFactory
+        .select(Projections.constructor(EvaluatorRes.class,
+            qEvaluator.id,
+            qEvaluator.name,
+            qEvaluator.code,
+            qEvaluator.department,
+            qEvaluator.position,
+            qEvaluator.image))
+        .from(qEvaluator)
         .join(qEvaluator.companyAdmin, qCompanyAdmin)
-        .where(eqCompanyAdminId(companyAdminId))
+        .where(eqCompanyAdminId(companyAdminId), containName(search))
         .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
         .fetch();
 
-//    List<Evaluator> content = results.getResults();
-//    long total = results.getTotal();
-
-//    return new PageImpl<>(content, pageable, total);
     return new PageImpl<>(results, pageable, results.size());
   }
 
@@ -72,6 +76,13 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository{
     return qCompanyAdmin.id.eq(companyAdminId);
   }
 
+  private BooleanExpression containName(String name){
+    if(name == null || name.isEmpty()){
+      return null;
+    }
+    return qEvaluator.name.containsIgnoreCase(name);
+  }
+
   private List<OrderSpecifier> getAllOrderSpecifiers(Pageable pageable){
     List<OrderSpecifier> ORDERS = new ArrayList<>();
 
@@ -80,17 +91,15 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository{
         Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
 
         switch(order.getProperty()){
-          case "department":
-            OrderSpecifier<?> department = QueryDslUtil.getSortedColumn(direction, QEvaluator.evaluator, "department");
-            ORDERS.add(department);
-            break;
-          case "position":
-            OrderSpecifier<?> position = QueryDslUtil.getSortedColumn(direction, QEvaluator.evaluator, "position");
-            ORDERS.add(position);
-            break;
+          case "code":
+            OrderSpecifier<?> code = QueryDslUtil.getSortedColumn(direction, QEvaluator.evaluator, "code");
+            ORDERS.add(code);
           case "name":
             OrderSpecifier<?> name = QueryDslUtil.getSortedColumn(direction, QEvaluator.evaluator, "name");
             ORDERS.add(name);
+          case "department":
+            OrderSpecifier<?> department = QueryDslUtil.getSortedColumn(direction, QEvaluator.evaluator, "department");
+            ORDERS.add(department);
             break;
           default:
             break;
