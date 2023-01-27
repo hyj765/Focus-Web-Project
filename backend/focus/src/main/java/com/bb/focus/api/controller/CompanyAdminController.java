@@ -166,6 +166,21 @@ public class CompanyAdminController {
     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
   }
 
+  @ApiOperation(value = "사내 평가자 계정 리스트 조회", notes = "사내 평가자 계정 리스트를 조회한다.")
+  @GetMapping(value = {
+      "/evaluators/{company-admin-id}/list",
+      "/evaluators/{company-admin-id}/list/{search-name}"
+  })
+  public ResponseEntity<Page<EvaluatorRes>> getEvaluators(
+      @PathVariable("company-admin-id") Long id,
+      @PathVariable(value = "search-name", required = false) String search,
+      @PageableDefault(sort="code", direction = Direction.ASC) Pageable pageable) {
+
+    Page<EvaluatorRes> evaluators = evaluatorService.findAllEvaluatorsUsePaging(pageable, search, id);
+
+    return ResponseEntity.status(200).body(evaluators);
+  }
+
   @ApiOperation(value = "지원자 계정 삭제", notes = "기업관리자가 지원자 계정을 삭제한다.")
   @DeleteMapping("/applicants/{applicant-id}")
   public ResponseEntity<? extends BaseResponseBody> deleteApplicant(
@@ -174,19 +189,6 @@ public class CompanyAdminController {
     applicantService.removeApplicant(id);
 
     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-  }
-
-  @ApiOperation(value = "사내 평가자 계정 리스트 조회", notes = "사내 평가자 계정 리스트를 조회한다.")
-  @GetMapping("/evaluators/{company-admin-id}/list/{search-name}")
-  public ResponseEntity<Page<EvaluatorRes>> getEvaluators(
-      @PathVariable("company-admin-id") Long id,
-      @PathVariable(value = "search-name", required = false) Optional<String> search ,
-      @PageableDefault(size=10, sort="code", direction = Direction.ASC) Pageable pageable) {
-
-    Page<EvaluatorRes> evaluators =
-        evaluatorService.findAllEvaluatorsUsePaging(pageable, String.valueOf(search), id);
-
-    return ResponseEntity.status(200).body(evaluators);
   }
 
   @ApiOperation(value = "사내 지원자 계정 리스트 조회", notes = "사내 지원자 계정 리스트를 조회한다.")

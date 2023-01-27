@@ -2,16 +2,13 @@ package com.bb.focus.db.repository;
 
 import com.bb.focus.api.response.EvaluatorRes;
 import com.bb.focus.common.util.QueryDslUtil;
-import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.company.QCompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.entity.evaluator.QEvaluator;
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +42,16 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository{
             qEvaluator.code,
             qEvaluator.department,
             qEvaluator.position,
-            qEvaluator.image))
+            qEvaluator.image,
+            qEvaluator.userId,
+            qEvaluator.tel,
+            qEvaluator.email))
         .from(qEvaluator)
         .join(qEvaluator.companyAdmin, qCompanyAdmin)
-        .where(eqCompanyAdminId(companyAdminId), containName(search))
+        .where(
+            eqCompanyAdminId(companyAdminId),
+            containName(search)
+        )
         .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
@@ -78,7 +81,9 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository{
 
   private BooleanExpression eqCompanyAdminId(Long companyAdminId){
 
-    if(companyAdminId.equals(null)) return null;
+    if(companyAdminId.equals(null)) {
+      return null;
+    }
     return qCompanyAdmin.id.eq(companyAdminId);
   }
 
