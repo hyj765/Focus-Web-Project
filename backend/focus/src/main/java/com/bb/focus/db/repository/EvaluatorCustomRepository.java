@@ -12,4 +12,5 @@ public interface EvaluatorCustomRepository {
 
   List<Evaluator> findAllEvaluatorsByCompanyAdminId(Long companyAdminId);
 
+  Evaluator findEvaluatorByUserId(String userId);
 }

@@ -1,9 +1,13 @@
 package com.bb.focus.common.auth;
 
+import com.bb.focus.api.service.ApplicantService;
 import com.bb.focus.api.service.CompanyAdminService;
+import com.bb.focus.api.service.EvaluatorService;
 import com.bb.focus.api.service.ServiceAdminService;
 import com.bb.focus.db.entity.admin.ServiceAdmin;
+import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.company.CompanyAdmin;
+import com.bb.focus.db.entity.evaluator.Evaluator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,17 +20,53 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class FocusUserDetailService implements UserDetailsService {
-    @Autowired
-    CompanyAdminService companyAdminService;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(username);
-        System.out.println("focusUserDetailService 왔다감");
-        if (companyAdmin != null) {
-            FocusUserDetails userDetails = new FocusUserDetails(companyAdmin);
+  @Autowired
+  CompanyAdminService companyAdminService;
+
+  @Autowired
+  ServiceAdminService serviceAdminService;
+
+  @Autowired
+  ApplicantService applicantService;
+
+  @Autowired
+  EvaluatorService evaluatorService;
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(username);
+    if (companyAdmin == null) {
+      ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminByUserId(username);
+      if (serviceAdmin == null) {
+        Applicant applicant = applicantService.getApplicantByUserId(username);
+        if(applicant == null){
+          Evaluator evaluator = evaluatorService.getEvaluatorByUserId(username);
+          if(evaluator != null){
+            User user = new User(evaluator.getUserId(), evaluator.getPwd(),
+                evaluator.getUserRole());
+            FocusUserDetails userDetails = new FocusUserDetails(user);
             return userDetails;
+          }
         }
-        return null;
+        else {
+          User user = new User(applicant.getUserId(), applicant.getPwd(),
+              applicant.getUserRole());
+          FocusUserDetails userDetails = new FocusUserDetails(user);
+          return userDetails;
+        }
+      } else {
+        User user = new User(serviceAdmin.getUserId(), serviceAdmin.getPwd(),
+            serviceAdmin.getUserRole());
+        FocusUserDetails userDetails = new FocusUserDetails(user);
+        return userDetails;
+      }
+    } else {
+      User user = new User(companyAdmin.getUserId(), companyAdmin.getPwd(),
+          companyAdmin.getUserRole());
+      FocusUserDetails userDetails = new FocusUserDetails(user);
+      return userDetails;
     }
+    return null;
+  }
 }

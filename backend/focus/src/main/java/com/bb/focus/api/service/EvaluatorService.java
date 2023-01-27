@@ -26,4 +26,6 @@ public interface EvaluatorService {
 
   public Evaluator findEvaluator(Long id);
 
+  public Evaluator getEvaluatorByUserId(String userId);
+
 }

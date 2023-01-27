@@ -10,11 +10,11 @@ import com.bb.focus.api.response.EvaluatorRes;
 import com.bb.focus.api.service.ApplicantService;
 import com.bb.focus.api.service.CompanyAdminService;
 import com.bb.focus.api.service.EvaluatorService;
-import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.common.auth.FocusUserDetails;
 import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.company.CompanyAdmin;
+import com.bb.focus.db.entity.evaluator.Evaluator;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.HashMap;
@@ -44,7 +44,9 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/companyusers")
 public class CompanyAdminController {
 
+
   private final EvaluatorService evaluatorService;
+
   private final ApplicantService applicantService;
 
   private final CompanyAdminService companyAdminService;

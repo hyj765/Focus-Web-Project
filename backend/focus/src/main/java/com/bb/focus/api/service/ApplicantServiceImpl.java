@@ -14,6 +14,7 @@ import com.bb.focus.db.repository.UniversityRepository;
 import java.util.List;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,12 +26,15 @@ import sun.security.util.Password;
 public class ApplicantServiceImpl implements ApplicantService{
 
   private final ApplicantRepository applicantRepository;
+
   private final CompanyAdminRepository companyAdminRepository;
+
   private final CollegeRepository collegeRepository;
+
   private final UniversityRepository universityRepository;
+
   private final GraduateSchoolRepository graduateSchoolRepository;
-  private final MailService mailService;
-  private final PasswordEncoder passwordEncoder;
+
 
   /**
    * 지원자 계정 생성
@@ -96,7 +100,8 @@ public class ApplicantServiceImpl implements ApplicantService{
 //    mailService.sendAccountMail(evaluator.getEmail(), content);
 
     //암호화
-    String encodedPwd = passwordEncoder.encode(newPwd);
+//    String encodedPwd = passwordEncoder.encode(newPwd);
+    String encodedPwd = newPwd;
 
     applicant.setUserId(newId);
     applicant.setPwd(encodedPwd);
@@ -165,6 +170,12 @@ public class ApplicantServiceImpl implements ApplicantService{
    */
   public Applicant findApplicant(Long id) {
     return applicantRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+  }
+
+  @Override
+  public Applicant getApplicantByUserId(String userId) {
+    Applicant applicant = applicantRepository.findApplicantByUserId(userId);
+    return applicant;
   }
 
   /**

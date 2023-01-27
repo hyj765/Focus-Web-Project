@@ -13,14 +13,15 @@ public class ServiceAdminServiceImpl implements ServiceAdminService {
   @Autowired
   ServiceAdminRepository serviceAdminRepository;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+//  @Autowired
+//  PasswordEncoder passwordEncoder;
 
   @Override
   public ServiceAdmin createUser(ServiceAdminRegisterPostReq serviceAdminRegisterInfo) {
     ServiceAdmin serviceAdmin = new ServiceAdmin();
     serviceAdmin.setUserId(serviceAdminRegisterInfo.getUserId());
-    serviceAdmin.setPwd(passwordEncoder.encode(serviceAdminRegisterInfo.getPassword()));
+//    serviceAdmin.setPwd(passwordEncoder.encode(serviceAdminRegisterInfo.getPassword()));
+    serviceAdmin.setPwd(serviceAdminRegisterInfo.getPassword());
     serviceAdmin.setEmail(serviceAdminRegisterInfo.getEmail());
     serviceAdmin.setTel(serviceAdminRegisterInfo.getTel());
     serviceAdmin.setName(serviceAdminRegisterInfo.getName());
@@ -30,8 +31,7 @@ public class ServiceAdminServiceImpl implements ServiceAdminService {
 
   @Override
   public ServiceAdmin getServiceAdminByUserId(String userId) {
-    ServiceAdmin serviceAdmin = serviceAdminRepository.findServiceAdminByUserId(userId)
-        .orElse(new ServiceAdmin());
+    ServiceAdmin serviceAdmin = serviceAdminRepository.findServiceAdminByUserId(userId);
     return serviceAdmin;
   }
 }
