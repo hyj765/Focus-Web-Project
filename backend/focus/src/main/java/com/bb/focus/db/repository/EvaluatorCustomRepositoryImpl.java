@@ -1,9 +1,8 @@
 package com.bb.focus.db.repository;
 
-import static org.springframework.util.ObjectUtils.isEmpty;
-
 import com.bb.focus.api.response.EvaluatorRes;
 import com.bb.focus.common.util.QueryDslUtil;
+import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.company.QCompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.entity.evaluator.QEvaluator;
@@ -64,6 +63,13 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository{
         .join(qEvaluator.companyAdmin, qCompanyAdmin)
         .where(eqCompanyAdminId(companyAdminId))
         .fetch();
+  }
+
+  @Override
+  public Evaluator findEvaluatorByUserId(String userId) {
+    Evaluator evaluator = jpaQueryFactory.select(qEvaluator).from(qEvaluator)
+        .where(qEvaluator.userId.eq(userId)).fetchOne();
+    return evaluator;
   }
 
   private BooleanExpression eqCompanyAdminId(Long companyAdminId){

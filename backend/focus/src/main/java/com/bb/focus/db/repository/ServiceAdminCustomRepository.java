@@ -5,6 +5,6 @@ import java.util.Optional;
 
 public interface ServiceAdminCustomRepository {
 
-  Optional<ServiceAdmin> findServiceAdminByUserId(String userId);
+  ServiceAdmin findServiceAdminByUserId(String userId);
 
 }

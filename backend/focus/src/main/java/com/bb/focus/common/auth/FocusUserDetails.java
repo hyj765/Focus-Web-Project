@@ -15,30 +15,30 @@ import java.util.List;
  */
 public class FocusUserDetails implements UserDetails {
     @Autowired
-    CompanyAdmin companyAdmin;
+    User user;
     boolean accountNonExpired;
     boolean accountNonLocked;
     boolean credentialNonExpired;
     boolean enabled = false;
     List<GrantedAuthority> roles = new ArrayList<>();
 
-    public FocusUserDetails(CompanyAdmin companyAdmin) {
+    public FocusUserDetails(User user) {
         super();
-        this.companyAdmin = companyAdmin;
+        this.user = user;
     }
 
-    public CompanyAdmin getUser() {
-        return this.companyAdmin;
+    public User getUser() {
+        return this.user;
     }
 
     @Override
     public String getPassword() {
-        return this.companyAdmin.getPwd();
+        return this.user.getPwd();
     }
 
     @Override
     public String getUsername() {
-        return this.companyAdmin.getUserId();
+        return this.user.getUserId();
     }
 
     @Override

@@ -4,11 +4,13 @@ import com.bb.focus.db.entity.applicant.Applicant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @ApiModel("ApplicantRes")
+@NoArgsConstructor
 public class ApplicantRes {
   @ApiModelProperty(name="지원자 시퀀스 넘버", example = "1")
   private Long id;
@@ -25,12 +27,27 @@ public class ApplicantRes {
   @ApiModelProperty(name="지원자 사진 url", example = "url")
   private String image;
 
+  @ApiModelProperty(name="지원자 전화번호", example = "010-1235-5456")
+  private String tel;
+
+  @ApiModelProperty(name="지원자 이메일", example = "abc@gmail.com")
+  private String email;
+
   public ApplicantRes(Applicant applicant){
     id = applicant.getId();
     name = applicant.getName();
     userId = applicant.getUserId();
     code = applicant.getCode();
     image = applicant.getCode();
+  }
+
+  public static ApplicantRes of(Applicant user){
+    ApplicantRes res = new ApplicantRes();
+    res.setUserId(user.getUserId());
+    res.setTel(user.getTel());
+    res.setEmail(user.getEmail());
+    res.setName(user.getName());
+    return res;
   }
 
 }

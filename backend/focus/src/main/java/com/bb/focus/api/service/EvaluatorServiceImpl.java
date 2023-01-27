@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class EvaluatorServiceImpl implements EvaluatorService{
 
   private final CompanyAdminRepository companyAdminRepository;
+
   private final EvaluatorRepository evaluatorRepository;
 
   private final MailService mailService;
@@ -71,7 +72,8 @@ public class EvaluatorServiceImpl implements EvaluatorService{
 //    mailService.sendAccountMail(evaluator.getEmail(), content);
 
     //암호화
-    String encodedPwd = passwordEncoder.encode(newPwd);
+//    String encodedPwd = passwordEncoder.encode(newPwd);
+    String encodedPwd = newPwd;
 
     evaluator.setUserId(newId);
     evaluator.setPwd(encodedPwd);
@@ -107,6 +109,7 @@ public class EvaluatorServiceImpl implements EvaluatorService{
 
   @Override
   public List<Evaluator> findAllEvaluators(Long companyAdminId) {
+    //현재 기업관리자의 시퀀스넘버(id)를 알아야 한다.
     List<Evaluator> evaluators = evaluatorRepository.findAllEvaluatorsByCompanyAdminId(companyAdminId);
     return evaluators;
   }
@@ -114,6 +117,12 @@ public class EvaluatorServiceImpl implements EvaluatorService{
   @Override
   public Evaluator findEvaluator(Long id) {
     Evaluator evaluator = evaluatorRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+    return evaluator;
+  }
+
+  @Override
+  public Evaluator getEvaluatorByUserId(String userId) {
+    Evaluator evaluator = evaluatorRepository.findEvaluatorByUserId(userId);
     return evaluator;
   }
 
