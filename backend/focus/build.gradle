@@ -120,6 +120,8 @@ dependencies {
     //메일 전송기능
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 }
 
