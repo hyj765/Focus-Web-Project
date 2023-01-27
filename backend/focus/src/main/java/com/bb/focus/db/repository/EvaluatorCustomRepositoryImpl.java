@@ -92,7 +92,7 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository{
   private List<OrderSpecifier> getAllOrderSpecifiers(Pageable pageable){
     List<OrderSpecifier> ORDERS = new ArrayList<>();
 
-    if(!isEmpty(pageable.getSort())){
+    if(pageable.getSort() != null){
       for(Sort.Order order : pageable.getSort()){
         Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
 

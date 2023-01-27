@@ -25,8 +25,8 @@ public class EvaluatorServiceImpl implements EvaluatorService{
 
   private final EvaluatorRepository evaluatorRepository;
 
-  private final MailService mailService;
-  private final PasswordEncoder passwordEncoder;
+//  private final MailService mailService;
+//  private final PasswordEncoder passwordEncoder;
 
   /**
    * 평가자 계정 생성
