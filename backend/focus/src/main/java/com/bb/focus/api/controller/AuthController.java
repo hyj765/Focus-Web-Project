@@ -1,35 +1,30 @@
 package com.bb.focus.api.controller;
 
 import com.bb.focus.api.request.UserLoginPostReq;
-import com.bb.focus.api.response.EvaluatorRes;
+import com.bb.focus.api.request.UserLogoutPostReq;
 import com.bb.focus.api.response.UserLoginPostRes;
+import com.bb.focus.api.response.UserLogoutPostRes;
 import com.bb.focus.api.service.ApplicantService;
 import com.bb.focus.api.service.CompanyAdminService;
 import com.bb.focus.api.service.EvaluatorService;
 import com.bb.focus.api.service.ServiceAdminService;
-import com.bb.focus.common.auth.FocusUserDetails;
 import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.common.util.JwtTokenUtil;
 import com.bb.focus.db.entity.admin.ServiceAdmin;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import java.time.LocalDateTime;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.validation.Errors;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
+
+import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 인증 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -50,6 +45,9 @@ public class AuthController {
 
   @Autowired
   ApplicantService applicantService;
+
+  @Autowired
+  RedisTemplate redisTemplate;
 
 //    private PasswordEncoder passwordEncoder;
 
@@ -134,14 +132,14 @@ public class AuthController {
   }
 
   @PostMapping("/logout")
-  public ResponseEntity<?> logout(@ApiIgnore Authentication authentication) {
-
-    FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
-    System.out.println("logout :"+ authentication);
-    System.out.println(userDetails.toString());
-    String userId = userDetails.getUsername();
-    Evaluator evaluator = evaluatorService.getEvaluatorByUserId(userId);
-
-    return ResponseEntity.status(200).body(EvaluatorRes.of(evaluator));
+  public ResponseEntity<?> logout(@RequestBody @ApiParam(value = "로그아웃 정보", required = true) UserLogoutPostReq logoutInfo) {
+    String userId = JwtTokenUtil.getUserId(logoutInfo.getAccessToken());
+    System.out.println("userId : "+userId);
+    Long expiration = JwtTokenUtil.getLeftExpiration(logoutInfo.getAccessToken());
+    System.out.println("expiration : "+expiration);
+    redisTemplate.opsForValue()
+            .set("Bearer "+logoutInfo.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+    return ResponseEntity.ok(
+            UserLogoutPostRes.of(200, "Success", userId));
   }
 }
