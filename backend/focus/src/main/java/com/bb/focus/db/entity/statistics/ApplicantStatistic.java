@@ -37,7 +37,7 @@ public class ApplicantStatistic {
 
   @NotNull
   @ColumnDefault("0")
-  private int avgApplicantId;
+  private int avgApplicantAge;
 
   @NotNull
   @ColumnDefault("0")
@@ -46,6 +46,10 @@ public class ApplicantStatistic {
   @NotNull
   @ColumnDefault("0")
   private int maleCount;
+
+  @NotNull
+  @ColumnDefault("0")
+  private int avgAwardCount;
 
   @NotNull
   @ColumnDefault("0")

@@ -1,9 +1,13 @@
 package com.bb.focus.common.util;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.pdf.PdfWriter;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
+
 
 @Component
 public class ExcelUtils {
@@ -42,7 +46,12 @@ public class ExcelUtils {
     }
 
 
+    public void ExtractPDF(StringBuilder Html){
+        Document document = new Document(PageSize.A4);
+       // PdfWriter.getInstance()
 
+
+    }
 
 
 }
