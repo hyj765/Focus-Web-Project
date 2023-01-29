@@ -41,6 +41,16 @@ public class ApplicantRes {
     image = applicant.getCode();
   }
 
+  public ApplicantRes(Long id, String name, String userId, String code, String image, String tel, String email) {
+    this.id = id;
+    this.name = name;
+    this.userId = userId;
+    this.code = code;
+    this.image = image;
+    this.tel = tel;
+    this.email = email;
+  }
+
   public static ApplicantRes of(Applicant user){
     ApplicantRes res = new ApplicantRes();
     res.setUserId(user.getUserId());

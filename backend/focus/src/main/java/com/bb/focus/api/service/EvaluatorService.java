@@ -30,4 +30,7 @@ public interface EvaluatorService {
 
   public Evaluator getEvaluatorByUserId(String userId);
 
+  public List<String> getDepartments(Long companyAdminId);
+
+  Page<EvaluatorRes> findDepartmentEvaluators(Pageable pageable, List<String> departmentList, Long companyAdminId);
 }

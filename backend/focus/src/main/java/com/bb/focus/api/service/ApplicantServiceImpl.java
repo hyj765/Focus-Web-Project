@@ -1,6 +1,7 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.ApplicantInfoReq;
+import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.applicant.school.ApplicantCollege;
 import com.bb.focus.db.entity.applicant.school.ApplicantGraduate;
@@ -18,6 +19,8 @@ import java.util.Map;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,19 +64,19 @@ public class ApplicantServiceImpl implements ApplicantService{
     applicant.setAwardCount(applicantInfoReq.getAwardCount());
     applicant.setActivityCount(applicantInfoReq.getActivityCount());
 
-    if(applicantInfoReq.getCollegeId() != 1){
+    if(applicantInfoReq.getCollegeId() != null){
       ApplicantCollege applicantCollege = collegeRepository.findById(applicantInfoReq.getCollegeId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicationCollege(applicantCollege);
     }
 
-    if(applicantInfoReq.getUnivId() != 1){
+    if(applicantInfoReq.getUnivId() != null){
       ApplicantUniv applicantUniv = universityRepository.findById(applicantInfoReq.getUnivId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicantsUniv(applicantUniv);
     }
 
-    if(applicantInfoReq.getGraduateId() != 1){
+    if(applicantInfoReq.getGraduateId() != null){
       ApplicantGraduate applicantGraduate = graduateSchoolRepository.findById(applicantInfoReq.getGraduateId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicantsGraduate(applicantGraduate);
@@ -182,6 +185,13 @@ public class ApplicantServiceImpl implements ApplicantService{
   public Applicant getApplicantByUserId(String userId) {
     Applicant applicant = applicantRepository.findApplicantByUserId(userId);
     return applicant;
+  }
+
+  @Override
+  public Page<ApplicantRes> findAllApplicantsUsePaging(Pageable pageable, String search, Long id) {
+    Page<ApplicantRes> applicants = applicantRepository.findAllApplicantsWithPaging(pageable, search, id);
+    return applicants;
+
   }
 
   /**
