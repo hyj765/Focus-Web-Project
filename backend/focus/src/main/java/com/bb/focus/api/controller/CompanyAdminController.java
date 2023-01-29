@@ -17,10 +17,8 @@ import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,16 +37,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.mail.MessagingException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/companyusers")
 public class CompanyAdminController {
 
-
   private final EvaluatorService evaluatorService;
-
   private final ApplicantService applicantService;
-
   private final CompanyAdminService companyAdminService;
 
   @ApiOperation(value = "평가자 계정 생성", notes = "기업관리자로부터 입력받은 정보로 평가자 계정을 생성한다.")
@@ -80,7 +77,7 @@ public class CompanyAdminController {
   @ApiOperation(value = "평가자 ID, PWD 자동생성 : 단건", notes = "평가자의 1명의 id와 pwd를 자동생성한다.")
   @PostMapping("/evaluators/create/{evaluator-id}")
   public ResponseEntity<? extends BaseResponseBody> autoSetEvaluatorAccount(
-      @PathVariable("evaluator-id") Long id) {
+      @PathVariable("evaluator-id") Long id) throws MessagingException {
 
     evaluatorService.autoAssignAccount(id);
 
@@ -90,7 +87,7 @@ public class CompanyAdminController {
   @ApiOperation(value = "모든 평가자 ID, PWD 자동생성", notes = "사내 모든 평가자의 ID, PWD를 일괄 자동생성한다.")
   @PostMapping("/evaluators/create/all/{company-admin-id}")
   public ResponseEntity<? extends BaseResponseBody> autoSetTotalEvaluatorAccount(
-      @PathVariable("company-admin-id") Long id) {
+      @PathVariable("company-admin-id") Long id) throws MessagingException {
 
     List<Evaluator> evaluators = evaluatorService.findAllEvaluators(id);
 
@@ -103,7 +100,7 @@ public class CompanyAdminController {
   @ApiOperation(value = "지원자 ID, PWD 자동생성 : 단건", notes = "지원자의 1명의 id와 pwd를 자동생성한다.")
   @PostMapping("/applicants/create/{applicant-id}")
   public ResponseEntity<? extends BaseResponseBody> autoSetApplicantAccount(
-      @PathVariable("applicant-id") Long id) {
+      @PathVariable("applicant-id") Long id) throws MessagingException {
 
     applicantService.autoAssignAccount(id);
 
@@ -116,7 +113,7 @@ public class CompanyAdminController {
   @ApiOperation(value = "모든 지원자 ID, PWD 자동생성", notes = "사내 모든 지원자의 ID, PWD를 일괄 자동생성한다.")
   @PostMapping("/applicants/create/all/{company-admin-id}")
   public ResponseEntity<? extends BaseResponseBody> autoSetTotalApplicantAccount(
-      @PathVariable("company-admin-id") Long id) {
+      @PathVariable("company-admin-id") Long id) throws MessagingException {
 
     List<Applicant> applicants = applicantService.findAllApplicants(id);
 
@@ -166,6 +163,44 @@ public class CompanyAdminController {
     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
   }
 
+  @ApiOperation(value = "사내 평가자 계정 리스트 조회", notes = "사내 평가자 계정 리스트를 조회한다.")
+  @GetMapping(value = {
+      "/evaluators/{company-admin-id}/list",
+      "/evaluators/{company-admin-id}/list/{search-name}"
+  })
+  public ResponseEntity<Page<EvaluatorRes>> getEvaluators(
+      @PathVariable("company-admin-id") Long id,
+      @PathVariable(value = "search-name", required = false) String search,
+      @PageableDefault(sort="code", direction = Direction.ASC) Pageable pageable) {
+
+    Page<EvaluatorRes> evaluators = evaluatorService.findAllEvaluatorsUsePaging(pageable, search, id);
+
+    return ResponseEntity.status(200).body(evaluators);
+  }
+
+  @ApiOperation(value = "사내 전체 부서 리스트 조회(이름)", notes = "사내 평가자들의 모든 부서 이름 리스트를 조회한다.")
+  @GetMapping(value = "/{company-admin-id}/departments")
+  public ResponseEntity<List<String>> getDepartments(@PathVariable("company-admin-id") Long id){
+    List<String> departments = evaluatorService.getDepartments(id);
+    return ResponseEntity.status(200).body(departments);
+  }
+
+  @ApiOperation(value="사내 평가자 계정 리스트 조회 : 부서별", notes = "부서별 사내 평가자 계정 리스트를 조회한다.")
+  @GetMapping(value = "/evaluators/{company-admin-id}/departments/{departments}")
+  public ResponseEntity<Page<EvaluatorRes>> getDepartmentsEvaluators(
+          @PathVariable("company-admin-id") Long id,
+          @PathVariable("departments") List<String> departmentList,
+          @PageableDefault(sort="code", direction = Direction.ASC) Pageable pageable) {
+
+    Page<EvaluatorRes> evaluators = null;
+
+    if(!departmentList.isEmpty()){
+      evaluators = evaluatorService.findDepartmentEvaluators(pageable, departmentList, id);
+    }
+
+    return ResponseEntity.status(200).body(evaluators);
+  }
+
   @ApiOperation(value = "지원자 계정 삭제", notes = "기업관리자가 지원자 계정을 삭제한다.")
   @DeleteMapping("/applicants/{applicant-id}")
   public ResponseEntity<? extends BaseResponseBody> deleteApplicant(
@@ -176,31 +211,19 @@ public class CompanyAdminController {
     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
   }
 
-  @ApiOperation(value = "사내 평가자 계정 리스트 조회", notes = "사내 평가자 계정 리스트를 조회한다.")
-  @GetMapping("/evaluators/{company-admin-id}/list/{search-name}")
-  public ResponseEntity<Page<EvaluatorRes>> getEvaluators(
-      @PathVariable("company-admin-id") Long id,
-      @PathVariable(value = "search-name", required = false) Optional<String> search ,
-      @PageableDefault(size=10, sort="code", direction = Direction.ASC) Pageable pageable) {
-
-    Page<EvaluatorRes> evaluators =
-        evaluatorService.findAllEvaluatorsUsePaging(pageable, String.valueOf(search), id);
-
-    return ResponseEntity.status(200).body(evaluators);
-  }
-
   @ApiOperation(value = "사내 지원자 계정 리스트 조회", notes = "사내 지원자 계정 리스트를 조회한다.")
-  @GetMapping("/applicants/{company-admin-id}/list")
-  public ResponseEntity<List<ApplicantRes>> getApplicants(
-      @PathVariable("company-admin-id") Long id) {
+  @GetMapping(value = {
+          "/applicants/{company-admin-id}/list",
+          "/applicants/{company-admin-id}/{search-name}"
+  })
+  public ResponseEntity<Page<ApplicantRes>> getApplicants(
+      @PathVariable("company-admin-id") Long id,
+      @PathVariable(value = "search-name", required = false) String search,
+      @PageableDefault(sort = "code", direction = Direction.ASC) Pageable pageable) {
 
-    List<Applicant> applicants = applicantService.findAllApplicants(id);
+    Page<ApplicantRes> applicants = applicantService.findAllApplicantsUsePaging(pageable, search, id);
 
-    List<ApplicantRes> result = applicants.stream()
-        .map(a -> new ApplicantRes(a))
-        .collect(Collectors.toList());
-
-    return ResponseEntity.status(200).body(result);
+    return ResponseEntity.status(200).body(applicants);
   }
 
   @ApiOperation(value = "평가자 상세 조회", notes = "특정 평가자 계정의 상세 정보를 조회한다.")
@@ -240,5 +263,6 @@ public class CompanyAdminController {
 
     return ResponseEntity.status(200).body(CompanyAdminRes.of(companyAdmin));
   }
+
 
 }

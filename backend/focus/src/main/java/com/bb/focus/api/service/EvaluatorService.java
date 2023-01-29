@@ -7,13 +7,15 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import javax.mail.MessagingException;
+
 public interface EvaluatorService {
 
   //평가자 계정 생성
   public Long create(Long companyAdminId, EvaluatorInfoReq evaluatorInfoReq);
 
   //ID, PWD 자동생성
-  public void autoAssignAccount(Long id);
+  public void autoAssignAccount(Long id) throws MessagingException;
 
   //평가자 계정 기본정보 수정 (이름, 사번, 부서, 직급, 전화번호, 이메일, 사진)
   public void updateEvaluatorInfo(Long id, EvaluatorInfoReq evaluatorInfoReq);
@@ -28,4 +30,7 @@ public interface EvaluatorService {
 
   public Evaluator getEvaluatorByUserId(String userId);
 
+  public List<String> getDepartments(Long companyAdminId);
+
+  Page<EvaluatorRes> findDepartmentEvaluators(Pageable pageable, List<String> departmentList, Long companyAdminId);
 }

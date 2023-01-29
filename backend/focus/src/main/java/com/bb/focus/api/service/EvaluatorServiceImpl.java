@@ -6,15 +6,17 @@ import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.repository.CompanyAdminRepository;
 import com.bb.focus.db.repository.EvaluatorRepository;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+
+import java.util.*;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.mail.MessagingException;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,7 +27,7 @@ public class EvaluatorServiceImpl implements EvaluatorService{
 
   private final EvaluatorRepository evaluatorRepository;
 
-//  private final MailService mailService;
+  private final MailService mailService;
 //  private final PasswordEncoder passwordEncoder;
 
   /**
@@ -59,7 +61,7 @@ public class EvaluatorServiceImpl implements EvaluatorService{
    *           비밀번호 : 랜덤 생성 문자열
    */
   @Transactional
-  public void autoAssignAccount(Long id) {
+  public void autoAssignAccount(Long id) throws MessagingException {
 
     Evaluator evaluator = evaluatorRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 
@@ -67,10 +69,10 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     String newPwd = getRandomString();
 
     //메일
-//    Map<String, String> content = new HashMap<>();
-//    content.put("id", newId);
-//    content.put("pwd", newPwd);
-//    mailService.sendAccountMail(evaluator.getEmail(), content);
+    Map<String, String> content = new HashMap<>();
+    content.put("id", newId);
+    content.put("pwd", newPwd);
+    mailService.sendAccountMail(evaluator.getEmail(), content);
 
     //암호화
 //    String encodedPwd = passwordEncoder.encode(newPwd);
@@ -125,6 +127,18 @@ public class EvaluatorServiceImpl implements EvaluatorService{
   public Evaluator getEvaluatorByUserId(String userId) {
     Evaluator evaluator = evaluatorRepository.findEvaluatorByUserId(userId);
     return evaluator;
+  }
+
+  @Override
+  public List<String> getDepartments(Long companyAdminId) {
+    List<String> departments = evaluatorRepository.findAllDepartmentsByCompanyAdminId(companyAdminId);
+    return departments;
+  }
+
+  @Override
+  public Page<EvaluatorRes> findDepartmentEvaluators(Pageable pageable, List<String> departmentList, Long companyAdminId) {
+    Page<EvaluatorRes> evaluators = evaluatorRepository.findDepartmentEvaluators(pageable, departmentList, companyAdminId);
+    return evaluators;
   }
 
   /**

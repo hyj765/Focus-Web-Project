@@ -13,4 +13,8 @@ public interface EvaluatorCustomRepository {
   List<Evaluator> findAllEvaluatorsByCompanyAdminId(Long companyAdminId);
 
   Evaluator findEvaluatorByUserId(String userId);
+
+  List<String> findAllDepartmentsByCompanyAdminId(Long companyAdminId);
+
+  Page<EvaluatorRes> findDepartmentEvaluators(Pageable pageable, List<String> departmentList, Long companyAdminId);
 }
