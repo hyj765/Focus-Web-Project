@@ -152,7 +152,14 @@ public class DataProcessServiceImpl implements DataProcessService{
     }
 
     @Transactional
-    public boolean setStatisticTable(){
+    public boolean setStatisticTable(long processId){
+        // 전형 얻어오고 -> 전형 process 넣어주고 -> 각 값들 받아서 set해주고 -> save
+        ApplicantStatistic data= new ApplicantStatistic();
+        //->data.setProcessId(processId);
+
+        statisticRepo.save(data);
+
+
 
 
         return true;

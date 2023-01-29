@@ -109,6 +109,11 @@ public class CompanyAdmin {
     }
   }
 
-
+  public void addEvaluationSheet(EvaluationSheet evaluationSheet){
+    this.evaluationSheetList.add(evaluationSheet);
+    if(evaluationSheet.getCompanyAdmin() != this){
+      evaluationSheet.setCompanyAdmin(this);
+    }
+  }
 
 }

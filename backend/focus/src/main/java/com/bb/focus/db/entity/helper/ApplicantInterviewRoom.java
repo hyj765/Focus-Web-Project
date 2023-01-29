@@ -28,4 +28,5 @@ public class ApplicantInterviewRoom {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="applicant_id")
     private Applicant applicant;
+
 }
