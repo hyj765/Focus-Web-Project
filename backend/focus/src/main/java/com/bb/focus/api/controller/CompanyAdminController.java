@@ -17,10 +17,8 @@ import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -44,11 +42,8 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/companyusers")
 public class CompanyAdminController {
 
-
   private final EvaluatorService evaluatorService;
-
   private final ApplicantService applicantService;
-
   private final CompanyAdminService companyAdminService;
 
   @ApiOperation(value = "평가자 계정 생성", notes = "기업관리자로부터 입력받은 정보로 평가자 계정을 생성한다.")
@@ -181,6 +176,29 @@ public class CompanyAdminController {
     return ResponseEntity.status(200).body(evaluators);
   }
 
+  @ApiOperation(value = "사내 전체 부서 리스트 조회(이름)", notes = "사내 평가자들의 모든 부서 이름 리스트를 조회한다.")
+  @GetMapping(value = "/evaluators/{company-admin-id}/departments")
+  public ResponseEntity<List<String>> getDepartments(@PathVariable("company-admin-id") Long id){
+    List<String> departments = evaluatorService.getDepartments(id);
+    return ResponseEntity.status(200).body(departments);
+  }
+
+  @ApiOperation(value="사내 평가자 계정 리스트 조회 : 부서별", notes = "부서별 사내 평가자 계정 리스트를 조회한다.")
+  @GetMapping(value = "/evaluators/{company-admin-id}/departments/{departments}")
+  public ResponseEntity<Page<EvaluatorRes>> getDepartmentsEvaluators(
+          @PathVariable("company-admin-id") Long id,
+          @PathVariable("departments") List<String> departmentList,
+          @PageableDefault(sort="code", direction = Direction.ASC) Pageable pageable) {
+
+    Page<EvaluatorRes> evaluators = null;
+
+    if(!departmentList.isEmpty()){
+      evaluators = evaluatorService.findDepartmentEvaluators(pageable, departmentList, id);
+    }
+
+    return ResponseEntity.status(200).body(evaluators);
+  }
+
   @ApiOperation(value = "지원자 계정 삭제", notes = "기업관리자가 지원자 계정을 삭제한다.")
   @DeleteMapping("/applicants/{applicant-id}")
   public ResponseEntity<? extends BaseResponseBody> deleteApplicant(
@@ -242,5 +260,6 @@ public class CompanyAdminController {
 
     return ResponseEntity.status(200).body(CompanyAdminRes.of(companyAdmin));
   }
+
 
 }

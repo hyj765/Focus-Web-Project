@@ -47,7 +47,7 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository{
             qEvaluator.tel,
             qEvaluator.email))
         .from(qEvaluator)
-        .join(qEvaluator.companyAdmin, qCompanyAdmin)
+//        .join(qEvaluator.companyAdmin, qCompanyAdmin)
         .where(
             eqCompanyAdminId(companyAdminId),
             containName(search)
@@ -67,7 +67,7 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository{
   public List<Evaluator> findAllEvaluatorsByCompanyAdminId(Long companyAdminId) {
     return jpaQueryFactory
         .selectFrom(qEvaluator)
-        .join(qEvaluator.companyAdmin, qCompanyAdmin)
+//        .join(qEvaluator.companyAdmin, qCompanyAdmin)
         .where(eqCompanyAdminId(companyAdminId))
         .fetch();
   }
@@ -77,6 +77,45 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository{
     Evaluator evaluator = jpaQueryFactory.select(qEvaluator).from(qEvaluator)
         .where(qEvaluator.userId.eq(userId)).fetchOne();
     return evaluator;
+  }
+
+  @Override
+  public List<String> findAllDepartmentsByCompanyAdminId(Long companyAdminId) {
+    return jpaQueryFactory
+            .select(qEvaluator.department)
+            .from(qEvaluator)
+            .where(eqCompanyAdminId(companyAdminId))
+            .distinct()
+            .fetch();
+  }
+
+  @Override
+  public Page<EvaluatorRes> findDepartmentEvaluators(Pageable pageable, List<String> departmentList, Long companyAdminId) {
+
+    List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
+
+    List<EvaluatorRes> results = jpaQueryFactory
+            .select(Projections.constructor(EvaluatorRes.class,
+                    qEvaluator.id,
+                    qEvaluator.name,
+                    qEvaluator.code,
+                    qEvaluator.department,
+                    qEvaluator.position,
+                    qEvaluator.image,
+                    qEvaluator.userId,
+                    qEvaluator.tel,
+                    qEvaluator.email))
+            .from(qEvaluator)
+            .where(
+                    eqCompanyAdminId(companyAdminId),
+                    qEvaluator.department.in(departmentList)
+            )
+            .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+
+    return new PageImpl<>(results, pageable, results.size());
   }
 
   private BooleanExpression eqCompanyAdminId(Long companyAdminId){

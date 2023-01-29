@@ -127,6 +127,18 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     return evaluator;
   }
 
+  @Override
+  public List<String> getDepartments(Long companyAdminId) {
+    List<String> departments = evaluatorRepository.findAllDepartmentsByCompanyAdminId(companyAdminId);
+    return departments;
+  }
+
+  @Override
+  public Page<EvaluatorRes> findDepartmentEvaluators(Pageable pageable, List<String> departmentList, Long companyAdminId) {
+    Page<EvaluatorRes> evaluators = evaluatorRepository.findDepartmentEvaluators(pageable, departmentList, companyAdminId);
+    return evaluators;
+  }
+
   /**
    * 평가자 이메일로 중복 회원 검증
    */
