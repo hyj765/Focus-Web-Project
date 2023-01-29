@@ -177,7 +177,7 @@ public class CompanyAdminController {
   }
 
   @ApiOperation(value = "사내 전체 부서 리스트 조회(이름)", notes = "사내 평가자들의 모든 부서 이름 리스트를 조회한다.")
-  @GetMapping(value = "/evaluators/{company-admin-id}/departments")
+  @GetMapping(value = "/{company-admin-id}/departments")
   public ResponseEntity<List<String>> getDepartments(@PathVariable("company-admin-id") Long id){
     List<String> departments = evaluatorService.getDepartments(id);
     return ResponseEntity.status(200).body(departments);
