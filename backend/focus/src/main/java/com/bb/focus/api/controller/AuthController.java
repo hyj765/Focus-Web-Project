@@ -1,7 +1,6 @@
 package com.bb.focus.api.controller;
 
-import com.bb.focus.api.request.UserLoginPostReq;
-import com.bb.focus.api.request.UserLogoutPostReq;
+import com.bb.focus.api.request.UserReq;
 import com.bb.focus.api.response.UserLoginPostRes;
 import com.bb.focus.api.response.UserLogoutPostRes;
 import com.bb.focus.api.service.ApplicantService;
@@ -34,112 +33,112 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/auth")
 public class AuthController {
 
-  @Autowired
-  ServiceAdminService serviceAdminService;
+    @Autowired
+    ServiceAdminService serviceAdminService;
 
-  @Autowired
-  CompanyAdminService companyAdminService;
+    @Autowired
+    CompanyAdminService companyAdminService;
 
-  @Autowired
-  EvaluatorService evaluatorService;
+    @Autowired
+    EvaluatorService evaluatorService;
 
-  @Autowired
-  ApplicantService applicantService;
+    @Autowired
+    ApplicantService applicantService;
 
-  @Autowired
-  RedisTemplate redisTemplate;
+    @Autowired
+    RedisTemplate redisTemplate;
 
 //    private PasswordEncoder passwordEncoder;
 
 
-  @PostMapping("/login")
-  @ApiOperation(value = "로그인", notes = "<strong>아이디와 패스워드</strong>를 통해 로그인 한다.")
-  @ApiResponses({
-      @ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
-      @ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
-      @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
-      @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
-  })
-  public ResponseEntity<UserLoginPostRes> login(
-      @RequestBody @ApiParam(value = "로그인 정보", required = true) UserLoginPostReq loginInfo) {
-    String userId = loginInfo.getId();
-    String password = loginInfo.getPassword();
-    Byte userInfo = loginInfo.getUserRole();
-    switch (userInfo) {
-      case 1: // 서비스 관리자
-        ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminByUserId(userId);
+    @PostMapping("/login")
+    @ApiOperation(value = "로그인", notes = "<strong>아이디와 패스워드</strong>를 통해 로그인 한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
+            @ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
+            @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+            @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+    })
+    public ResponseEntity<UserLoginPostRes> login(
+            @RequestBody @ApiParam(value = "로그인 정보", required = true) UserReq.Login loginInfo) {
+        String userId = loginInfo.getId();
+        String password = loginInfo.getPassword();
+        Byte userInfo = loginInfo.getUserRole();
+        switch (userInfo) {
+            case 1: // 서비스 관리자
+                ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminByUserId(userId);
 //                if (passwordEncoder.matches(password, serviceAdmin.getPwd())) {
-        if (password.equals(serviceAdmin.getPwd())) {
-          // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-          return ResponseEntity.ok(
-              UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
-        }
-        break;
-      case 2: // 기업 관리자
-        CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(userId);
+                if (password.equals(serviceAdmin.getPwd())) {
+                    // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+                    return ResponseEntity.ok(
+                            UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+                }
+                break;
+            case 2: // 기업 관리자
+                CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(userId);
 //                if (passwordEncoder.matches(password, companyAdmin.getPwd())) {
-        if (password.equals(companyAdmin.getPwd())) {
-          // 계정이 만료된 경우 로그인 실패로 응답
-          if (!canLogin(companyAdmin.getEndDate())) {
-            return ResponseEntity.status(401)
-                .body(UserLoginPostRes.of(401, "End of Contract", null));
-          }
-          // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-          return ResponseEntity.ok(
-              UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
-        }
-        break;
-      case 3: // 평가자
-        Evaluator evaluator = evaluatorService.getEvaluatorByUserId(userId);
+                if (password.equals(companyAdmin.getPwd())) {
+                    // 계정이 만료된 경우 로그인 실패로 응답
+                    if (!canLogin(companyAdmin.getEndDate())) {
+                        return ResponseEntity.status(401)
+                                .body(UserLoginPostRes.of(401, "End of Contract", null));
+                    }
+                    // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+                    return ResponseEntity.ok(
+                            UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+                }
+                break;
+            case 3: // 평가자
+                Evaluator evaluator = evaluatorService.getEvaluatorByUserId(userId);
 //                if (passwordEncoder.matches(password, evaluator.getPwd())) {
-        if (password.equals(evaluator.getPwd())) {
-          // 계정이 만료된 경우 로그인 실패로 응답
+                if (password.equals(evaluator.getPwd())) {
+                    // 계정이 만료된 경우 로그인 실패로 응답
 //          if (!canLogin(evaluator.getExpireDate())) {
 //            return ResponseEntity.status(401)
 //                .body(UserLoginPostRes.of(401, "End of Contract", null));
 //          }
-          // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-          return ResponseEntity.ok(
-              UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
-        }
-        break;
-      case 4: // 지원자
-        Applicant applicant = applicantService.getApplicantByUserId(userId);
+                    // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+                    return ResponseEntity.ok(
+                            UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+                }
+                break;
+            case 4: // 지원자
+                Applicant applicant = applicantService.getApplicantByUserId(userId);
 //                if (passwordEncoder.matches(password, evaluator.getPwd())) {
-        if (password.equals(applicant.getPwd())) {
-          // 계정이 만료된 경우 로그인 실패로 응답
+                if (password.equals(applicant.getPwd())) {
+                    // 계정이 만료된 경우 로그인 실패로 응답
 //          if (!canLogin(applicant.getExpireDate())) {
 //            return ResponseEntity.status(401)
 //                .body(UserLoginPostRes.of(401, "End of Contract", null));
 //          }
-          // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-          return ResponseEntity.ok(
-              UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+                    // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+                    return ResponseEntity.ok(
+                            UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+                }
+                break;
         }
-        break;
+        // 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
+        return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null));
     }
-    // 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
-    return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null));
-  }
 
-  // 계정 만료 확인
-  private boolean canLogin(LocalDateTime endDate) {
-    LocalDateTime now = LocalDateTime.now();
-    if (now.isBefore(endDate) || now.isEqual(endDate)) {
-      return true;
+    // 계정 만료 확인
+    private boolean canLogin(LocalDateTime endDate) {
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isBefore(endDate) || now.isEqual(endDate)) {
+            return true;
+        }
+        return false;
     }
-    return false;
-  }
 
-  @PostMapping("/logout")
-  public ResponseEntity<?> logout(@RequestBody @ApiParam(value = "로그아웃 정보", required = true) UserLogoutPostReq logoutInfo) {
-    String userId = JwtTokenUtil.getUserId(logoutInfo.getAccessToken());
-    System.out.println("userId : "+userId);
-    Long expiration = JwtTokenUtil.getLeftExpiration(logoutInfo.getAccessToken());
-    System.out.println("expiration : "+expiration);
-    redisTemplate.opsForValue()
-            .set("Bearer "+logoutInfo.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
-    return ResponseEntity.ok(
-            UserLogoutPostRes.of(200, "Success", userId));
-  }
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody @ApiParam(value = "로그아웃 정보", required = true) UserReq.Logout logoutInfo) {
+        String userId = JwtTokenUtil.getUserId(logoutInfo.getAccessToken());
+        System.out.println("userId : " + userId);
+        Long expiration = JwtTokenUtil.getLeftExpiration(logoutInfo.getAccessToken());
+        System.out.println("expiration : " + expiration);
+        redisTemplate.opsForValue()
+                .set("Bearer " + logoutInfo.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+        return ResponseEntity.ok(
+                UserLogoutPostRes.of(200, "Success", userId));
+    }
 }
