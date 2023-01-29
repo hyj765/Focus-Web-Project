@@ -52,7 +52,16 @@ def buildTime() {
 project.ext.set("build.date", buildTime())
 
 dependencies {
+    //make pdf
     implementation group: 'com.github.librepdf', name: 'openpdf', version: '1.3.30'
+    //common file utils
+    implementation 'commons-io:commons-io:2.6'
+    // https://mvnrepository.com/artifact/org.apache.poi/poi
+    implementation group: 'org.apache.poi', name: 'poi', version: '4.1.2'
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
+// https://mvnrepository.com/artifact/org.apache.tika/tika-core
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.3.0'
+    implementation 'com.opencsv:opencsv:5.5'
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -108,6 +117,10 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.tika/tika-core
 	implementation group: 'org.apache.tika', name: 'tika-core', version: '2.3.0'
 	implementation 'com.opencsv:opencsv:5.5'
+
+    //메일 전송기능
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 
 }
 

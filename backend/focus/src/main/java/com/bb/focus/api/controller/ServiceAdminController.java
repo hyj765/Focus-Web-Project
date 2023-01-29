@@ -3,18 +3,22 @@ package com.bb.focus.api.controller;
 import com.bb.focus.api.request.CompanyAdminRegisterPostReq;
 import com.bb.focus.api.request.ServiceAdminRegisterPostReq;
 import com.bb.focus.api.response.CompanyAdminRes;
+import com.bb.focus.api.response.ServiceAdminRes;
 import com.bb.focus.api.service.CompanyAdminService;
 import com.bb.focus.api.service.ServiceAdminService;
+import com.bb.focus.common.auth.FocusUserDetails;
 import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.db.entity.admin.ServiceAdmin;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -106,5 +110,19 @@ public class ServiceAdminController {
             @RequestBody @ApiParam(value = "기업 관리자 정보 수정 내역", required = true) CompanyAdminRegisterPostReq updateInfo) {
         Long companyAdminId = companyAdminService.updateCompanyAdminByUserInfo(updateInfo);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
+    @ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
+    @GetMapping("/me")
+    public ResponseEntity<ServiceAdminRes> getUserInfo(@ApiIgnore Authentication authentication) {
+        /**
+         * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
+         * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
+         */
+        FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
+        String userId = userDetails.getUsername();
+        ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminByUserId(userId);
+
+        return ResponseEntity.status(200).body(ServiceAdminRes.of(serviceAdmin));
     }
 }

@@ -2,13 +2,15 @@ package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.ApplicantInfoReq;
 import com.bb.focus.db.entity.applicant.Applicant;
+
+import javax.mail.MessagingException;
 import java.util.List;
 
 public interface ApplicantService {
 
   public Long create(Long comapnyAdminId, ApplicantInfoReq applicantInfoReq);
 
-  public void autoAssignAccount(Long id);
+  public void autoAssignAccount(Long id) throws MessagingException;
 
   public Long updateApplicantInfo(Long id, ApplicantInfoReq applicantInfoReq);
 
@@ -18,4 +20,5 @@ public interface ApplicantService {
 
   public Applicant findApplicant(Long id);
 
+  public Applicant getApplicantByUserId(String userId);
 }

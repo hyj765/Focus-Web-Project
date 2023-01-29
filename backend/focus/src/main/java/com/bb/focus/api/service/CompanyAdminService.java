@@ -13,6 +13,5 @@ public interface CompanyAdminService {
 
     List<CompanyAdmin> getAll();
 
-    @Transactional
     Long updateCompanyAdminByUserInfo(CompanyAdminRegisterPostReq userUpdateInfo);
 }

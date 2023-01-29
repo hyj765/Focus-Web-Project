@@ -1,5 +1,8 @@
 package com.bb.focus.config;
 
+import com.bb.focus.api.service.ApplicantService;
+import com.bb.focus.api.service.CompanyAdminService;
+import com.bb.focus.api.service.EvaluatorService;
 import com.bb.focus.api.service.ServiceAdminService;
 import com.bb.focus.common.auth.FocusUserDetailService;
 import com.bb.focus.common.auth.JwtAuthenticationFilter;
@@ -23,45 +26,57 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private FocusUserDetailService focusUserDetailService;
 
-    @Autowired
-    private ServiceAdminService serviceAdminService;
+  @Autowired
+  private FocusUserDetailService focusUserDetailService;
 
-    // Password 인코딩 방식에 BCrypt 암호화 방식 사용
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Autowired
+  private CompanyAdminService companyAdminService;
 
-    // DAO 기반으로 Authentication Provider를 생성
-    // BCrypt Password Encoder와 FocusUserDetailService 구현체를 설정
-    @Bean
-    DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(this.focusUserDetailService);
-        return daoAuthenticationProvider;
-    }
+  @Autowired
+  private ServiceAdminService serviceAdminService;
 
-    // DAO 기반의 Authentication Provider가 적용되도록 설정
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider());
-    }
+  @Autowired
+  private ApplicantService applicantService;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .httpBasic().disable()
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 사용 하지않음
-                .and()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), serviceAdminService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
-                .authorizeRequests()
-                .antMatchers("/").authenticated()       //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
-                .anyRequest().permitAll()
-                .and().cors();
-    }
+  @Autowired
+  private EvaluatorService evaluatorService;
+
+  // Password 인코딩 방식에 BCrypt 암호화 방식 사용
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
+
+  // DAO 기반으로 Authentication Provider를 생성
+  // BCrypt Password Encoder와 UserDetailService 구현체를 설정
+  @Bean
+  DaoAuthenticationProvider authenticationProvider() {
+    DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+    daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+    daoAuthenticationProvider.setUserDetailsService(this.focusUserDetailService);
+    return daoAuthenticationProvider;
+  }
+
+  // DAO 기반의 Authentication Provider가 적용되도록 설정
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) {
+    auth.authenticationProvider(authenticationProvider());
+  }
+
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http
+        .httpBasic().disable()
+        .csrf().disable()
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 사용 하지않음
+        .and()
+        .addFilter(new JwtAuthenticationFilter(authenticationManager(), companyAdminService,
+            serviceAdminService, applicantService, evaluatorService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
+        .authorizeRequests()
+        .antMatchers("/api/v1/users/me").authenticated()       //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
+        .anyRequest().permitAll()
+        .and().cors();
+  }
 }

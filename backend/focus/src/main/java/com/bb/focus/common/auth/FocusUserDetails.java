@@ -1,6 +1,7 @@
 package com.bb.focus.common.auth;
 
 import com.bb.focus.db.entity.admin.ServiceAdmin;
+import com.bb.focus.db.entity.company.CompanyAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,30 +15,30 @@ import java.util.List;
  */
 public class FocusUserDetails implements UserDetails {
     @Autowired
-    ServiceAdmin serviceAdmin;
+    User user;
     boolean accountNonExpired;
     boolean accountNonLocked;
     boolean credentialNonExpired;
     boolean enabled = false;
     List<GrantedAuthority> roles = new ArrayList<>();
 
-    public FocusUserDetails(ServiceAdmin serviceAdmin) {
+    public FocusUserDetails(User user) {
         super();
-        this.serviceAdmin = serviceAdmin;
+        this.user = user;
     }
 
-    public ServiceAdmin getUser() {
-        return this.serviceAdmin;
+    public User getUser() {
+        return this.user;
     }
 
     @Override
     public String getPassword() {
-        return this.serviceAdmin.getPwd();
+        return this.user.getPwd();
     }
 
     @Override
     public String getUsername() {
-        return this.serviceAdmin.getUserId();
+        return this.user.getUserId();
     }
 
     @Override
