@@ -210,17 +210,18 @@ public class CompanyAdminController {
   }
 
   @ApiOperation(value = "사내 지원자 계정 리스트 조회", notes = "사내 지원자 계정 리스트를 조회한다.")
-  @GetMapping("/applicants/{company-admin-id}/list")
-  public ResponseEntity<List<ApplicantRes>> getApplicants(
-      @PathVariable("company-admin-id") Long id) {
+  @GetMapping(value = {
+          "/applicants/{company-admin-id}/list",
+          "/applicants/{company-admin-id}/{search-name}"
+  })
+  public ResponseEntity<Page<ApplicantRes>> getApplicants(
+      @PathVariable("company-admin-id") Long id,
+      @PathVariable(value = "search-name", required = false) String search,
+      @PageableDefault(sort = "code", direction = Direction.ASC) Pageable pageable) {
 
-    List<Applicant> applicants = applicantService.findAllApplicants(id);
+    Page<ApplicantRes> applicants = applicantService.findAllApplicantsUsePaging(pageable, search, id);
 
-    List<ApplicantRes> result = applicants.stream()
-        .map(a -> new ApplicantRes(a))
-        .collect(Collectors.toList());
-
-    return ResponseEntity.status(200).body(result);
+    return ResponseEntity.status(200).body(applicants);
   }
 
   @ApiOperation(value = "평가자 상세 조회", notes = "특정 평가자 계정의 상세 정보를 조회한다.")
