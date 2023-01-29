@@ -3,6 +3,7 @@ package com.bb.focus.api.service;
 import java.util.Map;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -14,10 +15,22 @@ public class MailServiceImpl implements MailService{
 
   private final JavaMailSender javaMailSender;
 
-//  @Override
-//  public void sendGeneralMail(MailDto mail) {
-//
-//  }
+  public void sendGeneralMail(String from, String to, String subject, String content) throws MessagingException {
+    StringBuilder mailContent = new StringBuilder();
+    mailContent.append("<html><body><div>")
+            .append(content)
+            .append("</div></body></html>");
+
+    MimeMessage message = javaMailSender.createMimeMessage();
+    MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, true, "UTF-8");
+
+    mimeMessageHelper.setFrom(from);
+    mimeMessageHelper.setTo(to);
+    mimeMessageHelper.setSubject(subject);
+    mimeMessageHelper.setText(mailContent.toString(), true);
+
+    javaMailSender.send(message);
+  }
 
   public void sendAccountMail(String to, Map<String, String> content) throws MessagingException {
 
