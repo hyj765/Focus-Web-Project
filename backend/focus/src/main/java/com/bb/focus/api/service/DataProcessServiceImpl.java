@@ -5,7 +5,12 @@ import com.bb.focus.api.response.SchoolDto;
 import com.bb.focus.common.util.ExcelUtils;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.company.CompanyAdmin;
+import com.bb.focus.db.entity.statistics.ApplicantStatistic;
+import com.bb.focus.db.entity.statistics.MajorPerApplicant;
+import com.bb.focus.db.repository.MajorStatisticRepository;
+import com.bb.focus.db.repository.StaticalRepository;
 import java.util.Map;
+import javax.transaction.Transactional;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
@@ -22,17 +27,16 @@ import java.util.List;
 @Service
 public class DataProcessServiceImpl implements DataProcessService{
 
-    private List<Applicant> allapplicant = null;
+    MajorStatisticRepository majorStatisticRepo;
+    StaticalRepository statisticRepo;
     ApplicantService applicantService;
     ExcelUtils exelUtils;
     @Autowired
-    public DataProcessServiceImpl(ExcelUtils eutil,ApplicantService aservice){
+    public DataProcessServiceImpl(ExcelUtils eutil,ApplicantService aservice, StaticalRepository sRepo, MajorStatisticRepository majorRepo){
         applicantService = aservice;
         exelUtils = eutil;
-    }
-
-    public void initApplicant(long companyId){
-         allapplicant=applicantService.findAllApplicants(companyId);
+        statisticRepo = sRepo;
+        majorStatisticRepo = majorRepo;
     }
 
     public List<SchoolDto> ConvertMultiFileIntoList(MultipartFile file) throws IOException {
@@ -82,50 +86,63 @@ public class DataProcessServiceImpl implements DataProcessService{
         return exelUtils.CreateWorkbook(headers);
     }
 
-    public long GetAvgAge(long processId){
 
-        return 0;
+
+    //통계함수들
+
+    // 통계 테이블에서 지원자 평균 나이를 가져오는 함수
+    public long GetAvgAge(long processId){
+        ApplicantStatistic applicantStatisticLog =statisticRepo.findById(processId);
+        return applicantStatisticLog.getAvgApplicantAge();
     }
+
+    // 통계 테이블에서 지원자 남성과 여성 비율을 가져오는 함수
     public Map<String,Integer> GetGenders(long processId){
         Map<String, Integer> Genders = null;
+        ApplicantStatistic applicantStatisticLog =statisticRepo.findById(processId);
 
-
+        Genders.put("female",applicantStatisticLog.getFemaleCount());
+        Genders.put("male",applicantStatisticLog.getMaleCount());
 
         return Genders;
-
     }
+
+    // 통계 테이블에서 각 지원자 전공 별 인원을 가져오는 함수 반환되는 데이터는 각 학과 Key 인원 Value로 반환됨.
     public Map<String,Integer> GetMajorPerApplicant(long processId){
-        Map<String, Integer> MajorPerApplicant = null;
+        Map<String, Integer> StatisticMajorData = null;
+        ApplicantStatistic applicantStatisticLog =statisticRepo.findById(processId);
 
+        List<MajorPerApplicant> majorPerApplicantList=applicantStatisticLog.getMajorPerApplicantList();
 
+        for(MajorPerApplicant majorPerApplicant:majorPerApplicantList){
+            StatisticMajorData.put(majorPerApplicant.getMajorName(),majorPerApplicant.getApplicantCount());
+        }
 
-        return MajorPerApplicant;
-
+        return StatisticMajorData;
     }
+
+    // 통계 테이블에서 지원자 평균 수상 횟수를 반환하는 함수
     public long GetAwardPerApplicant(long processId){
-        Map<String, Integer> AvgAge = null;
-
-
-
-        return 0;
-
+        ApplicantStatistic applicantStatisticLog =statisticRepo.findById(processId);
+        return applicantStatisticLog.getAvgAwardCount();
     }
+    // 통계 테이블에서 지원자 평균 대외활동 수를 반환하는 함수
     public long GetActivityPerApplicant(long processId){
-
-
-
-
-        return 0;
+        ApplicantStatistic applicantStatisticLog =statisticRepo.findById(processId);
+        return applicantStatisticLog.getAvgApplicantAge();
 
     }
+
+    //합격자의 테이블 로그를 가져오는 함수.
     public Map<String,Integer> GetResultPerApplicant(long processId){
         Map<String, Integer> ResultPerApplicant = null;
-
+        // 보류
 
 
         return null;
     }
 
+    // PDF의 형태로 통계 데이터를 반환해주는 함수.
     public MultipartFile ExtractStaticResultIntoPDF(){
 
 
@@ -134,5 +151,32 @@ public class DataProcessServiceImpl implements DataProcessService{
         return null;
     }
 
+    @Transactional
+    public boolean setStatisticTable(long processId){
+        // 전형 얻어오고 -> 전형 process 넣어주고 -> 각 값들 받아서 set해주고 -> save
+        ApplicantStatistic data= new ApplicantStatistic();
+        //->data.setProcessId(processId);
+
+        statisticRepo.save(data);
+
+
+
+
+        return true;
+    }
+
+    // PROCESSID를 통하여 전형에 맞는 통계 테이블을 호출 후 해당 통계 테이블에 학과 데이터를 추가하는 코드
+    @Transactional
+    public boolean setMajorPerCountData(long procecssId, String majorName, int count){
+       ApplicantStatistic applicantStatistic =statisticRepo.findById(procecssId);
+       MajorPerApplicant majorPerApplicant = new MajorPerApplicant();
+
+       majorPerApplicant.setMajorName(majorName);
+       majorPerApplicant.setApplicantCount(count);
+       majorPerApplicant.setApplicantStatistic(applicantStatistic);
+
+       majorStatisticRepo.save(majorPerApplicant);
+       return true;
+    }
 
 }

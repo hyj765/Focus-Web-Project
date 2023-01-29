@@ -12,7 +12,10 @@ import com.bb.focus.db.repository.CollegeRepository;
 import com.bb.focus.db.repository.CompanyAdminRepository;
 import com.bb.focus.db.repository.GraduateSchoolRepository;
 import com.bb.focus.db.repository.UniversityRepository;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sun.security.util.Password;
+
+import javax.mail.MessagingException;
 
 @Service
 @Transactional(readOnly = true)
@@ -37,6 +42,7 @@ public class ApplicantServiceImpl implements ApplicantService{
   private final UniversityRepository universityRepository;
 
   private final GraduateSchoolRepository graduateSchoolRepository;
+  private final MailService mailService;
 
 
   /**
@@ -89,7 +95,7 @@ public class ApplicantServiceImpl implements ApplicantService{
    *          비밀번호 : 랜덤 생성 문자열
    */
   @Transactional
-  public void autoAssignAccount(Long id) {
+  public void autoAssignAccount(Long id) throws MessagingException {
 
     Applicant applicant = applicantRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 
@@ -97,10 +103,10 @@ public class ApplicantServiceImpl implements ApplicantService{
     String newPwd = getRandomString();
 
     //메일
-//    Map<String, String> content = new HashMap<>();
-//    content.put("id", newId);
-//    content.put("pwd", newPwd);
-//    mailService.sendAccountMail(evaluator.getEmail(), content);
+    Map<String, String> content = new HashMap<>();
+    content.put("id", newId);
+    content.put("pwd", newPwd);
+    mailService.sendAccountMail(applicant.getEmail(), content);
 
     //암호화
 //    String encodedPwd = passwordEncoder.encode(newPwd);

@@ -37,6 +37,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.mail.MessagingException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/companyusers")
@@ -75,7 +77,7 @@ public class CompanyAdminController {
   @ApiOperation(value = "평가자 ID, PWD 자동생성 : 단건", notes = "평가자의 1명의 id와 pwd를 자동생성한다.")
   @PostMapping("/evaluators/create/{evaluator-id}")
   public ResponseEntity<? extends BaseResponseBody> autoSetEvaluatorAccount(
-      @PathVariable("evaluator-id") Long id) {
+      @PathVariable("evaluator-id") Long id) throws MessagingException {
 
     evaluatorService.autoAssignAccount(id);
 
@@ -85,7 +87,7 @@ public class CompanyAdminController {
   @ApiOperation(value = "모든 평가자 ID, PWD 자동생성", notes = "사내 모든 평가자의 ID, PWD를 일괄 자동생성한다.")
   @PostMapping("/evaluators/create/all/{company-admin-id}")
   public ResponseEntity<? extends BaseResponseBody> autoSetTotalEvaluatorAccount(
-      @PathVariable("company-admin-id") Long id) {
+      @PathVariable("company-admin-id") Long id) throws MessagingException {
 
     List<Evaluator> evaluators = evaluatorService.findAllEvaluators(id);
 
@@ -98,7 +100,7 @@ public class CompanyAdminController {
   @ApiOperation(value = "지원자 ID, PWD 자동생성 : 단건", notes = "지원자의 1명의 id와 pwd를 자동생성한다.")
   @PostMapping("/applicants/create/{applicant-id}")
   public ResponseEntity<? extends BaseResponseBody> autoSetApplicantAccount(
-      @PathVariable("applicant-id") Long id) {
+      @PathVariable("applicant-id") Long id) throws MessagingException {
 
     applicantService.autoAssignAccount(id);
 
@@ -111,7 +113,7 @@ public class CompanyAdminController {
   @ApiOperation(value = "모든 지원자 ID, PWD 자동생성", notes = "사내 모든 지원자의 ID, PWD를 일괄 자동생성한다.")
   @PostMapping("/applicants/create/all/{company-admin-id}")
   public ResponseEntity<? extends BaseResponseBody> autoSetTotalApplicantAccount(
-      @PathVariable("company-admin-id") Long id) {
+      @PathVariable("company-admin-id") Long id) throws MessagingException {
 
     List<Applicant> applicants = applicantService.findAllApplicants(id);
 

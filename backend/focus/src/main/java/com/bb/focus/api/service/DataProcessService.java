@@ -29,7 +29,7 @@ public interface DataProcessService {
 
   Map<String,Integer> GetGenders(long processId);
 
-  Map<String,Integer> GetMajorPerApplicant(long processId);
+    Map<String,Integer> GetMajorPerApplicant(long processId);
   long GetAwardPerApplicant(long processId);
   long GetActivityPerApplicant(long processId);
   Map<String,Integer> GetResultPerApplicant(long processId);
