@@ -1,8 +1,7 @@
 package com.bb.focus.db.entity.process;
 
+import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.company.CompanyAdmin;
-import com.bb.focus.db.entity.helper.EvaluatorInterviewRoom;
-import com.bb.focus.db.entity.helper.ProcessApplicant;
 import com.bb.focus.db.entity.helper.ProcessApplicantPassLog;
 import com.bb.focus.db.entity.helper.ProcessEvaluator;
 import com.bb.focus.db.entity.interview.Interview;
@@ -50,12 +49,13 @@ public class Process {
     @OneToMany(targetEntity = com.bb.focus.db.entity.interview.Interview.class, mappedBy = "process")
     private List<Interview> interviewList = new ArrayList<>();
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ProcessApplicant.class, mappedBy = "process")
-    private List<ProcessApplicant> processApplicantList = new ArrayList<>();
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ProcessApplicantPassLog.class, mappedBy = "process")
     private List<ProcessApplicantPassLog> processApplicantPassLogList = new ArrayList<>();
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ProcessEvaluator.class, mappedBy = "process")
     private  List<ProcessEvaluator> processEvaluatorList = new ArrayList<>();
+
+    @OneToMany(targetEntity = com.bb.focus.db.entity.applicant.Applicant.class, mappedBy = "process")
+    private List<Applicant> applicantList = new ArrayList<>();
 }
