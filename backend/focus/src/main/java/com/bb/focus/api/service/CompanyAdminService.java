@@ -10,6 +10,7 @@ public interface CompanyAdminService {
     CompanyAdmin createCompanyAdmin(CompanyAdminRegisterPostReq userRegisterInfo);
 
     CompanyAdmin getCompanyAdminByUserId(String userId);
+    CompanyAdmin getCompanyAdminById(Long id);
 
     List<CompanyAdmin> getAll();
 

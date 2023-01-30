@@ -50,7 +50,6 @@ public class ApplicantController {
          */
         FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
         String userId = userDetails.getUsername();
-        System.out.println("dkdkdkdkdkdkdk :  "+userDetails.getUsername());
         Applicant applicant = applicantService.getApplicantByUserId(userId);
 
         return ResponseEntity.status(200).body(ApplicantRes.of(applicant));

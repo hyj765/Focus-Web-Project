@@ -22,6 +22,13 @@ public class CompanyAdminCustomRepositoryImpl implements CompanyAdminCustomRepos
   }
 
   @Override
+  public CompanyAdmin findCompanyAdminById(Long id) {
+    CompanyAdmin companyAdmin = jpaQueryFactory.select(qCompanyAdmin).from(qCompanyAdmin)
+        .where(qCompanyAdmin.id.eq(id)).fetchOne();
+    return companyAdmin;
+  }
+
+  @Override
   public List<CompanyAdmin> findAll() {
     List<CompanyAdmin> companyAdminList = jpaQueryFactory.select(qCompanyAdmin).from(qCompanyAdmin)
         .fetch();

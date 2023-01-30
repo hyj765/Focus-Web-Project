@@ -80,6 +80,13 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository{
   }
 
   @Override
+  public Evaluator findEvaluatorById(Long id) {
+    Evaluator evaluator = jpaQueryFactory.select(qEvaluator).from(qEvaluator)
+        .where(qEvaluator.id.eq(id)).fetchOne();
+    return evaluator;
+  }
+
+  @Override
   public List<String> findAllDepartmentsByCompanyAdminId(Long companyAdminId) {
     return jpaQueryFactory
             .select(qEvaluator.department)

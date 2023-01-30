@@ -188,6 +188,12 @@ public class ApplicantServiceImpl implements ApplicantService{
   }
 
   @Override
+  public Applicant getApplicantById(Long id) {
+    Applicant applicant = applicantRepository.findApplicantById(id);
+    return applicant;
+  }
+
+  @Override
   public Page<ApplicantRes> findAllApplicantsUsePaging(Pageable pageable, String search, Long id) {
     Page<ApplicantRes> applicants = applicantRepository.findAllApplicantsWithPaging(pageable, search, id);
     return applicants;

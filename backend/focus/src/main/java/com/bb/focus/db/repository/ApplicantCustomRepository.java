@@ -13,6 +13,8 @@ public interface ApplicantCustomRepository {
 
   Applicant findApplicantByUserId(String userId);
 
+  Applicant findApplicantById(Long id);
+
   Page<ApplicantRes> findAllApplicantsWithPaging(Pageable pageable, String search, Long companyAdminId);
 
 }

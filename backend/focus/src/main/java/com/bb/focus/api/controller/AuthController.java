@@ -70,8 +70,9 @@ public class AuthController {
 //                if (passwordEncoder.matches(password, serviceAdmin.getPwd())) {
                 if (password.equals(serviceAdmin.getPwd())) {
                     // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+                    Long sequenceId = serviceAdmin.getId();
                     return ResponseEntity.ok(
-                            UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+                            UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(sequenceId)));
                 }
                 break;
             case 2: // 기업 관리자
@@ -83,9 +84,10 @@ public class AuthController {
                         return ResponseEntity.status(401)
                                 .body(UserLoginPostRes.of(401, "End of Contract", null));
                     }
+                    Long sequenceId = companyAdmin.getId();
                     // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
                     return ResponseEntity.ok(
-                            UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+                            UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(sequenceId)));
                 }
                 break;
             case 3: // 평가자
@@ -98,8 +100,9 @@ public class AuthController {
 //                .body(UserLoginPostRes.of(401, "End of Contract", null));
 //          }
                     // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+                    Long sequenceId = evaluator.getId();
                     return ResponseEntity.ok(
-                            UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+                            UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(sequenceId)));
                 }
                 break;
             case 4: // 지원자
@@ -112,8 +115,9 @@ public class AuthController {
 //                .body(UserLoginPostRes.of(401, "End of Contract", null));
 //          }
                     // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+                    Long sequenceId = applicant.getId();
                     return ResponseEntity.ok(
-                            UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(userId)));
+                            UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(sequenceId)));
                 }
                 break;
         }

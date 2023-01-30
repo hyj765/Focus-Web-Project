@@ -3,11 +3,10 @@ package com.bb.focus.api.service;
 import com.bb.focus.api.request.ApplicantInfoReq;
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.db.entity.applicant.Applicant;
-
+import java.util.List;
+import javax.mail.MessagingException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import javax.mail.MessagingException;
-import java.util.List;
 
 public interface ApplicantService {
 
@@ -25,5 +24,7 @@ public interface ApplicantService {
 
   public Applicant getApplicantByUserId(String userId);
 
-    Page<ApplicantRes> findAllApplicantsUsePaging(Pageable pageable, String search, Long id);
+  public Applicant getApplicantById(Long id);
+
+  Page<ApplicantRes> findAllApplicantsUsePaging(Pageable pageable, String search, Long id);
 }
