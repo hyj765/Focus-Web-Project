@@ -5,6 +5,7 @@ import com.bb.focus.db.entity.applicant.school.ApplicantGraduate;
 import com.bb.focus.db.entity.applicant.school.ApplicantUniv;
 import com.bb.focus.db.entity.company.Chat;
 import com.bb.focus.db.entity.company.CompanyAdmin;
+import com.bb.focus.db.entity.evaluation.EvaluationSheet;
 import com.bb.focus.db.entity.helper.ApplicantInterviewRoom;
 import com.bb.focus.db.entity.helper.ProcessApplicant;
 import com.sun.istack.NotNull;
@@ -122,5 +123,11 @@ public class Applicant {
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ProcessApplicant.class, mappedBy = "applicant")
     private List<ProcessApplicant> processApplicantList = new ArrayList<>();
 
+    public void addApplicantPasslog(ApplicantPassLog applicantPassLog){
+        this.applicantPassLogList.add(applicantPassLog);
+        if(applicantPassLog.getApplicant() != this){
+            applicantPassLog.setApplicant(this);
+        }
+    }
 
 }
