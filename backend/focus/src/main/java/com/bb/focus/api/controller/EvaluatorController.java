@@ -2,6 +2,7 @@ package com.bb.focus.api.controller;
 
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.EvaluatorRes;
+import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.api.service.ApplicantService;
 import com.bb.focus.api.service.EvaluatorService;
 import com.bb.focus.common.auth.FocusUserDetails;
@@ -9,6 +10,8 @@ import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -27,17 +30,48 @@ public class EvaluatorController {
 
     @Autowired
     EvaluatorService evaluatorService;
+
     @ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
     @GetMapping("/me")
     public ResponseEntity<EvaluatorRes> getUserInfo(@ApiIgnore Authentication authentication) {
-        /**
-         * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
-         * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
-         */
+
         FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
         Long id = userDetails.getUser().getId();
         Evaluator evaluator = evaluatorService.getEvaluatorById(id);
 
         return ResponseEntity.status(200).body(EvaluatorRes.of(evaluator));
     }
+
+    @ApiOperation(value = "날짜별로 해당 평가자에게 배정된 면접 리스트")
+    @GetMapping("/list")
+    public ResponseEntity<List<InterviewRoomRes>> getInterviewRoomsInfo(@ApiIgnore Authentication authentication) {
+
+        FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
+        Long id = userDetails.getUser().getId();
+        List<InterviewRoomRes> interviewRoomResList = evaluatorService.getInterviewRoomsById(id);
+
+        return ResponseEntity.status(200).body(interviewRoomResList);
+    }
+
+    @ApiOperation(value = "해당 평가자에게 가장 가까운 면접 1개 정보 조회")
+    @GetMapping("/next")
+    public ResponseEntity<EvaluatorRes> getNextInterviewRoomInfo(@ApiIgnore Authentication authentication) {
+        FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
+        Long id = userDetails.getUser().getId();
+        Evaluator evaluator = evaluatorService.getEvaluatorById(id);
+
+        return ResponseEntity.status(200).body(EvaluatorRes.of(evaluator));
+    }
+
+    @ApiOperation(value = "해당 평가자에 배정된 면접별 지원자 리스트 조회")
+    @GetMapping("/applicants")
+    public ResponseEntity<EvaluatorRes> getApplicantsInfo(@ApiIgnore Authentication authentication) {
+        FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
+        Long id = userDetails.getUser().getId();
+        Evaluator evaluator = evaluatorService.getEvaluatorById(id);
+
+        return ResponseEntity.status(200).body(EvaluatorRes.of(evaluator));
+    }
+
+
 }

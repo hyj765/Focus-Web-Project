@@ -23,7 +23,7 @@ public class CompanyAdminRegisterPostReq {
     String companyName;
     @ApiModelProperty(name = "계약 시작 날짜", example = "2022-01-23T17:43:02.945175")
     LocalDateTime startDate;
-    @ApiModelProperty(name = "계약 종료 날짜", example = "2023-01-23T17:43:02.945175")
+    @ApiModelProperty(name = "계약 종료 날짜", example = "2025-01-23T17:43:02.945175")
     LocalDateTime endDate;
     @ApiModelProperty(name = "기업 대표 전화 번호", example = "02-1234-1234")
     String tel;
