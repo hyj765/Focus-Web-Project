@@ -7,12 +7,11 @@ import com.bb.focus.db.entity.company.Chat;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluation.EvaluationSheet;
 import com.bb.focus.db.entity.helper.ApplicantInterviewRoom;
-import com.bb.focus.db.entity.helper.ProcessApplicant;
+import com.bb.focus.db.entity.process.Process;
 import com.sun.istack.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -50,6 +49,10 @@ public class Applicant {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="company_admin_id")
     private CompanyAdmin companyAdmin;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "process_id")
+    private Process process;
 
     @Column(length = 50)
     private String userId;

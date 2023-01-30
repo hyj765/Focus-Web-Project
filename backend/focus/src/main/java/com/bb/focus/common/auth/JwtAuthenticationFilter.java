@@ -91,29 +91,29 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             JWTVerifier verifier = JwtTokenUtil.getVerifier();
             JwtTokenUtil.handleError(token);
             DecodedJWT decodedJWT = verifier.verify(token.replace(JwtTokenUtil.TOKEN_PREFIX, ""));
-            String userId = decodedJWT.getSubject();
-            if (userId != null) {
+            Long sequenceId = Long.parseLong(decodedJWT.getSubject());
+            if (sequenceId != null) {
                 // jwt 토큰에 포함된 계정 정보(userId) 통해 실제 디비에 해당 정보의 계정이 있는지 조회.
-                CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(userId);
+                CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminById(sequenceId);
                 User user = null;
                 if (companyAdmin != null) {
                     // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
-                    user = new User(companyAdmin.getUserId(), companyAdmin.getPwd(),
+                    user = new User(companyAdmin.getId(), companyAdmin.getUserId(), companyAdmin.getPwd(),
                             companyAdmin.getUserRole());
                 } else {
-                    ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminByUserId(userId);
+                    ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminById(sequenceId);
                     if (serviceAdmin != null) {
-                        user = new User(serviceAdmin.getUserId(), serviceAdmin.getPwd(),
+                        user = new User(serviceAdmin.getId(), serviceAdmin.getUserId(), serviceAdmin.getPwd(),
                                 serviceAdmin.getUserRole());
                     } else {
-                        Applicant applicant = applicantService.getApplicantByUserId(userId);
+                        Applicant applicant = applicantService.getApplicantById(sequenceId);
                         if (applicant != null) {
-                            user = new User(applicant.getUserId(), applicant.getPwd(),
+                            user = new User(applicant.getId(), applicant.getUserId(), applicant.getPwd(),
                                     applicant.getUserRole());
                         } else {
-                            Evaluator evaluator = evaluatorService.getEvaluatorByUserId(userId);
+                            Evaluator evaluator = evaluatorService.getEvaluatorById(sequenceId);
                             if (evaluator != null) {
-                                user = new User(evaluator.getUserId(), evaluator.getPwd(),
+                                user = new User(evaluator.getId(), evaluator.getUserId(), evaluator.getPwd(),
                                         evaluator.getUserRole());
                             }
                         }
@@ -121,7 +121,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                 }
                 FocusUserDetails userDetails = new FocusUserDetails(user);
                 UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(
-                        userId,
+                        sequenceId,
                         null, userDetails.getAuthorities());
                 jwtAuthentication.setDetails(userDetails);
                 hm.put("jwtAuthentication", jwtAuthentication);

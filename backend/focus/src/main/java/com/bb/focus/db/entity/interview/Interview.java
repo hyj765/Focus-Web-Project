@@ -59,4 +59,7 @@ public class Interview {
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.InteviewApplicantPassLog.class, mappedBy = "interview")
     private List<InteviewApplicantPassLog> inteviewApplicantPassLogList = new ArrayList<>();
+
+    @OneToMany(targetEntity = com.bb.focus.db.entity.interview.InterviewRoom.class, mappedBy = "interview")
+    private List<InterviewRoom> interviewRoomList = new ArrayList<>();
 }

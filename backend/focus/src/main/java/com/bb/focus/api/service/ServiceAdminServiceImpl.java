@@ -34,4 +34,10 @@ public class ServiceAdminServiceImpl implements ServiceAdminService {
     ServiceAdmin serviceAdmin = serviceAdminRepository.findServiceAdminByUserId(userId);
     return serviceAdmin;
   }
+
+  @Override
+  public ServiceAdmin getServiceAdminById(Long id) {
+    ServiceAdmin serviceAdmin = serviceAdminRepository.findServiceAdminById(id);
+    return serviceAdmin;
+  }
 }

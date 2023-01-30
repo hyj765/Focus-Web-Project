@@ -130,6 +130,12 @@ public class EvaluatorServiceImpl implements EvaluatorService{
   }
 
   @Override
+  public Evaluator getEvaluatorById(Long id) {
+    Evaluator evaluator = evaluatorRepository.findEvaluatorById(id);
+    return evaluator;
+  }
+
+  @Override
   public List<String> getDepartments(Long companyAdminId) {
     List<String> departments = evaluatorRepository.findAllDepartmentsByCompanyAdminId(companyAdminId);
     return departments;

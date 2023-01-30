@@ -18,13 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.security.util.Password;
 
 import javax.mail.MessagingException;
 
@@ -137,19 +134,19 @@ public class ApplicantServiceImpl implements ApplicantService{
     applicant.setActivityCount(applicantInfoReq.getActivityCount());
 
     //대학 정보 수정..
-    if(applicantInfoReq.getCollegeId() != 1){
+    if(applicantInfoReq.getCollegeId() != null){
       ApplicantCollege applicantCollege = collegeRepository.findById(applicantInfoReq.getCollegeId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicationCollege(applicantCollege);
     }
 
-    if(applicantInfoReq.getUnivId() != 1){
+    if(applicantInfoReq.getUnivId() != null){
       ApplicantUniv applicantUniv = universityRepository.findById(applicantInfoReq.getUnivId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicantsUniv(applicantUniv);
     }
 
-    if(applicantInfoReq.getGraduateId() != 1){
+    if(applicantInfoReq.getGraduateId() != null){
       ApplicantGraduate applicantGraduate = graduateSchoolRepository.findById(applicantInfoReq.getGraduateId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicantsGraduate(applicantGraduate);
@@ -184,6 +181,12 @@ public class ApplicantServiceImpl implements ApplicantService{
   @Override
   public Applicant getApplicantByUserId(String userId) {
     Applicant applicant = applicantRepository.findApplicantByUserId(userId);
+    return applicant;
+  }
+
+  @Override
+  public Applicant getApplicantById(Long id) {
+    Applicant applicant = applicantRepository.findApplicantById(id);
     return applicant;
   }
 

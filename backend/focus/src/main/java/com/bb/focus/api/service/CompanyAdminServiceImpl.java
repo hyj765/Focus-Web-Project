@@ -44,6 +44,12 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
   }
 
   @Override
+  public CompanyAdmin getCompanyAdminById(Long id) {
+    CompanyAdmin companyAdmin = companyAdminRepository.findCompanyAdminById(id);
+    return companyAdmin;
+  }
+
+  @Override
   public List<CompanyAdmin> getAll() {
     List<CompanyAdmin> companyAdminList = companyAdminRepository.findAll();
     return companyAdminList;
