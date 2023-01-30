@@ -2,6 +2,7 @@ package com.bb.focus.db.entity.applicant;
 
 import com.bb.focus.db.entity.helper.InteviewApplicantPassLog;
 import com.bb.focus.db.entity.helper.ProcessApplicantPassLog;
+import com.bb.focus.db.entity.process.Process;
 import com.sun.istack.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -84,6 +85,16 @@ public class ApplicantPassLog {
             this.name = applicant.getName();
             this.email = applicant.getEmail();
         }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean setProcess(Process process){
+        try{
+            this.processName = process.getName();
+            this.step = process.getCurrentStep();
+        }catch ( Exception e){
             return false;
         }
         return true;

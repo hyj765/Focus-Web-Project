@@ -123,9 +123,6 @@ public class Applicant {
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class, mappedBy = "applicant")
     private List<ApplicantInterviewRoom> applicantInterviewRoomList = new ArrayList<>();
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ProcessApplicant.class, mappedBy = "applicant")
-    private List<ProcessApplicant> processApplicantList = new ArrayList<>();
-
     public void addApplicantPasslog(ApplicantPassLog applicantPassLog){
         this.applicantPassLogList.add(applicantPassLog);
         if(applicantPassLog.getApplicant() != this){

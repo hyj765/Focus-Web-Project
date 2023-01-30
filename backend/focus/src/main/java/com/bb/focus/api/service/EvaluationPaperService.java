@@ -12,4 +12,5 @@ public interface EvaluationPaperService {
 
     boolean RemoveEvaluationSheet(Long evaluationSheetId);
     List<EvaluationSheetItemRes> GetEvaluationSheetItems(Long evaluationSheetId);
+    List<EvaluationSheetItemRes> GetRoomPerEvaluationItems(Long interviewRoomId);
 }

@@ -8,6 +8,7 @@ import com.bb.focus.db.entity.evaluation.EvaluationSheet;
 import com.bb.focus.db.repository.CompanyAdminRepository;
 import com.bb.focus.db.repository.EvaluationSheetItemRepository;
 import com.bb.focus.db.repository.EvaluationSheetRepository;
+import com.bb.focus.db.repository.ProcessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +21,13 @@ public class EvaluationPaperServiceImpl implements EvaluationPaperService {
     EvaluationSheetRepository sheetRepo;
     CompanyAdminRepository companyRepo;
     EvaluationSheetItemRepository evaluationSheetItemRepo;
+    ProcessRepository processRepo;
     @Autowired
-    public EvaluationPaperServiceImpl(EvaluationSheetRepository sheetS, CompanyAdminRepository companyS, EvaluationSheetItemRepository evaluationItemS){
+    public EvaluationPaperServiceImpl(EvaluationSheetRepository sheetS, CompanyAdminRepository companyS, EvaluationSheetItemRepository evaluationItemS, ProcessRepository processS){
         sheetRepo=sheetS;
         companyRepo = companyS;
         evaluationSheetItemRepo = evaluationItemS;
+        processRepo = processS;
     }
 
     //
@@ -73,6 +76,15 @@ public class EvaluationPaperServiceImpl implements EvaluationPaperService {
 
         return true;
     }
+    public List<EvaluationSheetItemRes> GetRoomPerEvaluationItems(Long interviewRoomId){
+        List<EvaluationSheetItemRes> evaluationSheetItemResList = null;
+        // InterviewRoomRepo.findById(interviewRoomid);
+        // interviewRoom.get(interviewId);
+        // List<EvaluationSheetItemRes> evaluationSheetItemResList = GetEvaluationSheetItems(interview.getEvaluationSheetId);
+
+        return null;
+    }
+
     public boolean RemoveEvaluationSheet(Long evaluationSheetId){
         sheetRepo.deleteById(evaluationSheetId);
         return true;

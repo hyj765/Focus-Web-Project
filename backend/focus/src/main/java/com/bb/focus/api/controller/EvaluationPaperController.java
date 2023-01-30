@@ -59,6 +59,18 @@ public class EvaluationPaperController {
         }
         return new ResponseEntity<List<EvaluationSheetItemRes>>(evaluationSheetItemResList,HttpStatus.OK);
     }
+    @GetMapping("/interview/{interview-room-id}")
+    public ResponseEntity<?> GetInterviewRoomEvaluationItems(@PathVariable(name="interview-room-id")Long interviewRoomId ){
+
+        List<EvaluationSheetItemRes> evaluationSheetItemResList=evaluationService.GetRoomPerEvaluationItems(interviewRoomId);
+
+        if(evaluationSheetItemResList == null){
+            return new ResponseEntity<String>("Data Error",HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<List<EvaluationSheetItemRes>>(evaluationSheetItemResList,HttpStatus.OK);
+    }
+
     // 결과까지 보여주는 함수
     @GetMapping("sheets/result")
     public ResponseEntity<?> GetEvaluationSheetResult(Long applicantId, Long processId){
