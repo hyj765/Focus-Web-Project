@@ -1,6 +1,7 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.ProcessReq;
+import com.bb.focus.api.response.ProcessDetailRes;
 import com.bb.focus.api.response.ProcessRes;
 import java.util.List;
 
@@ -13,5 +14,7 @@ public interface ProcessService {
   public void removeProcess(Long id);
 
   public List<ProcessRes> getAllExpectedProcess(Long companyAdminId);
+
+  public ProcessDetailRes getProcessDetail(Long processId);
 
 }

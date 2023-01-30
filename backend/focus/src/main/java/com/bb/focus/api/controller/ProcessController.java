@@ -1,6 +1,7 @@
 package com.bb.focus.api.controller;
 
 import com.bb.focus.api.request.ProcessReq;
+import com.bb.focus.api.response.ProcessDetailRes;
 import com.bb.focus.api.response.ProcessRes;
 import com.bb.focus.api.service.ProcessService;
 import com.bb.focus.common.auth.FocusUserDetails;
@@ -78,6 +79,15 @@ public class ProcessController {
     List<ProcessRes> expectedProcessList = processService.getAllExpectedProcess(companyAdminId);
     return ResponseEntity.status(200).body(expectedProcessList);
   }
+
+//  @ApiOperation(value = "프로세스 상세 조회", notes = "프로세스의 상세 정보 조회 : n차 정보 포함")
+//  @GetMapping("/{process-id}")
+//  public ResponseEntity<ProcessDetailRes> getProcessDetail(
+//      @ApiIgnore Authentication authentication,
+//      @PathVariable("process-id") Long id){
+//
+//
+//  }
 
 
 }

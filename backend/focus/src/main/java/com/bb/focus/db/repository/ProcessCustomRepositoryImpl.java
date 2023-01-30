@@ -1,5 +1,6 @@
 package com.bb.focus.db.repository;
 
+import com.bb.focus.api.response.ProcessDetailRes;
 import com.bb.focus.api.response.ProcessRes;
 import com.bb.focus.db.entity.company.QCompanyAdmin;
 import com.bb.focus.db.entity.process.QProcess;
@@ -42,6 +43,22 @@ public class ProcessCustomRepositoryImpl implements ProcessCustomRepository{
         .fetch();
 
     return results;
+  }
+
+  @Override
+  public ProcessDetailRes findProcessDetail(Long processId) {
+    ProcessDetailRes result = jpaQueryFactory
+        .select(Projections.constructor(ProcessDetailRes.class,
+            qProcess.id,
+            qProcess.name,
+            qProcess.startDate,
+            qProcess.endDate,
+            qProcess.interviewCount,
+            qProcess.currentStep))
+        .from(qProcess)
+        .where(qProcess.id.eq(processId))
+        .fetchOne();
+    return result;
   }
 
   private BooleanExpression eqCompanyAdminId(Long companyAdminId) {

@@ -20,7 +20,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name="interviews")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,4 +62,13 @@ public class Interview {
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.interview.InterviewRoom.class, mappedBy = "interview")
     private List<InterviewRoom> interviewRoomList = new ArrayList<>();
+
+    //연관관계 메서드
+    public void setProcess(Process process){
+        if(this.process != null){
+            this.process.getInterviewList().remove(this);
+        }
+        this.process = process;
+        process.getInterviewList().add(this);
+    }
 }

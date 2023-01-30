@@ -1,8 +1,10 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.ProcessReq;
+import com.bb.focus.api.response.ProcessDetailRes;
 import com.bb.focus.api.response.ProcessRes;
 import com.bb.focus.db.entity.company.CompanyAdmin;
+import com.bb.focus.db.entity.interview.Interview;
 import com.bb.focus.db.entity.process.Process;
 import com.bb.focus.db.repository.CompanyAdminRepository;
 import com.bb.focus.db.repository.ProcessRepository;
@@ -63,5 +65,16 @@ public class ProcessServiceImpl implements ProcessService {
   public List<ProcessRes> getAllExpectedProcess(Long companyAdminId) {
     List<ProcessRes> expectedProcessList = processRepository.findAllExpectedProcess(companyAdminId);
     return expectedProcessList;
+  }
+
+  public ProcessDetailRes getProcessDetail(Long processId) {
+    ProcessDetailRes processDetail = processRepository.findProcessDetail(processId);
+
+    //interview List필요...
+    Process process = processRepository.findById(processId).orElseThrow(IllegalArgumentException::new);
+
+
+
+    return null;
   }
 }
