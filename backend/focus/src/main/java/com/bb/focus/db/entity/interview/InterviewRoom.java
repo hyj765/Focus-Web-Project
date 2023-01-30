@@ -35,6 +35,10 @@ public class InterviewRoom {
     @JoinColumn(name="company_admin_id")
     private CompanyAdmin companyAdmin;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "interview_id")
+    private Interview interview;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_chat_id")
     private RoomChat roomChat;
