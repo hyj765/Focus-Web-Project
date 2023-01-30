@@ -98,22 +98,22 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                 User user = null;
                 if (companyAdmin != null) {
                     // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
-                    user = new User(companyAdmin.getUserId(), companyAdmin.getPwd(),
+                    user = new User(companyAdmin.getId(), companyAdmin.getUserId(), companyAdmin.getPwd(),
                             companyAdmin.getUserRole());
                 } else {
                     ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminById(sequenceId);
                     if (serviceAdmin != null) {
-                        user = new User(serviceAdmin.getUserId(), serviceAdmin.getPwd(),
+                        user = new User(serviceAdmin.getId(), serviceAdmin.getUserId(), serviceAdmin.getPwd(),
                                 serviceAdmin.getUserRole());
                     } else {
                         Applicant applicant = applicantService.getApplicantById(sequenceId);
                         if (applicant != null) {
-                            user = new User(applicant.getUserId(), applicant.getPwd(),
+                            user = new User(applicant.getId(), applicant.getUserId(), applicant.getPwd(),
                                     applicant.getUserRole());
                         } else {
                             Evaluator evaluator = evaluatorService.getEvaluatorById(sequenceId);
                             if (evaluator != null) {
-                                user = new User(evaluator.getUserId(), evaluator.getPwd(),
+                                user = new User(evaluator.getId(), evaluator.getUserId(), evaluator.getPwd(),
                                         evaluator.getUserRole());
                             }
                         }

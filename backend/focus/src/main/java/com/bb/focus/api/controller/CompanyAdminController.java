@@ -258,8 +258,8 @@ public class CompanyAdminController {
      * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
      */
     FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
-    String userId = userDetails.getUsername();
-    CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(userId);
+    Long id = userDetails.getUser().getId();
+    CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminById(id);
 
     return ResponseEntity.status(200).body(CompanyAdminRes.of(companyAdmin));
   }
