@@ -4,6 +4,7 @@ import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.evaluation.EvaluationSheet;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.entity.interview.InterviewRoom;
+import com.bb.focus.db.entity.process.Process;
 import com.sun.istack.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +94,9 @@ public class CompanyAdmin {
 
   @OneToMany(targetEntity = com.bb.focus.db.entity.interview.InterviewRoom.class, mappedBy = "companyAdmin")
   private List<InterviewRoom> interviewRoomList = new ArrayList<>();
+
+  @OneToMany(targetEntity = com.bb.focus.db.entity.process.Process.class, mappedBy = "companyAdmin")
+  private List<Process> processList = new ArrayList<>();
 
   //연관관계 메서드
   public void addEvaluator(Evaluator evaluator){
