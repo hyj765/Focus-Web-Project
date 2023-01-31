@@ -16,11 +16,13 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@DynamicInsert
 public class Process {
 
   @Id
@@ -28,7 +30,7 @@ public class Process {
   @Column(name="process_id")
   private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="company_admin_id")
     private CompanyAdmin companyAdmin;
 
@@ -58,4 +60,13 @@ public class Process {
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.applicant.Applicant.class, mappedBy = "process")
     private List<Applicant> applicantList = new ArrayList<>();
+
+    //연관관계 메서드
+    public void setCompanyAdmin(CompanyAdmin companyAdmin){
+      if(this.companyAdmin != null){
+        this.companyAdmin.getProcessList().remove(this);
+      }
+      this.companyAdmin = companyAdmin;
+      companyAdmin.getProcessList().add(this);
+    }
 }
