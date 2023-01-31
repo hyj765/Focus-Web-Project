@@ -7,10 +7,12 @@ import com.bb.focus.db.entity.applicant.school.ApplicantCollege;
 import com.bb.focus.db.entity.applicant.school.ApplicantGraduate;
 import com.bb.focus.db.entity.applicant.school.ApplicantUniv;
 import com.bb.focus.db.entity.company.CompanyAdmin;
+import com.bb.focus.db.entity.process.Process;
 import com.bb.focus.db.repository.ApplicantRepository;
 import com.bb.focus.db.repository.CollegeRepository;
 import com.bb.focus.db.repository.CompanyAdminRepository;
 import com.bb.focus.db.repository.GraduateSchoolRepository;
+import com.bb.focus.db.repository.ProcessRepository;
 import com.bb.focus.db.repository.UniversityRepository;
 
 import java.util.HashMap;
@@ -40,13 +42,14 @@ public class ApplicantServiceImpl implements ApplicantService{
 
   private final GraduateSchoolRepository graduateSchoolRepository;
   private final MailService mailService;
+  private final ProcessRepository processRepository;
 
 
   /**
    * 지원자 계정 생성
    */
   @Transactional
-  public Long create(Long comapnyAdminId, ApplicantInfoReq applicantInfoReq) {
+  public Long create(Long comapnyAdminId, ApplicantInfoReq applicantInfoReq, Long processId) {
     Applicant applicant = new Applicant();
 
     applicant.setName(applicantInfoReq.getName());
@@ -60,6 +63,9 @@ public class ApplicantServiceImpl implements ApplicantService{
     applicant.setDegree(applicantInfoReq.getDegree());
     applicant.setAwardCount(applicantInfoReq.getAwardCount());
     applicant.setActivityCount(applicantInfoReq.getActivityCount());
+
+    Process process = processRepository.findById(processId).orElseThrow(IllegalArgumentException::new);
+    applicant.setProcess(process);
 
     if(applicantInfoReq.getCollegeId() != null){
       ApplicantCollege applicantCollege = collegeRepository.findById(applicantInfoReq.getCollegeId())
@@ -100,10 +106,10 @@ public class ApplicantServiceImpl implements ApplicantService{
     String newPwd = getRandomString();
 
     //메일
-    Map<String, String> content = new HashMap<>();
-    content.put("id", newId);
-    content.put("pwd", newPwd);
-    mailService.sendAccountMail(applicant.getEmail(), content);
+//    Map<String, String> content = new HashMap<>();
+//    content.put("id", newId);
+//    content.put("pwd", newPwd);
+//    mailService.sendAccountMail(applicant.getEmail(), content);
 
     //암호화
 //    String encodedPwd = passwordEncoder.encode(newPwd);
@@ -191,8 +197,8 @@ public class ApplicantServiceImpl implements ApplicantService{
   }
 
   @Override
-  public Page<ApplicantRes> findAllApplicantsUsePaging(Pageable pageable, String search, Long id) {
-    Page<ApplicantRes> applicants = applicantRepository.findAllApplicantsWithPaging(pageable, search, id);
+  public Page<ApplicantRes> findAllApplicantsUsePaging(Pageable pageable, String search, Long companyAdminId, Long processId) {
+    Page<ApplicantRes> applicants = applicantRepository.findAllApplicantsWithPaging(pageable, search, companyAdminId, processId);
     return applicants;
 
   }
