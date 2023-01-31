@@ -30,7 +30,7 @@ public class Process {
   @Column(name="process_id")
   private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="company_admin_id")
     private CompanyAdmin companyAdmin;
 

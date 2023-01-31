@@ -1,6 +1,7 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.ProcessReq;
+import com.bb.focus.api.response.InterviewRes;
 import com.bb.focus.api.response.ProcessDetailRes;
 import com.bb.focus.api.response.ProcessRes;
 import com.bb.focus.db.entity.company.CompanyAdmin;
@@ -9,10 +10,10 @@ import com.bb.focus.db.entity.process.Process;
 import com.bb.focus.db.repository.CompanyAdminRepository;
 import com.bb.focus.db.repository.ProcessRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.yaml.snakeyaml.events.Event.ID;
 
 @Service
 @RequiredArgsConstructor
@@ -69,12 +70,15 @@ public class ProcessServiceImpl implements ProcessService {
 
   public ProcessDetailRes getProcessDetail(Long processId) {
     ProcessDetailRes processDetail = processRepository.findProcessDetail(processId);
+    List<Interview> list = processRepository.findById(processId).get().getInterviewList();
+    List<InterviewRes> interviewList = list.stream()
+        .map(i -> new InterviewRes(i))
+        .collect(Collectors.toList());
 
-    //interview List필요...
-    Process process = processRepository.findById(processId).orElseThrow(IllegalArgumentException::new);
+    for(InterviewRes interview : interviewList){
+      processDetail.getInterviewList().add(interview);
+    }
 
-
-
-    return null;
+    return processDetail;
   }
 }

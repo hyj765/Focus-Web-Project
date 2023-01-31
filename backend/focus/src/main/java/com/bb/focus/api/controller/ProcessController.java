@@ -80,14 +80,15 @@ public class ProcessController {
     return ResponseEntity.status(200).body(expectedProcessList);
   }
 
-//  @ApiOperation(value = "프로세스 상세 조회", notes = "프로세스의 상세 정보 조회 : n차 정보 포함")
-//  @GetMapping("/{process-id}")
-//  public ResponseEntity<ProcessDetailRes> getProcessDetail(
-//      @ApiIgnore Authentication authentication,
-//      @PathVariable("process-id") Long id){
-//
-//
-//  }
+  @ApiOperation(value = "프로세스 상세 조회", notes = "프로세스의 상세 정보 조회 : n차 정보 포함")
+  @GetMapping("/{process-id}")
+  public ResponseEntity<ProcessDetailRes> getProcessDetail(
+      @ApiIgnore Authentication authentication,
+      @PathVariable("process-id") Long id){
+
+    ProcessDetailRes processDetailRes = processService.getProcessDetail(id);
+    return ResponseEntity.status(200).body(processDetailRes);
+  }
 
 
 }
