@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class InterviewServiceImpl implements InterviewService{
+public class InterviewServiceImpl implements InterviewService {
 
   private final ProcessRepository processRepository;
   private final InterviewRepository interviewRepository;
@@ -24,7 +24,8 @@ public class InterviewServiceImpl implements InterviewService{
   public void createInterview(Long processId, InterviewReq interviewReq) {
     //processId 매핑, interviewReq에서 각종 정보와 evaluation sheet 매핑
 
-    Process process = processRepository.findById(processId).orElseThrow(IllegalArgumentException::new);
+    Process process = processRepository.findById(processId)
+        .orElseThrow(IllegalArgumentException::new);
     EvaluationSheet evaluationSheet = evaluationSheetRepository.findById(
         interviewReq.getEvaluationSheetId()).orElseThrow(IllegalArgumentException::new);
 
@@ -43,4 +44,5 @@ public class InterviewServiceImpl implements InterviewService{
   public Interview findInterviewById(Long interviewId) {
     Interview interview = interviewRepository.findInterviewById(interviewId);
     return interview;
+  }
 }
