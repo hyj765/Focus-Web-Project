@@ -123,9 +123,6 @@ public class Applicant {
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class, mappedBy = "applicant")
     private List<ApplicantInterviewRoom> applicantInterviewRoomList = new ArrayList<>();
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ProcessApplicant.class, mappedBy = "applicant")
-    private List<ProcessApplicant> processApplicantList = new ArrayList<>();
-
     //연관관계 메서드
     public void setProcess(Process process){
         if(this.process != null){
