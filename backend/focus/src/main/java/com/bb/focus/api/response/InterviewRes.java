@@ -14,6 +14,7 @@ public class InterviewRes {
   private String name;
   private LocalDateTime startDate;
   private LocalDateTime endDate;
+  private Long evaluationSheetId;
 
   public InterviewRes(Interview interview) {
     id = interview.getId();
@@ -21,5 +22,6 @@ public class InterviewRes {
     name = interview.getName();
     startDate = interview.getStartDate();
     endDate = interview.getEndDate();
+    evaluationSheetId = interview.getEvaluationSheet().getId();
   }
 }
