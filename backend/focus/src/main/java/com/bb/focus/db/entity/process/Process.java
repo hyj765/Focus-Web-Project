@@ -1,6 +1,7 @@
 package com.bb.focus.db.entity.process;
 
 import com.bb.focus.db.entity.applicant.Applicant;
+import com.bb.focus.db.entity.applicant.ApplicantPassLog;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.helper.ProcessApplicantPassLog;
 import com.bb.focus.db.entity.helper.ProcessEvaluator;
@@ -61,6 +62,13 @@ public class Process {
     @OneToMany(targetEntity = com.bb.focus.db.entity.applicant.Applicant.class, mappedBy = "process")
     private List<Applicant> applicantList = new ArrayList<>();
 
+    public void AddProcessPassLog(ApplicantPassLog applicantPassLog){
+      ProcessApplicantPassLog processApplicantPassLog=new ProcessApplicantPassLog();
+      processApplicantPassLog.setApplicantPassLog(applicantPassLog);
+      processApplicantPassLog.setProcess(this);
+      processApplicantPassLogList.add(processApplicantPassLog);
+    }
+
     //연관관계 메서드
     public void setCompanyAdmin(CompanyAdmin companyAdmin){
       if(this.companyAdmin != null){
@@ -69,4 +77,5 @@ public class Process {
       this.companyAdmin = companyAdmin;
       companyAdmin.getProcessList().add(this);
     }
+
 }

@@ -9,7 +9,11 @@ public interface EvaluationPaperService {
 
     boolean CreateEvaluationSheet(Long companyId, String sheetInfo);
     boolean CreateEvaluationItem(Long sheetId, EvaluationItemReq evaluationItemReq);
-
     boolean RemoveEvaluationSheet(Long evaluationSheetId);
+
+    boolean RemoveEvaluationItem(Long evaluationSheetItemId);
     List<EvaluationSheetItemRes> GetEvaluationSheetItems(Long evaluationSheetId);
+    List<EvaluationSheetItemRes> GetRoomPerEvaluationItems(Long interviewRoomId);
+
+
 }
