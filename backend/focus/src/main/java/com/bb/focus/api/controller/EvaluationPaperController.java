@@ -105,4 +105,10 @@ public class EvaluationPaperController {
         return new ResponseEntity<String>("Delete Fail",HttpStatus.BAD_REQUEST);
     }
 
+    @DeleteMapping("/sheets/deleteitem/{sheetitem-id}")
+    public ResponseEntity<?> DeleteEvaluationSheetItem(@PathVariable(name="sheetitem-id") Long itemId){
+        evaluationService.RemoveEvaluationItem(itemId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
 }

@@ -69,6 +69,7 @@ public class EvaluationPaperServiceImpl implements EvaluationPaperService {
         }
         return evaluationSheetItemResList;
     }
+
     public boolean modifyEvaluationSheet(Long evaluationSheetId){
 
 
@@ -89,6 +90,12 @@ public class EvaluationPaperServiceImpl implements EvaluationPaperService {
         sheetRepo.deleteById(evaluationSheetId);
         return true;
     };
+
+    public boolean RemoveEvaluationItem(Long evaluationSheetItemId){
+        evaluationSheetItemRepo.deleteById(evaluationSheetItemId);
+
+        return true;
+    }
 
 
 }
