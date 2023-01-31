@@ -63,8 +63,23 @@ public class InterviewRoom {
     private Byte curApplicantCount;
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class, mappedBy = "interviewRoom")
-    private List<ApplicantInterviewRoom> applicantInterviewRoomList = new ArrayList<>();
+    private List<ApplicantInterviewRoom> interviewRoomApplicantList = new ArrayList<>();
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class, mappedBy = "interviewRoom")
-    private List<EvaluatorInterviewRoom> evaluatorInterviewRoomList = new ArrayList<>();
+    private List<EvaluatorInterviewRoom> interviewRoomEvaluatorList = new ArrayList<>();
+
+    //연관관계 메서드
+    public void addEvaluatorInterviewRoom(EvaluatorInterviewRoom evaluatorInterviewRoom){
+        interviewRoomEvaluatorList.add(evaluatorInterviewRoom);
+        if(evaluatorInterviewRoom.getInterviewRoom() != this){
+            evaluatorInterviewRoom.setInterviewRoom(this);
+        }
+    }
+
+    public void addApplicantInterviewRoom(ApplicantInterviewRoom applicantInterviewRoom){
+        interviewRoomApplicantList.add(applicantInterviewRoom);
+        if(applicantInterviewRoom.getInterviewRoom() != this){
+            applicantInterviewRoom.setInterviewRoom(this);
+        }
+    }
 }

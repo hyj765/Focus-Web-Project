@@ -28,4 +28,5 @@ public class EvaluatorInterviewRoom {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="interview_room_id")
     private InterviewRoom interviewRoom;
+
 }
