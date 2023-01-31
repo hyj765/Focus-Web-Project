@@ -15,6 +15,6 @@ public interface ApplicantCustomRepository {
 
   Applicant findApplicantById(Long id);
 
-  Page<ApplicantRes> findAllApplicantsWithPaging(Pageable pageable, String search, Long companyAdminId);
+  Page<ApplicantRes> findAllApplicantsWithPaging(Pageable pageable, String search, Long companyAdminId, Long processId);
 
 }

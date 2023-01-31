@@ -5,6 +5,7 @@ import com.bb.focus.common.util.QueryDslUtil;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.applicant.QApplicant;
 import com.bb.focus.db.entity.company.QCompanyAdmin;
+import com.bb.focus.db.entity.process.QProcess;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -28,6 +29,7 @@ public class ApplicantCustomRepositoryImpl implements ApplicantCustomRepository 
 
   QCompanyAdmin qCompanyAdmin = QCompanyAdmin.companyAdmin;
   QApplicant qApplicant = QApplicant.applicant;
+  QProcess qProcess = QProcess.process;
 
   public List<Applicant> findAllApplicantsByCompanyAdminId(Long companyAdminId) {
     return jpaQueryFactory
@@ -52,7 +54,7 @@ public class ApplicantCustomRepositoryImpl implements ApplicantCustomRepository 
   }
 
   @Override
-  public Page<ApplicantRes> findAllApplicantsWithPaging(Pageable pageable, String search, Long companyAdminId) {
+  public Page<ApplicantRes> findAllApplicantsWithPaging(Pageable pageable, String search, Long companyAdminId, Long processId) {
 
     List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
@@ -67,6 +69,7 @@ public class ApplicantCustomRepositoryImpl implements ApplicantCustomRepository 
                     qApplicant.email))
             .from(qApplicant)
             .where(eqCompanyAdminId(companyAdminId),
+                    eqProcessId(processId),
                     containName(search)
             )
             .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
@@ -83,6 +86,13 @@ public class ApplicantCustomRepositoryImpl implements ApplicantCustomRepository 
       return null;
     }
     return qCompanyAdmin.id.eq(companyAdminId);
+  }
+
+  private BooleanExpression eqProcessId(Long processId){
+    if(processId.equals(null)){
+      return null;
+    }
+    return qProcess.id.eq(processId);
   }
 
   private BooleanExpression containName(String name){
