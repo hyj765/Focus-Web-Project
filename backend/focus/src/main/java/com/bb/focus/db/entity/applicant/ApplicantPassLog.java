@@ -18,9 +18,11 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Table(name="applicants_pass_log")
 public class ApplicantPassLog {
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -76,6 +78,16 @@ public class ApplicantPassLog {
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ProcessApplicantPassLog.class, mappedBy = "applicantPassLog")
     private List<ProcessApplicantPassLog> processApplicantPassLogList = new ArrayList<>();
 
+    public boolean setApplicantData(Applicant applicant){
+        try {
+            this.code = applicant.getCode();
+            this.name = applicant.getName();
+            this.email = applicant.getEmail();
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
 
 
 }

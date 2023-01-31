@@ -25,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,6 +48,7 @@ public class CompanyAdminController {
   private final EvaluatorService evaluatorService;
   private final ApplicantService applicantService;
   private final CompanyAdminService companyAdminService;
+
 
   @ApiOperation(value = "평가자 계정 생성", notes = "기업관리자로부터 입력받은 정보로 평가자 계정을 생성한다.")
   @PostMapping("/evaluators")
@@ -298,6 +300,14 @@ public class CompanyAdminController {
 
     return ResponseEntity.status(200).body(CompanyAdminRes.of(companyAdmin));
   }
+  @ApiOperation(value = "인터뷰에 따른 지원자 합불 여부 처리", notes = "인터뷰 넘버와 해당 인터뷰에 따른 지원자 결과 변경")
+  @PutMapping("/pass/{process-id}/{applicant-id}")
+  public ResponseEntity<?> ApplicantPassProcess(@PathVariable(name="process-id")Long processId,@PathVariable(name="applicant-id")Long applicantId){
+    String message  = "";
 
+
+
+    return new ResponseEntity<String>(message, HttpStatus.OK);
+  }
 
 }
