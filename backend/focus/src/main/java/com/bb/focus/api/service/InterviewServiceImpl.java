@@ -38,4 +38,9 @@ public class InterviewServiceImpl implements InterviewService{
 
     interviewRepository.save(interview);
   }
+
+  @Override
+  public Interview findInterviewById(Long interviewId) {
+    Interview interview = interviewRepository.findInterviewById(interviewId);
+    return interview;
 }
