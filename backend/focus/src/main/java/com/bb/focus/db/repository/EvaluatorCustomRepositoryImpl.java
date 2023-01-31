@@ -7,6 +7,7 @@ import com.bb.focus.db.entity.company.QCompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.entity.evaluator.QEvaluator;
 import com.bb.focus.db.entity.helper.QEvaluatorInterviewRoom;
+import com.bb.focus.db.entity.interview.InterviewRoom;
 import com.bb.focus.db.entity.interview.QInterviewRoom;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -135,29 +136,10 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository 
 
   @Override
   public List<InterviewRoomRes> findInterviewRoomsById(Long id) {
-    // User랑 UserTag -> InterviewRoom이랑 Evaluator
-    String query = "SELECT new InterviewRoomRes(ir.id, ir.name, ir.startTime, ir.endTime, ir.duration) FROM InterviewRoom interviewRoom"
-        + "LEFT JOIN interviewRoom.evaluator evaluator "
-        + "LEFT JOIN evaluator.interviewRoom interviewRoom "
-        + "WHERE interviewRoom.id = " + id;
 
-    List<UserWithTeamDto> resultList = entityManager.createQuery(query, UserWithTeamDto.class)
-        .getResultList();
+    List<InterviewRoomRes> resultList = null;
 
-    List<InterviewRoomRes> results = jpaQueryFactory
-        .select(Projections.constructor(InterviewRoomRes.class,
-            qInterviewRoom.id,
-            qInterviewRoom.name,
-            qInterviewRoom.startTime,
-            qInterviewRoom.endTime,
-            qInterviewRoom.duration
-        ))
-        .from(qEvaluatorInterviewRoom)
-        .join(qEvaluatorInterviewRoom.interviewRoom,a)
-        .join(.qEvaluator,b)
-        .where(eqEvaluatorId(id))
-        .fetch();
-    return results;
+    return resultList;
   }
 
   private BooleanExpression eqEvaluatorId(Long evaluatorId) {
