@@ -10,11 +10,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "service_notices")
 public class ServiceNotice {
 
@@ -36,6 +39,7 @@ public class ServiceNotice {
     private String title;
 
     @NotNull
+    @CreatedDate
     private LocalDateTime createdAt;
 
     @NotNull
