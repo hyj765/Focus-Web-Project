@@ -19,6 +19,7 @@ import com.bb.focus.db.repository.EvaluationSheetItemRepository;
 import com.bb.focus.db.repository.EvaluationSheetRepository;
 import com.bb.focus.db.repository.EvaluatorRepository;
 import com.bb.focus.db.repository.InterviewCustomRepository;
+import com.bb.focus.db.repository.InterviewRepository;
 import com.bb.focus.db.repository.ProcessRepository;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -35,7 +36,7 @@ public class EvaluationServiceImpl implements EvaluationService{
   EvaluationSheetItemRepository evaluationSheetItemRepo;
   EvaluationSheetRepository evaluationSheetRepo;
   EvaluationResultRepository evaluationResultRepo;
-  InterviewCustomRepository interviewCustomRepo;
+  InterviewRepository interviewRepo;
   EvaluatorRepository evaluatorRepo;
 
   @Autowired
@@ -45,7 +46,7 @@ public class EvaluationServiceImpl implements EvaluationService{
       , ApplicantEvaluatorRepository applicantEvaluatorRepository
       , EvaluationSheetItemRepository evaluationSheetItemRepository
       , EvaluationResultRepository evaluationResultRepository
-      , InterviewCustomRepository interviewCustomRepository
+      , InterviewRepository interviewRepository
       , EvaluatorRepository evaluatorRepository
       , EvaluationSheetRepository evaluationSheetRepository
       )
@@ -57,7 +58,7 @@ public class EvaluationServiceImpl implements EvaluationService{
     applicantEvaluatorRepo = applicantEvaluatorRepository;
     evaluationSheetItemRepo = evaluationSheetItemRepository;
     evaluationResultRepo = evaluationResultRepository;
-    interviewCustomRepo = interviewCustomRepository;
+    interviewRepo = interviewRepository;
     evaluatorRepo = evaluatorRepository;
     evaluationSheetRepo = evaluationSheetRepository;
   }
@@ -129,7 +130,7 @@ public class EvaluationServiceImpl implements EvaluationService{
 
   public boolean createApplicantEvaluator(Long interviewId,Long evaluatorId,Long applicantId){
     ApplicantEvaluator applicantEvaluator = new ApplicantEvaluator();
-    Interview interview= interviewCustomRepo.findInterviewById(interviewId);
+    Interview interview= interviewRepo.findInterviewById(interviewId);
     Evaluator evaluator = evaluatorRepo.findEvaluatorById(evaluatorId);
     Applicant applicant = applicantRepo.findApplicantById(applicantId);
     EvaluationSheet evaluationSheet = evaluationSheetRepo.findById(interview.getEvaluationSheet().getId()).orElseThrow(IllegalAccessError::new);
