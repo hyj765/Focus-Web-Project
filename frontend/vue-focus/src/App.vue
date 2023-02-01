@@ -1,8 +1,8 @@
 <template>
-	<div>
-		<TheHeader></TheHeader>
-		<RouterView></RouterView>
-	</div>
+  <div>
+    <TheHeader></TheHeader>
+    <RouterView></RouterView>
+  </div>
 </template>
 
 <script setup>

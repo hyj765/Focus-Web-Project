@@ -1,7 +1,7 @@
 <template>
-	<div>
-		<h2>Evaluator</h2>
-	</div>
+  <div>
+    <h2>Evaluator</h2>
+  </div>
 </template>
 
 <script setup></script>
