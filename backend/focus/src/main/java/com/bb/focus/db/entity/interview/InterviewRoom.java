@@ -32,9 +32,9 @@ public class InterviewRoom {
     @JoinColumn(name = "room_id")
     private Room room;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="company_admin_id")
-    private CompanyAdmin companyAdmin;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name="company_admin_id")
+//    private CompanyAdmin companyAdmin;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "interview_id")
@@ -63,11 +63,11 @@ public class InterviewRoom {
     @NotNull
     private Byte curApplicantCount;
 
-//    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class, mappedBy = "interviewRoom")
-//    private List<ApplicantInterviewRoom> interviewRoomApplicantList = new ArrayList<>();
-//
-//    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class, mappedBy = "interviewRoom")
-//    private List<EvaluatorInterviewRoom> interviewRoomEvaluatorList = new ArrayList<>();
+    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class, mappedBy = "interviewRoom")
+    private List<ApplicantInterviewRoom> ApplicantInterviewRoomList = new ArrayList<>();
+
+    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class, mappedBy = "interviewRoom")
+    private List<EvaluatorInterviewRoom> EvaluatorInteviewRoomList = new ArrayList<>();
 
 
 }
