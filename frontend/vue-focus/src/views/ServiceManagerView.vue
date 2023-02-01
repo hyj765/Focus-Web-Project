@@ -1,9 +1,11 @@
 <template>
   <div>
-    <h2>Service Manager</h2>
+    <TheSideBar />
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import TheSideBar from '@/layouts/TheSideBar.vue';
+</script>
 
 <style lang="scss" scoped></style>
