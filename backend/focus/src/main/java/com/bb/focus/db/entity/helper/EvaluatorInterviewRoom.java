@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name = "evaluators_interview_rooms")
 public class EvaluatorInterviewRoom {
 
