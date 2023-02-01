@@ -20,8 +20,7 @@ import java.time.LocalDateTime;
 @Table(name = "interview_rooms")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-//@RequiredArgsConstructor
+@NoArgsConstructor
 public class InterviewRoom {
 
     @Id
@@ -64,9 +63,11 @@ public class InterviewRoom {
     @NotNull
     private Byte curApplicantCount;
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class, mappedBy = "interviewRoom")
-    private List<ApplicantInterviewRoom> applicantInterviewRoomList = new ArrayList<>();
+//    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class, mappedBy = "interviewRoom")
+//    private List<ApplicantInterviewRoom> interviewRoomApplicantList = new ArrayList<>();
+//
+//    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class, mappedBy = "interviewRoom")
+//    private List<EvaluatorInterviewRoom> interviewRoomEvaluatorList = new ArrayList<>();
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class, mappedBy = "interviewRoom")
-    private List<EvaluatorInterviewRoom> evaluatorInterviewRoomList = new ArrayList<>();
+
 }

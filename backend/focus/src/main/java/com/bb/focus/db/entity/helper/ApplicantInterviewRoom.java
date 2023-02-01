@@ -29,4 +29,5 @@ public class ApplicantInterviewRoom {
     @JoinColumn(name="applicant_id")
     private Applicant applicant;
 
+
 }

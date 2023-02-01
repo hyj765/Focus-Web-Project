@@ -120,8 +120,8 @@ public class Applicant {
     @OneToOne(targetEntity = com.bb.focus.db.entity.company.Chat.class, mappedBy = "applicant", fetch = FetchType.LAZY)
     private Chat chat;
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class, mappedBy = "applicant")
-    private List<ApplicantInterviewRoom> applicantInterviewRoomList = new ArrayList<>();
+//    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class, mappedBy = "applicant")
+//    private List<ApplicantInterviewRoom> applicantInterviewRoomList = new ArrayList<>();
 
     //연관관계 메서드
     public void setProcess(Process process){
