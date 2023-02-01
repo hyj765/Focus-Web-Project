@@ -6,6 +6,7 @@ import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.db.entity.interview.Interview;
 import com.bb.focus.db.entity.interview.InterviewRoom;
 import com.bb.focus.db.entity.interview.Room;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+@Api(value = "면접(N차) API", tags = {"Interview"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/interview/round")

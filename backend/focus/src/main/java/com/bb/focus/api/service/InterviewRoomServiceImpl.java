@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service("roomService")
+@Service("interviewRoomService")
 public class InterviewRoomServiceImpl implements InterviewRoomService {
 
     @Autowired

@@ -3,6 +3,7 @@ package com.bb.focus.api.controller;
 import com.bb.focus.api.service.InterviewRoomService;
 import com.bb.focus.db.entity.interview.InterviewRoom;
 import com.bb.focus.db.entity.interview.Room;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+@Api(value = "면접 일정 API", tags = {"InterviewRoom"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/interviewrooms")

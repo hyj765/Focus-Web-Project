@@ -4,6 +4,7 @@ import com.bb.focus.api.request.RoomReq;
 import com.bb.focus.api.service.RoomService;
 import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.db.entity.interview.Room;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Api(value = "룸 API", tags = {"Room"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/rooms")

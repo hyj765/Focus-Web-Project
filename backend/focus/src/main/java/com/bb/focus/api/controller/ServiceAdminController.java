@@ -23,7 +23,7 @@ import springfox.documentation.annotations.ApiIgnore;
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
  */
-@Api(value = "유저 API", tags = {"ServiceUser"})
+@Api(value = "서비스 관리자 API", tags = {"ServiceUser"})
 @RestController
 @RequestMapping("/serviceusers")
 public class ServiceAdminController {

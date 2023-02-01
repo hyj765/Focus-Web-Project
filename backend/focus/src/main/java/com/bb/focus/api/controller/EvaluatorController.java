@@ -3,6 +3,7 @@ package com.bb.focus.api.controller;
 import com.bb.focus.api.response.EvaluatorRes;
 import com.bb.focus.api.service.EvaluatorService;
 import com.bb.focus.common.auth.FocusUserDetails;
+import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.entity.helper.ApplicantInterviewRoom;
 import com.bb.focus.db.entity.helper.EvaluatorInterviewRoom;
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
  */
-@Api(value = "유저 API", tags = {"Evaluator"})
+@Api(value = "평가자 API", tags = {"Evaluator"})
 @RestController
 @RequestMapping("/evaluators")
 public class EvaluatorController {

@@ -15,6 +15,7 @@ import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
@@ -40,6 +41,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.mail.MessagingException;
 
+@Api(value = "기업관리자 API", tags = {"CompanyAdmin"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/companyusers")

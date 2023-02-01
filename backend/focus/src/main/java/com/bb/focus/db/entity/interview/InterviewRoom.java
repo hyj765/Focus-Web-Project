@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class InterviewRoom {
 
     @Id
