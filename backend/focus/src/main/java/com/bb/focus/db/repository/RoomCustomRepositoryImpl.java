@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class InterviewRoomCustomRepositoryImpl implements InterviewRoomCustomRepository {
+public class RoomCustomRepositoryImpl implements RoomCustomRepository {
 
 }

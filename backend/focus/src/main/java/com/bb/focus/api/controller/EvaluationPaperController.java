@@ -4,6 +4,7 @@ import com.bb.focus.api.request.EvaluationItemReq;
 import com.bb.focus.api.response.EvaluationSheetItemRes;
 import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.EvaluationPaperService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api(value = "평가지 API", tags = {"EvaluationPaper"})
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/evaluation")
@@ -59,6 +61,18 @@ public class EvaluationPaperController {
         }
         return new ResponseEntity<List<EvaluationSheetItemRes>>(evaluationSheetItemResList,HttpStatus.OK);
     }
+    @GetMapping("/interview/{interview-room-id}")
+    public ResponseEntity<?> GetInterviewRoomEvaluationItems(@PathVariable(name="interview-room-id")Long interviewRoomId ){
+
+        List<EvaluationSheetItemRes> evaluationSheetItemResList=evaluationService.GetRoomPerEvaluationItems(interviewRoomId);
+
+        if(evaluationSheetItemResList == null){
+            return new ResponseEntity<String>("Data Error",HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<List<EvaluationSheetItemRes>>(evaluationSheetItemResList,HttpStatus.OK);
+    }
+
     // 결과까지 보여주는 함수
     @GetMapping("sheets/result")
     public ResponseEntity<?> GetEvaluationSheetResult(Long applicantId, Long processId){
@@ -91,6 +105,12 @@ public class EvaluationPaperController {
             return new ResponseEntity<String>("Delete Success", HttpStatus.OK);
         }
         return new ResponseEntity<String>("Delete Fail",HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/sheets/deleteitem/{sheetitem-id}")
+    public ResponseEntity<?> DeleteEvaluationSheetItem(@PathVariable(name="sheetitem-id") Long itemId){
+        evaluationService.RemoveEvaluationItem(itemId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
 }

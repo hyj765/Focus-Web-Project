@@ -3,6 +3,7 @@ package com.bb.focus.api.controller;
 import com.bb.focus.api.response.SchoolDto;
 import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.SchoolService;
+import io.swagger.annotations.Api;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
 
+@Api(value = "데이터 입력 API", tags = {"DataInput"})
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/Data")

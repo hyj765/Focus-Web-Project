@@ -2,6 +2,7 @@ package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.EvaluatorInfoReq;
 import com.bb.focus.api.response.EvaluatorRes;
+import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.repository.CompanyAdminRepository;
@@ -27,7 +28,7 @@ public class EvaluatorServiceImpl implements EvaluatorService{
 
   private final EvaluatorRepository evaluatorRepository;
 
-  private final MailService mailService;
+//  private final MailService mailService;
 //  private final PasswordEncoder passwordEncoder;
 
   /**
@@ -69,10 +70,10 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     String newPwd = getRandomString();
 
     //메일
-    Map<String, String> content = new HashMap<>();
-    content.put("id", newId);
-    content.put("pwd", newPwd);
-    mailService.sendAccountMail(evaluator.getEmail(), content);
+//    Map<String, String> content = new HashMap<>();
+//    content.put("id", newId);
+//    content.put("pwd", newPwd);
+//    mailService.sendAccountMail(evaluator.getEmail(), content);
 
     //암호화
 //    String encodedPwd = passwordEncoder.encode(newPwd);
@@ -145,6 +146,12 @@ public class EvaluatorServiceImpl implements EvaluatorService{
   public Page<EvaluatorRes> findDepartmentEvaluators(Pageable pageable, List<String> departmentList, Long companyAdminId) {
     Page<EvaluatorRes> evaluators = evaluatorRepository.findDepartmentEvaluators(pageable, departmentList, companyAdminId);
     return evaluators;
+  }
+
+  @Override
+  public List<InterviewRoomRes> getInterviewRoomsById(Long id) {
+    List<InterviewRoomRes> interviewRooms = evaluatorRepository.findInterviewRoomsById(id);
+    return interviewRooms;
   }
 
   /**

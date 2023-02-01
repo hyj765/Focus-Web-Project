@@ -2,6 +2,7 @@ package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.EvaluatorInfoReq;
 import com.bb.focus.api.response.EvaluatorRes;
+import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -35,4 +36,6 @@ public interface EvaluatorService {
   public List<String> getDepartments(Long companyAdminId);
 
   Page<EvaluatorRes> findDepartmentEvaluators(Pageable pageable, List<String> departmentList, Long companyAdminId);
+
+  List<InterviewRoomRes> getInterviewRoomsById(Long id);
 }

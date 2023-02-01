@@ -1,6 +1,9 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.InterviewRoomReq;
+import com.bb.focus.db.entity.interview.InterviewRoom;
+
+import java.util.Optional;
 
 public interface InterviewRoomService {
 
@@ -14,4 +17,5 @@ public interface InterviewRoomService {
   //면접 일정 삭제
 
 
+  Optional<InterviewRoom> findById(Long id);
 }

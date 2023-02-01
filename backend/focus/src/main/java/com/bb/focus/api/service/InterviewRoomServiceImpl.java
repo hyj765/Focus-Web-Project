@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -31,4 +33,10 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
 
 
   }
+
+  @Override
+  public Optional<InterviewRoom> findById(Long id) {
+        return interviewRoomRepository.findById(id);
+  }
+
 }
