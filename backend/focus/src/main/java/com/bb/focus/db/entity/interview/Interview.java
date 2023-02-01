@@ -71,4 +71,11 @@ public class Interview {
         this.process = process;
         process.getInterviewList().add(this);
     }
+
+    public void setApplicantEvaluator(ApplicantEvaluator applicantEvaluator){
+        this.applicantEvaluatorList.add(applicantEvaluator);
+        if(applicantEvaluator.getInterview() == null){
+            applicantEvaluator.setInterview(this);
+        }
+    }
 }

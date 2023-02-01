@@ -32,11 +32,11 @@ public class DataProcessServiceImpl implements DataProcessService{
     ApplicantService applicantService;
     ExcelUtils exelUtils;
     @Autowired
-    public DataProcessServiceImpl(ExcelUtils eutil,ApplicantService aservice, StaticalRepository sRepo, MajorStatisticRepository majorRepo){
+    public DataProcessServiceImpl(ExcelUtils eutil,ApplicantService aservice, StaticalRepository staticalRepository, MajorStatisticRepository majorStatisticRepository){
         applicantService = aservice;
         exelUtils = eutil;
-        statisticRepo = sRepo;
-        majorStatisticRepo = majorRepo;
+        statisticRepo = staticalRepository;
+        majorStatisticRepo = majorStatisticRepository;
     }
 
     public List<SchoolDto> ConvertMultiFileIntoList(MultipartFile file) throws IOException {

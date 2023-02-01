@@ -85,5 +85,11 @@ public class Evaluator {
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ProcessEvaluator.class, mappedBy = "evaluator")
     private List<ProcessEvaluator> processEvaluatorList = new ArrayList<>();
 
+    public void setApplicantEvaluator(ApplicantEvaluator applicantEvaluator){
+        this.applicantEvaluatorList.add(applicantEvaluator);
+        if(applicantEvaluator.getEvaluator() == null){
+            applicantEvaluator.setEvaluator(this);
+        }
+    }
 
 }
