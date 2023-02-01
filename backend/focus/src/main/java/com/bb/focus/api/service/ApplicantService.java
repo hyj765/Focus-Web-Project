@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ApplicantService {
 
-  public Long create(Long comapnyAdminId, ApplicantInfoReq applicantInfoReq);
+  public Long create(Long comapnyAdminId, ApplicantInfoReq applicantInfoReq, Long processId);
 
   public void autoAssignAccount(Long id) throws MessagingException;
 
@@ -26,5 +26,5 @@ public interface ApplicantService {
 
   public Applicant getApplicantById(Long id);
 
-  Page<ApplicantRes> findAllApplicantsUsePaging(Pageable pageable, String search, Long id);
+  Page<ApplicantRes> findAllApplicantsUsePaging(Pageable pageable, String search, Long companyAdminId, Long processId);
 }

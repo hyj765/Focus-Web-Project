@@ -28,6 +28,7 @@ public class EvaluationPaperController {
     }
 
 
+
     @PostMapping("/sheets/{company-id}")
     public ResponseEntity<?> CreateSheet(@PathVariable(name="company-id")Long companyId,@RequestParam String sheet){
         evaluationService.CreateEvaluationSheet(companyId,sheet);
@@ -58,9 +59,21 @@ public class EvaluationPaperController {
         }
         return new ResponseEntity<List<EvaluationSheetItemRes>>(evaluationSheetItemResList,HttpStatus.OK);
     }
+    @GetMapping("/interview/{interview-room-id}")
+    public ResponseEntity<?> GetInterviewRoomEvaluationItems(@PathVariable(name="interview-room-id")Long interviewRoomId ){
+
+        List<EvaluationSheetItemRes> evaluationSheetItemResList=evaluationService.GetRoomPerEvaluationItems(interviewRoomId);
+
+        if(evaluationSheetItemResList == null){
+            return new ResponseEntity<String>("Data Error",HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<List<EvaluationSheetItemRes>>(evaluationSheetItemResList,HttpStatus.OK);
+    }
+
     // 결과까지 보여주는 함수
-    @GetMapping("sheets/result/{evaluation-sheet-id}")
-    public ResponseEntity<?> GetEvaluationSheetResult(@PathVariable(name="evaluation-sheet-id") Long sheetId){
+    @GetMapping("sheets/result")
+    public ResponseEntity<?> GetEvaluationSheetResult(Long applicantId, Long processId){
 
 
         return null;
@@ -90,6 +103,12 @@ public class EvaluationPaperController {
             return new ResponseEntity<String>("Delete Success", HttpStatus.OK);
         }
         return new ResponseEntity<String>("Delete Fail",HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/sheets/deleteitem/{sheetitem-id}")
+    public ResponseEntity<?> DeleteEvaluationSheetItem(@PathVariable(name="sheetitem-id") Long itemId){
+        evaluationService.RemoveEvaluationItem(itemId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
 }
