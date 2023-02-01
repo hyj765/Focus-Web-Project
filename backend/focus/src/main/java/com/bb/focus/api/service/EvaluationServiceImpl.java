@@ -5,11 +5,20 @@ import com.bb.focus.api.request.EvaluationResultReq;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.applicant.ApplicantPassLog;
 import com.bb.focus.db.entity.applicant.Status;
+import com.bb.focus.db.entity.evaluation.EvaluationResult;
+import com.bb.focus.db.entity.evaluation.EvaluationSheet;
+import com.bb.focus.db.entity.evaluator.Evaluator;
+import com.bb.focus.db.entity.helper.ApplicantEvaluator;
 import com.bb.focus.db.entity.interview.Interview;
 import com.bb.focus.db.entity.process.Process;
 import com.bb.focus.db.repository.ApplicantEvaluatorRepository;
 import com.bb.focus.db.repository.ApplicantPassLogRepository;
 import com.bb.focus.db.repository.ApplicantRepository;
+import com.bb.focus.db.repository.EvaluationResultRepository;
+import com.bb.focus.db.repository.EvaluationSheetItemRepository;
+import com.bb.focus.db.repository.EvaluationSheetRepository;
+import com.bb.focus.db.repository.EvaluatorRepository;
+import com.bb.focus.db.repository.InterviewCustomRepository;
 import com.bb.focus.db.repository.ProcessRepository;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -21,20 +30,36 @@ import org.springframework.stereotype.Service;
 public class EvaluationServiceImpl implements EvaluationService{
   ApplicantPassLogRepository applicantPassLogRepo;
   ApplicantRepository applicantRepo;
-
   ProcessRepository processRepo;
   ApplicantEvaluatorRepository applicantEvaluatorRepo;
-
+  EvaluationSheetItemRepository evaluationSheetItemRepo;
+  EvaluationSheetRepository evaluationSheetRepo;
+  EvaluationResultRepository evaluationResultRepo;
+  InterviewCustomRepository interviewCustomRepo;
+  EvaluatorRepository evaluatorRepo;
 
   @Autowired
-  public EvaluationServiceImpl(ApplicantPassLogRepository applicantPassLogS
-      , ApplicantRepository applicantS
-      , ProcessRepository processS
-      , ApplicantEvaluatorRepository applicantEvaluatorR){
-    applicantPassLogRepo = applicantPassLogS;
-    processRepo = processS;
-    applicantRepo = applicantS;
-    applicantEvaluatorRepo = applicantEvaluatorR;
+  public EvaluationServiceImpl(ApplicantPassLogRepository applicantPassLogRepository
+      , ApplicantRepository applicantRepository
+      , ProcessRepository processRepository
+      , ApplicantEvaluatorRepository applicantEvaluatorRepository
+      , EvaluationSheetItemRepository evaluationSheetItemRepository
+      , EvaluationResultRepository evaluationResultRepository
+      , InterviewCustomRepository interviewCustomRepository
+      , EvaluatorRepository evaluatorRepository
+      , EvaluationSheetRepository evaluationSheetRepository
+      )
+  {
+
+    applicantPassLogRepo = applicantPassLogRepository;
+    processRepo = processRepository;
+    applicantRepo = applicantRepository;
+    applicantEvaluatorRepo = applicantEvaluatorRepository;
+    evaluationSheetItemRepo = evaluationSheetItemRepository;
+    evaluationResultRepo = evaluationResultRepository;
+    interviewCustomRepo = interviewCustomRepository;
+    evaluatorRepo = evaluatorRepository;
+    evaluationSheetRepo = evaluationSheetRepository;
   }
   public boolean ApplicantEvaluation(EvaluationResultReq result, EvaluationData evaluationData){
 
@@ -82,5 +107,48 @@ public class EvaluationServiceImpl implements EvaluationService{
 
     return true;
   }
+
+  public List<Applicant> findEvaluatorPerApplicant(Long evaluatorId, Long interviewId){
+    List<ApplicantEvaluator> applicantEvaluator =applicantEvaluatorRepo.findByEvaluatorId(evaluatorId);
+
+
+    return null;
+  }
+  public boolean modifyApplicantEvaluation(Long evaluationResultId,EvaluationResultReq evaluationResultReq){
+
+    EvaluationResult evaluationResult =evaluationResultRepo.findById(evaluationResultId).orElseThrow(IllegalAccessError::new);
+    if(evaluationResult == null) {
+      return false;
+    }
+
+    evaluationResult.setContent(evaluationResultReq.getContent());
+    evaluationResult.setScore(evaluationResultReq.getScore());
+    return true;
+
+  }
+
+  public boolean createApplicantEvaluator(Long interviewId,Long evaluatorId,Long applicantId){
+    ApplicantEvaluator applicantEvaluator = new ApplicantEvaluator();
+    Interview interview= interviewCustomRepo.findInterviewById(interviewId);
+    Evaluator evaluator = evaluatorRepo.findEvaluatorById(evaluatorId);
+    Applicant applicant = applicantRepo.findApplicantById(applicantId);
+    EvaluationSheet evaluationSheet = evaluationSheetRepo.findById(interview.getEvaluationSheet().getId()).orElseThrow(IllegalAccessError::new);
+    interview.setApplicantEvaluator(applicantEvaluator);
+    evaluator.setApplicantEvaluator(applicantEvaluator);
+    applicantEvaluator.setApplicant(applicant);
+    applicantEvaluator.setEvaluationSheet(evaluationSheet);
+    return true;
+  }
+  public boolean updateApplicantEvaluation(Long ApplicantEvaluatorId){
+    List<EvaluationResult> evaluationResultList=evaluationResultRepo.findByapplicantEvaluatorId(ApplicantEvaluatorId);
+    int total =0;
+    for(EvaluationResult evaluationResult:evaluationResultList){
+        total +=evaluationResult.getScore();
+    }
+    ApplicantEvaluator applicantEvaluator=applicantEvaluatorRepo.findById(ApplicantEvaluatorId).orElseThrow(IllegalAccessError::new);
+    applicantEvaluator.setScore(total);
+    return true;
+  }
+
 
 }

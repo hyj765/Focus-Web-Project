@@ -23,11 +23,15 @@ public class EvaluationPaperServiceImpl implements EvaluationPaperService {
     EvaluationSheetItemRepository evaluationSheetItemRepo;
     ProcessRepository processRepo;
     @Autowired
-    public EvaluationPaperServiceImpl(EvaluationSheetRepository sheetS, CompanyAdminRepository companyS, EvaluationSheetItemRepository evaluationItemS, ProcessRepository processS){
-        sheetRepo=sheetS;
-        companyRepo = companyS;
-        evaluationSheetItemRepo = evaluationItemS;
-        processRepo = processS;
+    public EvaluationPaperServiceImpl(EvaluationSheetRepository evaluationSheetRepository,
+        CompanyAdminRepository companyAdminRepository,
+        EvaluationSheetItemRepository evaluationSheetItemRepository,
+        ProcessRepository processRepository){
+
+        sheetRepo= evaluationSheetRepository;
+        companyRepo = companyAdminRepository;
+        evaluationSheetItemRepo = evaluationSheetItemRepository;
+        processRepo = processRepository;
     }
 
     //

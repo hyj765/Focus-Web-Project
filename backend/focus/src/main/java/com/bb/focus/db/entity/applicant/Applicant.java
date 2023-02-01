@@ -6,6 +6,7 @@ import com.bb.focus.db.entity.applicant.school.ApplicantUniv;
 import com.bb.focus.db.entity.company.Chat;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluation.EvaluationSheet;
+import com.bb.focus.db.entity.helper.ApplicantEvaluator;
 import com.bb.focus.db.entity.helper.ApplicantInterviewRoom;
 import com.bb.focus.db.entity.process.Process;
 import com.sun.istack.NotNull;
@@ -138,5 +139,6 @@ public class Applicant {
             applicantPassLog.setApplicant(this);
         }
     }
+
 
 }
