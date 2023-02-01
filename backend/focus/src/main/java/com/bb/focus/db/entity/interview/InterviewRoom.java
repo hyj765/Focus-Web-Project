@@ -63,10 +63,12 @@ public class InterviewRoom {
     @NotNull
     private Byte curApplicantCount;
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class, mappedBy = "interviewRoom")
+    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class,
+        mappedBy = "interviewRoom", cascade = {CascadeType.REMOVE})
     private List<ApplicantInterviewRoom> ApplicantInterviewRoomList = new ArrayList<>();
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class, mappedBy = "interviewRoom")
+    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class,
+        mappedBy = "interviewRoom", cascade = {CascadeType.REMOVE})
     private List<EvaluatorInterviewRoom> EvaluatorInteviewRoomList = new ArrayList<>();
 
 

@@ -76,7 +76,8 @@ public class Evaluator {
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantEvaluator.class, mappedBy = "evaluator")
     private List<ApplicantEvaluator> applicantEvaluatorList = new ArrayList<>();
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class, mappedBy = "evaluator")
+    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class,
+        mappedBy = "evaluator" ,cascade = {CascadeType.REMOVE})
     private List<EvaluatorInterviewRoom> evaluatorInterviewRoomList = new ArrayList<>();
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.InterviewEvaluator.class, mappedBy = "evaluator")

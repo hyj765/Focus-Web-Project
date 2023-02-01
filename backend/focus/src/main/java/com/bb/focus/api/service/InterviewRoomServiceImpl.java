@@ -86,6 +86,12 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
     }
 
     //지원자-평가자 테이블에 데이터 넣기... 서비스 불러와서 함수 호출하고 외래키 파라미터 세팅해주기.
+//    for(int e = 0, elen = evaluatorIds.length; e < elen; e++){
+//      for(int a = 0, alen = applicantIds.length; a < alen; a++){
+//
+//      }
+//    }
+
 
   }
 
