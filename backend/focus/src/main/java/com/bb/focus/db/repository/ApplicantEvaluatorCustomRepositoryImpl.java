@@ -15,12 +15,27 @@ public class ApplicantEvaluatorCustomRepositoryImpl implements ApplicantEvaluato
   QInterviewRoom qInterviewRoom = QInterviewRoom.interviewRoom;
   QApplicantEvaluator qApplicantEvaluator = QApplicantEvaluator.applicantEvaluator;
 
-  public void deleteByInterviewRoomId(Long interviewRoomId) {
-
+  @Override
+  public void deleteByInterviewRoomIdAndEvaluatorId(Long interviewRoomId, Long evaluatorId) {
     jpaQueryFactory
-        .delete(qInterviewRoom)
-        .where(eqInterviewRoomId(interviewRoomId))
-        .execute();
+            .delete(qApplicantEvaluator)
+            .where(
+                    eqInterviewRoomId(interviewRoomId),
+                    eqEvaluatorId(evaluatorId)
+            )
+            .execute();
+
+  }
+
+  @Override
+  public void deleteByInterviewRoomIdAndApplicantId(Long interviewRoomId, Long applicantId) {
+    jpaQueryFactory
+            .delete(qApplicantEvaluator)
+            .where(
+                    eqInterviewRoomId(interviewRoomId),
+                    eqApplicantId(applicantId)
+            )
+            .execute();
 
   }
 
@@ -29,5 +44,19 @@ public class ApplicantEvaluatorCustomRepositoryImpl implements ApplicantEvaluato
       return null;
     }
     return qInterviewRoom.id.eq(interviewRoomId);
+  }
+
+  private BooleanExpression eqEvaluatorId(Long evaluatorId) {
+    if(evaluatorId.equals(null)){
+      return null;
+    }
+    return qInterviewRoom.id.eq(evaluatorId);
+  }
+
+  private BooleanExpression eqApplicantId(Long applicantId) {
+    if(applicantId.equals(null)){
+      return null;
+    }
+    return qInterviewRoom.id.eq(applicantId);
   }
 }

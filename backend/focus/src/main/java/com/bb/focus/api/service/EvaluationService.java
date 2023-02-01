@@ -19,5 +19,5 @@ public interface EvaluationService {
   boolean modifyApplicantEvaluation(Long evaluationResultId,EvaluationResultReq evaluationResultReq);
   boolean updateApplicantEvaluation(Long EvaluatorId);
 
-  boolean createApplicantEvaluator(Long interviewId,Long EvaluatorId,Long ApplicantId); // 평가지 시퀀스 넘버는
+  boolean createApplicantEvaluator(Long interviewId,Long InterviewRoomId, Long EvaluatorId,Long ApplicantId); // 평가지 시퀀스 넘버는
 }

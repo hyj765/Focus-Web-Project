@@ -10,20 +10,15 @@ import com.bb.focus.db.entity.evaluation.EvaluationSheet;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.entity.helper.ApplicantEvaluator;
 import com.bb.focus.db.entity.interview.Interview;
+import com.bb.focus.db.entity.interview.InterviewRoom;
 import com.bb.focus.db.entity.process.Process;
-import com.bb.focus.db.repository.ApplicantEvaluatorRepository;
-import com.bb.focus.db.repository.ApplicantPassLogRepository;
-import com.bb.focus.db.repository.ApplicantRepository;
-import com.bb.focus.db.repository.EvaluationResultRepository;
-import com.bb.focus.db.repository.EvaluationSheetItemRepository;
-import com.bb.focus.db.repository.EvaluationSheetRepository;
-import com.bb.focus.db.repository.EvaluatorRepository;
-import com.bb.focus.db.repository.InterviewCustomRepository;
-import com.bb.focus.db.repository.InterviewRepository;
-import com.bb.focus.db.repository.ProcessRepository;
+import com.bb.focus.db.repository.*;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +33,7 @@ public class EvaluationServiceImpl implements EvaluationService{
   EvaluationResultRepository evaluationResultRepo;
   InterviewRepository interviewRepo;
   EvaluatorRepository evaluatorRepo;
+  InterviewRoomRepository interviewRoomRepo;
 
   @Autowired
   public EvaluationServiceImpl(ApplicantPassLogRepository applicantPassLogRepository
@@ -49,6 +45,7 @@ public class EvaluationServiceImpl implements EvaluationService{
       , InterviewRepository interviewRepository
       , EvaluatorRepository evaluatorRepository
       , EvaluationSheetRepository evaluationSheetRepository
+      , InterviewRoomRepository interviewRoomRepository
       )
   {
 
@@ -61,6 +58,7 @@ public class EvaluationServiceImpl implements EvaluationService{
     interviewRepo = interviewRepository;
     evaluatorRepo = evaluatorRepository;
     evaluationSheetRepo = evaluationSheetRepository;
+    interviewRepo = interviewRepository;
   }
   public boolean ApplicantEvaluation(EvaluationResultReq result, EvaluationData evaluationData){
 
@@ -128,16 +126,24 @@ public class EvaluationServiceImpl implements EvaluationService{
 
   }
 
-  public boolean createApplicantEvaluator(Long interviewId,Long evaluatorId,Long applicantId){
+  public boolean createApplicantEvaluator(Long interviewId,Long interviewRoomId, Long evaluatorId,Long applicantId){
     ApplicantEvaluator applicantEvaluator = new ApplicantEvaluator();
+
+    InterviewRoom interviewRoom = interviewRoomRepo.findById(interviewRoomId).orElseThrow(IllegalArgumentException::new);
+
     Interview interview= interviewRepo.findInterviewById(interviewId);
     Evaluator evaluator = evaluatorRepo.findEvaluatorById(evaluatorId);
     Applicant applicant = applicantRepo.findApplicantById(applicantId);
+
     EvaluationSheet evaluationSheet = evaluationSheetRepo.findById(interview.getEvaluationSheet().getId()).orElseThrow(IllegalAccessError::new);
     interview.setApplicantEvaluator(applicantEvaluator);
     evaluator.setApplicantEvaluator(applicantEvaluator);
     applicantEvaluator.setApplicant(applicant);
     applicantEvaluator.setEvaluationSheet(evaluationSheet);
+    applicantEvaluator.setInterviewRoom(interviewRoom);
+
+    applicantEvaluatorRepo.save(applicantEvaluator);
+
     return true;
   }
   public boolean updateApplicantEvaluation(Long ApplicantEvaluatorId){

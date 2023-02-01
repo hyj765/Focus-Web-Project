@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface InterviewRoomService {
 
   //면접 일정 생성
-  public void createInterviewRoom(InterviewRoomReq interviewRoomReq);
+  public Long createInterviewRoom(InterviewRoomReq interviewRoomReq);
 
   //면접 일정 수정(기본 정보 수정)
   public Long updateInterviewRoom(Long interviewRoomId, InterviewRoomReq interviewRoomReq);

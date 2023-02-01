@@ -17,10 +17,14 @@ import com.bb.focus.db.repository.InterviewRepository;
 import com.bb.focus.db.repository.InterviewRoomRepository;
 import com.bb.focus.db.repository.RoomRepository;
 import java.time.Duration;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import java.util.Optional;
 
 @Service
@@ -38,12 +42,15 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
   private final EvaluationService evaluationService;
   private final ApplicantEvaluatorRepository applicantEvaluatorRepository;
 
+  @PersistenceUnit
+  private EntityManagerFactory factory;
+
   /**
    * 면접실 기본 정보 + 평가자 리스트 + 지원자 리스트를 받아와서 면접실을 생성한다.
    * @param interviewRoomReq
    */
   @Transactional
-  public void createInterviewRoom(InterviewRoomReq interviewRoomReq) {
+  public Long createInterviewRoom(InterviewRoomReq interviewRoomReq) {
 
     InterviewRoom interviewRoom = new InterviewRoom();
 
@@ -66,7 +73,7 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
     Room room = roomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
     interviewRoom.setRoom(room);
 
-    interviewRoomRepository.save(interviewRoom);
+    InterviewRoom savedEntity = interviewRoomRepository.save(interviewRoom);
 
     //평가자 리스트 setting
     Long[] evaluatorIds = interviewRoomReq.getEvaluators();
@@ -88,12 +95,11 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
       applicantInterviewRoomRepository.save(applicantInterviewRoom);
     }
 
-    //지원자-평가자 테이블에 데이터 넣기
-    for(int e = 0, elen = evaluatorIds.length; e < elen; e++){
-      for(int a = 0, alen = applicantIds.length; a < alen; a++){
-        evaluationService.createApplicantEvaluator(interviewId, evaluatorIds[e], applicantIds[a]);
-      }
-    }
+    EntityManager em = factory.createEntityManager();
+    em.flush();
+
+    return savedEntity.getId();
+
   }
 
   @Transactional
@@ -121,7 +127,6 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
   @Transactional
   public void removeInterviewRoom(Long interviewRoomId) {
     interviewRoomRepository.deleteById(interviewRoomId);
-//    applicantEvaluatorRepository.deleteByInterviewRoomId(interviewRoomId);    //jpa 엔티티 수정하고 casecade로 설정하면 필요 없다.
   }
 
   @Transactional
@@ -155,11 +160,13 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
   @Transactional
   public void removeEvaluator(Long interviewRoomId, Long evaluatorId) {
     evaluatorInterviewRoomRepository.deleteByInterviewRoomIdAndEvaluatorId(interviewRoomId, evaluatorId);
+    applicantEvaluatorRepository.deleteByInterviewRoomIdAndEvaluatorId(interviewRoomId, evaluatorId);
   }
 
   @Transactional
   public void removeApplicant(Long interviewRoomId, Long applicantId) {
     applicantInterviewRoomRepository.deleteByInterviewRoomIdAndApplicantId(interviewRoomId, applicantId);
+    applicantEvaluatorRepository.deleteByInterviewRoomIdAndApplicantId(interviewRoomId, applicantId);
   }
 
   @Override
@@ -168,3 +175,4 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
   }
 
 }
+
