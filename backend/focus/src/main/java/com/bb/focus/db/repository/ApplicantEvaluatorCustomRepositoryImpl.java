@@ -1,5 +1,6 @@
 package com.bb.focus.db.repository;
 
+import com.bb.focus.db.entity.evaluator.QEvaluator;
 import com.bb.focus.db.entity.helper.QApplicantEvaluator;
 import com.bb.focus.db.entity.interview.QInterviewRoom;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -13,6 +14,7 @@ public class ApplicantEvaluatorCustomRepositoryImpl implements ApplicantEvaluato
 
   private final JPAQueryFactory jpaQueryFactory;
   QInterviewRoom qInterviewRoom = QInterviewRoom.interviewRoom;
+  QEvaluator qEvaluator = QEvaluator.evaluator;
   QApplicantEvaluator qApplicantEvaluator = QApplicantEvaluator.applicantEvaluator;
 
   @Override
@@ -50,7 +52,7 @@ public class ApplicantEvaluatorCustomRepositoryImpl implements ApplicantEvaluato
     if(evaluatorId.equals(null)){
       return null;
     }
-    return qInterviewRoom.id.eq(evaluatorId);
+    return qEvaluator.id.eq(evaluatorId);
   }
 
   private BooleanExpression eqApplicantId(Long applicantId) {

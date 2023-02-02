@@ -31,4 +31,12 @@ public class ProcessEvaluatorServiceImpl implements ProcessEvaluatorService{
 
     processEvaluatorRepository.save(processEvaluator);
   }
+
+  @Transactional
+  public void removeProcessEvaluator(Long processId, Long evaluatorId) {
+
+    processEvaluatorRepository.deleteByProcessIdAndEvaluatorId(processId, evaluatorId);
+
+
+  }
 }
