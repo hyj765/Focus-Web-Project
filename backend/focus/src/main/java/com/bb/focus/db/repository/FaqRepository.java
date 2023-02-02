@@ -1,8 +1,9 @@
 package com.bb.focus.db.repository;
 
 import com.bb.focus.db.entity.admin.Faq;
-import com.bb.focus.db.entity.interview.Room;
-import java.util.List;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Repository;
 public interface FaqRepository extends JpaRepository<Faq, Long>,
     FaqCustomRepository {
 
-  List<Faq> findAll();
+  Page<Faq> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
-  List<Faq> findByAuthRange(Byte userRole);
+  Page<Faq> findByAuthRangeOrderByCreatedAtDesc(Pageable pageable, Byte userRole);
+
+  Optional<Faq> findById(Long id);
 
 }

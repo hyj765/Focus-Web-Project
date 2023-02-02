@@ -1,13 +1,17 @@
 package com.bb.focus.api.service;
 
-import com.bb.focus.api.request.RoomReq;
 import com.bb.focus.db.entity.admin.Faq;
-import com.bb.focus.db.entity.interview.Room;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface FaqService {
 
-  List<Faq> findAll();
+  Faq save(Faq faq);
 
-  List<Faq> findByAuthRange(Byte userRole);
+  Page<Faq> findAll(Pageable pageable);
+
+  Page<Faq> findByAuthRange(Pageable pageable, Byte userRole);
+
+  Faq findById(Long faqId);
+
 }
