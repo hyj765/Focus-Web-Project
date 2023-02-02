@@ -23,9 +23,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
 import java.util.Optional;
 
 @Service
@@ -43,11 +40,6 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
   private final ApplicantEvaluatorRepository applicantEvaluatorRepository;
   private final RoomService roomService;
 
-
-  /**
-   * 면접실 기본 정보 + 평가자 리스트 + 지원자 리스트를 받아와서 면접실을 생성한다.
-   * @param interviewRoomReq
-   */
   @Transactional
   public InterviewRoom createInterviewRoom(InterviewRoomReq interviewRoomReq) {
 

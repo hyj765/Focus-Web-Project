@@ -2,7 +2,9 @@ package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.RoomReq;
 import com.bb.focus.common.util.EncryptionUtils;
+import com.bb.focus.db.entity.interview.Interview;
 import com.bb.focus.db.entity.interview.Room;
+import com.bb.focus.db.repository.InterviewRepository;
 import com.bb.focus.db.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ public class RoomServiceImpl implements RoomService {
 
   @Autowired
   RoomRepository roomRepository;
+  @Autowired
+  private InterviewRepository interviewRepository;
 
   @Override
   public Room createRoom(RoomReq.Create roomInfo) {
@@ -42,7 +46,8 @@ public class RoomServiceImpl implements RoomService {
   @Override
   public Room autoCreateRoom(Long interviewId) {
     Room room = new Room();
-    room.setInterview(interviewService.findInterviewById(interviewId));
+    Interview interview = interviewRepository.findById(interviewId).orElseThrow(IllegalArgumentException::new);
+    room.setInterview(interview);
     return roomRepository.save(room);
   }
 }
