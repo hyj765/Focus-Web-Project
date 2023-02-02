@@ -1,6 +1,7 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.InterviewRoomReq;
+import com.bb.focus.api.request.RoomReq;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.entity.helper.ApplicantInterviewRoom;
@@ -36,21 +37,19 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
   private final EvaluatorInterviewRoomRepository evaluatorInterviewRoomRepository;
   private final ApplicantInterviewRoomRepository applicantInterviewRoomRepository;
   private final InterviewRepository interviewRepository;
-  private final RoomRepository roomRepository;
   private final EvaluatorRepository evaluatorRepository;
   private final ApplicantRepository applicantRepository;
   private final EvaluationService evaluationService;
   private final ApplicantEvaluatorRepository applicantEvaluatorRepository;
+  private final RoomService roomService;
 
-  @PersistenceUnit
-  private EntityManagerFactory factory;
 
   /**
    * 면접실 기본 정보 + 평가자 리스트 + 지원자 리스트를 받아와서 면접실을 생성한다.
    * @param interviewRoomReq
    */
   @Transactional
-  public Long createInterviewRoom(InterviewRoomReq interviewRoomReq) {
+  public InterviewRoom createInterviewRoom(InterviewRoomReq interviewRoomReq) {
 
     InterviewRoom interviewRoom = new InterviewRoom();
 
@@ -64,16 +63,10 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
 
     interviewRoom.setDuration(interviewDuration);
 
-    //외래키 setting
+    //외래키(면접 id) setting
     Long interviewId = interviewRoomReq.getInterviewId();
     Interview interview = interviewRepository.findById(interviewId).orElseThrow(IllegalArgumentException::new);
     interviewRoom.setInterview(interview);
-
-    Long roomId = interviewRoomReq.getRoomId();
-    Room room = roomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
-    interviewRoom.setRoom(room);
-
-    InterviewRoom savedEntity = interviewRoomRepository.save(interviewRoom);
 
     //평가자 리스트 setting
     Long[] evaluatorIds = interviewRoomReq.getEvaluators();
@@ -95,11 +88,13 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
       applicantInterviewRoomRepository.save(applicantInterviewRoom);
     }
 
-    EntityManager em = factory.createEntityManager();
-    em.flush();
+    //룸 생성 & 외래키 setting
+    Room room = roomService.autoCreateRoom(interviewId);
+    roomService.updateRoomById(room);
+    interviewRoom.setRoom(room);
 
-    return savedEntity.getId();
-
+    InterviewRoom savedEntity = interviewRoomRepository.save(interviewRoom);
+    return savedEntity;
   }
 
   @Transactional
@@ -115,11 +110,6 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
     int interviewDuration = (int)(duration.getSeconds() / 60);
 
     interviewRoom.setDuration(interviewDuration);
-
-    Long roomId = interviewRoomReq.getRoomId();
-    Room room = roomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
-    interviewRoom.setRoom(room);
-
 
     return interviewRoom.getId();
   }

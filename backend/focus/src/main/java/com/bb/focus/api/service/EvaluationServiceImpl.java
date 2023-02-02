@@ -126,10 +126,8 @@ public class EvaluationServiceImpl implements EvaluationService{
 
   }
 
-  public boolean createApplicantEvaluator(Long interviewId,Long interviewRoomId, Long evaluatorId,Long applicantId){
+  public boolean createApplicantEvaluator(Long interviewId,InterviewRoom interviewRoom, Long evaluatorId,Long applicantId){
     ApplicantEvaluator applicantEvaluator = new ApplicantEvaluator();
-
-    InterviewRoom interviewRoom = interviewRoomRepo.findById(interviewRoomId).orElseThrow(IllegalArgumentException::new);
 
     Interview interview= interviewRepo.findInterviewById(interviewId);
     Evaluator evaluator = evaluatorRepo.findEvaluatorById(evaluatorId);

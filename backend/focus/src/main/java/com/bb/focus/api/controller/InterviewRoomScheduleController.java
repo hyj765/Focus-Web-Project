@@ -4,6 +4,7 @@ import com.bb.focus.api.request.InterviewRoomReq;
 import com.bb.focus.api.service.EvaluationService;
 import com.bb.focus.api.service.InterviewRoomService;
 import com.bb.focus.common.model.response.BaseResponseBody;
+import com.bb.focus.db.entity.interview.InterviewRoom;
 import com.bb.focus.db.repository.InterviewRoomRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +36,7 @@ public class InterviewRoomScheduleController {
       @ApiIgnore Authentication authentication,
       @RequestBody @ApiParam(value = "면접 일정 생성 정보", required = true) InterviewRoomReq interviewRoomReq) {
 
-    Long interviewRoomId = interviewRoomService.createInterviewRoom(interviewRoomReq);
+    InterviewRoom interviewRoom = interviewRoomService.createInterviewRoom(interviewRoomReq);
 
     Long interviewId = interviewRoomReq.getInterviewId();
     Long[] evaluatorIds = interviewRoomReq.getEvaluators();
@@ -44,7 +45,7 @@ public class InterviewRoomScheduleController {
     //지원자-평가자 테이블에 데이터 넣기
     for(int e = 0, elen = evaluatorIds.length; e < elen; e++) {
       for (int a = 0, alen = applicantIds.length; a < alen; a++) {
-        evaluationService.createApplicantEvaluator(interviewId, interviewRoomId, evaluatorIds[e], applicantIds[a]);
+        evaluationService.createApplicantEvaluator(interviewId, interviewRoom, evaluatorIds[e], applicantIds[a]);
       }
     }
 
