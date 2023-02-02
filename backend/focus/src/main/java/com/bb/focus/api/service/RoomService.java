@@ -8,4 +8,6 @@ public interface RoomService {
   Room createRoom(RoomReq.Create roomInfo);
 
   Long updateRoomById(Room room);
+
+  Room autoCreateRoom(Long interviewId);
 }

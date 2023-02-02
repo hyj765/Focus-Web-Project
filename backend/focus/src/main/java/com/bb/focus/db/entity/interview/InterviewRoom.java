@@ -2,6 +2,7 @@ package com.bb.focus.db.entity.interview;
 
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.company.CompanyAdmin;
+import com.bb.focus.db.entity.helper.ApplicantEvaluator;
 import com.bb.focus.db.entity.helper.ApplicantInterviewRoom;
 import com.bb.focus.db.entity.helper.EvaluatorInterviewRoom;
 import com.sun.istack.NotNull;
@@ -70,6 +71,10 @@ public class InterviewRoom {
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class,
         mappedBy = "interviewRoom", cascade = {CascadeType.REMOVE})
     private List<EvaluatorInterviewRoom> EvaluatorInteviewRoomList = new ArrayList<>();
+
+    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantEvaluator.class,
+        mappedBy = "interviewRoom", cascade = {CascadeType.REMOVE})
+    private List<ApplicantEvaluator> applicantEvaluatorList = new ArrayList<>();
 
 
 }

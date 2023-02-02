@@ -38,4 +38,11 @@ public class RoomServiceImpl implements RoomService {
         .waitCode(newWaitCode).build());
     return room.getId();
   }
+
+  @Override
+  public Room autoCreateRoom(Long interviewId) {
+    Room room = new Room();
+    room.setInterview(interviewService.findInterviewById(interviewId));
+    return roomRepository.save(room);
+  }
 }
