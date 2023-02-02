@@ -1,7 +1,6 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.InterviewRoomReq;
-import com.bb.focus.api.request.RoomReq;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.entity.helper.ApplicantInterviewRoom;
@@ -16,7 +15,6 @@ import com.bb.focus.db.repository.EvaluatorInterviewRoomRepository;
 import com.bb.focus.db.repository.EvaluatorRepository;
 import com.bb.focus.db.repository.InterviewRepository;
 import com.bb.focus.db.repository.InterviewRoomRepository;
-import com.bb.focus.db.repository.RoomRepository;
 import java.time.Duration;
 
 import lombok.RequiredArgsConstructor;
@@ -36,7 +34,6 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
   private final InterviewRepository interviewRepository;
   private final EvaluatorRepository evaluatorRepository;
   private final ApplicantRepository applicantRepository;
-  private final EvaluationService evaluationService;
   private final ApplicantEvaluatorRepository applicantEvaluatorRepository;
   private final RoomService roomService;
 
