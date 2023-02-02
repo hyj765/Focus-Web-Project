@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -168,25 +170,27 @@ public class ServiceAdminController {
     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
   }
 
+  // http://localhost:8080/serviceusers/notices/?page=2&size=3
   @ApiOperation(value = "서비스 공지 사항 리스트 조회", notes = "서비스 공지 사항 리스트를 조회한다.")
   @GetMapping("/notices")
-  public ResponseEntity<?> getServiceNoticeList() {
-    List<ServiceNotice> serviceNoticeList = serviceNoticeService.findAll();
-    List<ServiceNoticeRes> results = new ArrayList<>();
-    for(ServiceNotice sn : serviceNoticeList){
-      ServiceNoticeRes serviceNoticeRes = new ServiceNoticeRes(
-          sn.getId(),
-          sn.getServiceAdmin().getId(),
-          sn.getCategory().getId(),
-          sn.getTitle(),
-          sn.getCreatedAt(),
-          sn.getContent()
-      );
-      results.add(serviceNoticeRes);
-    }
+  public ResponseEntity<?> getServiceNoticeList(Pageable pageable) {
+    Page<ServiceNoticeRes> results = serviceNoticeService.findAll(pageable)
+        .map(ServiceNoticeRes::from);
     return ResponseEntity.status(200).body(results);
   }
 
+  // http://localhost:8080/serviceusers/notices/category/2?page=1&size=3
+  @ApiOperation(value = "카테고리별 서비스 공지 사항 리스트 조회", notes = "카테고리별 서비스 공지 사항 리스트를 조회한다.")
+  @GetMapping("/notices/category/{category-id}")
+  public ResponseEntity<?> getServiceNoticeListByCategory(Pageable pageable,
+      @PathVariable("category-id") Long categoryId
+  ) {
+    ServiceNoticeCategory category = serviceNoticeCategoryService.findById(categoryId).get();
+    Page<ServiceNoticeRes> results = serviceNoticeService.findAllByCategoryOrderByCreatedAtDesc(
+            pageable, category)
+        .map(ServiceNoticeRes::from);
+    return ResponseEntity.status(200).body(results);
+  }
 
   @ApiOperation(value = "서비스 공지 사항 상세 조회", notes = "서비스 공지 사항 리스트를 조회한다.")
   @GetMapping("/notices/{service-notice-id}")

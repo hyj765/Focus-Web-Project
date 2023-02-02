@@ -1,6 +1,6 @@
 package com.bb.focus.api.response;
 
-import com.bb.focus.db.entity.admin.ServiceNotice;
+import com.bb.focus.db.entity.admin.Faq;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDateTime;
@@ -12,20 +12,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ApiModel("ServiceNoticeRes")
+@ApiModel("FaqRes")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ServiceNoticeRes {
+public class FaqRes {
 
-  @ApiModelProperty(name = "서비스 공지사항 시퀀스 넘버", example = "1")
+  @ApiModelProperty(name = "faq 사항 시퀀스 넘버", example = "1")
   private Long id;
 
   @ApiModelProperty(name = "작성한 서비스 관리자의 시퀀스 넘버", example = "1")
   private Long serviceAdminId;
-
-  @ApiModelProperty(name = "해당 글의 카테고리 시퀀스 넘버", example = "1")
-  private Long categoryId;
 
   @ApiModelProperty(name = "제목", example = "1")
   private String title;
@@ -36,14 +33,17 @@ public class ServiceNoticeRes {
   @ApiModelProperty(name = "내용", example = "1")
   private String content;
 
-  public static ServiceNoticeRes from(ServiceNotice serviceNotice) {
-    return ServiceNoticeRes.builder()
-        .id(serviceNotice.getId())
-        .serviceAdminId(serviceNotice.getServiceAdmin().getId())
-        .categoryId(serviceNotice.getCategory().getId())
-        .title(serviceNotice.getTitle())
-        .content(serviceNotice.getContent())
-        .createdAt(serviceNotice.getCreatedAt())
+  @ApiModelProperty(name = "3:기업관리자,평가자 열람 가능, 4:기업관리자,지원자 열람 가능", example = "1")
+  private Byte authRange;
+
+  public static FaqRes from(Faq faq) {
+    return FaqRes.builder()
+        .id(faq.getId())
+        .serviceAdminId(faq.getServiceAdmin().getId())
+        .title(faq.getTitle())
+        .createdAt(faq.getCreatedAt())
+        .content(faq.getContent())
+        .authRange(faq.getAuthRange())
         .build();
   }
 }
