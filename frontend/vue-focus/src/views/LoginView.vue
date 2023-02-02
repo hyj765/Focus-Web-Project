@@ -1,20 +1,24 @@
 <template>
   <section class="bg-gray-50">
     <div
-      class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
+      class="absolute inset-0 flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
     >
-      <a
-        href="#"
-        class="flex items-center mb-6 text-2xl font-semibold text-gray-900"
+      <div
+        class="w-full bg-white/80 rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0"
       >
-        <img
-          class="w-8 h-auto mr-2"
-          src="../assets/blue_opacity.png"
-          alt="logo"
-        />
-        Focus
-      </a>
-      <div class="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
+        <!-- # 로고 -->
+        <a
+          href="#"
+          class="flex justify-center items-center my-10 text-4xl font-black text-blue-900"
+        >
+          <img
+            class="w-8 h-auto mr-2"
+            src="../assets/blue_opacity.png"
+            alt="logo"
+          />
+          FOCUS
+        </a>
+        <!-- # 로고 -->
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h2
             class="font-bold leading-tight tracking-tight text-gray-900 md:text-xl"

@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded">
+  <nav class="bg-white/50 border-gray-200 px-2 sm:px-4 py-2.5 rounded">
     <div class="container flex flex-wrap items-center justify-between mx-auto">
       <div class="flex items-center space-x-2">
         <img class="h-7" src="../assets/blue_opacity.png" alt="logo" />
@@ -9,7 +9,7 @@
       </div>
       <div class="hidden w-full md:block md:w-auto" id="navbar-default">
         <ul
-          class="flex flex-col items-center p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white"
+          class="flex flex-col items-center p-4 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0"
         >
           <!-- <li>
             <RouterLink
@@ -43,7 +43,7 @@
               >지원자</RouterLink
             >
           </li> -->
-          <li>
+          <!-- <li>
             <button
               type="button"
               class="btn header-item noti-icon waves-effect"
@@ -55,37 +55,37 @@
               <i class="bx bx-bell bx-tada"></i>
               <span class="badge bg-danger rounded-pill">3</span>
             </button>
-          </li>
+          </li> -->
           <!-- # 채팅 -->
-          <li>
+          <li class="bg-white/60 rounded-lg">
             <span
               class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
               ><i class="bx bx-conversation"></i
             ></span>
           </li>
           <!-- # FAQ -->
-          <li>
+          <li class="bg-white/60 rounded-lg">
             <span
               class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
               ><i class="bx bx-question-mark"></i
             ></span>
           </li>
           <!-- # 메일보내기 -->
-          <li>
+          <li class="bg-white/60 rounded-lg">
             <span
               class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
               ><i class="bx bx-paper-plane"></i
             ></span>
           </li>
           <!-- # 메일함 -->
-          <li>
+          <li class="bg-white/60 rounded-lg">
             <span
               class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
               ><i class="bx bxs-inbox"></i
             ></span>
           </li>
           <!-- # 종 -->
-          <li>
+          <li class="bg-white/60 rounded-lg">
             <span
               class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
               ><i class="bx bx-bell"></i
@@ -102,7 +102,7 @@
             <h4
               class="font-semibold text-gray-700 capitalize font-poppins tracking-wide"
             >
-              James
+              James Smith
             </h4>
           </div>
         </ul>
