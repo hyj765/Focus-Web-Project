@@ -3,7 +3,9 @@ package com.bb.focus.api.controller;
 import com.bb.focus.api.response.SchoolDto;
 import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.SchoolService;
+import com.bb.focus.common.util.ImageUtil;
 import io.swagger.annotations.Api;
+import java.awt.Image;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
@@ -25,13 +27,27 @@ public class DataInputController {
     DataProcessService DataService;
     SchoolService schoolSerivce;
 
+    ImageUtil imageUtil;
+
     //ApplicantService
     //EvaluatorService
     @Autowired
-    public DataInputController(DataProcessService Dservice, SchoolService scService){
+    public DataInputController(DataProcessService Dservice, SchoolService scService, ImageUtil iUtil){
         DataService = Dservice;
         schoolSerivce = scService;
+        imageUtil = iUtil;
+    }
 
+    @PostMapping("/upload/image")
+    public ResponseEntity<?> UploadImage(@RequestPart MultipartFile file){
+        if(!imageUtil.ExtensionCheck(file)){
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+        if(!imageUtil.Upload(file,"self")){
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     // 평가자 엑셀 다운로드 하는 함수 Headers 값의 따라 목록이 늘어남.

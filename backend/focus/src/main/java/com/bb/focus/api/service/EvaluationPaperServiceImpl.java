@@ -5,10 +5,14 @@ import com.bb.focus.api.response.EvaluationSheetItemRes;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluation.EvaluationItem;
 import com.bb.focus.db.entity.evaluation.EvaluationSheet;
+import com.bb.focus.db.entity.interview.Interview;
+import com.bb.focus.db.entity.interview.InterviewRoom;
 import com.bb.focus.db.repository.CompanyAdminRepository;
 import com.bb.focus.db.repository.EvaluationSheetItemRepository;
 import com.bb.focus.db.repository.EvaluationSheetRepository;
+import com.bb.focus.db.repository.InterviewRoomRepository;
 import com.bb.focus.db.repository.ProcessRepository;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,27 +26,24 @@ public class EvaluationPaperServiceImpl implements EvaluationPaperService {
     CompanyAdminRepository companyRepo;
     EvaluationSheetItemRepository evaluationSheetItemRepo;
     ProcessRepository processRepo;
+    InterviewRoomRepository interviewRoomRepo;
     @Autowired
     public EvaluationPaperServiceImpl(EvaluationSheetRepository evaluationSheetRepository,
         CompanyAdminRepository companyAdminRepository,
         EvaluationSheetItemRepository evaluationSheetItemRepository,
-        ProcessRepository processRepository){
+        ProcessRepository processRepository,
+        InterviewRoomRepository interviewRoomRepository){
 
         sheetRepo= evaluationSheetRepository;
         companyRepo = companyAdminRepository;
         evaluationSheetItemRepo = evaluationSheetItemRepository;
         processRepo = processRepository;
-    }
-
-    //
-    public void EvaluationApplicant(){
+        interviewRoomRepo = interviewRoomRepository;
 
     }
 
-    public void GetInterviewPerApplicant(){
 
-    }
-
+    @Transactional
     public boolean CreateEvaluationSheet(Long companyId, String sheetInfo){
         EvaluationSheet evaluationSheet = new EvaluationSheet();
         CompanyAdmin companyAdmin = companyRepo.findById(companyId).orElseThrow(IllegalAccessError::new);
@@ -53,6 +54,7 @@ public class EvaluationPaperServiceImpl implements EvaluationPaperService {
 
         return true;
     };
+    @Transactional
     public boolean CreateEvaluationItem(Long sheetId, EvaluationItemReq evaluationItemReq){
         EvaluationItem evaluationItem = new EvaluationItem();
         EvaluationSheet evaluationSheet = sheetRepo.findById(sheetId).orElseThrow(IllegalAccessError::new);
@@ -73,28 +75,54 @@ public class EvaluationPaperServiceImpl implements EvaluationPaperService {
         }
         return evaluationSheetItemResList;
     }
+    @Transactional
+    public boolean modifyEvaluationSheet(Long evaluationSheetId, String modifyName){
+        if(modifyName.equals("") || modifyName == null){
+            return false;
+        }
+        EvaluationSheet evaluationSheet = sheetRepo.findById(evaluationSheetId).orElseThrow(IllegalAccessError::new);
 
-    public boolean modifyEvaluationSheet(Long evaluationSheetId){
-
-
-
-
+        if(evaluationSheet == null) {
+            return false;
+        }
+        evaluationSheet.setName(modifyName);
         return true;
+    }
+    @Transactional
+    public boolean modifyUserEvaluationItem(Long evaluationSheetId, Long evaluationItemId, byte modifyRange, String modifyContent){
+        // request에 item 추가해야함.
+        if(evaluationItemId == null || evaluationSheetId == null || modifyRange < 0 || modifyContent == null){
+            return false;
+        }
+        EvaluationSheet evaluationSheet=sheetRepo.findById(evaluationSheetId).orElseThrow(IllegalAccessError::new);
+
+        for(EvaluationItem evaluationItem:evaluationSheet.getEvaluationItemList()){
+            if(evaluationItem.getId() == evaluationItemId){
+                evaluationItem.setScaleContent(modifyContent);
+                evaluationItem.setScoreRange(modifyRange);
+                return true;
+            }
+        }
+
+        return false;
     }
     public List<EvaluationSheetItemRes> GetRoomPerEvaluationItems(Long interviewRoomId){
         List<EvaluationSheetItemRes> evaluationSheetItemResList = null;
-        // InterviewRoomRepo.findById(interviewRoomid);
-        // interviewRoom.get(interviewId);
-        // List<EvaluationSheetItemRes> evaluationSheetItemResList = GetEvaluationSheetItems(interview.getEvaluationSheetId);
+        InterviewRoom interviewRoom =interviewRoomRepo.findById(interviewRoomId).orElseThrow(IllegalAccessError::new);
+        Interview interview =interviewRoom.getInterview();
+        evaluationSheetItemResList = GetEvaluationSheetItems(interview.getEvaluationSheet().getId());
 
-        return null;
+        return evaluationSheetItemResList;
     }
 
+    @Transactional
     public boolean RemoveEvaluationSheet(Long evaluationSheetId){
+
         sheetRepo.deleteById(evaluationSheetId);
         return true;
     };
 
+    @Transactional
     public boolean RemoveEvaluationItem(Long evaluationSheetItemId){
         evaluationSheetItemRepo.deleteById(evaluationSheetItemId);
 

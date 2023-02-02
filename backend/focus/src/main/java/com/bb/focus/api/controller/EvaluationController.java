@@ -4,6 +4,8 @@ import com.bb.focus.api.request.EvaluationData;
 import com.bb.focus.api.request.EvaluationResultReq;
 import com.bb.focus.api.service.EvaluationService;
 import io.swagger.annotations.Api;
+import java.util.List;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,16 +26,15 @@ public class EvaluationController {
     evaluationService = evaluationS;
   }
 
-
   @PostMapping("/evaluation")
   public ResponseEntity<?> EvaluationApplicant(
       @RequestBody EvaluationResultReq evaluationResultReq,
       @RequestBody EvaluationData evaluationData)
   {
+    evaluationService.ApplicantEvaluation(evaluationResultReq,evaluationData);
 
 
-
-    return null;
+    return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
 

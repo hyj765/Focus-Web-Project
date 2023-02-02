@@ -109,13 +109,13 @@ public class EvaluationServiceImpl implements EvaluationService{
     return true;
   }
 
-  public List<Applicant> findEvaluatorPerApplicant(Long evaluatorId, Long interviewId){
+  public List<Applicant> FindEvaluatorPerApplicant(Long evaluatorId, Long interviewId){
     List<ApplicantEvaluator> applicantEvaluator =applicantEvaluatorRepo.findByEvaluatorId(evaluatorId);
 
 
     return null;
   }
-  public boolean modifyApplicantEvaluation(Long evaluationResultId,EvaluationResultReq evaluationResultReq){
+  public boolean ModifyApplicantEvaluation(Long evaluationResultId,EvaluationResultReq evaluationResultReq){
 
     EvaluationResult evaluationResult =evaluationResultRepo.findById(evaluationResultId).orElseThrow(IllegalAccessError::new);
     if(evaluationResult == null) {
@@ -128,7 +128,7 @@ public class EvaluationServiceImpl implements EvaluationService{
 
   }
 
-  public boolean createApplicantEvaluator(Long interviewId,Long evaluatorId,Long applicantId){
+  public boolean CreateApplicantEvaluator(Long interviewId,Long evaluatorId,Long applicantId){
     ApplicantEvaluator applicantEvaluator = new ApplicantEvaluator();
     Interview interview= interviewRepo.findInterviewById(interviewId);
     Evaluator evaluator = evaluatorRepo.findEvaluatorById(evaluatorId);
@@ -140,7 +140,7 @@ public class EvaluationServiceImpl implements EvaluationService{
     applicantEvaluator.setEvaluationSheet(evaluationSheet);
     return true;
   }
-  public boolean updateApplicantEvaluation(Long ApplicantEvaluatorId){
+  public boolean UpdateApplicantEvaluation(Long ApplicantEvaluatorId){
     List<EvaluationResult> evaluationResultList=evaluationResultRepo.findByapplicantEvaluatorId(ApplicantEvaluatorId);
     int total =0;
     for(EvaluationResult evaluationResult:evaluationResultList){
