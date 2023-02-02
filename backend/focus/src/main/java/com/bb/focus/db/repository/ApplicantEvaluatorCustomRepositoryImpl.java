@@ -1,10 +1,12 @@
 package com.bb.focus.db.repository;
 
+import com.bb.focus.db.entity.applicant.QApplicant;
 import com.bb.focus.db.entity.evaluator.QEvaluator;
 import com.bb.focus.db.entity.helper.QApplicantEvaluator;
 import com.bb.focus.db.entity.interview.QInterviewRoom;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +18,7 @@ public class ApplicantEvaluatorCustomRepositoryImpl implements ApplicantEvaluato
   QInterviewRoom qInterviewRoom = QInterviewRoom.interviewRoom;
   QEvaluator qEvaluator = QEvaluator.evaluator;
   QApplicantEvaluator qApplicantEvaluator = QApplicantEvaluator.applicantEvaluator;
+  QApplicant qApplicant = QApplicant.applicant;
 
   @Override
   public void deleteByInterviewRoomIdAndEvaluatorId(Long interviewRoomId, Long evaluatorId) {
@@ -41,6 +44,24 @@ public class ApplicantEvaluatorCustomRepositoryImpl implements ApplicantEvaluato
 
   }
 
+  public List<Long> findApplicantIds(Long interviewRoomId) {
+
+    return jpaQueryFactory
+        .select(qApplicant.id)
+        .from(qApplicantEvaluator)
+        .where(eqInterviewRoomId(interviewRoomId))
+        .distinct().fetch();
+  }
+
+  public List<Long> findEvaluatorIds(Long interviewRoomId) {
+
+    return jpaQueryFactory
+        .select(qEvaluator.id)
+        .from(qApplicantEvaluator)
+        .where(eqInterviewRoomId(interviewRoomId))
+        .distinct().fetch();
+  }
+
   private BooleanExpression eqInterviewRoomId(Long interviewRoomId) {
     if(interviewRoomId.equals(null)){
       return null;
@@ -59,6 +80,6 @@ public class ApplicantEvaluatorCustomRepositoryImpl implements ApplicantEvaluato
     if(applicantId.equals(null)){
       return null;
     }
-    return qInterviewRoom.id.eq(applicantId);
+    return qApplicant.id.eq(applicantId);
   }
 }
