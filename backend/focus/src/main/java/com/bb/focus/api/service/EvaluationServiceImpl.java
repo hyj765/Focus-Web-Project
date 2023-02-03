@@ -107,13 +107,13 @@ public class EvaluationServiceImpl implements EvaluationService{
     return true;
   }
 
-  public List<Applicant> findEvaluatorPerApplicant(Long evaluatorId, Long interviewId){
+  public List<Applicant> FindEvaluatorPerApplicant(Long evaluatorId, Long interviewId){
     List<ApplicantEvaluator> applicantEvaluator =applicantEvaluatorRepo.findByEvaluatorId(evaluatorId);
 
 
     return null;
   }
-  public boolean modifyApplicantEvaluation(Long evaluationResultId,EvaluationResultReq evaluationResultReq){
+  public boolean ModifyApplicantEvaluation(Long evaluationResultId,EvaluationResultReq evaluationResultReq){
 
     EvaluationResult evaluationResult =evaluationResultRepo.findById(evaluationResultId).orElseThrow(IllegalAccessError::new);
     if(evaluationResult == null) {
@@ -144,7 +144,7 @@ public class EvaluationServiceImpl implements EvaluationService{
 
     return true;
   }
-  public boolean updateApplicantEvaluation(Long ApplicantEvaluatorId){
+  public boolean UpdateApplicantEvaluation(Long ApplicantEvaluatorId){
     List<EvaluationResult> evaluationResultList=evaluationResultRepo.findByapplicantEvaluatorId(ApplicantEvaluatorId);
     int total =0;
     for(EvaluationResult evaluationResult:evaluationResultList){

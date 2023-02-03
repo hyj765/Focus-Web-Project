@@ -16,9 +16,9 @@ public interface EvaluationService {
   boolean LoggingUserPass(Long processId,Long applicantId,  Status status);
   boolean ApplicantEvaluation(EvaluationResultReq result, EvaluationData evaluationData);
 
-  List<Applicant> findEvaluatorPerApplicant(Long evaluatorId, Long interviewId);
-  boolean modifyApplicantEvaluation(Long evaluationResultId,EvaluationResultReq evaluationResultReq);
-  boolean updateApplicantEvaluation(Long EvaluatorId);
+  List<Applicant> FindEvaluatorPerApplicant(Long evaluatorId, Long interviewId);
+  boolean ModifyApplicantEvaluation(Long evaluationResultId,EvaluationResultReq evaluationResultReq);
+  boolean UpdateApplicantEvaluation(Long EvaluatorId);
 
   boolean createApplicantEvaluator(Long interviewId, InterviewRoom InterviewRoom, Long EvaluatorId,Long ApplicantId); // 평가지 시퀀스 넘버는
 }

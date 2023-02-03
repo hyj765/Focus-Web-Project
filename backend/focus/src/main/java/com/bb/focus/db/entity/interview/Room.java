@@ -43,7 +43,7 @@ public class Room {
   @Column(length = 64)
   private String waitCode;
 
-  @OneToMany(mappedBy = "room")
+  @OneToMany(targetEntity = com.bb.focus.db.entity.interview.InterviewRoom.class,mappedBy = "room")
   private List<InterviewRoom> interviewRoomList = new ArrayList<>();
 
 
