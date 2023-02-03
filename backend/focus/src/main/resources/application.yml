@@ -37,17 +37,13 @@ spring:
     port: 587
     username: blackbunnya106@gmail.com
     password: ppcohvausdqwdzie
-    properties:
-      mail:
-        smtp:
-          starttls:
-            enable: true
-            required: true
-            auth: true
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hiberate.type: trace
+  properties:
+    mail:
+      smtp:
+        starttls:
+          enable: true
+          required: true
+          auth: true
 jwt:
   secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
   expiration: 1296000000

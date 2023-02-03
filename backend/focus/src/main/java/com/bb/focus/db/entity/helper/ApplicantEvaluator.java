@@ -5,6 +5,7 @@ import com.bb.focus.db.entity.evaluation.EvaluationResult;
 import com.bb.focus.db.entity.evaluation.EvaluationSheet;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.entity.interview.Interview;
+import com.bb.focus.db.entity.interview.InterviewRoom;
 import com.sun.istack.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,10 @@ public class ApplicantEvaluator {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="evaluation_sheet_id")
   private EvaluationSheet evaluationSheet;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "interview_room_id")
+  private InterviewRoom interviewRoom;
 
   @Column(length = 1000)
   private String memo;

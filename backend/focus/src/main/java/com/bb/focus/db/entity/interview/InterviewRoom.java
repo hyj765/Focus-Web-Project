@@ -2,6 +2,7 @@ package com.bb.focus.db.entity.interview;
 
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.company.CompanyAdmin;
+import com.bb.focus.db.entity.helper.ApplicantEvaluator;
 import com.bb.focus.db.entity.helper.ApplicantInterviewRoom;
 import com.bb.focus.db.entity.helper.EvaluatorInterviewRoom;
 import com.sun.istack.NotNull;
@@ -28,7 +29,7 @@ public class InterviewRoom {
     @Column(name = "interview_room_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "room_id")
     private Room room;
 
@@ -63,11 +64,17 @@ public class InterviewRoom {
     @NotNull
     private Byte curApplicantCount;
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class, mappedBy = "interviewRoom")
+    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class,
+        mappedBy = "interviewRoom", cascade = {CascadeType.REMOVE})
     private List<ApplicantInterviewRoom> ApplicantInterviewRoomList = new ArrayList<>();
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class, mappedBy = "interviewRoom")
+    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class,
+        mappedBy = "interviewRoom", cascade = {CascadeType.REMOVE})
     private List<EvaluatorInterviewRoom> EvaluatorInteviewRoomList = new ArrayList<>();
+
+    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantEvaluator.class,
+        mappedBy = "interviewRoom", cascade = {CascadeType.REMOVE})
+    private List<ApplicantEvaluator> applicantEvaluatorList = new ArrayList<>();
 
 
 }

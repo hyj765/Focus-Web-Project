@@ -23,9 +23,6 @@ public class InterviewRoomReq {
   @ApiModelProperty(name = "면접(차수) 시퀀스 넘버", example = "1")
   private Long interviewId;
 
-  @ApiModelProperty(name = "룸 시퀀스 넘버", example = "1")
-  private Long roomId;
-
   @ApiModelProperty(name = "해당 면접실에 들어가는 평가자 시퀀스 넘버 리스트", example = "")
   private Long[] evaluators;
 

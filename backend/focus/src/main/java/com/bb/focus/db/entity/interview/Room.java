@@ -27,7 +27,7 @@ public class Room {
   @Column(name="room_id")
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   @JoinColumn(name = "interview_id")
   private Interview interview;
 
