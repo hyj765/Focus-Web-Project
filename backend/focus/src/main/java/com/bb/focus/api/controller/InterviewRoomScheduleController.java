@@ -3,6 +3,9 @@ package com.bb.focus.api.controller;
 import com.bb.focus.api.request.AddRemoveApplicantReq;
 import com.bb.focus.api.request.AddRemoveEvaluatorReq;
 import com.bb.focus.api.request.InterviewRoomReq;
+import com.bb.focus.api.response.ApplicantRes;
+import com.bb.focus.api.response.EvaluatorRes;
+import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.api.service.ApplicantEvaluatorService;
 import com.bb.focus.api.service.EvaluationService;
 import com.bb.focus.api.service.InterviewRoomService;
@@ -13,11 +16,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -146,5 +151,38 @@ public class InterviewRoomScheduleController {
         removeApplicantReq.getApplicantId());
 
     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+  }
+
+  @ApiOperation(value = "면접 별 전체 면접 일정 조회")
+  @GetMapping("/{interview-id}")
+  public ResponseEntity<List<InterviewRoomRes>> getInterviewSchedule(
+      @ApiIgnore Authentication authentication,
+      @PathVariable(value = "interview-id") Long interviewId) {
+
+    List<InterviewRoomRes> result = interviewRoomService.findAllInterviewRoom(interviewId);
+
+    return ResponseEntity.status(200).body(result);
+  }
+
+  @ApiOperation(value = "면접 별 평가자 리스트 조회")
+  @GetMapping("/{interview-room-id}/evaluators")
+  public ResponseEntity<List<EvaluatorRes>> getEvaluators(
+      @ApiIgnore Authentication authentication,
+      @PathVariable(value = "interview-room-id") Long interviewRoomId) {
+
+    List<EvaluatorRes> result = interviewRoomService.findEvaluators(interviewRoomId);
+
+    return ResponseEntity.status(200).body(result);
+  }
+
+  @ApiOperation(value = "면접 별 지원자 리스트 조회")
+  @GetMapping("/{interview-room-id}/applicants")
+  public ResponseEntity<List<ApplicantRes>> getApplicants(
+      @ApiIgnore Authentication authentication,
+      @PathVariable(value = "interview-room-id") Long interviewRoomId) {
+
+    List<ApplicantRes> result = interviewRoomService.findApplicants(interviewRoomId);
+
+    return ResponseEntity.status(200).body(result);
   }
 }
