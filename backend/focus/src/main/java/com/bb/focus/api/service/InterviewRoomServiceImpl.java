@@ -1,6 +1,9 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.InterviewRoomReq;
+import com.bb.focus.api.response.ApplicantRes;
+import com.bb.focus.api.response.EvaluatorRes;
+import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.entity.helper.ApplicantInterviewRoom;
@@ -17,6 +20,9 @@ import com.bb.focus.db.repository.InterviewRepository;
 import com.bb.focus.db.repository.InterviewRoomRepository;
 import java.time.Duration;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -147,6 +153,37 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
     applicantInterviewRoomRepository.deleteByInterviewRoomIdAndApplicantId(interviewRoomId, applicantId);
     applicantEvaluatorRepository.deleteByInterviewRoomIdAndApplicantId(interviewRoomId, applicantId);
   }
+
+  //면접 일정 조회(프로세스 -> 면접(N차) 별)
+  public List<InterviewRoomRes> findAllInterviewRoom(Long interviewId) {
+
+    List<InterviewRoom> interviewRooms = interviewRoomRepository.findByInterviewId(interviewId);
+    List<InterviewRoomRes> results = interviewRooms.stream()
+        .map(ir -> new InterviewRoomRes(
+            ir.getId(),
+            ir.getName(),
+            ir.getStartTime(),
+            ir.getEndTime(),
+            ir.getDuration()
+        )).collect(Collectors.toList());
+
+    return results;
+  }
+
+  //면접 일정 별 평가자 리스트 조회
+  public List<EvaluatorRes> findEvaluators(Long interviewRoomId) {
+
+    List<EvaluatorRes> evaluators = interviewRoomRepository.findEvaluatorsByInterviewId(interviewRoomId);
+    return evaluators;
+  }
+
+  public List<ApplicantRes> findApplicants(Long interviewRoomId) {
+
+    List<ApplicantRes> applicants = interviewRoomRepository.findApplicantsByInterviewId(interviewRoomId);
+    return applicants;
+  }
+
+  //면접 일정 별 지원자 리스트 조회
 
   @Override
   public Optional<InterviewRoom> findById(Long id) {
