@@ -11,53 +11,6 @@
         <ul
           class="flex flex-col items-center p-4 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0"
         >
-          <!-- <li>
-            <RouterLink
-              to="/service"
-              class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0"
-              aria-current="page"
-              >서비스관리자</RouterLink
-            >
-          </li>
-          <li>
-            <RouterLink
-              to="/corporate"
-              class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0"
-              aria-current="page"
-              >기업관리자</RouterLink
-            >
-          </li>
-          <li>
-            <RouterLink
-              to="/evaluate"
-              class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0"
-              aria-current="page"
-              >평가자</RouterLink
-            >
-          </li>
-          <li>
-            <RouterLink
-              to="/apply"
-              class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0"
-              aria-current="page"
-              >지원자</RouterLink
-            >
-          </li> -->
-          <!-- <li>
-            <button
-              type="button"
-              class="btn header-item noti-icon waves-effect"
-              id="page-header-notifications-dropdown"
-              data-bs-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <i class="bx bx-bell bx-tada"></i>
-              <span class="badge bg-danger rounded-pill">3</span>
-            </button>
-          </li> -->
-          <!-- # 채팅 -->
-
           <li class="bg-white/60 rounded-lg">
             <span
               class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
