@@ -1,5 +1,6 @@
 package com.bb.focus.api.response;
 
+import com.bb.focus.db.entity.evaluation.EvaluationResult;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -10,8 +11,6 @@ import lombok.Setter;
 @ApiModel("EvaluationSheetResultRes")
 public class EvaluationSheetResultRes {
 
-    @ApiModelProperty(name="평가지 시퀀스 넘버", example = "1")
-    private Long evaluationSheetId;
     @ApiModelProperty(name="평가항목 아이템", example = "1")
     private Long id;
 
@@ -26,4 +25,12 @@ public class EvaluationSheetResultRes {
 
     @ApiModelProperty(name="해당 항목의 점수",example = "해당 내용의 점수")
     private Byte score;
+
+    public EvaluationSheetResultRes(EvaluationResult evaluationResult){
+        content=evaluationResult.getEvaluationItem().getScaleContent();
+        reason = evaluationResult.getContent();
+        score = evaluationResult.getScore();
+        id = evaluationResult.getId();
+        Maxscore = evaluationResult.getEvaluationItem().getScoreRange();
+    }
 }

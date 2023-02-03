@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ApplicantEvaluatorRepository extends JpaRepository<ApplicantEvaluator,Long>, ApplicantEvaluatorCustomRepository {
     List<ApplicantEvaluator> findByEvaluatorId(Long evaluatorId);
 
+    ApplicantEvaluator findByEvaluatorIdAndApplicantIdAndInterviewId(Long evaluatorId,Long applicantId,Long interviewId);
+
 }

@@ -2,6 +2,7 @@ package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.EvaluationData;
 import com.bb.focus.api.request.EvaluationResultReq;
+import com.bb.focus.api.response.EvaluationSheetResultRes;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.applicant.ApplicantPassLog;
 import com.bb.focus.db.entity.applicant.Status;
@@ -16,6 +17,7 @@ import com.bb.focus.db.repository.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -33,19 +35,17 @@ public class EvaluationServiceImpl implements EvaluationService{
   EvaluationResultRepository evaluationResultRepo;
   InterviewRepository interviewRepo;
   EvaluatorRepository evaluatorRepo;
-  InterviewRoomRepository interviewRoomRepo;
 
   @Autowired
   public EvaluationServiceImpl(ApplicantPassLogRepository applicantPassLogRepository
-      , ApplicantRepository applicantRepository
       , ProcessRepository processRepository
+      , ApplicantRepository applicantRepository
       , ApplicantEvaluatorRepository applicantEvaluatorRepository
       , EvaluationSheetItemRepository evaluationSheetItemRepository
       , EvaluationResultRepository evaluationResultRepository
       , InterviewRepository interviewRepository
       , EvaluatorRepository evaluatorRepository
       , EvaluationSheetRepository evaluationSheetRepository
-      , InterviewRoomRepository interviewRoomRepository
       )
   {
 
@@ -58,7 +58,6 @@ public class EvaluationServiceImpl implements EvaluationService{
     interviewRepo = interviewRepository;
     evaluatorRepo = evaluatorRepository;
     evaluationSheetRepo = evaluationSheetRepository;
-    interviewRepo = interviewRepository;
   }
   public boolean ApplicantEvaluation(EvaluationResultReq result, EvaluationData evaluationData){
 
@@ -106,22 +105,27 @@ public class EvaluationServiceImpl implements EvaluationService{
 
     return true;
   }
+  public List<EvaluationSheetResultRes> findApplicantEvaluation(Long evaluatorId,Long applicantId,Long interviewId){
+    ApplicantEvaluator applicantEvaluator = applicantEvaluatorRepo.findByEvaluatorIdAndApplicantIdAndInterviewId(evaluatorId,applicantId,interviewId);
+    List<EvaluationSheetResultRes> evaluationSheetResultResList = new ArrayList<>();
+    for(EvaluationResult evaluationResult:applicantEvaluator.getEvaluationResultList()){
+          EvaluationSheetResultRes evaluationResultRes = new EvaluationSheetResultRes(evaluationResult);
+          evaluationSheetResultResList.add(evaluationResultRes);
+    }
 
-  public List<Applicant> FindEvaluatorPerApplicant(Long evaluatorId, Long interviewId){
-    List<ApplicantEvaluator> applicantEvaluator =applicantEvaluatorRepo.findByEvaluatorId(evaluatorId);
 
-
-    return null;
+    return evaluationSheetResultResList;
   }
-  public boolean ModifyApplicantEvaluation(Long evaluationResultId,EvaluationResultReq evaluationResultReq){
+  public boolean ModifyApplicantEvaluation(EvaluationResultReq evaluationResultReq){
+    EvaluationResult evaluationResult =evaluationResultRepo.findById(evaluationResultReq.getEvaluationResultId()).orElseThrow(IllegalAccessError::new);
 
-    EvaluationResult evaluationResult =evaluationResultRepo.findById(evaluationResultId).orElseThrow(IllegalAccessError::new);
     if(evaluationResult == null) {
       return false;
     }
 
     evaluationResult.setContent(evaluationResultReq.getContent());
     evaluationResult.setScore(evaluationResultReq.getScore());
+
     return true;
 
   }

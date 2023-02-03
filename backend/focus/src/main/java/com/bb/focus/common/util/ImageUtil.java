@@ -25,10 +25,12 @@ public class ImageUtil {
     return false;
   }
 
-  public boolean checkFolder(){
-    String filePath = System.getProperty("user.home");
-    System.out.println(filePath);
-    File file = new File(filePath+ "\\images");
+  public boolean checkFolder(String folderName){
+    String filePath = System.getProperty("user.dir");
+    if(!folderName.equals("")){
+      folderName = "\\"+folderName;
+    }
+    File file = new File(filePath+ "\\images" + folderName);
 
     if(file.exists()){
       return true;
@@ -42,6 +44,7 @@ public class ImageUtil {
   }
 
   public int getImageCount(String keyword){
+    String basePath = System.getProperty("user.dir") + "\\images\\"+keyword;
     File directory = new File(keyword);
     File[] files = directory.listFiles();
     if(files == null){
@@ -61,21 +64,27 @@ public class ImageUtil {
   }
 
   public byte[] Read(Long imageSerial){
-    String filePath = System.getProperty("user.home\\image");
+    String filePath = System.getProperty("user.dir");
     File file = new File(filePath);
 
 
     return null;
   }
   public boolean Upload(MultipartFile file,String baseFileName){
-    String filePath = System.getProperty("user.home\\image");
-    if(!checkFolder()){
+    String filePath = System.getProperty("user.dir") + "\\images";
+    if(!checkFolder("")){
       return false;
     }
+    if(!checkFolder("ficture")){
+      return false;
+    }
+    if(!checkFolder("selfintroduce")){
+      return false;
+    }
+    int serialNumber =getImageCount("selfintroduce");
 
-    int serialNumber =getImageCount(filePath);
     String saveName = baseFileName + serialNumber + file.getOriginalFilename();
-
+    filePath = filePath + "\\selfintroduce";
     try {
 
       File createdFile = new File(filePath+"\\"+saveName);
