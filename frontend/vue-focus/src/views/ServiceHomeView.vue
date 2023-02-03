@@ -6,8 +6,8 @@
 </template>
 
 <script setup>
-import TheSideBar from '@/layouts/TheSideBar.vue';
-import TheHeader from '@/layouts/TheHeader.vue';
+import TheSideBar from '@/components/TheSideBar.vue';
+import TheHeader from '@/components/TheHeader.vue';
 </script>
 
 <style lang="scss" scoped></style>
