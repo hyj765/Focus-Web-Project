@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginView from '@/views/LoginView';
-import ServiceManagerView from '@/views/ServiceManagerView';
-import CorporateManagerView from '@/views/CorporateManagerView';
-import EvaluatorView from '@/views/EvaluatorView';
-import ApplicantView from '@/views/ApplicantView';
+import ServiceHomeView from '@/views/ServiceHomeView';
+import CorporateHomeView from '@/views/CorporateHomeView';
+import EvaluatorHomeView from '@/views/EvaluatorHomeView';
+import ApplicantHomeView from '@/views/ApplicantHomeView';
 
 const routes = [
   {
@@ -14,22 +14,22 @@ const routes = [
   {
     path: '/service',
     name: 'Service',
-    component: ServiceManagerView,
+    component: ServiceHomeView,
   },
   {
     path: '/corporate',
     name: 'Corporate',
-    component: CorporateManagerView,
+    component: CorporateHomeView,
   },
   {
     path: '/evaluate',
     name: 'Evaluator',
-    component: EvaluatorView,
+    component: EvaluatorHomeView,
   },
   {
     path: '/apply',
     name: 'Applicant',
-    component: ApplicantView,
+    component: ApplicantHomeView,
   },
 ];
 
