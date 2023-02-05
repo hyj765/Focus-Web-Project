@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>3CorporateManageApplicant</div>
 </template>
 
 <script setup></script>
