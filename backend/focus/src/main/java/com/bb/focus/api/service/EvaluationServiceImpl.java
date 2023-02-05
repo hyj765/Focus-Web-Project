@@ -1,11 +1,11 @@
 package com.bb.focus.api.service;
 
-import com.bb.focus.api.request.EvaluationData;
 import com.bb.focus.api.request.EvaluationResultReq;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.applicant.ApplicantPassLog;
 import com.bb.focus.db.entity.applicant.Status;
+import com.bb.focus.db.entity.evaluation.EvaluationItem;
 import com.bb.focus.db.entity.evaluation.EvaluationResult;
 import com.bb.focus.db.entity.evaluation.EvaluationSheet;
 import com.bb.focus.db.entity.evaluator.Evaluator;
@@ -20,7 +20,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,8 +58,28 @@ public class EvaluationServiceImpl implements EvaluationService{
     evaluatorRepo = evaluatorRepository;
     evaluationSheetRepo = evaluationSheetRepository;
   }
-  public boolean ApplicantEvaluation(EvaluationResultReq result, EvaluationData evaluationData){
 
+  // 면접평가 시에 해당 데이터를 저장하는 함수
+  public boolean ApplicantEvaluation(EvaluationResultReq result,Long applicantEvaluatorId, Long evaluationItemId){
+
+    ApplicantEvaluator applicantEvaluator=applicantEvaluatorRepo.findById(applicantEvaluatorId).orElseThrow(IllegalAccessError::new);
+    List<EvaluationResult> evaluationResultList=applicantEvaluator.getEvaluationResultList();
+
+    for(EvaluationResult evaluationResult:evaluationResultList){
+      if(evaluationResult.getEvaluationItem().getId() == evaluationItemId){
+        evaluationResult.setContent(result.getContent());
+        evaluationResult.setScore(result.getScore());
+        return true;
+      }
+    }
+
+    EvaluationItem evaluationItem = evaluationSheetItemRepo.findById(evaluationItemId).orElseThrow(IllegalAccessError::new);
+    EvaluationResult evaluationResult = new EvaluationResult();
+    evaluationResult.setContent(result.getContent());
+    evaluationResult.setScore(result.getScore());
+    applicantEvaluator.addEvaluationResult(evaluationResult);
+    evaluationResult.setEvaluationItem(evaluationItem);
+    evaluationResultRepo.save(evaluationResult);
 
     return true;
   }
@@ -73,6 +92,7 @@ public class EvaluationServiceImpl implements EvaluationService{
     applicant.addApplicantPasslog(applicantPassLog);
 
     Process process =processRepo.findById(processId).orElseThrow(IllegalAccessError::new);
+
     if(!applicantPassLog.setApplicantData(applicant)) {
       return false;
     }
@@ -105,6 +125,7 @@ public class EvaluationServiceImpl implements EvaluationService{
 
     return true;
   }
+
   public List<EvaluationSheetResultRes> findApplicantEvaluation(Long evaluatorId,Long applicantId,Long interviewId){
     ApplicantEvaluator applicantEvaluator = applicantEvaluatorRepo.findByEvaluatorIdAndApplicantIdAndInterviewId(evaluatorId,applicantId,interviewId);
     List<EvaluationSheetResultRes> evaluationSheetResultResList = new ArrayList<>();

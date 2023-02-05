@@ -57,4 +57,12 @@ public class ApplicantEvaluator {
   @OneToMany(targetEntity = com.bb.focus.db.entity.evaluation.EvaluationResult.class, mappedBy = "applicantEvaluator")
   private List<EvaluationResult> evaluationResultList = new ArrayList<>();
 
+  public boolean addEvaluationResult(EvaluationResult evaluationResult){
+    this.evaluationResultList.add(evaluationResult);
+    if(evaluationResult.getApplicantEvaluator() != this){
+      evaluationResult.setApplicantEvaluator(this);
+    }
+    return true;
+  }
+
 }
