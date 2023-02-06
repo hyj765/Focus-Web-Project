@@ -248,6 +248,7 @@ onMounted(() => {
     .get('http://localhost:3000/notices')
     .then(({ data }) => {
       notices.value = data.notices.notices;
+      console.log(notices.value);
     })
     .catch(err => {
       console.log(err.message);
