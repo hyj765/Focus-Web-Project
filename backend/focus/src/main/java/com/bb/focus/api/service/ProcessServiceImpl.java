@@ -81,4 +81,8 @@ public class ProcessServiceImpl implements ProcessService {
 
     return processDetail;
   }
+
+  public int getProcessGoingOnNumber(){
+    return processRepository.findProcessGoingOn();
+  }
 }

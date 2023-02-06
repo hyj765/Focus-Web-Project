@@ -7,6 +7,7 @@ import com.bb.focus.api.response.CompanyAdminRes;
 import com.bb.focus.api.response.ServiceAdminRes;
 import com.bb.focus.api.response.ServiceNoticeRes;
 import com.bb.focus.api.service.CompanyAdminService;
+import com.bb.focus.api.service.ProcessService;
 import com.bb.focus.api.service.ServiceAdminService;
 import com.bb.focus.api.service.ServiceNoticeCategoryService;
 import com.bb.focus.api.service.ServiceNoticeService;
@@ -57,6 +58,9 @@ public class ServiceAdminController {
 
   @Autowired
   ServiceNoticeService serviceNoticeService;
+
+  @Autowired
+  ProcessService processService;
 
   @PostMapping()
   @ApiOperation(value = "관리자 계정 생성", notes = "<strong>아이디와 패스워드</strong>를 통해 관리자의 계정을 생성한다.")
@@ -241,5 +245,14 @@ public class ServiceAdminController {
         serviceNotice.getContent()
     );
     return ResponseEntity.status(200).body(serviceNoticeRes);
+  }
+
+
+  @ApiOperation(value = "면접 진행중인 기업 프로세스 개수 조회")
+  @GetMapping("/serviceusers/process/number")
+  public ResponseEntity<?> getProcessNumber(
+  ) {
+    int ret = processService.getProcessGoingOnNumber();
+    return ResponseEntity.status(200).body(ret);
   }
 }
