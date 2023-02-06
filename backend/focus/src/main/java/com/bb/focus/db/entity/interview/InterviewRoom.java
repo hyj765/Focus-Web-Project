@@ -69,7 +69,10 @@ public class InterviewRoom {
     private Byte curApplicantCount;
 
     @Column(length = 45)
+    @NotNull
     private String processName;
+
+    @NotNull
     private int interviewRound;
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class,

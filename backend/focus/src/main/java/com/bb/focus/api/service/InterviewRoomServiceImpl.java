@@ -170,7 +170,10 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
             ir.getName(),
             ir.getStartTime(),
             ir.getEndTime(),
-            ir.getDuration()
+            ir.getDuration(),
+            ir.getDate(),
+            ir.getInterviewRound(),
+            ir.getProcessName()
         )).collect(Collectors.toList());
 
     return results;
@@ -194,6 +197,11 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
   @Override
   public Optional<InterviewRoom> findById(Long id) {
         return interviewRoomRepository.findById(id);
+  }
+
+  @Override
+  public List<InterviewRoomRes> findUpToByEvaluator(Long evaluatorId) {
+    return interviewRoomRepository.findInterviewRoomByEvaluatorId(evaluatorId);
   }
 
 }

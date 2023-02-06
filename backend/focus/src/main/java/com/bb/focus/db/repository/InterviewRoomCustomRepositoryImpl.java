@@ -2,15 +2,18 @@ package com.bb.focus.db.repository;
 
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.EvaluatorRes;
+import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.db.entity.applicant.QApplicant;
 import com.bb.focus.db.entity.evaluator.QEvaluator;
 import com.bb.focus.db.entity.helper.QApplicantInterviewRoom;
 import com.bb.focus.db.entity.helper.QEvaluatorInterviewRoom;
 import com.bb.focus.db.entity.interview.QInterviewRoom;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -69,10 +72,39 @@ public class InterviewRoomCustomRepositoryImpl implements InterviewRoomCustomRep
         .fetch();
   }
 
+  public List<InterviewRoomRes> findInterviewRoomByEvaluatorId(Long evaluatorId) {
+    return jpaQueryFactory
+        .select(Projections.constructor(InterviewRoomRes.class,
+            qInterviewRoom.id,
+            qInterviewRoom.name,
+            qInterviewRoom.startTime,
+            qInterviewRoom.endTime,
+            qInterviewRoom.duration,
+            qInterviewRoom.date,
+            qInterviewRoom.interviewRound,
+            qInterviewRoom.processName
+        ))
+        .from(qInterviewRoom)
+        .innerJoin(qEvaluatorInterviewRoom)
+        .on(qEvaluatorInterviewRoom.interviewRoom.eq(qInterviewRoom))
+        .innerJoin(qEvaluator).on(qEvaluatorInterviewRoom.evaluator.eq(qEvaluator))
+        .where(eqEvaluatorId(evaluatorId),qInterviewRoom.startTime.gt(LocalDateTime.now()))
+        .orderBy(qInterviewRoom.startTime.asc())
+        .fetch();
+
+  }
+
   private BooleanExpression eqInterviewRoomId(Long interviewRoomId) {
-    if(interviewRoomId.equals(null)){
+    if (interviewRoomId.equals(null)) {
       return null;
     }
     return qInterviewRoom.id.eq(interviewRoomId);
+  }
+
+  private BooleanExpression eqEvaluatorId(Long evaluatorId) {
+    if (evaluatorId.equals(null)) {
+      return null;
+    }
+    return qEvaluator.id.eq(evaluatorId);
   }
 }

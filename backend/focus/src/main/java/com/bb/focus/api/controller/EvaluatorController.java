@@ -3,6 +3,7 @@ package com.bb.focus.api.controller;
 import com.bb.focus.api.response.EvaluatorRes;
 import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.api.service.EvaluatorService;
+import com.bb.focus.api.service.InterviewRoomService;
 import com.bb.focus.common.auth.FocusUserDetails;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.evaluator.Evaluator;
@@ -37,6 +38,9 @@ public class EvaluatorController {
 
   @Autowired
   EvaluatorService evaluatorService;
+
+  @Autowired
+  InterviewRoomService interviewRoomService;
 
   @ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
   @GetMapping("/me")
@@ -82,20 +86,14 @@ public class EvaluatorController {
 
   @ApiOperation(value = "해당 평가자에게 가장 가까운 면접 1개 정보 조회")
   @GetMapping("/next")
-  public ResponseEntity<InterviewRoom> getNextInterviewRoomInfo(
+  public ResponseEntity<?> getNextInterviewRoomInfo(
       @ApiIgnore Authentication authentication) {
 
     FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
-    InterviewRoom result = null;
     Long id = userDetails.getUser().getId();
-    List<InterviewRoom> tmpResults = new ArrayList<>();
-    Evaluator evaluator = evaluatorService.getEvaluatorById(id);
-    List<EvaluatorInterviewRoom> evaluatorInterviewRoomList = evaluator.getEvaluatorInterviewRoomList();
-    for (EvaluatorInterviewRoom eir : evaluatorInterviewRoomList) {
-      tmpResults.add(eir.getInterviewRoom());
-    }
-
-    return ResponseEntity.status(200).body(result);
+    List<InterviewRoomRes> resultList = interviewRoomService.findUpToByEvaluator(id);
+    InterviewRoomRes result = resultList.get(0);
+    return ResponseEntity.status(200).body(resultList);
   }
 
   @ApiOperation(value = "해당 평가자에 배정된 면접별 지원자 리스트 조회")
