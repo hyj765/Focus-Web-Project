@@ -7,6 +7,7 @@ import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.CompanyAdminRes;
 import com.bb.focus.api.response.EvaluatorDetailRes;
 import com.bb.focus.api.response.EvaluatorRes;
+import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.api.service.ApplicantService;
 import com.bb.focus.api.service.CompanyAdminService;
 import com.bb.focus.api.service.EvaluatorService;
@@ -15,6 +16,7 @@ import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
+import com.bb.focus.db.entity.interview.InterviewRoom;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -302,6 +304,7 @@ public class CompanyAdminController {
 
     return ResponseEntity.status(200).body(CompanyAdminRes.of(companyAdmin));
   }
+
   @ApiOperation(value = "인터뷰에 따른 지원자 합불 여부 처리", notes = "인터뷰 넘버와 해당 인터뷰에 따른 지원자 결과 변경")
   @PutMapping("/pass/{process-id}/{applicant-id}")
   public ResponseEntity<?> ApplicantPassProcess(@PathVariable(name="process-id")Long processId,@PathVariable(name="applicant-id")Long applicantId){
@@ -311,5 +314,50 @@ public class CompanyAdminController {
 
     return new ResponseEntity<String>(message, HttpStatus.OK);
   }
+  @ApiOperation(value= "해당 기업에 속한 모든 평가자 수를 호출하는 함수", notes="기업 번호를 통하여 해당 기업에 속한 평가자 수 반환")
+  @GetMapping("/evaluatorCount/{company-id}")
+  public ResponseEntity<?> GetEvaluatorCount(@PathVariable(name="company-id") Long companyId)  {
+    int evaluatorCount = companyAdminService.getAllEvaluationCount(companyId);
+
+    return new ResponseEntity<Integer>(evaluatorCount,HttpStatus.OK);
+  }
+
+  @ApiOperation(value= "해당 기업에 속한 모든 지원자 수를 호출하는 함수", notes="기업 번호를 통하여 해당 기업에 속한 지원자 수 반환")
+  @GetMapping("/applicantCount/{company-id}")
+  public ResponseEntity<?> GetApplicantCount(@PathVariable(name="company-id") Long companyId)  {
+    int applicantCount = companyAdminService.getAllApplicantCount(companyId);
+
+    return new ResponseEntity<Integer>(applicantCount,HttpStatus.OK);
+  }
+  @ApiOperation(value= "해당 프로세스에서 진행 예정인 면접을 반환하는 함수", notes="해당 프로세스에서 진행예정인 면접을 반환하는 API")
+  @GetMapping("/interviewRoom/reserve/{process-id}")
+  public ResponseEntity<?> GetReservedInterview(@PathVariable(name="process-id")Long processId){
+    List<InterviewRoomRes> interviewRoomResList =companyAdminService.getAllReservedInterview(processId);
+
+    if(interviewRoomResList == null){
+      return new ResponseEntity<String>("면접실 정보 가져오기 실패",HttpStatus.OK);
+    }
+
+    return new ResponseEntity<List<InterviewRoomRes>>(interviewRoomResList,HttpStatus.OK);
+  }
+
+  @ApiOperation(value= "기업 관리자 별 모든 전체 전형리스트", notes="기업관리자 별로 모든 전체정보를 반환하는 API")
+  @GetMapping("/process/{company-id}")
+  public ResponseEntity<?>  getAllCompanyProcess(@PathVariable(name="company-id")Long companyId){
+
+
+
+    return null;
+  }
+
+  @ApiOperation(value= "차수 별 합격자", notes="차수 별 합격자 반환하는 API")
+  @GetMapping("/process/{company-id}")
+  public ResponseEntity<?>  getStepPerPassApplicant(@PathVariable(name="company-id") Long companyId){
+
+
+
+    return null;
+  }
+
 
 }

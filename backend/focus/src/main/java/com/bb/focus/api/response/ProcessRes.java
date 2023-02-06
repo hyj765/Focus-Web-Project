@@ -1,5 +1,6 @@
 package com.bb.focus.api.response;
 
+import com.bb.focus.db.entity.process.Process;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDateTime;

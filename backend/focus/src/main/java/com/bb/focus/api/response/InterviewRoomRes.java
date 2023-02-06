@@ -17,7 +17,10 @@ public class InterviewRoomRes implements Comparable<InterviewRoomRes> {
 
   @ApiModelProperty(name = "면접 일정 시퀀스 넘버", example = "1")
   private Long id;
-
+  @ApiModelProperty(name = "해당 면접실이 속한 전형 이름", example = "삼성 하반기 IT 공채")
+  private String processName;
+  @ApiModelProperty(name = "해당 면접실이 속한 면접의 차수", example = "1")
+  private int interviewRound;
   @ApiModelProperty(name = "면접 일정 이름", example = "홍길동")
   private String name;
 

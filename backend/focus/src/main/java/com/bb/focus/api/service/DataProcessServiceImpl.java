@@ -12,6 +12,9 @@ import com.bb.focus.db.repository.ApplicantRepository;
 import com.bb.focus.db.repository.MajorStatisticRepository;
 import com.bb.focus.db.repository.ProcessRepository;
 import com.bb.focus.db.repository.StaticalRepository;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import javax.transaction.Transactional;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -181,22 +184,74 @@ public class DataProcessServiceImpl implements DataProcessService{
         statisticRepo.save(applicantStatistic);
         return true;
     }
-    public boolean UpdateStatisticTable(long processId){
+
+    public boolean CreateMajorTable(Map<String,Integer> major, Long processId){
+        ApplicantStatistic applicantStatistic=statisticRepo.findByProcessId(processId);
+        Iterator<String> keys = major.keySet().iterator();
+        while(keys.hasNext()){
+            String key = keys.next();
+            int value = major.get(key);
+            MajorPerApplicant majorPerApplicant = new MajorPerApplicant();
+            majorPerApplicant.setMajorName(key);
+            majorPerApplicant.setApplicantStatistic(applicantStatistic);
+            majorPerApplicant.setApplicantCount(value);
+            majorStatisticRepo.save(majorPerApplicant);
+        }
+
+        return true;
+    }
+    public Map<String,Integer> UpdateStatisticTable(long processId){
         ApplicantStatistic applicantStatistic = statisticRepo.findByProcessId(processId);
         List<Applicant> applicantList = applicantRepo.findAllByProcessId(processId);
 
-        /*
+        int age =0;
+        int maleCount =0;
+        int femaleCount = 0;
+        int avgAwardCount =0;
+        int avgAtivityCount =0;
+        int college =0;
+        int university =0;
+        int graduateShool = 0;
+        int size = applicantList.size();
+        Map<String,Integer> major = new HashMap<>();
+        for(Applicant applicant:applicantList){
+            age += LocalDate.now().getYear() -applicant.getBirth().getYear();
+            if(applicant.getGender().equals("f")){
+                femaleCount++;
+            }else{
+                maleCount++;
+            }
 
-        applicantStatistic.setAvgApplicantAge(); // 나이 평균
-        applicantStatistic.setMaleCount(); // 남자 수
-        applicantStatistic.setFemaleCount();// 여자 수
-        applicantStatistic.setCollegeCount();
-        applicantStatistic.setGraduateCount();
-        applicantStatistic.setUniversityCount();
-        applicantStatistic.setAvgAwardCount();  // 수상
-        applicantStatistic.setAvgAcitivityCount(); // 대외활동
-        */
-        return true;
+            if(applicant.getApplicantsGraduate() != null){
+                graduateShool++;
+            }else if(applicant.getApplicantsUniv() != null){
+                university++;
+            }else {
+                college++;
+            }
+            avgAwardCount += applicant.getAwardCount();
+            avgAtivityCount += applicant.getActivityCount();
+
+            String applicantmajor = applicant.getMajor();
+            if(major.containsKey(applicantmajor)){
+                major.put(applicantmajor,major.get(applicantmajor)+1);
+            }else{
+                major.put(applicantmajor,0);
+            }
+
+        }
+
+        applicantStatistic.setAvgApplicantAge(age/size); // 나이 평균
+        applicantStatistic.setMaleCount(maleCount); // 남자 수
+        applicantStatistic.setFemaleCount(femaleCount);// 여자 수
+        applicantStatistic.setCollegeCount(college);
+        applicantStatistic.setGraduateCount(graduateShool);
+        applicantStatistic.setUniversityCount(university);
+        applicantStatistic.setAvgAwardCount(avgAwardCount/size);  // 수상
+        applicantStatistic.setAvgAcitivityCount(avgAtivityCount/size); // 대외활동
+        statisticRepo.save(applicantStatistic);
+
+        return major;
     }
     // PROCESSID를 통하여 전형에 맞는 통계 테이블을 호출 후 해당 통계 테이블에 학과 데이터를 추가하는 코드
     @Transactional

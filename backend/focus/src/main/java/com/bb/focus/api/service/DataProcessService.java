@@ -27,10 +27,10 @@ public interface DataProcessService {
   long GetActivityPerApplicant(long processId);
   Map<String,Integer> GetResultPerApplicant(long processId);
 
-  public boolean CreateStatisticTable(long processId);
+  boolean CreateStatisticTable(long processId);
 
-
+  Map<String,Integer> UpdateStatisticTable(long processId);
 
   MultipartFile ExtractStaticResultIntoPDF();
-
+  boolean CreateMajorTable(Map<String,Integer> major, Long processId);
 }
