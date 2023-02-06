@@ -21,7 +21,7 @@ app.post('/login', (req, res) => {
   const userDB = fs.readFileSync("./db/user.json")
   const usersInfo = JSON.parse(userDB)
   const userIndex = usersInfo.users.findIndex((element) => element.loginId === req.body.loginId)
-  console.log(userIndex)
+  // console.log(userIndex)
   if (
     req.body &&
     req.body.loginId === usersInfo.users[userIndex].loginId && 
@@ -31,7 +31,7 @@ app.post('/login', (req, res) => {
     const token = jwt.sign(
       { userInfo }, "the_secret_key"
     )
-    console.log(res.body)
+    // console.log(res.body)
     res.json({
       token,
       loginId: userInfo.loginId,
