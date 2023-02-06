@@ -19,7 +19,7 @@ import java.util.Optional;
 @Api(value = "면접 일정 API", tags = {"InterviewRoom"})
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/interviewrooms")
+@RequestMapping("/api/interviewrooms")
 public class InterviewRoomController {
 
     @Autowired

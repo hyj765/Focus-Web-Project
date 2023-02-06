@@ -28,7 +28,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(value = "면접 전형 API", tags = {"Process"})
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/interview/process")
+@RequestMapping("/api/interview/process")
 public class ProcessController {
 
   private final ProcessService processService;

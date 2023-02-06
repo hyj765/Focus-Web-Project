@@ -36,7 +36,7 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Api(value = "유저 API", tags = {"Applicant"})
 @RestController
-@RequestMapping("/applicants")
+@RequestMapping("/api/applicants")
 public class ApplicantController {
 
     @Autowired

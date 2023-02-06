@@ -34,7 +34,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(value = "면접실 : 면접 일정 API", tags = {"InterviewRoom Schedule"})
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/interview/schedule")
+@RequestMapping("/api/interview/schedule")
 public class InterviewRoomScheduleController {
 
   private final InterviewRoomService interviewRoomService;

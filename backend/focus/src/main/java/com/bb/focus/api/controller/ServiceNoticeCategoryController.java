@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "카테고리 API", tags = {"ServiceNoticeCategory"})
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/categories")
+@RequestMapping("/api/categories")
 public class ServiceNoticeCategoryController {
 
   private final ServiceNoticeCategoryService serviceNoticeCategoryService;

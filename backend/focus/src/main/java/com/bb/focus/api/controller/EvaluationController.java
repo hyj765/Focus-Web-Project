@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "평가 API", tags = {"Evaluation"})
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/interview")
+@RequestMapping("/api/interview")
 public class EvaluationController {
 
   EvaluationService evaluationService;

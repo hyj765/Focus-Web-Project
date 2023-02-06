@@ -44,7 +44,7 @@ import javax.mail.MessagingException;
 @Api(value = "기업관리자 API", tags = {"CompanyAdmin"})
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/companyusers")
+@RequestMapping("/api/companyusers")
 public class CompanyAdminController {
 
   private final EvaluatorService evaluatorService;

@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Api(value = "평가자 API", tags = {"Evaluator"})
 @RestController
-@RequestMapping("/evaluators")
+@RequestMapping("/api/evaluators")
 public class EvaluatorController {
 
     @Autowired

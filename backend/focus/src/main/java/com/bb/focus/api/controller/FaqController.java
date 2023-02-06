@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "FAQ API", tags = {"FAQ"})
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/faq")
+@RequestMapping("/api/faq")
 public class FaqController {
 
   private final FaqService faqService;

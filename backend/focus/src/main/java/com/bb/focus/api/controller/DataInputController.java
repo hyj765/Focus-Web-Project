@@ -22,7 +22,7 @@ import java.util.List;
 @Api(value = "데이터 입력 API", tags = {"DataInput"})
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/Data")
+@RequestMapping("/api/Data")
 public class DataInputController {
     DataProcessService DataService;
     SchoolService schoolSerivce;

@@ -17,7 +17,7 @@ import java.util.List;
 @Api(value = "평가지 API", tags = {"EvaluationPaper"})
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/evaluation")
+@RequestMapping("/api/evaluation")
 public class EvaluationPaperController {
     DataProcessService dataProcessService;
     EvaluationPaperService evaluationService;
