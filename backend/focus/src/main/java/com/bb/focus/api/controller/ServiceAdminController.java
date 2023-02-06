@@ -108,6 +108,40 @@ public class ServiceAdminController {
     return ResponseEntity.status(200).body(companyAdminResList);
   }
 
+  @GetMapping("/accounts/contracts")
+  @ApiOperation(value = "계약 중인 기업 계정 리스트 정보 조회", notes = "서비스 관리자가 조회할 수 있으며, 등록되어 있는 기업 계정 중 계약 중인 기업 계정 리스트 정보를 응답한다.")
+  @ApiResponses({
+      @ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 404, message = "사용자 없음"),
+      @ApiResponse(code = 500, message = "서버 오류")
+  })
+  public ResponseEntity<List<CompanyAdminRes>> getCompanyAdminOnContractInfoList() {
+    List<CompanyAdmin> companyAdminList = companyAdminService.getAllContainsToday();
+    List<CompanyAdminRes> companyAdminResList = new ArrayList<>();
+    for (CompanyAdmin ca : companyAdminList) {
+      companyAdminResList.add(CompanyAdminRes.of(ca));
+    }
+    return ResponseEntity.status(200).body(companyAdminResList);
+  }
+
+  @GetMapping("/accounts/contracts/number")
+  @ApiOperation(value = "계약 중인 기업 계정 개수 정보 조회", notes = "서비스 관리자가 조회할 수 있으며, 등록되어 있는 기업 계정 중 계약 중인 기업 계정 리스트 정보를 응답한다.")
+  @ApiResponses({
+      @ApiResponse(code = 200, message = "성공"),
+      @ApiResponse(code = 401, message = "인증 실패"),
+      @ApiResponse(code = 404, message = "사용자 없음"),
+      @ApiResponse(code = 500, message = "서버 오류")
+  })
+  public ResponseEntity<?> getCompanyAdminOnContractNumber() {
+    List<CompanyAdmin> companyAdminList = companyAdminService.getAllContainsToday();
+    List<CompanyAdminRes> companyAdminResList = new ArrayList<>();
+    for (CompanyAdmin ca : companyAdminList) {
+      companyAdminResList.add(CompanyAdminRes.of(ca));
+    }
+    return ResponseEntity.status(200).body(companyAdminResList.size());
+  }
+
 
   @GetMapping("/accounts/{company-admin-id}")
   @ApiOperation(value = "기업 계정 정보 조회", notes = "서비스 관리자가 조회할 수 있으며, 등록되어 있는 기업 계정 정보를 응답한다.")

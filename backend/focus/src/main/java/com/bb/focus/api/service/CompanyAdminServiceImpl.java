@@ -75,4 +75,9 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
     Long companyAdminId = companyAdminRepository.updateCompanyAdminByUserId(companyAdmin);
     return companyAdminId;
   }
+
+  @Override
+  public List<CompanyAdmin> getAllContainsToday() {
+    return companyAdminRepository.findAllContainsToday();
+  }
 }

@@ -12,4 +12,6 @@ public interface CompanyAdminCustomRepository {
 
   Long updateCompanyAdminByUserId(CompanyAdmin companyAdmin);
 
+  List<CompanyAdmin> findAllContainsToday();
+
 }

@@ -15,4 +15,6 @@ public interface CompanyAdminService {
     List<CompanyAdmin> getAll();
 
     Long updateCompanyAdminByUserInfo(CompanyAdminRegisterPostReq userUpdateInfo);
+
+    List<CompanyAdmin> getAllContainsToday();
 }
