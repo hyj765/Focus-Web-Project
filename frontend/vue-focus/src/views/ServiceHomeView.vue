@@ -51,6 +51,13 @@
                 ><i class="bx bx-bell"></i
               ></span>
             </li>
+            <!-- 로그아웃 -->
+            <li class="bg-white/60 rounded-lg" @click="logout()">
+              <span
+                class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
+                ><i class="bx bx-heart"></i
+              ></span>
+            </li>
             <!-- # 프로필 -->
             <div class="flex items-center space-x-2">
               <img
@@ -130,6 +137,8 @@
 
 <script setup>
 import { ref, shallowRef } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 import ServiceAccountManage from '@/views/ServiceAccountManage.vue';
 import ServiceDashboard from '@/views/ServiceDashboard.vue';
@@ -137,6 +146,15 @@ import ServiceNotice from './ServiceNotice.vue';
 
 const currentComp = shallowRef(ServiceDashboard);
 const changeCurrentComp = comp => (currentComp.value = comp);
+
+const router = useRouter();
+const store = useStore();
+
+const logout = () => {
+  store.dispatch('logout').then(() => {
+    router.push({ name: 'Login' });
+  });
+};
 </script>
 
 <style lang="scss" scoped></style>
