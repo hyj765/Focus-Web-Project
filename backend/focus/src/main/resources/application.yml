@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/focus_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
     hikari:
-      username: ssafy
+      username: root
       password: ssafy
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
