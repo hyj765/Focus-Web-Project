@@ -93,6 +93,17 @@ public class EvaluatorController {
     Long id = userDetails.getUser().getId();
     List<InterviewRoomRes> resultList = interviewRoomService.findUpToByEvaluator(id);
     InterviewRoomRes result = resultList.get(0);
+    return ResponseEntity.status(200).body(result);
+  }
+
+  @ApiOperation(value = "해당 평가자가 이미 진행한 면접 리스트 조회")
+  @GetMapping("/past")
+  public ResponseEntity<?> getPastInterviewRoomInfo(
+      @ApiIgnore Authentication authentication) {
+
+    FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
+    Long id = userDetails.getUser().getId();
+    List<InterviewRoomRes> resultList = interviewRoomService.findPastByEvaluator(id);
     return ResponseEntity.status(200).body(resultList);
   }
 

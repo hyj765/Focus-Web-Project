@@ -204,5 +204,10 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
     return interviewRoomRepository.findInterviewRoomByEvaluatorId(evaluatorId);
   }
 
+  @Override
+  public List<InterviewRoomRes> findPastByEvaluator(Long evaluatorId) {
+    return interviewRoomRepository.findPastInterviewRoomByEvaluatorId(evaluatorId);
+  }
+
 }
 

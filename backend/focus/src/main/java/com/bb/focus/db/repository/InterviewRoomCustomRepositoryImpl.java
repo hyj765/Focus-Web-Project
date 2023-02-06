@@ -94,6 +94,28 @@ public class InterviewRoomCustomRepositoryImpl implements InterviewRoomCustomRep
 
   }
 
+  @Override
+  public List<InterviewRoomRes> findPastInterviewRoomByEvaluatorId(Long evaluatorId) {
+    return jpaQueryFactory
+        .select(Projections.constructor(InterviewRoomRes.class,
+            qInterviewRoom.id,
+            qInterviewRoom.name,
+            qInterviewRoom.startTime,
+            qInterviewRoom.endTime,
+            qInterviewRoom.duration,
+            qInterviewRoom.date,
+            qInterviewRoom.interviewRound,
+            qInterviewRoom.processName
+        ))
+        .from(qInterviewRoom)
+        .innerJoin(qEvaluatorInterviewRoom)
+        .on(qEvaluatorInterviewRoom.interviewRoom.eq(qInterviewRoom))
+        .innerJoin(qEvaluator).on(qEvaluatorInterviewRoom.evaluator.eq(qEvaluator))
+        .where(eqEvaluatorId(evaluatorId),qInterviewRoom.startTime.lt(LocalDateTime.now()))
+        .orderBy(qInterviewRoom.startTime.asc())
+        .fetch();
+  }
+
   private BooleanExpression eqInterviewRoomId(Long interviewRoomId) {
     if (interviewRoomId.equals(null)) {
       return null;
