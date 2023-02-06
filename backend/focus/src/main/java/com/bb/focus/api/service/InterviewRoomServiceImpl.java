@@ -62,6 +62,7 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
     Long interviewId = interviewRoomReq.getInterviewId();
     Interview interview = interviewRepository.findById(interviewId).orElseThrow(IllegalArgumentException::new);
     interviewRoom.setInterview(interview);
+    interviewRoom.setInterviewRound(interview.getStep());   //면접 차수 넣기
 
     //평가자 리스트 setting
     Long[] evaluatorIds = interviewRoomReq.getEvaluators();
@@ -87,6 +88,9 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
     Room room = roomService.autoCreateRoom(interviewId);
     roomService.updateRoomById(room);
     interviewRoom.setRoom(room);
+
+    //프로세스명 넣기
+    interviewRoom.setProcessName(interview.getProcess().getName());
 
     InterviewRoom savedEntity = interviewRoomRepository.save(interviewRoom);
     return savedEntity;

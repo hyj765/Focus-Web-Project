@@ -27,6 +27,8 @@ public interface DataProcessService {
   long GetActivityPerApplicant(long processId);
   Map<String,Integer> GetResultPerApplicant(long processId);
 
+  public boolean CreateStatisticTable(long processId);
+
 
 
   MultipartFile ExtractStaticResultIntoPDF();

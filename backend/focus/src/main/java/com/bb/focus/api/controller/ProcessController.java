@@ -3,6 +3,7 @@ package com.bb.focus.api.controller;
 import com.bb.focus.api.request.ProcessReq;
 import com.bb.focus.api.response.ProcessDetailRes;
 import com.bb.focus.api.response.ProcessRes;
+import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.ProcessService;
 import com.bb.focus.common.auth.FocusUserDetails;
 import com.bb.focus.common.model.response.BaseResponseBody;
@@ -32,6 +33,7 @@ import springfox.documentation.annotations.ApiIgnore;
 public class ProcessController {
 
   private final ProcessService processService;
+  private final DataProcessService dataProcessService;
 
   @ApiOperation(value = "프로세스 생성", notes = "기업관리자가 프로세스를 생성한다.")
   @PostMapping()
@@ -41,7 +43,9 @@ public class ProcessController {
     FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
     Long companyAdminId = userDetails.getUser().getId();
 
-    processService.createProcess(processReq, companyAdminId);
+    Long processId = processService.createProcess(processReq, companyAdminId);
+    dataProcessService.CreateStatisticTable(processId);
+
     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
   }
 

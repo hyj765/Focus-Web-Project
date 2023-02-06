@@ -64,6 +64,10 @@ public class InterviewRoom {
     @NotNull
     private Byte curApplicantCount;
 
+    @Column(length = 45)
+    private String processName;
+    private int interviewRound;
+
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class,
         mappedBy = "interviewRoom", cascade = {CascadeType.REMOVE})
     private List<ApplicantInterviewRoom> ApplicantInterviewRoomList = new ArrayList<>();

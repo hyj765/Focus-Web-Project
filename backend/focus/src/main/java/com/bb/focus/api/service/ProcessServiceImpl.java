@@ -24,7 +24,7 @@ public class ProcessServiceImpl implements ProcessService {
   private final CompanyAdminRepository companyAdminRepository;
 
   @Transactional
-  public void createProcess(ProcessReq processReq, Long companyAdminId) {
+  public Long createProcess(ProcessReq processReq, Long companyAdminId) {
     CompanyAdmin companyAdmin = companyAdminRepository.findById(companyAdminId).orElseThrow(IllegalArgumentException::new);
     Process process = new Process();
 
@@ -37,8 +37,8 @@ public class ProcessServiceImpl implements ProcessService {
     if(processReq.getEndDate() != null){
       process.setEndDate(processReq.getEndDate());
     }
-
     processRepository.save(process);
+    return process.getId();
   }
 
   @Transactional

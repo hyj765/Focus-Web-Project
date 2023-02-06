@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProcessService {
 
-  public void createProcess(ProcessReq processReq, Long companyAdminId);
+  public Long createProcess(ProcessReq processReq, Long companyAdminId);
 
   public Long updateProcess(Long id, ProcessReq processReq);
 
