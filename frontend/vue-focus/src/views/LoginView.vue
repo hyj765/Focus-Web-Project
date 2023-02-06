@@ -25,17 +25,21 @@
           >
             할당받은 계정을 입력하세요
           </h2>
-          <form class="space-y-4 md:space-y-6" action="#">
+          <form
+            @submit.prevent="login()"
+            class="space-y-4 md:space-y-6"
+            action="#"
+          >
             <div>
               <label
-                for="email"
+                for="loginId"
                 class="block mb-2 text-sm font-medium text-gray-900"
                 >ID</label
               >
               <input
-                type="email"
-                name="email"
-                id="email"
+                v-model="loginId"
+                type="text"
+                id="loginId"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                 placeholder="ID"
                 required=""
@@ -43,14 +47,14 @@
             </div>
             <div>
               <label
-                for="password"
+                for="loginPw"
                 class="block mb-2 text-sm font-medium text-gray-900"
                 >Password</label
               >
               <input
+                v-model="loginPw"
                 type="password"
-                name="password"
-                id="password"
+                id="loginPw"
                 placeholder="••••••••"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                 required=""
@@ -98,6 +102,30 @@
   </section>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
+const loginId = ref('');
+const loginPw = ref('');
+
+const router = useRouter();
+const store = useStore();
+
+const login = () => {
+  store
+    .dispatch('login', {
+      loginId: loginId.value,
+      loginPw: loginPw.value,
+    })
+    .then(() => {
+      router.push({ name: 'Service' });
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
+</script>
 
 <style lang="scss" scoped></style>
