@@ -45,7 +45,10 @@
               ></span>
             </li>
             <!-- # 프로필 -->
-            <div class="flex items-center space-x-2">
+            <button
+              class="flex items-center space-x-2"
+              @click="changeCurrentComp(CorporateProfile)"
+            >
               <img
                 class="h-8 rounded-full"
                 src="http://www.gravatar.com/avatar/2acfb745ecf9d4dccb3364752d17f65f?s=260&d=mp"
@@ -57,7 +60,7 @@
               >
                 James Smith
               </h4>
-            </div>
+            </button>
           </ul>
         </div>
       </div>
@@ -209,6 +212,7 @@ import CorporateManagePass from './CorporateManagePass.vue';
 import CorporateSheet from './CorporateSheet.vue';
 import CorporateStatics from './CorporateStatics.vue';
 import CorporateNotice from './CorporateNotice.vue';
+import CorporateProfile from './CorporateProfile.vue';
 
 const currentComp = shallowRef(CorporateDashboard);
 const changeCurrentComp = comp => (currentComp.value = comp);
