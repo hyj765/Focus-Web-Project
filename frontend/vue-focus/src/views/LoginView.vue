@@ -4,7 +4,7 @@
       class="absolute inset-0 flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
     >
       <div
-        class="w-full bg-white/80 rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0"
+        class="w-full bg-white/80 rounded-lg shadow-lg md:mt-0 sm:max-w-md xl:p-0"
       >
         <!-- # 로고 -->
         <a

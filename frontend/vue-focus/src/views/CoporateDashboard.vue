@@ -32,7 +32,7 @@
     <!-- 
     # 면접진행률
  -->
-    <div class="flex space-x-2 justify-center">
+    <!-- <div class="flex space-x-2 justify-center">
       <div
         class="bg-white shadow-lg mx-auto w-2/5 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block"
       >
@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!--     
     # 예정된 면접
  -->
@@ -75,8 +75,7 @@
           >
             <section class="flex flex-row px-2">
               <div class="flex flex-col space-y-2 w-1/2 justify-center">
-                <p class="text-lg font-bold">두나무 증권 FE 개발자</p>
-                <h5 class="text-sm font-semibold">평가자 3 | 지원자 4</h5>
+                <p class="text-xl font-bold">두나무 증권 FE 개발자</p>
               </div>
               <ul class="flex flex-col w-auto space-y-4">
                 <!-- 
@@ -123,8 +122,7 @@
           >
             <section class="flex flex-row px-2">
               <div class="flex flex-col space-y-2 w-1/2 justify-center">
-                <p class="text-lg font-bold">두나무 증권 FE 개발자</p>
-                <h5 class="text-sm font-semibold">평가자 3 | 지원자 4</h5>
+                <p class="text-xl font-bold">두나무 증권 FE 개발자</p>
               </div>
               <ul class="flex flex-col w-auto space-y-4">
                 <!-- 
