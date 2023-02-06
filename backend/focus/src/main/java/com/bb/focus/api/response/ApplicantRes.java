@@ -33,15 +33,19 @@ public class ApplicantRes {
   @ApiModelProperty(name="지원자 이메일", example = "abc@gmail.com")
   private String email;
 
+  @ApiModelProperty(name="지원자 전공", example = "컴퓨터공학과")
+  private String major;
+
   public ApplicantRes(Applicant applicant){
     id = applicant.getId();
     name = applicant.getName();
     userId = applicant.getUserId();
     code = applicant.getCode();
     image = applicant.getCode();
+    major = applicant.getMajor();
   }
 
-  public ApplicantRes(Long id, String name, String userId, String code, String image, String tel, String email) {
+  public ApplicantRes(Long id, String name, String userId, String code, String image, String tel, String email, String major) {
     this.id = id;
     this.name = name;
     this.userId = userId;
@@ -49,6 +53,7 @@ public class ApplicantRes {
     this.image = image;
     this.tel = tel;
     this.email = email;
+    this.major = major;
   }
 
   public static ApplicantRes of(Applicant user){
@@ -57,6 +62,7 @@ public class ApplicantRes {
     res.setTel(user.getTel());
     res.setEmail(user.getEmail());
     res.setName(user.getName());
+    res.setMajor(user.getMajor());
     return res;
   }
 

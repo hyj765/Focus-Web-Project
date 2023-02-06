@@ -63,6 +63,7 @@ public class ApplicantServiceImpl implements ApplicantService{
     applicant.setDegree(applicantInfoReq.getDegree());
     applicant.setAwardCount(applicantInfoReq.getAwardCount());
     applicant.setActivityCount(applicantInfoReq.getActivityCount());
+    applicant.setMajor(applicantInfoReq.getMajor());
 
     Process process = processRepository.findById(processId).orElseThrow(IllegalArgumentException::new);
     applicant.setProcess(process);
@@ -138,6 +139,7 @@ public class ApplicantServiceImpl implements ApplicantService{
     applicant.setDegree(applicantInfoReq.getDegree());
     applicant.setAwardCount(applicantInfoReq.getAwardCount());
     applicant.setActivityCount(applicantInfoReq.getActivityCount());
+    applicant.setMajor(applicantInfoReq.getMajor());
 
     //대학 정보 수정..
     if(applicantInfoReq.getCollegeId() != null){

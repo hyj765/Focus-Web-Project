@@ -66,7 +66,9 @@ public class ApplicantCustomRepositoryImpl implements ApplicantCustomRepository 
                     qApplicant.code,
                     qApplicant.image,
                     qApplicant.tel,
-                    qApplicant.email))
+                    qApplicant.email,
+                    qApplicant.major
+            ))
             .from(qApplicant)
             .where(eqCompanyAdminId(companyAdminId),
                     eqProcessId(processId),

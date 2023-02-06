@@ -55,6 +55,9 @@ public class ApplicantDetailRes {
   @ApiModelProperty(name="지원자 계정만료일", example = "")
   private LocalDateTime expireDate;
 
+  @ApiModelProperty(name="지원자 전공", example = "컴퓨터공학과")
+  private String major;
+
   public ApplicantDetailRes(Applicant applicant){
     id = applicant.getId();
     name = applicant.getName();
@@ -70,6 +73,7 @@ public class ApplicantDetailRes {
     awardCount = applicant.getAwardCount();
     activityCount = applicant.getActivityCount();
     expireDate = applicant.getExpireDate();
+    major = applicant.getMajor();
   }
 
 }

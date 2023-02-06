@@ -115,6 +115,10 @@ public class Applicant {
     @ColumnDefault("0")
     private Byte activityCount;
 
+    @NotNull
+    @Column(length = 255)
+    private String major;
+
     @OneToMany(targetEntity = com.bb.focus.db.entity.applicant.ApplicantPassLog.class, mappedBy = "applicant")
     private List<ApplicantPassLog> applicantPassLogList = new ArrayList<>();
 
