@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>5CorporateManagePass</div>
 </template>
 
 <script setup></script>
