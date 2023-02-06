@@ -43,7 +43,7 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Api(value = "서비스 관리자 API", tags = {"ServiceUser"})
 @RestController
-@RequestMapping("/serviceusers")
+@RequestMapping("/api/serviceusers")
 public class ServiceAdminController {
 
   @Autowired
