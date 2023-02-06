@@ -1,10 +1,11 @@
 package com.bb.focus.db.repository;
 
-import com.bb.focus.api.response.ProceedingCompanyRes;
+import com.bb.focus.api.response.ProceedingProcessRes;
 import java.util.List;
-import org.springframework.stereotype.Repository;
 
 public interface ServiceAdminDashboardCustomRepository {
 
-  public List<ProceedingCompanyRes> findAllProceedingCompany();
+  public List<ProceedingProcessRes> findAllProceedingCompany();
+
+  public Long getCountProceedingCompany();
 }
