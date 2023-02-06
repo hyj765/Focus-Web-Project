@@ -1,14 +1,12 @@
 package com.bb.focus.common.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
 import java.util.Locale;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+
 
 @Component
 public class ImageUtil {
@@ -25,10 +23,12 @@ public class ImageUtil {
     return false;
   }
 
-  public boolean checkFolder(){
-    String filePath = System.getProperty("user.home");
-    System.out.println(filePath);
-    File file = new File(filePath+ "\\images");
+  public boolean checkFolder(String folderName, String folderPath){
+    String filePath = System.getProperty("user.dir");
+    if(!folderName.equals("")){
+      folderName = "\\"+folderName;
+    }
+    File file = new File(filePath+ "\\images" + folderName);
 
     if(file.exists()){
       return true;
@@ -42,6 +42,7 @@ public class ImageUtil {
   }
 
   public int getImageCount(String keyword){
+    String basePath = System.getProperty("user.dir") + "\\images\\"+keyword;
     File directory = new File(keyword);
     File[] files = directory.listFiles();
     if(files == null){
@@ -60,22 +61,36 @@ public class ImageUtil {
     return fileCount;
   }
 
-  public byte[] Read(Long imageSerial){
-    String filePath = System.getProperty("user.home\\image");
-    File file = new File(filePath);
+  public byte[] Read_image(String fileName, String folderPath) throws FileNotFoundException, IOException{
+    File file = new File(folderPath);
+    byte[] imageByteArray;
+    String path = folderPath + "\\" + fileName;
 
-
-    return null;
-  }
-  public boolean Upload(MultipartFile file,String baseFileName){
-    String filePath = System.getProperty("user.home\\image");
-    if(!checkFolder()){
-      return false;
+    if(!isFileExist(path)){
+      return null;
     }
 
-    int serialNumber =getImageCount(filePath);
-    String saveName = baseFileName + serialNumber + file.getOriginalFilename();
+    InputStream imageInput = new FileInputStream(path);
+    imageByteArray=IOUtils.toByteArray(imageInput);
+    imageInput.close();
 
+    return imageByteArray;
+  }
+  public boolean Upload(MultipartFile file,String baseFileName){
+    String filePath = System.getProperty("user.dir") + "\\images";
+//    if(!checkFolder("")){
+//      return false;
+//    }
+//    if(!checkFolder("ficture")){
+//      return false;
+//    }
+//    if(!checkFolder("selfintroduce")){
+//      return false;
+//    }
+    int serialNumber =getImageCount("selfintroduce");
+
+    String saveName = baseFileName + serialNumber + file.getOriginalFilename();
+    filePath = filePath + "\\selfintroduce";
     try {
 
       File createdFile = new File(filePath+"\\"+saveName);
@@ -86,8 +101,28 @@ public class ImageUtil {
     return true;
   }
 
-  public boolean Delete(Long fileNumber,String baseName){
+  public boolean Delete(String fileName,String folderPath){
+    File dir = new File(folderPath);
+    String path = dir + "\\" + fileName;
 
+    if(!isFileExist(path)){
+      return false;
+    }
+    File file = new File(path);
+    file.delete();
+
+    return true;
+  }
+
+  public boolean isFileExist(String filePath){
+    File file = new File(filePath);
+
+    if(!file.exists()){
+      return false;
+    }
+    if(!file.isFile()){
+      return false;
+    }
 
     return true;
   }

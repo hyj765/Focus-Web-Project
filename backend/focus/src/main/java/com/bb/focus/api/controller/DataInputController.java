@@ -90,7 +90,7 @@ public class DataInputController {
     public ResponseEntity<?> AddApplicantIntoExcel(@RequestPart MultipartFile file) throws IOException
     {
         try {
-            DataService.ReadExcel(file);
+            DataService.ReadExcel(file,7);
         }catch (IOException e){
             return new ResponseEntity<String>("File was Broken",HttpStatus.BAD_REQUEST);
         }catch (InvalidFormatException e){
@@ -105,7 +105,7 @@ public class DataInputController {
     public ResponseEntity<?> AddEvaluatorIntoExcel(@RequestPart MultipartFile file) throws IOException
     {
         try {
-            DataService.ReadExcel(file);
+            DataService.ReadExcel(file,6);
         }catch (IOException e){
             return new ResponseEntity<String>("File was Broken",HttpStatus.BAD_REQUEST);
         }catch (InvalidFormatException e){
@@ -131,6 +131,7 @@ public class DataInputController {
         for(SchoolDto university: univList){
             schoolSerivce.InsertUniv(university);
         }
+
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
