@@ -6,6 +6,7 @@ import com.bb.focus.db.entity.helper.ApplicantEvaluator;
 import com.bb.focus.db.entity.helper.ApplicantInterviewRoom;
 import com.bb.focus.db.entity.helper.EvaluatorInterviewRoom;
 import com.sun.istack.NotNull;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -54,6 +55,9 @@ public class InterviewRoom {
 
     @NotNull
     private LocalDateTime endTime;
+
+    @NotNull
+    private LocalDate date;
 
     @NotNull
     private int duration;

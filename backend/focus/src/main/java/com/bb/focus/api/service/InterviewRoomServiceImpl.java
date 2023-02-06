@@ -52,6 +52,7 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
     interviewRoom.setName(interviewRoomReq.getName());
     interviewRoom.setStartTime(interviewRoomReq.getStartTime());
     interviewRoom.setEndTime(interviewRoomReq.getEndTime());
+    interviewRoom.setDate(interviewRoomReq.getStartTime().toLocalDate());
 
     Duration duration = Duration.between(interviewRoom.getStartTime(), interviewRoom.getEndTime());
     int interviewDuration = (int)(duration.getSeconds() / 60);
@@ -100,6 +101,7 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
     interviewRoom.setName(interviewRoomReq.getName());
     interviewRoom.setStartTime(interviewRoomReq.getStartTime());
     interviewRoom.setEndTime(interviewRoomReq.getEndTime());
+    interviewRoom.setDate(interviewRoomReq.getStartTime().toLocalDate());
 
     Duration duration = Duration.between(interviewRoom.getStartTime(), interviewRoom.getEndTime());
     int interviewDuration = (int)(duration.getSeconds() / 60);
