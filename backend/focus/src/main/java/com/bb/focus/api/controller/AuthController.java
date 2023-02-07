@@ -70,7 +70,7 @@ public class AuthController {
         // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
         Long sequenceId = serviceAdmin.getId();
         return ResponseEntity.ok(
-            UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(sequenceId)));
+            UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(sequenceId), (byte) 1));
       }
     } else {
       CompanyAdmin companyAdmin = companyAdminService.getCompanyAdminByUserId(userId);
@@ -79,51 +79,51 @@ public class AuthController {
           // 계정이 만료된 경우 로그인 실패로 응답
           if (!canLogin(companyAdmin.getEndDate())) {
             return ResponseEntity.status(401)
-                .body(UserLoginPostRes.of(401, "End of Contract", null));
+                .body(UserLoginPostRes.of(401, "End of Contract", null, (byte) 0));
           }
           Long sequenceId = companyAdmin.getId();
           // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
           return ResponseEntity.ok(
               UserLoginPostRes.of(200, "Success",
-                  JwtTokenUtil.getToken(sequenceId)));
+                  JwtTokenUtil.getToken(sequenceId), (byte) 2));
         }
       } else {
         Evaluator evaluator = evaluatorService.getEvaluatorByUserId(userId);
         if (evaluator != null) {
           if (password.equals(evaluator.getPwd())) {
             // 계정이 만료된 경우 로그인 실패로 응답
-          if (!canLogin(evaluator.getExpireDate())) {
-            return ResponseEntity.status(401)
-                .body(UserLoginPostRes.of(401, "End of Contract", null));
-          }
+            if (!canLogin(evaluator.getExpireDate())) {
+              return ResponseEntity.status(401)
+                  .body(UserLoginPostRes.of(401, "End of Contract", null, (byte) 0));
+            }
             // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
             Long sequenceId = evaluator.getId();
             return ResponseEntity.ok(
                 UserLoginPostRes.of(200, "Success",
-                    JwtTokenUtil.getToken(sequenceId)));
+                    JwtTokenUtil.getToken(sequenceId), (byte) 3));
           }
         } else {
           Applicant applicant = applicantService.getApplicantByUserId(userId);
           if (password.equals(applicant.getPwd())) {
             // 계정이 만료된 경우 로그인 실패로 응답
-          if (!canLogin(applicant.getExpireDate())) {
-            return ResponseEntity.status(401)
-                .body(UserLoginPostRes.of(401, "End of Contract", null));
-          }
+            if (!canLogin(applicant.getExpireDate())) {
+              return ResponseEntity.status(401)
+                  .body(UserLoginPostRes.of(401, "End of Contract", null, (byte) 0));
+            }
             // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
             Long sequenceId = applicant.getId();
             return ResponseEntity.ok(
                 UserLoginPostRes.of(200, "Success",
-                    JwtTokenUtil.getToken(sequenceId)));
+                    JwtTokenUtil.getToken(sequenceId), (byte) 4));
           }
         }
       }
     }
-  // 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
-        return ResponseEntity.status(401).
+    // 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
+    return ResponseEntity.status(401).
 
-  body(UserLoginPostRes.of(401, "Invalid Password",null));
-}
+        body(UserLoginPostRes.of(401, "Invalid Password", null, (byte) 0));
+  }
 
   // 계정 만료 확인
   private boolean canLogin(LocalDateTime endDate) {
