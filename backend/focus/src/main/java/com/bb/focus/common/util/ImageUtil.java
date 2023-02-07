@@ -23,7 +23,7 @@ public class ImageUtil {
     return false;
   }
 
-  public boolean checkFolder(String folderName, String folderPath){
+  public boolean checkFolder(String folderName){
     String filePath = System.getProperty("user.dir");
     if(!folderName.equals("")){
       folderName = "\\"+folderName;
@@ -78,15 +78,15 @@ public class ImageUtil {
   }
   public boolean Upload(MultipartFile file,String baseFileName){
     String filePath = System.getProperty("user.dir") + "\\images";
-//    if(!checkFolder("")){
-//      return false;
-//    }
-//    if(!checkFolder("ficture")){
-//      return false;
-//    }
-//    if(!checkFolder("selfintroduce")){
-//      return false;
-//    }
+    if(!checkFolder("")){
+      return false;
+    }
+    if(!checkFolder("ficture")){
+      return false;
+    }
+    if(!checkFolder("selfintroduce")){
+      return false;
+    }
     int serialNumber =getImageCount("selfintroduce");
 
     String saveName = baseFileName + serialNumber + file.getOriginalFilename();

@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Api(value = "평가자 API", tags = {"Evaluator"})
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/evaluators")
 public class EvaluatorController {
 

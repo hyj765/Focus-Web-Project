@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProcessRepository extends JpaRepository<Process, Long> , ProcessCustomRepository{
-    List<Process> findAllByCompanyId(Long companyId);
+    List<Process> findAllByCompanyAdminId(Long companyAdminId);
 }

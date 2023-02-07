@@ -21,6 +21,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(value = "면접실 : 면접 일정 API", tags = {"InterviewRoom Schedule"})
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("*")
 @RequestMapping("/api/interview/schedule")
 public class InterviewRoomScheduleController {
 

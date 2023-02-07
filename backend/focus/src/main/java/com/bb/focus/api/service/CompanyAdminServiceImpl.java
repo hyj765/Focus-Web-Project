@@ -25,6 +25,7 @@ import javax.persistence.criteria.CriteriaBuilder.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Service("companyAdminService")
 public class CompanyAdminServiceImpl implements CompanyAdminService {
@@ -132,7 +133,8 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
   public List<InterviewRoomRes> getAllReservedInterview(Long processId){
     Process process = processRepository.findById(processId).orElseThrow(IllegalAccessError::new);
     Long cur_step = (long)process.getCurrentStep();
-    List<InterviewRoom> interviewRoomList=interviewRoomRepository.findByProcessIdAndCurrentStep(processId,cur_step);
+    String processName = process.getName();
+    List<InterviewRoom> interviewRoomList=interviewRoomRepository.findByProcessNameAndInterviewRound(processName,cur_step);
     List<InterviewRoomRes> interviewRoomResList= new ArrayList<>();
 
     for(InterviewRoom interviewRoom:interviewRoomList){
@@ -168,7 +170,7 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
   }
   @Override
   public List<ProcessRes> getFinishStepPerProcessInfo(Long companyId){
-    List<Process> processList=processRepository.findAllByCompanyId(companyId);
+    List<Process> processList=processRepository.findAllByCompanyAdminId(companyId);
     List<ProcessRes> processResList = new ArrayList<>();
     for(Process process:processList){
       if(process.getCurrentStep() > process.getInterviewCount()){

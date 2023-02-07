@@ -29,6 +29,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,6 +44,7 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Api(value = "서비스 관리자 API", tags = {"ServiceUser"})
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/serviceusers")
 public class ServiceAdminController {
 
