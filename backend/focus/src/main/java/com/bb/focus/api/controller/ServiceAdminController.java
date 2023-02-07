@@ -251,7 +251,7 @@ public class ServiceAdminController {
 
 
   @ApiOperation(value = "면접 진행중인 기업 프로세스 개수 조회")
-  @GetMapping("/serviceusers/process/number")
+  @GetMapping("/dashboard/process/number")
   public ResponseEntity<?> getProcessNumber(
   ) {
     int ret = processService.getProcessGoingOnNumber();
