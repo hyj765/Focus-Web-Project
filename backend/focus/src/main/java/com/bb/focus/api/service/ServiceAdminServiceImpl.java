@@ -20,7 +20,7 @@ public class ServiceAdminServiceImpl implements ServiceAdminService {
   public ServiceAdmin createUser(ServiceAdminRegisterPostReq serviceAdminRegisterInfo) {
     ServiceAdmin serviceAdmin = new ServiceAdmin();
     serviceAdmin.setUserId(serviceAdminRegisterInfo.getUserId());
-//    serviceAdmin.setPwd(passwordEncoder.encode(serviceAdminRegisterInfo.getPassword()));
+//    serviceAdmin.setPwd(EncryptionUtils.encryptSHA256(serviceAdminRegisterInfo.getPassword()));
     serviceAdmin.setPwd(serviceAdminRegisterInfo.getPassword());
     serviceAdmin.setEmail(serviceAdminRegisterInfo.getEmail());
     serviceAdmin.setTel(serviceAdminRegisterInfo.getTel());

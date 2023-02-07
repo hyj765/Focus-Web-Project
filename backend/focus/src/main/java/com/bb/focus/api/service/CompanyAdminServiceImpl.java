@@ -1,6 +1,8 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.CompanyAdminRegisterPostReq;
+import com.bb.focus.common.util.EncryptionUtils;
+import com.bb.focus.config.SecurityConfig;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.repository.CompanyAdminRepository;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +26,7 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
             .format(
                 DateTimeFormatter.ofPattern("yyyyMMdd"));
     String pwd = getRandomString();
+//    String pwd = EncryptionUtils.encryptSHA256(getRandomString());
 
     companyAdmin.setUserId(userId);
     companyAdmin.setPwd(pwd);
