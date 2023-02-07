@@ -116,11 +116,11 @@ const store = useStore();
 const login = () => {
   store
     .dispatch('login', {
-      loginId: loginId.value,
-      loginPw: loginPw.value,
+      id: loginId.value,
+      password: loginPw.value,
     })
     .then(() => {
-      router.push({ name: 'Service' });
+      // router.push({ name: 'Service' });
     })
     .catch(err => {
       console.log(err.message);

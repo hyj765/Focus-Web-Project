@@ -1,6 +1,8 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
 
+const BASE_URL = 'http://i8a106.p.ssafy.io/api';
+
 export default createStore({
   state: {
     user: null,
@@ -36,12 +38,12 @@ export default createStore({
     login({ commit }, credentials) {
       console.log('LOGIN ACTIONS', credentials);
       return axios
-        .post('http://localhost:3000/login', credentials)
+        .post(`${BASE_URL}/auth/login`, credentials)
         .then(({ data }) => {
           console.log('user data is: ', data);
-          commit('SET_USER_DATA', data);
-          console.log('state.user: ', this.state.user);
-          console.log('getters.loggedIn', this.getters.loggedIn);
+          // commit('SET_USER_DATA', data);
+          // console.log('state.user: ', this.state.user);
+          // console.log('getters.loggedIn', this.getters.loggedIn);
         });
     },
     logout({ commit }) {
