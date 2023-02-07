@@ -3,6 +3,7 @@ package com.bb.focus.db.repository;
 import com.bb.focus.api.response.ProcessDetailRes;
 import com.bb.focus.api.response.ProcessRes;
 import com.bb.focus.db.entity.company.QCompanyAdmin;
+import com.bb.focus.db.entity.process.Process;
 import com.bb.focus.db.entity.process.QProcess;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
@@ -59,6 +60,16 @@ public class ProcessCustomRepositoryImpl implements ProcessCustomRepository{
         .where(qProcess.id.eq(processId))
         .fetchOne();
     return result;
+  }
+
+  public int findProcessGoingOn(){
+    List<Process> result = jpaQueryFactory
+        .select(qProcess)
+        .from(qProcess)
+        .where(qProcess.startDate.lt(LocalDateTime.now()),
+            qProcess.endDate.gt(LocalDateTime.now()))
+        .fetch();
+    return result.size();
   }
 
   private BooleanExpression eqCompanyAdminId(Long companyAdminId) {

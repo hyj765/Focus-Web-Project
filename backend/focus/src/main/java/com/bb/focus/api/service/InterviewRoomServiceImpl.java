@@ -80,6 +80,7 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
     for(Long applicantId : applicantIds){
       ApplicantInterviewRoom applicantInterviewRoom = new ApplicantInterviewRoom();
       Applicant applicant = applicantRepository.findById(applicantId).orElseThrow(IllegalArgumentException::new);
+      applicant.setExpireDate(interviewRoomReq.getEndTime().plusMinutes(30));   //계정 만료 시간 설정
       applicantInterviewRoom.setApplicant(applicant);
       applicantInterviewRoom.setInterviewRoom(interviewRoom);
       applicantInterviewRoomRepository.save(applicantInterviewRoom);
@@ -170,7 +171,10 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
             ir.getName(),
             ir.getStartTime(),
             ir.getEndTime(),
-            ir.getDuration()
+            ir.getDuration(),
+            ir.getDate(),
+            ir.getInterviewRound(),
+            ir.getProcessName()
         )).collect(Collectors.toList());
 
     return results;
@@ -194,6 +198,16 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
   @Override
   public Optional<InterviewRoom> findById(Long id) {
         return interviewRoomRepository.findById(id);
+  }
+
+  @Override
+  public List<InterviewRoomRes> findUpToByEvaluator(Long evaluatorId) {
+    return interviewRoomRepository.findInterviewRoomByEvaluatorId(evaluatorId);
+  }
+
+  @Override
+  public List<InterviewRoomRes> findPastByEvaluator(Long evaluatorId) {
+    return interviewRoomRepository.findPastInterviewRoomByEvaluatorId(evaluatorId);
   }
 
 }

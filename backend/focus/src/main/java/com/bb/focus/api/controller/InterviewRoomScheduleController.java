@@ -164,6 +164,18 @@ public class InterviewRoomScheduleController {
     return ResponseEntity.status(200).body(result);
   }
 
+
+  @ApiOperation(value = "특정 체 면접 일정 조회")
+  @GetMapping("/detail/{interview-room-id}")
+  public ResponseEntity<InterviewRoomRes> getInterviewScheduleInfo(
+      @PathVariable(value = "interview-room-id") Long interviewRoomId) {
+
+    InterviewRoomRes result = new InterviewRoomRes(interviewRoomService.findById(interviewRoomId).get());
+
+    return ResponseEntity.status(200).body(result);
+  }
+
+
   @ApiOperation(value = "면접 별 평가자 리스트 조회")
   @GetMapping("/{interview-room-id}/evaluators")
   public ResponseEntity<List<EvaluatorRes>> getEvaluators(

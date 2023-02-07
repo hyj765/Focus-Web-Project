@@ -50,6 +50,9 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     validateDuplicateEvaluator(evaluator);
 
     CompanyAdmin companyAdmin = companyAdminRepository.findById(companyAdminId).orElseThrow(IllegalArgumentException::new);
+
+    evaluator.setExpireDate(companyAdmin.getEndDate());
+
     companyAdmin.addEvaluator(evaluator);
 
     evaluatorRepository.save(evaluator);
@@ -76,7 +79,7 @@ public class EvaluatorServiceImpl implements EvaluatorService{
 //    mailService.sendAccountMail(evaluator.getEmail(), content);
 
     //암호화
-//    String encodedPwd = passwordEncoder.encode(newPwd);
+//    String encodedPwd = EncryptionUtils.encryptSHA256(newPwd);
     String encodedPwd = newPwd;
 
     evaluator.setUserId(newId);

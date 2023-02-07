@@ -10,4 +10,6 @@ public interface ProcessCustomRepository {
 
   ProcessDetailRes findProcessDetail(Long processId);
 
+  int findProcessGoingOn();
+
 }

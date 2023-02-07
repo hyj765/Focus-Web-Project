@@ -17,4 +17,6 @@ public interface ProcessService {
 
   public ProcessDetailRes getProcessDetail(Long processId);
 
+  public int getProcessGoingOnNumber();
+
 }

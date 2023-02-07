@@ -19,7 +19,6 @@ public interface CompanyAdminService {
     List<CompanyAdmin> getAll();
 
     Long updateCompanyAdminByUserInfo(CompanyAdminRegisterPostReq userUpdateInfo);
-
     int getAllEvaluationCount(Long companyAdminId);
     int getAllApplicantCount(Long companyAdminId);
     List<InterviewRoomRes> getAllReservedInterview(Long processId);
@@ -27,5 +26,5 @@ public interface CompanyAdminService {
     List<ApplicantLogRes> getAllInterviewPerPassApplicant(Long processId);
 
     List<ProcessRes> getFinishStepPerProcessInfo(Long companyId);
-
+    List<CompanyAdmin> getAllContainsToday();
 }
