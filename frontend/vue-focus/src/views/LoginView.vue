@@ -120,7 +120,17 @@ const login = () => {
       password: loginPw.value,
     })
     .then(() => {
-      // router.push({ name: 'Service' });
+      const userRole = store.state.user.userRole;
+      console.log('current userRole: ', userRole);
+      if (userRole === 1) {
+        router.push({ name: 'Service' });
+      } else if (userRole === 2) {
+        router.push({ name: 'Corporate' });
+      } else if (userRole === 3) {
+        router.push({ name: 'Evaluator' });
+      } else if (userRole === 4) {
+        router.push({ name: 'Applicant' });
+      }
     })
     .catch(err => {
       console.log(err.message);
