@@ -23,6 +23,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,8 +38,8 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(value = "유저 API", tags = {"Applicant"})
 @RestController
 @RequestMapping("/api/applicants")
+@CrossOrigin("*")
 public class ApplicantController {
-
     @Autowired
     ApplicantService applicantService;
     @ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")

@@ -11,5 +11,5 @@ public interface InterviewRoomRepository extends JpaRepository<InterviewRoom, Lo
     InterviewRoomCustomRepository {
 
   List<InterviewRoom> findByInterviewId(Long interviewId);
-
+  List<InterviewRoom> findByProcessNameAndInterviewRound(String processName,Long CurrentStep);
 }

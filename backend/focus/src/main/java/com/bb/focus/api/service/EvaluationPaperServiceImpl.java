@@ -100,6 +100,7 @@ public class EvaluationPaperServiceImpl implements EvaluationPaperService {
             if(evaluationItem.getId() == evaluationItemId){
                 evaluationItem.setScaleContent(modifyContent);
                 evaluationItem.setScoreRange(modifyRange);
+                evaluationSheetItemRepo.save(evaluationItem);
                 return true;
             }
         }

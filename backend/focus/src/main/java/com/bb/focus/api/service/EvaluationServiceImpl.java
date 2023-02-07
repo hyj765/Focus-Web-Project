@@ -69,6 +69,7 @@ public class EvaluationServiceImpl implements EvaluationService{
       if(evaluationResult.getEvaluationItem().getId() == evaluationItemId){
         evaluationResult.setContent(result.getContent());
         evaluationResult.setScore(result.getScore());
+        evaluationResultRepo.save(evaluationResult);
         return true;
       }
     }
@@ -112,6 +113,7 @@ public class EvaluationServiceImpl implements EvaluationService{
     for(Interview interview :interviewList){
       if(interview.getStep() == process.getCurrentStep()){
         applicantPassLog.setInterviewName(interview.getName());
+
         break;
       }
     }
@@ -122,7 +124,7 @@ public class EvaluationServiceImpl implements EvaluationService{
     if(process.getInterviewCount() != process.getCurrentStep()) {
        process.setCurrentStep(CurStep);
     }
-
+    applicantPassLogRepo.save(applicantPassLog);
     return true;
   }
 
@@ -146,7 +148,7 @@ public class EvaluationServiceImpl implements EvaluationService{
 
     evaluationResult.setContent(evaluationResultReq.getContent());
     evaluationResult.setScore(evaluationResultReq.getScore());
-
+    evaluationResultRepo.save(evaluationResult);
     return true;
 
   }
@@ -177,6 +179,7 @@ public class EvaluationServiceImpl implements EvaluationService{
     }
     ApplicantEvaluator applicantEvaluator=applicantEvaluatorRepo.findById(ApplicantEvaluatorId).orElseThrow(IllegalAccessError::new);
     applicantEvaluator.setScore(total);
+    applicantEvaluatorRepo.save(applicantEvaluator);
     return true;
   }
 
