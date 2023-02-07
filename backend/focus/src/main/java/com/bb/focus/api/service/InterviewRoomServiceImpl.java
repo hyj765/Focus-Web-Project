@@ -80,6 +80,7 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
     for(Long applicantId : applicantIds){
       ApplicantInterviewRoom applicantInterviewRoom = new ApplicantInterviewRoom();
       Applicant applicant = applicantRepository.findById(applicantId).orElseThrow(IllegalArgumentException::new);
+      applicant.setExpireDate(interviewRoomReq.getEndTime().plusMinutes(30));   //계정 만료 시간 설정
       applicantInterviewRoom.setApplicant(applicant);
       applicantInterviewRoom.setInterviewRoom(interviewRoom);
       applicantInterviewRoomRepository.save(applicantInterviewRoom);

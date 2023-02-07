@@ -50,6 +50,9 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     validateDuplicateEvaluator(evaluator);
 
     CompanyAdmin companyAdmin = companyAdminRepository.findById(companyAdminId).orElseThrow(IllegalArgumentException::new);
+
+    evaluator.setExpireDate(companyAdmin.getEndDate());
+
     companyAdmin.addEvaluator(evaluator);
 
     evaluatorRepository.save(evaluator);
