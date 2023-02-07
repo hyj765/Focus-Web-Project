@@ -24,10 +24,9 @@ import java.util.List;
 @CrossOrigin("*")
 @RequestMapping("/api/Data")
 public class DataInputController {
-    DataProcessService DataService;
-    SchoolService schoolSerivce;
-
-    ImageUtil imageUtil;
+    private final DataProcessService DataService;
+    private final SchoolService schoolSerivce;
+    private final ImageUtil imageUtil;
 
     //ApplicantService
     //EvaluatorService

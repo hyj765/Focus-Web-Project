@@ -38,7 +38,6 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @RequestMapping("/api/applicants")
 public class ApplicantController {
-
     @Autowired
     ApplicantService applicantService;
     @ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")

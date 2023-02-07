@@ -3,11 +3,13 @@ package com.bb.focus.api.controller;
 import com.bb.focus.api.request.EvaluationResultReq;
 import com.bb.focus.api.request.InterviewResultReq;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
+import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.EvaluationService;
 import com.bb.focus.db.entity.applicant.Status;
 import com.bb.focus.db.entity.helper.ApplicantEvaluator;
 import io.swagger.annotations.Api;
 import java.util.List;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,9 +28,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class EvaluationController {
 
   EvaluationService evaluationService;
+  DataProcessService dataProcessService;
 
-  public EvaluationController(EvaluationService evaluationS){
+  public EvaluationController(EvaluationService evaluationS
+                             ,DataProcessService dataProcessS){
     evaluationService = evaluationS;
+    dataProcessService= dataProcessS;
+
   }
 
 
@@ -71,11 +77,17 @@ public class EvaluationController {
                                           , resultReq.get(i).getApplicantId()
                                           , Status.valueOf(resultReq.get(i).getPass()));
     }
-
-
-
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
+
+  @PostMapping("/staticstic/givestatistics")
+  public ResponseEntity<?> UpdateStatistic(@RequestBody Long processId){
+    Map<String,Integer> major=dataProcessService.UpdateStatisticTable(processId);
+    dataProcessService.CreateMajorTable(major,processId);
+
+    return new ResponseEntity<String>("통계데이터 업데이트 성공",HttpStatus.OK);
+  }
+
 
   @PutMapping("/modify/evaluation")
   public ResponseEntity<?> ModifyApplicantEvaluation(@RequestBody EvaluationResultReq evaluationResultReq){
