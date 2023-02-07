@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.transaction.Transactional;
+
 @Api(value = "평가 API", tags = {"Evaluation"})
 @RestController
 @CrossOrigin("*")
@@ -52,6 +54,9 @@ public class EvaluationController {
     return new ResponseEntity<List<EvaluationSheetResultRes>>(evaluationSheetResultResList,HttpStatus.OK);
 
   }
+
+
+  @Transactional
   @PostMapping("/evaluation")
   public ResponseEntity<?> EvaluationApplicant(
       @RequestBody EvaluationResultReq evaluationResultReq,
@@ -62,13 +67,14 @@ public class EvaluationController {
     //처음 평가 시에 생성 -> 그 다음에는 해당 면접에서 해당 지원자 넘버가 있을 시 ->
     try {
       evaluationService.ApplicantEvaluation(evaluationResultReq, applicantEvaluatorId, evaluationItemId);
+      evaluationService.UpdateApplicantEvaluationScore(applicantEvaluatorId);
     }catch (Exception e){
       return new ResponseEntity<String>("평가내역 저장실패",HttpStatus.BAD_REQUEST);
     }
 
     return new ResponseEntity<String>("평가내역 저장완료",HttpStatus.OK);
   }
-
+  @Transactional
   @PostMapping("/decision/pass")
   public ResponseEntity<?> FinishInterview(@RequestBody List<InterviewResultReq> resultReq,@RequestBody Long processId){
 
@@ -80,6 +86,7 @@ public class EvaluationController {
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
+  @Transactional
   @PostMapping("/staticstic/givestatistics")
   public ResponseEntity<?> UpdateStatistic(@RequestBody Long processId){
     Map<String,Integer> major=dataProcessService.UpdateStatisticTable(processId);
@@ -89,17 +96,27 @@ public class EvaluationController {
   }
 
 
+  @Transactional
   @PutMapping("/modify/evaluation")
-  public ResponseEntity<?> ModifyApplicantEvaluation(@RequestBody EvaluationResultReq evaluationResultReq){
+  public ResponseEntity<?> ModifyApplicantEvaluation(@RequestBody EvaluationResultReq evaluationResultReq, @RequestBody Long applicantEvaluationId){
 
     if(!evaluationService.ModifyApplicantEvaluation(evaluationResultReq)){
       return new ResponseEntity<String>("수정에 실패하였습니다.",HttpStatus.BAD_REQUEST);
+    }
+    if(evaluationService.UpdateApplicantEvaluationScore(applicantEvaluationId)){
+      return new ResponseEntity<String>("총점 재계산 실패",HttpStatus.OK);
     }
 
     return new ResponseEntity<String>("수정 성공",HttpStatus.OK);
   }
 
+  @Transactional
+  @PutMapping("/save/memo")
+  public ResponseEntity<?> EvaluatorSaveMemo(@RequestBody Long applicantEvaluatorId,@RequestBody String memo) {
+    // applicantevaluatorId와 메모
 
 
+    return new ResponseEntity<String>("메모 저장 완료",HttpStatus.OK);
+  }
 
 }
