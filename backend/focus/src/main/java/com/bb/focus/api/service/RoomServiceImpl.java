@@ -23,21 +23,15 @@ public class RoomServiceImpl implements RoomService {
   @Override
   public Room createRoom(RoomReq.Create roomInfo) {
     Room room = new Room();
-    room.setInterview(interviewService.findInterviewById(roomInfo.getInterviewId()));
     return roomRepository.save(room);
   }
 
   @Override
   public Long updateRoomById(Room room) {
-//    Room room = new Room();
-//    room.setId(roomId);
-//    room.setRealCode(EncryptionUtils.encryptSHA256("real" + roomId));
-//    room.setWaitCode(EncryptionUtils.encryptSHA256("wait" + roomId));
     String newRealCode = EncryptionUtils.encryptSHA256("real" + room.getId());
     String newWaitCode = EncryptionUtils.encryptSHA256("wait" + room.getId());
     roomRepository.save(Room.builder()
         .id(room.getId())
-        .interview(room.getInterview())
         .realCode(newRealCode)
         .waitCode(newWaitCode).build());
     return room.getId();
@@ -46,8 +40,8 @@ public class RoomServiceImpl implements RoomService {
   @Override
   public Room autoCreateRoom(Long interviewId) {
     Room room = new Room();
-    Interview interview = interviewRepository.findById(interviewId).orElseThrow(IllegalArgumentException::new);
-    room.setInterview(interview);
+    Interview interview = interviewRepository.findById(interviewId)
+        .orElseThrow(IllegalArgumentException::new);
     return roomRepository.save(room);
   }
 }

@@ -71,7 +71,6 @@ public class CompanyAdminRes {
         res.setSize(user.getSize());
         res.setLogoImage(user.getLogoImage());
         res.setSkinColor(user.getSkinColor());
-        res.setExpired(user.isExpired());
         return res;
     }
 }

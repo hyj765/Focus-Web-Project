@@ -30,13 +30,9 @@ public class InterviewRoom {
     @Column(name = "interview_room_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "room_id")
     private Room room;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="company_admin_id")
-//    private CompanyAdmin companyAdmin;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "interview_id")
@@ -61,12 +57,6 @@ public class InterviewRoom {
 
     @NotNull
     private int duration;
-
-    @NotNull
-    private Byte curEvaluatorCount;
-
-    @NotNull
-    private Byte curApplicantCount;
 
     @Column(length = 45)
     @NotNull

@@ -68,10 +68,10 @@ public class Evaluator {
 
     @NotNull
     @ColumnDefault("3")
-    private Byte userRole;
+    private Byte userRole;   //1:서비스관리자, 2:기업관리자, 3:평가자, 4:지원자
 
     @Column(length = 2090)
-    private String image;   //1:서비스관리자, 2:기업관리자, 3:평가자, 4:지원자
+    private String image;
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantEvaluator.class, mappedBy = "evaluator")
     private List<ApplicantEvaluator> applicantEvaluatorList = new ArrayList<>();

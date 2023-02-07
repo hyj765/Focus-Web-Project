@@ -60,10 +60,6 @@ public class CompanyAdmin {
   private String email;
 
   @NotNull
-  @ColumnDefault("0")
-  private boolean isExpired;
-
-  @NotNull
   @Column(length = 10)
   private String name;
 
@@ -94,9 +90,6 @@ public class CompanyAdmin {
 
   @OneToMany(targetEntity = com.bb.focus.db.entity.applicant.Applicant.class, mappedBy = "companyAdmin")
   private List<Applicant> applicantList = new ArrayList<>();
-
-//  @OneToMany(targetEntity = com.bb.focus.db.entity.interview.InterviewRoom.class, mappedBy = "companyAdmin")
-//  private List<InterviewRoom> interviewRoomList = new ArrayList<>();
 
   @OneToMany(targetEntity = com.bb.focus.db.entity.process.Process.class, mappedBy = "companyAdmin")
   private List<Process> processList = new ArrayList<>();

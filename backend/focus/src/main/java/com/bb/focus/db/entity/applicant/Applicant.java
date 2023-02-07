@@ -100,8 +100,6 @@ public class Applicant {
     private String degree;
 
     private LocalDateTime expireDate;
-    private LocalDateTime realEnterTime;
-    private LocalDateTime realExitTime;
 
     @NotNull
     @ColumnDefault("4")
