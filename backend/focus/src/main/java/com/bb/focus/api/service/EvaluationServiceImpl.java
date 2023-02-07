@@ -61,16 +61,17 @@ public class EvaluationServiceImpl implements EvaluationService{
 
   // 면접평가 시에 해당 데이터를 저장하는 함수
   public boolean ApplicantEvaluation(EvaluationResultReq result,Long applicantEvaluatorId, Long evaluationItemId){
-
     ApplicantEvaluator applicantEvaluator=applicantEvaluatorRepo.findById(applicantEvaluatorId).orElseThrow(IllegalAccessError::new);
     List<EvaluationResult> evaluationResultList=applicantEvaluator.getEvaluationResultList();
 
-    for(EvaluationResult evaluationResult:evaluationResultList){
-      if(evaluationResult.getEvaluationItem().getId() == evaluationItemId){
-        evaluationResult.setContent(result.getContent());
-        evaluationResult.setScore(result.getScore());
-        evaluationResultRepo.save(evaluationResult);
-        return true;
+    if(evaluationResultList != null) {
+      for (EvaluationResult evaluationResult : evaluationResultList) {
+        if (evaluationResult.getEvaluationItem().getId() == evaluationItemId) {
+          evaluationResult.setContent(result.getContent());
+          evaluationResult.setScore(result.getScore());
+          evaluationResultRepo.save(evaluationResult);
+          return true;
+        }
       }
     }
 
@@ -83,6 +84,14 @@ public class EvaluationServiceImpl implements EvaluationService{
     evaluationResultRepo.save(evaluationResult);
 
     return true;
+  }
+
+  @Override
+  public boolean UpdateApplicantEvaluationMemo(Long EvaluatorId,String memo) {
+    ApplicantEvaluator applicantEvaluator=applicantEvaluatorRepo.findById(EvaluatorId).orElseThrow(IllegalAccessError::new);
+    applicantEvaluator.setMemo(memo);
+    applicantEvaluatorRepo.save(applicantEvaluator);
+    return false;
   }
 
   // 면접 합격 결과를 로그로 찍는 함수. 결과에 들어갈 필요가 있음.
@@ -171,7 +180,9 @@ public class EvaluationServiceImpl implements EvaluationService{
 
     return true;
   }
-  public boolean UpdateApplicantEvaluation(Long ApplicantEvaluatorId){
+
+  // 총점 재계산하는 함수
+  public boolean UpdateApplicantEvaluationScore(Long ApplicantEvaluatorId){
     List<EvaluationResult> evaluationResultList=evaluationResultRepo.findByapplicantEvaluatorId(ApplicantEvaluatorId);
     int total =0;
     for(EvaluationResult evaluationResult:evaluationResultList){

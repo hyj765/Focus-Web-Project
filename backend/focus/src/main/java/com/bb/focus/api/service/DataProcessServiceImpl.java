@@ -61,7 +61,7 @@ public class DataProcessServiceImpl implements DataProcessService{
         List<SchoolDto> schoolDtoList = new ArrayList<>();
         String[] f;
         String line;
-        BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()));
+        BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream(),"UTF-8"));
 
         while ((line = br.readLine()) != null) {
             f = line.split(",");
@@ -85,7 +85,7 @@ public class DataProcessServiceImpl implements DataProcessService{
             return Exceldata;
         }
         Workbook workbook = null;
-        if(extension == "xlsx"){
+        if(extension.equals("xlsx")){
             workbook = new XSSFWorkbook(file.getInputStream());
         }else if(extension.equals("xls")){
             workbook = new HSSFWorkbook(file.getInputStream());

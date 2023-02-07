@@ -42,7 +42,6 @@ public class ImageUtil {
   }
 
   public int getImageCount(String keyword){
-    String basePath = System.getProperty("user.dir") + "\\images\\"+keyword;
     File directory = new File(keyword);
     File[] files = directory.listFiles();
     if(files == null){
@@ -77,17 +76,8 @@ public class ImageUtil {
     return imageByteArray;
   }
   public boolean Upload(MultipartFile file,String baseFileName){
-    String filePath = System.getProperty("user.dir") + "\\images";
-    if(!checkFolder("")){
-      return false;
-    }
-    if(!checkFolder("ficture")){
-      return false;
-    }
-    if(!checkFolder("selfintroduce")){
-      return false;
-    }
-    int serialNumber =getImageCount("selfintroduce");
+    String filePath = "tmp/image";
+    int serialNumber =getImageCount(filePath);
 
     String saveName = baseFileName + serialNumber + file.getOriginalFilename();
     filePath = filePath + "\\selfintroduce";
@@ -102,9 +92,7 @@ public class ImageUtil {
   }
 
   public boolean Delete(String fileName,String folderPath){
-    File dir = new File(folderPath);
-    String path = dir + "\\" + fileName;
-
+    String path = folderPath + '/' + fileName;
     if(!isFileExist(path)){
       return false;
     }

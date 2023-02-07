@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Api(value = "데이터 입력 API", tags = {"DataInput"})
@@ -85,26 +86,30 @@ public class DataInputController {
     }
 
     // 지원자 데이터를 엑셀로 받아오는 함수. csv 연동 아직 안됨. xls과 xlxs 두 가지만 가능
-    @PostMapping(value = "/input/applicant",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> AddApplicantIntoExcel(@RequestPart MultipartFile file) throws IOException
+    @PostMapping(value = "/input/{process-id}/applicant",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> AddApplicantIntoExcel(@PathVariable(name="process-id")@RequestPart MultipartFile file) throws IOException
     {
+        List<String[]> data = null;
         try {
-            DataService.ReadExcel(file,7);
+            data = DataService.ReadExcel(file,2);
         }catch (IOException e){
             return new ResponseEntity<String>("File was Broken",HttpStatus.BAD_REQUEST);
         }catch (InvalidFormatException e){
             return new ResponseEntity<String>("Invalid File Format",HttpStatus.BAD_REQUEST);
         }
-
+//        for(String[] da:data){
+//            System.out.print(da[0]);
+//            System.out.println(da[1]);
+//        }
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     // 평가자 데이터를 엑셀로 받아오는 함수. csv 연동 아직 안됨. xls과 xlxs 두 가지만 가능
-    @PostMapping(value = "/input/evaluator",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/input/{company-id}/evaluator",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> AddEvaluatorIntoExcel(@RequestPart MultipartFile file) throws IOException
-    {
+    {   List<String[]> data = null;
         try {
-            DataService.ReadExcel(file,6);
+            data =DataService.ReadExcel(file,6);
         }catch (IOException e){
             return new ResponseEntity<String>("File was Broken",HttpStatus.BAD_REQUEST);
         }catch (InvalidFormatException e){
