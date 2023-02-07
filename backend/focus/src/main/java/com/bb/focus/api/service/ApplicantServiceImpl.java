@@ -113,7 +113,7 @@ public class ApplicantServiceImpl implements ApplicantService{
 //    mailService.sendAccountMail(applicant.getEmail(), content);
 
     //암호화
-//    String encodedPwd = passwordEncoder.encode(newPwd);
+//    String encodedPwd = EncryptionUtils.encryptSHA256(newPwd);
     String encodedPwd = newPwd;
 
     applicant.setUserId(newId);
