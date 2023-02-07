@@ -41,4 +41,13 @@ public class ProcessRes {
     this.interviewCount = interviewCount;
     this.currentStep = currentStep;
   }
+
+  public void GetProcess(Process process){
+    id = process.getId();
+    interviewCount = process.getInterviewCount();
+    name = process.getName();
+    startDate = process.getStartDate();
+    endDate = process.getEndDate();
+    currentStep = process.getCurrentStep();
+  }
 }

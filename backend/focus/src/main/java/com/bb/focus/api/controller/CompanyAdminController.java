@@ -3,11 +3,13 @@ package com.bb.focus.api.controller;
 import com.bb.focus.api.request.ApplicantInfoReq;
 import com.bb.focus.api.request.EvaluatorInfoReq;
 import com.bb.focus.api.response.ApplicantDetailRes;
+import com.bb.focus.api.response.ApplicantLogRes;
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.CompanyAdminRes;
 import com.bb.focus.api.response.EvaluatorDetailRes;
 import com.bb.focus.api.response.EvaluatorRes;
 import com.bb.focus.api.response.InterviewRoomRes;
+import com.bb.focus.api.response.ProcessRes;
 import com.bb.focus.api.service.ApplicantService;
 import com.bb.focus.api.service.CompanyAdminService;
 import com.bb.focus.api.service.EvaluatorService;
@@ -341,23 +343,38 @@ public class CompanyAdminController {
     return new ResponseEntity<List<InterviewRoomRes>>(interviewRoomResList,HttpStatus.OK);
   }
 
-  @ApiOperation(value= "기업 관리자 별 모든 전체 전형리스트", notes="기업관리자 별로 모든 전체정보를 반환하는 API")
+  @ApiOperation(value= "기업 관리자 별 모든 전체 전형리스트", notes="기업관리자 별로 모든 프로세스 정보를 반환하는 API")
   @GetMapping("/process/{company-id}")
-  public ResponseEntity<?>  getAllCompanyProcess(@PathVariable(name="company-id")Long companyId){
+  public ResponseEntity<?>  GetAllCompanyProcess(@PathVariable(name="company-id")Long companyId){
+    List<ProcessRes> processResList = companyAdminService.getAllProcess(companyId);
 
+    if(processResList == null){
+      return new ResponseEntity<String>("전형 데이터 읽어오기 실패",HttpStatus.BAD_REQUEST);
+    }
 
-
-    return null;
+    return new ResponseEntity<List<ProcessRes>>(processResList,HttpStatus.OK);
   }
 
   @ApiOperation(value= "차수 별 합격자", notes="차수 별 합격자 반환하는 API")
-  @GetMapping("/process/{company-id}")
-  public ResponseEntity<?>  getStepPerPassApplicant(@PathVariable(name="company-id") Long companyId){
+  @GetMapping("/process/pass/{process-id}")
+  public ResponseEntity<?>  GetStepPerPassApplicant(@PathVariable(name="process-id") Long processId){
+    List<ApplicantLogRes> applicantLogResList= companyAdminService.getAllInterviewPerPassApplicant(processId);
+    if(applicantLogResList == null){
+      return new ResponseEntity<String>("합격자 정보 불러오기 실패",HttpStatus.BAD_REQUEST);
+    }
 
-
-
-    return null;
+    return new ResponseEntity<List<ApplicantLogRes>>(applicantLogResList,HttpStatus.OK);
   }
 
+  @ApiOperation(value= "종료된 프로세스 정보 가져와서 정보 출력", notes="스텝이 종료된 프로세스 정보만 출력하는 API")
+  @GetMapping("/finished/process/info/{company-id}")
+  public ResponseEntity<?> GetFinishStepProcess(@PathVariable(name="company-id")Long companyId){
+    List<ProcessRes> processResList=companyAdminService.getFinishStepPerProcessInfo(companyId);
+
+    if(processResList == null){
+      return new ResponseEntity<String>("프로세스 데이터 가져오기 실패",HttpStatus.BAD_REQUEST);
+    }
+    return new ResponseEntity<List<ProcessRes>>(processResList,HttpStatus.OK);
+  }
 
 }
