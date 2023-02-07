@@ -27,7 +27,6 @@ import javax.persistence.criteria.CriteriaBuilder.In;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
->>>>>>> backend/focus/src/main/java/com/bb/focus/api/service/CompanyAdminServiceImpl.java
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
