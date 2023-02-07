@@ -36,11 +36,6 @@ public class InterviewRoomRes implements Comparable<InterviewRoomRes> {
   @ApiModelProperty(name = "면접 일정 걸리는 시간(분)", example = "30")
   private int duration;
 
-  @ApiModelProperty(name = "해당되는 면접 차수")
-  private int interviewRound;
-
-  @ApiModelProperty(name = "전형 이름")
-  private String processName;
 
   public InterviewRoomRes(InterviewRoom interviewRoom) {
     id = interviewRoom.getId();

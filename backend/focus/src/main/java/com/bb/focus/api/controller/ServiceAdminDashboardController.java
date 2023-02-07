@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "서비스 관리자 대시보드 API", tags = {"ServiceAdmin Dashboard"})
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/serviceadmin/dashboard")
+@RequestMapping("/api/serviceusers/dashboard")
 public class ServiceAdminDashboardController {
 
   private final ServiceAdminDashboardService serviceAdminDashboardService;

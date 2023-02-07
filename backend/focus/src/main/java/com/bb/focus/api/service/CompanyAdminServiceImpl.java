@@ -2,35 +2,25 @@ package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.CompanyAdminRegisterPostReq;
 import com.bb.focus.api.response.ApplicantLogRes;
-import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.api.response.ProcessRes;
 import com.bb.focus.db.entity.applicant.ApplicantPassLog;
 import com.bb.focus.db.entity.applicant.Status;
-import com.bb.focus.common.util.EncryptionUtils;
-import com.bb.focus.config.SecurityConfig;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.interview.Interview;
 import com.bb.focus.db.entity.interview.InterviewRoom;
 import com.bb.focus.db.entity.process.Process;
 import com.bb.focus.db.repository.ApplicantPassLogRepository;
-import com.bb.focus.db.repository.ApplicantRepository;
 import com.bb.focus.db.repository.CompanyAdminRepository;
-import com.bb.focus.db.repository.InterviewRepository;
 import com.bb.focus.db.repository.InterviewRoomRepository;
 import com.bb.focus.db.repository.ProcessRepository;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.criteria.CriteriaBuilder.In;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Random;
->>>>>>> backend/focus/src/main/java/com/bb/focus/api/service/CompanyAdminServiceImpl.java
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Service("companyAdminService")
 public class CompanyAdminServiceImpl implements CompanyAdminService {
@@ -42,14 +32,15 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
 
   @Autowired
   public CompanyAdminServiceImpl(CompanyAdminRepository companyAdminRepo
-                                ,ProcessRepository processRepo
-                                ,InterviewRoomRepository interviewRoomRepo
-                                ,ApplicantPassLogRepository applicantPassLogRepo){
+      , ProcessRepository processRepo
+      , InterviewRoomRepository interviewRoomRepo
+      , ApplicantPassLogRepository applicantPassLogRepo) {
     companyAdminRepository = companyAdminRepo;
     processRepository = processRepo;
     interviewRoomRepository = interviewRoomRepo;
     applicantPassLogRepository = applicantPassLogRepo;
   }
+
   @Override
   public CompanyAdmin createCompanyAdmin(CompanyAdminRegisterPostReq userRegisterInfo) {
     CompanyAdmin companyAdmin = new CompanyAdmin();
@@ -112,40 +103,45 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
     Long companyAdminId = companyAdminRepository.updateCompanyAdminByUserId(companyAdmin);
     return companyAdminId;
   }
+
   @Override
-  public int getAllEvaluationCount(Long companyAdminId){
-    CompanyAdmin companyAdmin=companyAdminRepository.findCompanyAdminById(companyAdminId);
+  public int getAllEvaluationCount(Long companyAdminId) {
+    CompanyAdmin companyAdmin = companyAdminRepository.findCompanyAdminById(companyAdminId);
     return companyAdmin.getEvaluatorList().size();
   }
+
   @Override
-  public int getAllApplicantCount(Long companyAdminId){
-    CompanyAdmin companyAdmin=companyAdminRepository.findCompanyAdminById(companyAdminId);
-    int applicantCount =0;
+  public int getAllApplicantCount(Long companyAdminId) {
+    CompanyAdmin companyAdmin = companyAdminRepository.findCompanyAdminById(companyAdminId);
+    int applicantCount = 0;
 
     List<Process> processes = companyAdmin.getProcessList();
-    for(Process process:processes){
-        applicantCount+=process.getApplicantList().size();
+    for (Process process : processes) {
+      applicantCount += process.getApplicantList().size();
     }
 
     return applicantCount;
   }
+
   @Override
-  public List<ProcessRes> getAllProcess(Long companyAdminId){
+  public List<ProcessRes> getAllProcess(Long companyAdminId) {
     List<ProcessRes> processResList = processRepository.findAllExpectedProcess(companyAdminId);
     return processResList;
   }
-  @Override
-  public List<InterviewRoomRes> getAllReservedInterview(Long processId){
-    Process process = processRepository.findById(processId).orElseThrow(IllegalAccessError::new);
-    Long cur_step = (long)process.getCurrentStep();
-    String processName = process.getName();
-    List<InterviewRoom> interviewRoomList=interviewRoomRepository.findByProcessNameAndInterviewRound(processName,cur_step);
-    List<InterviewRoomRes> interviewRoomResList= new ArrayList<>();
 
-    for(InterviewRoom interviewRoom:interviewRoomList){
-      if(interviewRoom.getStartTime().isAfter(LocalDateTime.now())) {
-          InterviewRoomRes interviewRoomRes = new InterviewRoomRes(interviewRoom);
-          interviewRoomResList.add(interviewRoomRes);
+  @Override
+  public List<InterviewRoomRes> getAllReservedInterview(Long processId) {
+    Process process = processRepository.findById(processId).orElseThrow(IllegalAccessError::new);
+    Long cur_step = (long) process.getCurrentStep();
+    String processName = process.getName();
+    List<InterviewRoom> interviewRoomList = interviewRoomRepository.findByProcessNameAndInterviewRound(
+        processName, cur_step);
+    List<InterviewRoomRes> interviewRoomResList = new ArrayList<>();
+
+    for (InterviewRoom interviewRoom : interviewRoomList) {
+      if (interviewRoom.getStartTime().isAfter(LocalDateTime.now())) {
+        InterviewRoomRes interviewRoomRes = new InterviewRoomRes(interviewRoom);
+        interviewRoomResList.add(interviewRoomRes);
       }
     }
 
@@ -154,18 +150,19 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
 
 
   @Override
-  public List<ApplicantLogRes> getAllInterviewPerPassApplicant(Long processId){
-    Process process=processRepository.findById(processId).orElseThrow(IllegalAccessError::new);
-    if(process == null) {
+  public List<ApplicantLogRes> getAllInterviewPerPassApplicant(Long processId) {
+    Process process = processRepository.findById(processId).orElseThrow(IllegalAccessError::new);
+    if (process == null) {
       return null;
     }
     int cur_step = process.getCurrentStep();
     String processName = process.getName();
-    List<ApplicantPassLog> applicantPassLogsList=applicantPassLogRepository.findByProcessNameAndStep(processName,cur_step);
+    List<ApplicantPassLog> applicantPassLogsList = applicantPassLogRepository.findByProcessNameAndStep(
+        processName, cur_step);
     List<ApplicantLogRes> applicantLogResList = new ArrayList<>();
 
-    for(ApplicantPassLog applicantPassLog:applicantPassLogsList){
-      if(applicantPassLog.getStatus() == Status.P){
+    for (ApplicantPassLog applicantPassLog : applicantPassLogsList) {
+      if (applicantPassLog.getStatus() == Status.P) {
         ApplicantLogRes applicantLogRes = new ApplicantLogRes(applicantPassLog);
         applicantLogResList.add(applicantLogRes);
       }
@@ -173,23 +170,24 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
 
     return applicantLogResList;
   }
+
   @Override
-  public List<ProcessRes> getFinishStepPerProcessInfo(Long companyId){
-    List<Process> processList=processRepository.findAllByCompanyAdminId(companyId);
+  public List<ProcessRes> getFinishStepPerProcessInfo(Long companyId) {
+    List<Process> processList = processRepository.findAllByCompanyAdminId(companyId);
     List<ProcessRes> processResList = new ArrayList<>();
-    for(Process process:processList){
-      if(process.getCurrentStep() > process.getInterviewCount()){
+    for (Process process : processList) {
+      if (process.getCurrentStep() > process.getInterviewCount()) {
         continue;
       }
-        for(Interview interview:process.getInterviewList()) {
-          if(process.getCurrentStep() == interview.getStep()){
-              if(LocalDateTime.now().isAfter(interview.getEndDate())){
-                  ProcessRes processRes =new ProcessRes();
-                  processRes.GetProcess(process);
-                  processResList.add(processRes);
-              }
+      for (Interview interview : process.getInterviewList()) {
+        if (process.getCurrentStep() == interview.getStep()) {
+          if (LocalDateTime.now().isAfter(interview.getEndDate())) {
+            ProcessRes processRes = new ProcessRes();
+            processRes.GetProcess(process);
+            processResList.add(processRes);
           }
         }
+      }
     }
 
     return processResList;
