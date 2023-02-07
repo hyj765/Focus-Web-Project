@@ -21,6 +21,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(value = "면접(N차) API", tags = {"Interview"})
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("*")
 @RequestMapping("/api/interview/round")
 public class InterviewController {
 
