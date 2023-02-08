@@ -39,6 +39,7 @@
               padding-right: 5px;
             "
           ></textarea>
+
           <button type="submit" style="padding-left: 5px; padding-right: 5px">
             전송
           </button>
