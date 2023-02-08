@@ -238,22 +238,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+// import { ref, onMounted } from 'vue';
+// import axios from 'axios';
 
-const notices = ref([]);
+// const notices = ref([]);
 
-onMounted(() => {
-  axios
-    .get('http://localhost:3000/notices')
-    .then(({ data }) => {
-      notices.value = data.notices.notices;
-      console.log(notices.value);
-    })
-    .catch(err => {
-      console.log(err.message);
-    });
-});
+// onMounted(() => {
+//   axios
+//     .get('http://localhost:3000/notices')
+//     .then(({ data }) => {
+//       notices.value = data.notices.notices;
+//       console.log(notices.value);
+//     })
+//     .catch(err => {
+//       console.log(err.message);
+//     });
+// });
 </script>
 
 <style lang="scss" scoped></style>

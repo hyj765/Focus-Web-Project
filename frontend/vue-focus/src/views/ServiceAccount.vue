@@ -17,6 +17,7 @@
                 <button
                   type="button"
                   class="inline-block rounded bg-blue-600 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg"
+                  @click="$emit('update:comp')"
                 >
                   계정 생성
                 </button>
@@ -248,6 +249,20 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
+
+defineEmits(['update:comp']);
+
+// const store = useStore();
+// const getCoporateInfos = () => {
+//   store.dispatch('getCorporateInfos');
+// };
+
+// onMounted(() => {
+//   getCoporateInfos();
+// });
+</script>
 
 <style lang="scss" scoped></style>
