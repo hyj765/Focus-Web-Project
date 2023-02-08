@@ -117,6 +117,12 @@ public class Applicant {
     @Column(length = 255)
     private String major;
 
+    @NotNull
+    private float totalCredit;
+
+    @NotNull
+    private float credit;
+
     @OneToMany(targetEntity = com.bb.focus.db.entity.applicant.ApplicantPassLog.class, mappedBy = "applicant")
     private List<ApplicantPassLog> applicantPassLogList = new ArrayList<>();
 

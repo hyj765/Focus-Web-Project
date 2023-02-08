@@ -59,4 +59,10 @@ public class ApplicantInfoReq {
 
   @ApiModelProperty(name="전공", example = "컴퓨터공학과")
   private String major;
+
+  @ApiModelProperty(name="학점 만점", example = "4.5")
+  private Float totalCredit;
+
+  @ApiModelProperty(name="학점", example = "3.5")
+  private Float credit;
 }

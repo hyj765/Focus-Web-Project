@@ -36,6 +36,12 @@ public class ApplicantRes {
   @ApiModelProperty(name="지원자 전공", example = "컴퓨터공학과")
   private String major;
 
+  @ApiModelProperty(name="학점 만점", example = "4.5")
+  private Float totalCredit;
+
+  @ApiModelProperty(name="학점", example = "3.5")
+  private Float credit;
+
   public ApplicantRes(Applicant applicant){
     id = applicant.getId();
     name = applicant.getName();
@@ -43,9 +49,11 @@ public class ApplicantRes {
     code = applicant.getCode();
     image = applicant.getCode();
     major = applicant.getMajor();
+    totalCredit = applicant.getTotalCredit();
+    credit = applicant.getCredit();
   }
 
-  public ApplicantRes(Long id, String name, String userId, String code, String image, String tel, String email, String major) {
+  public ApplicantRes(Long id, String name, String userId, String code, String image, String tel, String email, String major, float totalCredit, float credit) {
     this.id = id;
     this.name = name;
     this.userId = userId;
@@ -54,6 +62,8 @@ public class ApplicantRes {
     this.tel = tel;
     this.email = email;
     this.major = major;
+    this.totalCredit = totalCredit;
+    this.credit = credit;
   }
 
   public static ApplicantRes of(Applicant user){
