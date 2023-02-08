@@ -10,7 +10,7 @@ public class EvaluationSheetReq {
   @Setter
   public static class Create{
     @ApiModelProperty(name = "평가지 제목", example = "제목제목")
-    private String sheet;
+    private String sheetName;
   }
 
 }

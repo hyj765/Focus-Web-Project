@@ -2,8 +2,6 @@ package com.bb.focus.api.controller;
 
 import com.bb.focus.api.request.EvaluationItemReq;
 import com.bb.focus.api.request.EvaluationSheetReq;
-import com.bb.focus.api.request.EvaluationSheetReq.Create;
-import com.bb.focus.api.request.EvaluatorInfoReq;
 import com.bb.focus.api.response.EvaluationSheetItemRes;
 import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.EvaluationPaperService;
@@ -45,7 +43,7 @@ public class EvaluationPaperController {
         FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
         Long companyAdminId = userDetails.getUser().getId();
 
-        evaluationService.CreateEvaluationSheet(companyAdminId, evaluationSheetReq.getSheet());
+        evaluationService.CreateEvaluationSheet(companyAdminId, evaluationSheetReq.getSheetName());
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
     @ApiOperation(value="평가지 아이템 생성", notes="기업관리자로부터 입력받은 정보로 평가지를 생성한다.")
