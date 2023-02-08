@@ -126,14 +126,13 @@
 
 
       <div class="flex justify-center">
-        <!-- <button
-          @click="changeCurrentComp(InterviewRoom)"
+        <button
           type="button"
-          class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+          class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+          @click="goSettingRoom"
         >
-          Red
-        </button> -->
-        <InterviewRoom></InterviewRoom>
+          입장
+        </button>
       </div>
       <!-- 
 # 현재 인원
@@ -145,10 +144,15 @@
 
 <script setup>
 import { shallowRef } from 'vue';
+import router from '@/router';
+import { useRouter } from 'vue-router';
+
 import InterviewRoom from './InterviewDisplay/InterviewRoom.vue';
 
 const currentComp = shallowRef(InterviewRoom);
 const changeCurrentComp = comp => (currentComp.value = comp);
+
+const goSettingRoom = () => router.push({ name: 'InterviewRoom' });
 </script>
 
 <style lang="scss" scoped></style>
