@@ -1,9 +1,15 @@
 <template>
   <div>
-    <div class="videoInput">
-      <video class="myVideo" autoplay :poster="posterImgSrc"></video>
+    <div class="videoInput" style="display: flex; margin-left: 13%">
+      <video
+        class="myVideo"
+        autoplay
+        :poster="posterImgSrc"
+        style="display: flex"
+      ></video>
+      <img src="~@/assets/guide_image.jpg" alt="Guide_Image" />
     </div>
-    <div class="text-center mt-3">
+    <div class="text-center">
       <button class="btn btn-secondary" @click="onClickCameraBtn">
         <font-awesome-icon :icon="['fas', cameraIcon]" />
       </button>
@@ -13,7 +19,7 @@
       </button>
 
       <button class="btn btn-secondary" @click="selectsOn = !selectsOn">
-        <img src="~@/assets/settings.png" alt="" class="setting" />
+        <img src="~@/assets/settings.png" alt="setting" class="setting" />
         <!-- <font-awesome-icon :icon="['fas', 'cog']" /> -->
       </button>
 
@@ -236,10 +242,10 @@ export default {
 </script>
 <style scoped>
 video {
-  margin-top: 10rem;
+  margin-top: 0;
   border-radius: 1rem;
   justify-content: center;
-  width: 100%;
+  width: 50%;
   aspect-ratio: 30 / 19;
   overflow: hidden;
   object-fit: cover;
@@ -260,6 +266,7 @@ button {
 }
 
 .setting {
+  margin-left: 40%;
   width: 14px;
   height: 14px;
   object-fit: cover;

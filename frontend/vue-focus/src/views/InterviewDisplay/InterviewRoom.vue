@@ -3,11 +3,11 @@
   <div id="main-container" class="container">
     <div v-if="!session" id="join">
       <div>
-        <!-- <PracticeRoom /> -->
         <SwitchCamera @set-device="setDevice($event)" />
         <div class="form-group">
+          <h3>- 이름과 코드를 입력해주세요 -</h3>
           <p>
-            <label>NAME</label>
+            <label>이름 : </label>
             <input
               v-model="myUserName"
               class="form-control"
@@ -16,7 +16,7 @@
             />
           </p>
           <p>
-            <label>ROOM CODE</label>
+            <label>면접방 코드 : </label>
             <input
               v-model="mySessionId"
               class="form-control"
@@ -25,9 +25,22 @@
             />
           </p>
           <p class="text-center">
-            <button class="btn btn-lg btn-success" @click="joinSession()">
-              참여하기
+            <button
+              type="button"
+              class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+              @click="joinSession()"
+            >
+              입장
             </button>
+
+            <router-link :to="{ name: 'Evaluator' }">
+              <button
+                type="button"
+                class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+              >
+                뒤로
+              </button>
+            </router-link>
           </p>
         </div>
       </div>
@@ -171,6 +184,7 @@ import UserChat from './components/UserChat';
 import MainScreen from './components/MainScreen.vue';
 
 import SwitchCamera from './components/SwitchCamera.vue';
+import router from '@/router';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
