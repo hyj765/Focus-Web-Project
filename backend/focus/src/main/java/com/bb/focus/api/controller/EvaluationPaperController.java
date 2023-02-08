@@ -10,6 +10,8 @@ import com.bb.focus.common.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,8 +46,12 @@ public class EvaluationPaperController {
         FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
         Long companyAdminId = userDetails.getUser().getId();
 
-        evaluationService.CreateEvaluationSheet(companyAdminId, evaluationSheetReq.getSheetName());
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        Long id = evaluationService.CreateEvaluationSheet(companyAdminId, evaluationSheetReq.getSheetName());
+
+        Map<String, Long> result = new HashMap<>();
+        result.put("evaluation sheet id", id);
+
+        return ResponseEntity.status(200).body(result);
     }
     @ApiOperation(value="평가지 아이템 생성", notes="기업관리자로부터 입력받은 정보로 평가지를 생성한다.")
     @PostMapping("/sheets/items/{evaluation-sheet-id}")

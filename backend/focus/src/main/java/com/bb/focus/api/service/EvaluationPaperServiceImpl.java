@@ -44,15 +44,15 @@ public class EvaluationPaperServiceImpl implements EvaluationPaperService {
 
 
     @Transactional
-    public boolean CreateEvaluationSheet(Long companyId, String sheetInfo){
+    public Long CreateEvaluationSheet(Long companyId, String sheetInfo){
         EvaluationSheet evaluationSheet = new EvaluationSheet();
         CompanyAdmin companyAdmin = companyRepo.findById(companyId).orElseThrow(IllegalAccessError::new);
         companyAdmin.addEvaluationSheet(evaluationSheet);
         evaluationSheet.setName(sheetInfo);
         // validation check
-        sheetRepo.save(evaluationSheet);
+        EvaluationSheet saved = sheetRepo.save(evaluationSheet);
 
-        return true;
+        return saved.getId();
     };
     @Transactional
     public boolean CreateEvaluationItem(Long sheetId, EvaluationItemReq evaluationItemReq){
