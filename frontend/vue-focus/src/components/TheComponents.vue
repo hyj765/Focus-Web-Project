@@ -5,7 +5,7 @@
       <div>
         <button
           type="button"
-          class="inline-block leading-normal text-white uppercase transition duration-150 ease-in-out bg-blue-600 rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg w-9 h-9"
+          class="inline-block leading-normal text-white uppercase transition duration-150 ease-in-out bg-indigo-600 rounded-full shadow-md hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg w-9 h-9"
         >
           <svg
             aria-hidden="true"
@@ -100,7 +100,7 @@
       <div class="flex justify-center space-x-2">
         <button
           type="button"
-          class="inline-block rounded bg-blue-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg"
+          class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
         >
           Button
         </button>
@@ -115,7 +115,7 @@
           class="flex items-center justify-between px-3 py-2 bg-white border-b border-gray-200 rounded-t-lg bg-clip-padding"
         >
           <div>
-            <i class="text-5xl text-blue-700 bx bxs-user-circle"></i>
+            <i class="text-5xl text-indigo-700 bx bxs-user-circle"></i>
             <div>
               <p>minofficial</p>
             </div>
@@ -140,7 +140,7 @@
             <div class="flex justify-center space-x-2">
               <button
                 type="button"
-                class="inline-block rounded bg-blue-600 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg"
+                class="inline-block rounded bg-indigo-600 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
               >
                 계정 생성
               </button>

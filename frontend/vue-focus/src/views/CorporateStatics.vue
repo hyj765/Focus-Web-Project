@@ -15,7 +15,6 @@
             두나무 개발자
           </h3>
         </div>
-        <div></div>
       </div>
     </div>
   </div>
