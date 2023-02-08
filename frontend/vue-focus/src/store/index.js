@@ -46,5 +46,16 @@ export default createStore({
     logout({ commit }) {
       commit('LOGOUT');
     },
+    getCorporateInfos() {
+      console.log('get corporate infos!');
+      console.log(this.state.user.accessToken);
+      axios
+        .get(`${BASE_URL}/serviceusers/accounts`, {
+          Authorization: `Bearer ${this.state.user.accessToken}`,
+        })
+        .then(res => {
+          console.log(res.data);
+        });
+    },
   },
 });
