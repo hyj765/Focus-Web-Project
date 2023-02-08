@@ -21,7 +21,7 @@ spring:
       pageable:
         one-indexed-parameters: true
   redis:
-    host: localhost
+    host: i8a106.p.ssafy.io
     port: 6379
   mvc:
     pathmatch:
