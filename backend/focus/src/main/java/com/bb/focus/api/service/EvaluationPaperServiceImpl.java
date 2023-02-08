@@ -86,10 +86,11 @@ public class EvaluationPaperServiceImpl implements EvaluationPaperService {
             return false;
         }
         evaluationSheet.setName(modifyName);
+        sheetRepo.save(evaluationSheet);
         return true;
     }
     @Transactional
-    public boolean modifyUserEvaluationItem(Long evaluationSheetId, Long evaluationItemId, byte modifyRange, String modifyContent){
+    public boolean modifyEvaluationItem(Long evaluationSheetId, Long evaluationItemId, byte modifyRange, String modifyContent){
         // request에 item 추가해야함.
         if(evaluationItemId == null || evaluationSheetId == null || modifyRange < 0 || modifyContent == null){
             return false;
