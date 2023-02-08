@@ -3,11 +3,11 @@
   <div id="main-container" class="container">
     <div v-if="!session" id="join">
       <div>
+        <!-- <PracticeRoom /> -->
         <SwitchCamera @set-device="setDevice($event)" />
         <div class="form-group">
-          <h3>- 이름과 코드를 입력해주세요 -</h3>
           <p>
-            <label>이름 : </label>
+            <label>성함 : </label>
             <input
               v-model="myUserName"
               class="form-control"
@@ -16,7 +16,7 @@
             />
           </p>
           <p>
-            <label>면접방 코드 : </label>
+            <label>방 코드 : </label>
             <input
               v-model="mySessionId"
               class="form-control"
@@ -32,15 +32,14 @@
             >
               입장
             </button>
-
             <router-link :to="{ name: 'Evaluator' }">
               <button
                 type="button"
                 class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
               >
                 뒤로
-              </button>
-            </router-link>
+              </button></router-link
+            >
           </p>
         </div>
       </div>
@@ -49,8 +48,52 @@
     <!-- ----------------------------------------------------------- 채팅방 들어가면 나오는 화면 ------------------------------------------------------------ -->
 
     <div v-if="session" id="session">
-      <!------------------- 화면 출력 Start -------------------->
+      <!------------------- 채팅 기능 Start ---------------------->
+      <div
+        v-if="chatmodal == true"
+        class="black-bg"
+        style="
+          position: absolute;
+          left: 990px;
+          padding-right: 5px;
+          padding-top: 0px;
+        "
+      >
+        <UserChat
+          id="user-chat"
+          :chat-log="chatLog"
+          value="보내기"
+          @send-message="sendMessage"
+        />
+      </div>
+      <!------------------- 채팅 기능 End ------------------------>
 
+      <!------------------- 참가자 목록 Start -------------------->
+      <div
+        v-if="participantsmodal == true"
+        class="black-bg"
+        style="position: absolute; left: 1096px"
+      >
+        <div class="participants-div" style="width: 25rem; height: 30rem">
+          <div class="right_label_participant white-bg">
+            <li style="text-align: center; font-size: 18px">참가자 목록</li>
+            <br />
+            <hr />
+          </div>
+          <div class="participant_list">
+            <!-- 참가자 리스트 -->
+            <UserList :stream-manager="publisher" />
+            <UserList
+              v-for="sub in subscribers"
+              :key="sub.stream.connection.connectionId"
+              :stream-manager="sub"
+            />
+          </div>
+        </div>
+      </div>
+      <!-------------------- 참가자 목록 End --------------------->
+
+      <!------------------- Sub Screen 출력 Start -------------------->
       <div id="video-container" class="">
         <div v-if="publisher">
           <user-video
@@ -78,9 +121,13 @@
           </div>
         </div>
       </div>
+      <!------------------- Sub Screen 출력 End -------------------->
 
       <div id="main-video">
+        <!------------------- Mian Screen 출력 Start ------------------->
         <MainScreen :stream-manager="mainStreamManager" />
+        <!-------------------- Mian Screen 출력 End -------------------->
+
         <div id="tool-bar">
           <!------------------- Camera/Voice On/Off Start ------------------->
           <div id="tools">
@@ -134,35 +181,36 @@
             />
 
             <img
+              v-if="chatmodal"
               id="openchat_img"
-              src="~@/assets/openchat.png"
+              src="~@/assets/closechat.png"
               @click="startChat"
+            />
+
+            <img
+              v-else
+              id="closechat_img"
+              src="~@/assets/openchat.png"
+              @click="closeChat"
+            />
+
+            <img
+              v-if="participantsmodal"
+              id="closeparticipants_img"
+              src="~@/assets/closeparticipants.png"
+              @click="checkParticipants"
+            />
+
+            <img
+              v-else
+              id="checkparticipants_img"
+              src="~@/assets/checkparticipants.png"
+              @click="closeParticipants"
             />
           </div>
           <!------------------- Camera/Voice On/Off End ---------------------->
         </div>
       </div>
-      <!------------------- 화면 출력 End ----------------------->
-
-      <!------------------- 채팅 기능 Start ---------------------->
-      <div v-if="chatmodal == true" class="black-bg">
-        <div class="side_chat">
-          <UserChat
-            id="user-chat"
-            :chat-log="chatLog"
-            value="보내기"
-            @send-message="sendMessage"
-          />
-          <button
-            class="btn btn-primary"
-            style="position: absolute; right: 0px; top: 0px"
-            @click="closeChat"
-          >
-            닫기
-          </button>
-        </div>
-      </div>
-      <!------------------- 채팅 기능 End ------------------------>
     </div>
   </div>
 </template>
@@ -184,7 +232,8 @@ import UserChat from './components/UserChat';
 import MainScreen from './components/MainScreen.vue';
 
 import SwitchCamera from './components/SwitchCamera.vue';
-import router from '@/router';
+
+import UserList from './components/UserList.vue';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -192,7 +241,7 @@ const OPENVIDU_SERVER_URL = 'https://' + 'i8a106.p.ssafy.io';
 const OPENVIDU_SERVER_SECRET = 'cKlIVFkVgNinXpF';
 
 export default {
-  name: 'InterviewRoom',
+  name: 'App',
 
   components: {
     // <------------------- 화면 출력 Start -------------------->
@@ -203,9 +252,17 @@ export default {
     UserChat,
     // <------------------- 채팅 기능 End ---------------------->
 
+    // <---------------- Mian Screen 출력 Start ---------------->
     MainScreen,
+    // <----------------- Mian Screen 출력 End ----------------->
 
+    // <-------------- Camera/Microphoe 변경 Start ------------->
     SwitchCamera,
+    // <--------------- Camera/Microphoe 변경 End -------------->
+
+    // <------------------ 참가자 목록 Start ------------------->
+    UserList,
+    // <------------------- 참가자 목록 End -------------------->
   },
 
   data() {
@@ -234,11 +291,17 @@ export default {
       chatLog: [],
       chatmodal: false,
       // <------------------- 채팅 기능 End ---------------------->
-      active: false,
 
-      // Speech Detection
+      active: false, // tool bar
+
+      // <------------------ 참가자 목록 Start ------------------->
+      participantsmodal: false,
+      // <------------------- 참가자 목록 End -------------------->
+
+      // <---------------- 발언자 하이라이팅 Start ---------------->
       isSpeakList: [],
       isSpeak: false,
+      // <----------------- 발언자 하이라이팅 End ----------------->
     };
   },
 
@@ -282,6 +345,14 @@ export default {
         this.chatLog.push([event.data, JSON.parse(event.from.data)]);
       });
       // <------------------- 채팅 기능 End ---------------------->
+
+      // this.session.on('publisherStartSpeaking', (event) => {
+      //   console.log('User' + event.connection.connectionId + ' start speaking');
+      // });
+
+      // this.session.on('publisherStopSpeaking', (event) => {
+      //   console.log('User' + event.connection.connectionId + ' stop speaking');
+      // });
 
       // Speech Start Detection
       this.session.on('publisherStartSpeaking', event => {
@@ -341,6 +412,7 @@ export default {
     },
 
     leaveSession() {
+      // --- Leave the session by calling 'disconnect' method over the Session object ---
       if (this.session) this.session.disconnect();
 
       this.session = undefined;
@@ -363,6 +435,7 @@ export default {
       );
     },
 
+    // See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-openviduapisessions
     createSession(sessionId) {
       return new Promise((resolve, reject) => {
         axios
@@ -400,6 +473,7 @@ export default {
       });
     },
 
+    // See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-openviduapisessionsltsession_idgtconnection
     createToken(sessionId) {
       return new Promise((resolve, reject) => {
         axios
@@ -519,10 +593,18 @@ export default {
       this.closecamera = !this.closecamera;
     },
     startChat() {
-      this.chatmodal = true;
+      this.chatmodal = !this.chatmodal;
     },
     closeChat() {
-      this.chatmodal = false;
+      this.chatmodal = !this.chatmodal;
+    },
+
+    checkParticipants() {
+      this.participantsmodal = !this.participantsmodal;
+    },
+
+    closeParticipants() {
+      this.participantsmodal = !this.participantsmodal;
     },
     // <------------------- 비디오/보이스 On/Off End ------------------->
   },
@@ -549,6 +631,7 @@ div {
 #video-container video {
   display: inline-block;
   position: relative;
+  /* float: left; */
   width: 50%;
   cursor: pointer;
 }
@@ -556,6 +639,7 @@ div {
 #video-container video + div {
   float: left;
   width: 50%;
+  /* position: relative; */
   margin-left: -50%;
 }
 
@@ -606,6 +690,39 @@ div {
   justify-content: center;
   height: 50%;
 }
+
+/* #tools>img{
+		width: 8%;
+	}
+
+	#chat-div{
+		position: absolute;
+		left: 65%;
+		bottom: 20%;
+		background-color: bisque;
+
+		width: 30%;
+		height: 70%;
+	} */
+
+.participants-div {
+  background-color: white;
+}
+
+/* #chat_input{
+		position: absolute;
+		display: flex;
+		bottom: 0;
+		width: 100%;
+	}
+
+	#chat_input>input{
+		width: 95%;
+	}
+
+	#chat_input>img{
+		width: 5%;
+	} */
 
 #user-chat {
   margin-left: 1rem;
