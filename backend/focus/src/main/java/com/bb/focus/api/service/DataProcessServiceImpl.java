@@ -165,23 +165,30 @@ public class DataProcessServiceImpl implements DataProcessService{
         return applicantStatisticLog.getAvgApplicantAge();
     }
 
-    //합격자의 테이블 로그를 가져오는 함수.
-    public Map<String,Integer> GetResultPerApplicant(long processId){
-        Map<String, Integer> ResultPerApplicant = null;
-        // 보류
 
-
-        return null;
+    // 통계 테이블에서 평균 학점 가져오는 함수
+    public float GetAvgGradeApplicant(long processId){
+        List<Applicant> applicantList = applicantRepo.findAllByProcessId(processId);
+        float avgGrade = 0;
+        int numberOfApplicant = applicantList.size();
+        for(Applicant applicant:applicantList){
+            if(applicant.getTotalCredit()  < 4.5){
+                avgGrade += applicant.getCredit() + 0.3;
+            }else{
+                avgGrade += applicant.getCredit();
+            }
+        }
+        return (avgGrade / numberOfApplicant);
     }
 
-    // PDF의 형태로 통계 데이터를 반환해주는 함수.
-    public MultipartFile ExtractStaticResultIntoPDF(){
-
-
-
-
-        return null;
-    }
+    // PDF의 형태로 통계 데이터를 반환해주는 함수. 취소
+//    public MultipartFile ExtractStaticResultIntoPDF(){
+//
+//
+//
+//
+//        return null;
+//    }
 
     @Transactional
     public boolean CreateStatisticTable(long processId){

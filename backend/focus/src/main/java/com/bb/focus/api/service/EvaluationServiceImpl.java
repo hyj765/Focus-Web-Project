@@ -86,9 +86,10 @@ public class EvaluationServiceImpl implements EvaluationService{
     return true;
   }
 
+
   @Override
-  public boolean UpdateApplicantEvaluationMemo(Long EvaluatorId,String memo) {
-    ApplicantEvaluator applicantEvaluator=applicantEvaluatorRepo.findById(EvaluatorId).orElseThrow(IllegalAccessError::new);
+  public boolean UpdateApplicantEvaluationMemo(Long applicantEvaluatorId,String memo) {
+    ApplicantEvaluator applicantEvaluator=applicantEvaluatorRepo.findById(applicantEvaluatorId).orElseThrow(IllegalAccessError::new);
     applicantEvaluator.setMemo(memo);
     applicantEvaluatorRepo.save(applicantEvaluator);
     return false;
@@ -154,10 +155,10 @@ public class EvaluationServiceImpl implements EvaluationService{
     if(evaluationResult == null) {
       return false;
     }
-
     evaluationResult.setContent(evaluationResultReq.getContent());
     evaluationResult.setScore(evaluationResultReq.getScore());
     evaluationResultRepo.save(evaluationResult);
+
     return true;
 
   }
