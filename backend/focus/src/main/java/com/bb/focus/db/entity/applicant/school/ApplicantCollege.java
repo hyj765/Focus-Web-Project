@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class ApplicantCollege {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "applicant_college_id")
     private Long id;
 

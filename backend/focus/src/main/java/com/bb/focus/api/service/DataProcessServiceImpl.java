@@ -61,7 +61,7 @@ public class DataProcessServiceImpl implements DataProcessService{
         List<SchoolDto> schoolDtoList = new ArrayList<>();
         String[] f;
         String line;
-        BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream(),"UTF-8"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream(),"EUC-KR"));
 
         while ((line = br.readLine()) != null) {
             f = line.split(",");
@@ -96,9 +96,17 @@ public class DataProcessServiceImpl implements DataProcessService{
             Row row = worksheet.getRow(i);
             String[] rowData = new String[columns];
             for(int j=0; j<columns; ++j){
-                rowData[j] = row.getCell(j).getStringCellValue();
+                Cell cell  = row.getCell(j);
+
                 if(rowData[j] == null || rowData[j].equals("")){
                     rowData[j] = "null";
+                    continue;
+                }
+
+                if(cell.getCellType() == CellType.NUMERIC){
+                    rowData[j] = String.valueOf(row.getCell(j).getNumericCellValue());
+                } else{
+                    rowData[j] = row.getCell(j).getStringCellValue();
                 }
             }
             Exceldata.add(rowData);
