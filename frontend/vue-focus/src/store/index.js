@@ -1,8 +1,7 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
 
-// const BASE_URL = 'https://i8a106.p.ssafy.io/api';
-const BASE_URL = 'http://localhost:8082/api';
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 
 export default createStore({
   state: {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>EMIT testing</h2>
+    <h2>기업관리자의 평가자 계정 생성</h2>
   </div>
 </template>
 

@@ -125,6 +125,7 @@
               <button
                 type="button"
                 class="inline-block h-10 px-6 font-medium leading-tight text-white uppercase transition duration-150 ease-in-out bg-blue-700 rounded shadow-md text-md hover:bg-blue-800 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg"
+                @click="$emit('update:comp')"
               >
                 계정 할당
               </button>
@@ -184,7 +185,7 @@
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody v-for="(evaluator, index) in evaluators" :key="index">
                 <tr
                   class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
                 >
@@ -196,125 +197,37 @@
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    사진
+                    image url: {{ evaluator.image }}
                   </td>
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    김민경
+                    {{ evaluator.name }}
                   </td>
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    2846172
+                    {{ evaluator.code }}
                   </td>
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    인사부
+                    {{ evaluator.department }}
                   </td>
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    대리
+                    {{ evaluator.position }}
                   </td>
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    010-7337-3460
+                    {{ evaluator.tel }}
                   </td>
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    minofficial13@gmail.com
-                  </td>
-                </tr>
-                <tr
-                  class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
-                >
-                  <td
-                    class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    <i class="text-lg bx bx-check-square"></i>
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    사진
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    김민경
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    2846172
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    인사부
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    대리
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    010-7337-3460
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    minofficial13@gmail.com
-                  </td>
-                </tr>
-                <tr
-                  class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
-                >
-                  <td
-                    class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    <i class="text-lg bx bx-check-square"></i>
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    사진
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    김민경
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    2846172
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    인사부
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    대리
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    010-7337-3460
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    minofficial13@gmail.com
+                    {{ evaluator.email }}
                   </td>
                 </tr>
               </tbody>
@@ -329,6 +242,70 @@
 <script setup>
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/20/solid';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+defineEmits(['update:comp']);
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+
+const evaluators = ref(null);
+// 총 페이지 값 (페이징 구현할 때 필요할 것으로 예상)
+let totalPageCount = 0;
+const pageSize = 5;
+// 페이징 컴포넌트에 따라 달라지는 반응형으로 교체
+const pageNumber = 1;
+
+const getEvaluatorsInfo = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  // 1. 기업관리자 id값 요청
+  // 임의로 아이디 값 배정
+  const companyId = 2;
+  // axios
+  //   .get(`${BASE_URL}/companyusers/me`, {
+  //     Authorization: `Bearer ${user.accessToken}`,
+  //   })
+  //   .then(res => {
+  //     console.log('id: ', res);
+  //   });
+
+  // 2. 기업관리자 id값을 바탕으로 평가자 계정 수 가져오기
+  let evaluatorCount = 0;
+  let remainder = 0;
+  axios
+    .get(`${BASE_URL}/companyusers/evaluatorCount/${companyId}`)
+    .then(res => {
+      // 필요한 총 페이지 수 계산
+      evaluatorCount = res.data;
+      remainder = evaluatorCount % pageSize;
+      if (remainder === 0) {
+        totalPageCount = parseInt(evaluatorCount / pageSize);
+      } else {
+        totalPageCount = parseInt(evaluatorCount / pageSize) + 1;
+      }
+      console.log(totalPageCount);
+    });
+
+  // 3. 조회
+  axios
+    .get(`${BASE_URL}/companyusers/evaluators/list`, {
+      params: {
+        size: pageSize,
+        page: pageNumber,
+      },
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      // console.log('evaluators list: ', res.data.content);
+      evaluators.value = res.data.content;
+      console.log('evaluators: ', evaluators.value);
+    });
+};
+
+onMounted(() => {
+  getEvaluatorsInfo();
+});
 </script>
 
 <style lang="scss" scoped></style>
