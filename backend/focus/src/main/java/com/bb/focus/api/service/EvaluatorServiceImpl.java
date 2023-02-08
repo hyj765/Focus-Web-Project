@@ -45,7 +45,6 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     evaluator.setPosition(evaluatorInfo.getPosition());
     evaluator.setTel(evaluatorInfo.getTel());
     evaluator.setEmail(evaluatorInfo.getEmail());
-    evaluator.setImage(evaluatorInfo.getImage());
 
     validateDuplicateEvaluator(evaluator);
 
@@ -100,7 +99,6 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     evaluator.setPosition(evaluatorInfo.getPosition());
     evaluator.setTel(evaluatorInfo.getTel());
     evaluator.setEmail(evaluatorInfo.getEmail());
-    evaluator.setImage(evaluatorInfo.getImage());
   }
 
   @Transactional

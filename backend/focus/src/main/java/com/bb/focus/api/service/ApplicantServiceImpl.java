@@ -56,10 +56,8 @@ public class ApplicantServiceImpl implements ApplicantService{
     applicant.setCode(applicantInfoReq.getCode());
     applicant.setGender(applicantInfoReq.getGender());
     applicant.setBirth(applicantInfoReq.getBirth());
-    applicant.setImage(applicantInfoReq.getImage());
     applicant.setEmail(applicantInfoReq.getEmail());
     applicant.setTel(applicantInfoReq.getTel());
-    applicant.setResume(applicantInfoReq.getResume());
     applicant.setDegree(applicantInfoReq.getDegree());
     applicant.setAwardCount(applicantInfoReq.getAwardCount());
     applicant.setActivityCount(applicantInfoReq.getActivityCount());
@@ -134,10 +132,8 @@ public class ApplicantServiceImpl implements ApplicantService{
     applicant.setCode(applicantInfoReq.getCode());
     applicant.setGender(applicantInfoReq.getGender());
     applicant.setBirth(applicantInfoReq.getBirth());
-    applicant.setImage(applicantInfoReq.getImage());
     applicant.setEmail(applicantInfoReq.getEmail());
     applicant.setTel(applicantInfoReq.getTel());
-    applicant.setResume(applicantInfoReq.getResume());
     applicant.setDegree(applicantInfoReq.getDegree());
     applicant.setAwardCount(applicantInfoReq.getAwardCount());
     applicant.setActivityCount(applicantInfoReq.getActivityCount());
