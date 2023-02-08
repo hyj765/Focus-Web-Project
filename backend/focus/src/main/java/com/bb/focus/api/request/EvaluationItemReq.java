@@ -10,8 +10,6 @@ import lombok.Setter;
 @ApiModel("EvaluationItemReq")
 public class EvaluationItemReq {
 
-    @ApiModelProperty(name="평가항목 시퀀스 넘버", example = "1")
-    private Long id;
     @ApiModelProperty(name="평가 항목이름", example = "성실성")
     private String content;
 
