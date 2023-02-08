@@ -7,15 +7,18 @@ import com.bb.focus.api.request.EvaluatorInfoReq;
 import com.bb.focus.api.response.EvaluationSheetItemRes;
 import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.EvaluationPaperService;
+import com.bb.focus.common.auth.FocusUserDetails;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Api(value = "평가지 API", tags = {"EvaluationPaper"})
 @RestController
@@ -34,11 +37,15 @@ public class EvaluationPaperController {
 
 
 
-    @PostMapping("/sheets/{company-id}")
+    @PostMapping("/sheets")
     public ResponseEntity<?> CreateSheet(
-        @PathVariable(name="company-id")Long companyId,
+        @ApiIgnore Authentication authentication,
         @RequestBody @ApiParam(value = "평가지 이름", required = true) EvaluationSheetReq.Create evaluationSheetReq){
-        evaluationService.CreateEvaluationSheet(companyId, evaluationSheetReq.getSheet());
+
+        FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
+        Long companyAdminId = userDetails.getUser().getId();
+
+        evaluationService.CreateEvaluationSheet(companyAdminId, evaluationSheetReq.getSheet());
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
     @ApiOperation(value="평가지 아이템 생성", notes="기업관리자로부터 입력받은 정보로 평가지를 생성한다.")
