@@ -4,6 +4,7 @@ import ServiceHomeView from '@/views/ServiceHomeView';
 import CorporateHomeView from '@/views/CorporateHomeView';
 import EvaluatorHomeView from '@/views/EvaluatorHomeView';
 import ApplicantHomeView from '@/views/ApplicantHomeView';
+import InterviewRoom from '@/views/InterviewDisplay/InterviewRoom';
 
 const routes = [
   {
@@ -34,6 +35,11 @@ const routes = [
     name: 'Applicant',
     component: ApplicantHomeView,
     // beforeEnter: [checkLogin],
+  },
+  {
+    path: '/interviewroom',
+    name: 'InterviewRoom',
+    component: InterviewRoom,
   },
 ];
 
