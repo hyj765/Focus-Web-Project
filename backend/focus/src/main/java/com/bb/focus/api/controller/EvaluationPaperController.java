@@ -6,6 +6,7 @@ import com.bb.focus.api.response.EvaluationSheetItemRes;
 import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.EvaluationPaperService;
 import com.bb.focus.common.auth.FocusUserDetails;
+import com.bb.focus.common.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -44,7 +45,7 @@ public class EvaluationPaperController {
         Long companyAdminId = userDetails.getUser().getId();
 
         evaluationService.CreateEvaluationSheet(companyAdminId, evaluationSheetReq.getSheetName());
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
     @ApiOperation(value="평가지 아이템 생성", notes="기업관리자로부터 입력받은 정보로 평가지를 생성한다.")
     @PostMapping("/sheets/items/{evaluation-sheet-id}")
@@ -54,7 +55,7 @@ public class EvaluationPaperController {
 
         evaluationService.CreateEvaluationItem(sheetId,evaluationItemReq);
 
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
 
@@ -118,7 +119,7 @@ public class EvaluationPaperController {
     @DeleteMapping("/sheets/deleteitem/{sheetitem-id}")
     public ResponseEntity<?> DeleteEvaluationSheetItem(@PathVariable(name="sheetitem-id") Long itemId){
         evaluationService.RemoveEvaluationItem(itemId);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
 }
