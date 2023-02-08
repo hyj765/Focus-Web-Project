@@ -81,7 +81,7 @@ public class ServiceAdminController {
     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
   }
 
-  @PostMapping("/accounts/")
+  @PostMapping("/accounts")
   @ApiOperation(value = "기업 관리자 계정 생성", notes = "<strong>아이디와 패스워드</strong>를 통해 기업관리자의 계정을 생성해준다.")
   @ApiResponses({
       @ApiResponse(code = 200, message = "성공"),
@@ -97,7 +97,7 @@ public class ServiceAdminController {
     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
   }
 
-  @GetMapping("/accounts/")
+  @GetMapping("/accounts")
   @ApiOperation(value = "기업 계정 리스트 정보 조회", notes = "서비스 관리자가 조회할 수 있으며, 등록되어 있는 기업 계정 리스트 정보를 응답한다.")
   @ApiResponses({
       @ApiResponse(code = 200, message = "성공"),
