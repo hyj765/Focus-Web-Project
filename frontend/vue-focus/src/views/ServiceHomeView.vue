@@ -45,15 +45,8 @@
                 ><i class="bx bx-bell"></i
               ></span>
             </li>
-            <!-- 로그아웃 -->
-            <li class="bg-white/60 rounded-lg" @click="logout()">
-              <span
-                class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
-                ><i class="bx bx-heart"></i
-              ></span>
-            </li>
             <!-- # 프로필 -->
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center space-x-2 pl-2">
               <img
                 class="h-8 rounded-full"
                 src="http://www.gravatar.com/avatar/2acfb745ecf9d4dccb3364752d17f65f?s=260&d=mp"
@@ -65,6 +58,13 @@
               >
                 James Smith
               </h4>
+              <!-- 로그아웃 -->
+              <li class="bg-white/60 rounded-lg" @click="logout()">
+                <span
+                  class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
+                  ><i class="bx bx-log-out"></i
+                ></span>
+              </li>
             </div>
           </ul>
         </div>

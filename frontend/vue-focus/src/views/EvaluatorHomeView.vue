@@ -46,6 +46,13 @@
               >
                 James Smith
               </h4>
+              <!-- 로그아웃 -->
+              <li class="bg-white/60 rounded-lg" @click="logout()">
+                <span
+                  class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
+                  ><i class="bx bx-log-out"></i
+                ></span>
+              </li>
             </div>
           </ul>
         </div>
@@ -112,6 +119,8 @@
 
 <script setup>
 import { ref, shallowRef } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 import EvaluatorDashboard from './EvaluatorDashboard.vue';
 import EvaluatorRecord from './EvaluatorRecord.vue';
@@ -119,6 +128,15 @@ import EvaluatorSetting from './EvaluatorSetting.vue';
 
 const currentComp = shallowRef(EvaluatorDashboard);
 const changeCurrentComp = comp => (currentComp.value = comp);
+
+const router = useRouter();
+const store = useStore();
+
+const logout = () => {
+  store.dispatch('logout').then(() => {
+    router.push({ name: 'Login' });
+  });
+};
 </script>
 
 <style lang="scss" scoped></style>
