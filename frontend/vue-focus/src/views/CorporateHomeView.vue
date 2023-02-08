@@ -60,6 +60,13 @@
               >
                 James Smith
               </h4>
+              <!-- 로그아웃 -->
+              <li class="bg-white/60 rounded-lg" @click="logout()">
+                <span
+                  class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
+                  ><i class="bx bx-log-out"></i
+                ></span>
+              </li>
             </button>
           </ul>
         </div>
@@ -202,6 +209,8 @@
 
 <script setup>
 import { ref, shallowRef } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 import CorporateDashboard from './CoporateDashboard.vue';
 import CorporateManageEvaluator from './CorporateManageEvaluator.vue';
@@ -216,6 +225,15 @@ import CorporateProfile from './CorporateProfile.vue';
 
 const currentComp = shallowRef(CorporateDashboard);
 const changeCurrentComp = comp => (currentComp.value = comp);
+
+const router = useRouter();
+const store = useStore();
+
+const logout = () => {
+  store.dispatch('logout').then(() => {
+    router.push({ name: 'Login' });
+  });
+};
 </script>
 
 <style lang="scss" scoped></style>
