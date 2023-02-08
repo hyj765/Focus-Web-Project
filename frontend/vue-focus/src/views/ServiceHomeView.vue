@@ -127,7 +127,7 @@
       <component
         class="flex-auto"
         :is="currentComp"
-        @update:comp="changeCurrentComp(TestCreate)"
+        @update:comp="changeCurrentComp(ServiceAccountCreate)"
       />
     </div>
   </div>
@@ -141,7 +141,7 @@ import { useStore } from 'vuex';
 import ServiceAccount from '@/views/ServiceAccount.vue';
 import ServiceDashboard from '@/views/ServiceDashboard.vue';
 import ServiceNotice from './ServiceNotice.vue';
-import TestCreate from '@/views/TestCreate.vue';
+import ServiceAccountCreate from '@/views/ServiceAccountCreate.vue';
 
 const currentComp = shallowRef(ServiceDashboard);
 const changeCurrentComp = comp => (currentComp.value = comp);

@@ -147,7 +147,7 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 defineEmits(['update:comp']);
-const BASE_URL = 'http://localhost:8082/api';
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 
 const corporates = ref(null);
 const getCorporateInfos = () => {
