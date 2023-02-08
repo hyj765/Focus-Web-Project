@@ -7,6 +7,7 @@ const BASE_URL = 'http://localhost:8082/api';
 export default createStore({
   state: {
     user: null,
+    // corporates: null,
   },
   getters: {
     loggedIn(state) {
@@ -46,16 +47,17 @@ export default createStore({
     logout({ commit }) {
       commit('LOGOUT');
     },
-    getCorporateInfos() {
-      console.log('get corporate infos!');
-      console.log(this.state.user.accessToken);
-      axios
-        .get(`${BASE_URL}/serviceusers/accounts`, {
-          Authorization: `Bearer ${this.state.user.accessToken}`,
-        })
-        .then(res => {
-          console.log(res.data);
-        });
-    },
+    // getCorporateInfos() {
+    //   const user = JSON.parse(localStorage.getItem('user'));
+    //   console.log(user.accessToken);
+    //   axios
+    //     .get(`${BASE_URL}/serviceusers/accounts`, {
+    //       Authorization: `Bearer ${user.accessToken}`,
+    //     })
+    //     .then(res => {
+    //       this.state.corporates = res.data;
+    //       console.log('ACTIONS state: ', this.state.corporates);
+    //     });
+    // },
   },
 });

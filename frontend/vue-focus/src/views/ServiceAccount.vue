@@ -73,14 +73,17 @@
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody
+                  v-for="(corporate, index) in corporates"
+                  :key="corporate.id"
+                >
                   <tr
                     class="border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100"
                   >
                     <td
                       class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900"
                     >
-                      1
+                      {{ index + 1 }}
                     </td>
                     <td
                       class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
@@ -91,7 +94,6 @@
                         class="h-7 w-7"
                         style="color: #ea4335"
                       >
-                        <!--! Font Awesome Pro 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                         <path
                           fill="currentColor"
                           d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
@@ -101,142 +103,33 @@
                     <td
                       class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
                     >
-                      Otto
+                      {{ corporate.companyName }}
                     </td>
                     <td
                       class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
                     >
-                      2022.04.06 ~ 2022.04.04
+                      {{ corporate.startDate.slice(0, 10) }} ~
+                      {{ corporate.endDate.slice(0, 10) }}
                     </td>
                     <td
                       class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
                     >
-                      김민경
+                      {{ corporate.name }}
                     </td>
                     <td
                       class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
                     >
-                      minofficial
+                      {{ corporate.userId }}
                     </td>
                     <td
                       class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
                     >
-                      010-7337-3460
+                      {{ corporate.tel }}
                     </td>
                     <td
                       class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
                     >
-                      minofficial13@gmail.com
-                    </td>
-                  </tr>
-                  <tr
-                    class="border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100"
-                  >
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900"
-                    >
-                      2
-                    </td>
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 488 512"
-                        class="h-7 w-7"
-                        style="color: #ea4335"
-                      >
-                        <!--! Font Awesome Pro 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                        <path
-                          fill="currentColor"
-                          d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
-                        />
-                      </svg>
-                    </td>
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
-                    >
-                      Thornton
-                    </td>
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
-                    >
-                      2022.04.06 ~ 2022.04.04
-                    </td>
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
-                    >
-                      김민경
-                    </td>
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
-                    >
-                      minofficial
-                    </td>
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
-                    >
-                      010-7337-3460
-                    </td>
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
-                    >
-                      minofficial13@gmail.com
-                    </td>
-                  </tr>
-                  <tr
-                    class="border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100"
-                  >
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900"
-                    >
-                      3
-                    </td>
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 488 512"
-                        class="h-7 w-7"
-                        style="color: #ea4335"
-                      >
-                        <!--! Font Awesome Pro 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                        <path
-                          fill="currentColor"
-                          d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
-                        />
-                      </svg>
-                    </td>
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
-                    >
-                      Wild
-                    </td>
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
-                    >
-                      2022.04.06 ~ 2022.04.04
-                    </td>
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
-                    >
-                      김민경
-                    </td>
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
-                    >
-                      minofficial
-                    </td>
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
-                    >
-                      010-7337-3460
-                    </td>
-                    <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
-                    >
-                      minofficial13@gmail.com
+                      {{ corporate.email }}
                     </td>
                   </tr>
                 </tbody>
@@ -251,18 +144,29 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useStore } from 'vuex';
+import axios from 'axios';
 
 defineEmits(['update:comp']);
+const BASE_URL = 'http://localhost:8082/api';
 
-// const store = useStore();
-// const getCoporateInfos = () => {
-//   store.dispatch('getCorporateInfos');
-// };
+const corporates = ref(null);
+const getCorporateInfos = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  console.log(user.accessToken);
+  axios
+    .get(`${BASE_URL}/serviceusers/accounts`, {
+      Authorization: `Bearer ${user.accessToken}`,
+    })
+    .then(res => {
+      console.log('res.data: ', res.data);
+      corporates.value = res.data;
+      console.log('corporates.value: ', corporates.value);
+    });
+};
 
-// onMounted(() => {
-//   getCoporateInfos();
-// });
+onMounted(() => {
+  getCorporateInfos();
+});
 </script>
 
 <style lang="scss" scoped></style>
