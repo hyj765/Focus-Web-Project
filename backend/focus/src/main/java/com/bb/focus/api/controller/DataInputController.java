@@ -64,8 +64,22 @@ public class DataInputController {
         if(!imageUtil.ExtensionCheck(file)){
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         }
-        if(!imageUtil.Upload(file,"self")){
-            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @GetMapping("/test/image")
+    public ResponseEntity<?> testImage(){
+        String txt = "테스트메시지";
+        String filepath = "/etc/image/test.txt";
+        try {
+            File file = new File(filepath);
+            FileWriter fw = new FileWriter(file, true);
+            fw.write(txt);
+            fw.flush();
+            fw.close();
+        }catch (IOException e){
+
         }
 
         return new ResponseEntity<Void>(HttpStatus.OK);
