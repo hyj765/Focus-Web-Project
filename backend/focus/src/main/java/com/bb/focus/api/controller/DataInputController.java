@@ -68,7 +68,7 @@ public class DataInputController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @PostMapping("/test/image")
+    @GetMapping("/test/image")
     public ResponseEntity<?> testImage(){
         String txt = "테스트메시지";
         String filepath = "/etc/image/test.txt";
