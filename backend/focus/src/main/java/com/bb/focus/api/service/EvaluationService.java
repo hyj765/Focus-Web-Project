@@ -9,7 +9,6 @@ import com.bb.focus.db.entity.interview.InterviewRoom;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
-@Service
 public interface EvaluationService {
 
 
