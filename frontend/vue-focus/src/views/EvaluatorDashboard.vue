@@ -9,31 +9,32 @@
         <h3 class="font-bold text-gray-500">DASHBOARD</h3>
       </nav>
     </div>
-    <div class="flex flex-col items-center justify-center">
+    <div class="p-10">
       <p class="p-2 text-lg font-bold text-gray-500">
         <i class="pr-1 text-indigo-500 bx bxs-check-circle"></i>
         잠시후에 시작할 면접입니다
       </p>
-      <div
-        class="flex flex-row w-auto h-auto pb-3 pl-2 pr-4 bg-white rounded-lg shadow-lg"
-      >
-        <div class="flex flex-col items-center w-auto h-auto text-gray-900">
-          <p class="flex items-center justify-center p-4 text-2xl font-bold">
-            두나무 증권 개발자
-          </p>
-          <p
-            class="flex items-center justify-center px-4 py-1 text-white bg-indigo-900 rounded-xl"
-          >
-            13:40 ~ 14:40 (50분)
-          </p>
-        </div>
-        <div class="flex items-center justify-center">
-          <button
-            type="button"
-            class="place-content-center inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
-          >
-            입장
-          </button>
+      <div class="inline-block">
+        <div class="flex flex-row pb-3 pl-2 pr-4 bg-white rounded-lg shadow-lg">
+          <div class="flex flex-col items-center w-auto h-auto text-gray-900">
+            <p class="flex items-center justify-center p-4 text-2xl font-bold">
+              두나무 증권 개발자
+            </p>
+            <p
+              class="flex items-center justify-center px-4 py-1 text-white bg-indigo-900 rounded-xl"
+            >
+              13:40 ~ 14:40 (50분)
+            </p>
+          </div>
+          <div class="flex items-center justify-center">
+            <button
+              type="button"
+              class="place-content-center inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
+            >
+              입장
+            </button>
+          </div>
+          <div></div>
         </div>
       </div>
     </div>
