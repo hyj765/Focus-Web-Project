@@ -1,6 +1,7 @@
 package com.bb.focus.api.service;
 
 import java.util.Map;
+import java.util.Properties;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 

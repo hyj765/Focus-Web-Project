@@ -40,7 +40,7 @@ spring:
   properties:
     mail:
       smtp:
-        starttls:
+        STARTTLS:
           enable: true
           required: true
           auth: true
