@@ -38,7 +38,7 @@ public class ProcessCustomRepositoryImpl implements ProcessCustomRepository{
             qProcess.currentStep))
         .from(qProcess)
         .where(eqCompanyAdminId(companyAdminId),
-            qProcess.startDate.gt(present)
+            qProcess.endDate.gt(present)
         )
         .orderBy(qProcess.startDate.asc())
         .fetch();
