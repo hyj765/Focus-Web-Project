@@ -27,13 +27,13 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/api/evaluation")
 public class EvaluationPaperController {
     DataProcessService dataProcessService;
-    EvaluationPaperService evaluationService;
+    EvaluationPaperService evaluationPaperService;
 
 
     @Autowired
     public EvaluationPaperController(DataProcessService dService, EvaluationPaperService eService){
         dataProcessService = dService;
-        evaluationService = eService;
+        evaluationPaperService = eService;
     }
 
 
@@ -46,7 +46,7 @@ public class EvaluationPaperController {
         FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
         Long companyAdminId = userDetails.getUser().getId();
 
-        Long id = evaluationService.CreateEvaluationSheet(companyAdminId, evaluationSheetReq.getSheetName());
+        Long id = evaluationPaperService.CreateEvaluationSheet(companyAdminId, evaluationSheetReq.getSheetName());
 
         Map<String, Long> result = new HashMap<>();
         result.put("evaluation sheet id", id);
@@ -59,7 +59,7 @@ public class EvaluationPaperController {
             @PathVariable(name="evaluation-sheet-id")long sheetId,
             @RequestBody @ApiParam(required = true) EvaluationItemReq evaluationItemReq){
 
-        evaluationService.CreateEvaluationItem(sheetId,evaluationItemReq);
+        evaluationPaperService.CreateEvaluationItem(sheetId,evaluationItemReq);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
@@ -72,7 +72,7 @@ public class EvaluationPaperController {
     @GetMapping("/sheets/{evaluation-sheet-id}")
     public ResponseEntity<?> GetEvaluationSheetInfo(@PathVariable(name="evaluation-sheet-id") Long sheetId){
         // id -> evaluationsheet 호출 -> list<items> -> ....
-        List<EvaluationSheetItemRes> evaluationSheetItemResList =evaluationService.GetEvaluationSheetItems(sheetId);
+        List<EvaluationSheetItemRes> evaluationSheetItemResList =evaluationPaperService.GetEvaluationSheetItems(sheetId);
         if(evaluationSheetItemResList == null){
             return new ResponseEntity<String>("",HttpStatus.OK);
         }
@@ -81,7 +81,7 @@ public class EvaluationPaperController {
     @GetMapping("/interview/{interview-room-id}")
     public ResponseEntity<?> GetInterviewRoomEvaluationItems(@PathVariable(name="interview-room-id")Long interviewRoomId ){
 
-        List<EvaluationSheetItemRes> evaluationSheetItemResList=evaluationService.GetRoomPerEvaluationItems(interviewRoomId);
+        List<EvaluationSheetItemRes> evaluationSheetItemResList=evaluationPaperService.GetRoomPerEvaluationItems(interviewRoomId);
 
         if(evaluationSheetItemResList == null){
             return new ResponseEntity<String>("Data Error",HttpStatus.BAD_REQUEST);
@@ -90,33 +90,32 @@ public class EvaluationPaperController {
         return new ResponseEntity<List<EvaluationSheetItemRes>>(evaluationSheetItemResList,HttpStatus.OK);
     }
 
-    // 결과까지 보여주는 함수
-    @GetMapping("sheets/result")
-    public ResponseEntity<?> GetEvaluationSheetResult(Long applicantId, Long processId){
 
-
-        return null;
+    @PutMapping("/sheets/modifysheet/{sheet-id}")
+    public ResponseEntity<?> ModifyEvaluationSheet(@PathVariable(name="sheet-id") Long sheetId, @RequestBody String sheetName){
+        if(evaluationPaperService.modifyEvaluationSheet(sheetId,sheetName)){
+            return new ResponseEntity<String>("",HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<String>("평가지 제목 변경 완료",HttpStatus.OK);
     }
 
+    @PutMapping("/sheets/modifyitem/{sheet-id}/{sheetitem-id}")
+    public ResponseEntity<?> ModifyEvaluationSheetItem(@PathVariable(name="sheet-id") Long sheetId,
+                                                       @PathVariable(name="sheetitem-id") Long sheetItemId,
+                                                       @RequestBody EvaluationItemReq itemReq)
+    {
+        if(!evaluationPaperService.modifyEvaluationItem(sheetId,sheetItemId,itemReq.getScore(),itemReq.getContent())){
+            return new ResponseEntity<String>("평가항목 수정 실패",HttpStatus.OK);
+        }
 
-    @PutMapping("/sheets/{evaluation-sheet-id}/{evaluation-item-id}")
-    public ResponseEntity<?> ModifyEvaluationSheetInfo(@PathVariable(name="evaluation-sheet-id") Long sheetId, @PathVariable(name="evaluation-item-id") Long itemId){
-
-
-        return null;
-    }
-
-    @PutMapping("/sheets/{evaluation-sheet-id}/{evaluation-sheet-item-id}")
-    public ResponseEntity<?> ModifyEvaluationSheetItem(@PathVariable(name="evaluation-sheet-id") Long sheetId ,@PathVariable(name="evaluation-sheet-item-id") Long sheetItemId,@RequestParam EvaluationItemReq itemReq){
-
-        return null;
+        return new ResponseEntity<String>("평가항목 수정 성공",HttpStatus.OK);
     }
 
     // 삭제
     @DeleteMapping("/sheets/{evaluation-sheet-id}")
     public ResponseEntity<?> DeleteEvaluationSheet(@PathVariable(name="evaluation-sheet-id") Long sheetId)
     {
-        if(evaluationService.RemoveEvaluationSheet(sheetId)){
+        if(evaluationPaperService.RemoveEvaluationSheet(sheetId)){
             return new ResponseEntity<String>("Delete Success", HttpStatus.OK);
         }
         return new ResponseEntity<String>("Delete Fail",HttpStatus.BAD_REQUEST);
@@ -124,7 +123,7 @@ public class EvaluationPaperController {
 
     @DeleteMapping("/sheets/deleteitem/{sheetitem-id}")
     public ResponseEntity<?> DeleteEvaluationSheetItem(@PathVariable(name="sheetitem-id") Long itemId){
-        evaluationService.RemoveEvaluationItem(itemId);
+        evaluationPaperService.RemoveEvaluationItem(itemId);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 

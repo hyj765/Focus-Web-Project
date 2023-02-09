@@ -25,12 +25,12 @@ public interface DataProcessService {
     Map<String,Integer> GetMajorPerApplicant(long processId);
   long GetAwardPerApplicant(long processId);
   long GetActivityPerApplicant(long processId);
-  Map<String,Integer> GetResultPerApplicant(long processId);
+  float GetAvgGradeApplicant(long processId);
 
   boolean CreateStatisticTable(long processId);
 
   Map<String,Integer> UpdateStatisticTable(long processId);
 
-  MultipartFile ExtractStaticResultIntoPDF();
+//  MultipartFile ExtractStaticResultIntoPDF();
   boolean CreateMajorTable(Map<String,Integer> major, Long processId);
 }

@@ -15,7 +15,7 @@ public interface EvaluationPaperService {
     List<EvaluationSheetItemRes> GetEvaluationSheetItems(Long evaluationSheetId);
     List<EvaluationSheetItemRes> GetRoomPerEvaluationItems(Long interviewRoomId);
     boolean modifyEvaluationSheet(Long evaluationSheetId, String modifyName);
-    boolean modifyUserEvaluationItem(Long evaluationSheetId, Long evaluationItemId, byte modifyRange, String modifyContent);
+    boolean modifyEvaluationItem(Long evaluationSheetId, Long evaluationItemId, byte modifyRange, String modifyContent);
     boolean RemoveEvaluationItem(Long evaluationSheetItemId);
     boolean RemoveEvaluationSheet(Long evaluationSheetId);
 

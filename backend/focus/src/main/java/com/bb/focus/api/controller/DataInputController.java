@@ -16,6 +16,8 @@ import io.swagger.annotations.Api;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+
+import io.swagger.annotations.ApiOperation;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
@@ -70,6 +72,8 @@ public class DataInputController {
     }
 
     // 평가자 엑셀 다운로드 하는 함수 Headers 값의 따라 목록이 늘어남.
+
+    @ApiOperation(value = "평가자 입력 엑셀 다운로드 ", notes = "평가자를 엑셀로 읽어오기 위한 양식을 다운로드한다.")
     @GetMapping("/download/evaluator")
     public ResponseEntity<?> DownloadEvaluatorExcel(HttpServletResponse response){
         response.setHeader("Content-Disposition", "attachment;filename=evaluator_input_here.xlsx");
@@ -87,6 +91,7 @@ public class DataInputController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
     // 지원자 엑셀 다운로드 하는 함수 Headers 값의 따라 목록이 늘어남.
+    @ApiOperation(value = "지원자 입력 양식 다운로드", notes = "지원자 입력 양식에 맞는 값을 다운로드한다.")
     @GetMapping("/download/applicant")
     public ResponseEntity<?> DownloadApplicantExcel(HttpServletResponse response){
         response.setHeader("Content-Disposition", "attachment;filename=Applicant_input_here.xlsx");
@@ -105,10 +110,12 @@ public class DataInputController {
     }
 
     // 지원자 데이터를 엑셀로 받아오는 함수. csv 연동 아직 안됨. xls과 xlxs 두 가지만 가능
+    @ApiOperation(value = "지원자 엑셀데이터를 읽어오는 함수", notes = "지원자의 엑셀데이터를 읽어오는 함수")
     @PostMapping(value = "/input/{process-id}/applicant",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> AddApplicantIntoExcel(
         @PathVariable(name="process-id") Long processId, @RequestPart MultipartFile file) throws IOException
     {
+        // invalid_format_check(header)
         List<String[]> data = null;
         try {
             data = DataService.ReadExcel(file,15);
@@ -160,6 +167,7 @@ public class DataInputController {
     }
 
     // 평가자 데이터를 엑셀로 받아오는 함수. csv 연동 아직 안됨. xls과 xlxs 두 가지만 가능
+    @ApiOperation(value = "평가자 데이터를 엑셀로 읽어오는 함수", notes = "평가자 데이터를 엑셀로 읽어온다.")
     @PostMapping(value = "/input/{company-id}/evaluator",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> AddEvaluatorIntoExcel(@RequestPart MultipartFile file) throws IOException
     {   List<String[]> data = null;
@@ -175,6 +183,7 @@ public class DataInputController {
     }
 
     // 4년제 대학교 데이터를 엑셀로 받아오는 함수. csv 파일에 UTF-8 고정
+    @ApiOperation(value = "4년제 대학교 데이터 입력", notes = "4년제 대학교 정보를 읽어온다 서비스 이전에 데이터 입력 요망")
     @PostMapping("/input/univ")
     public ResponseEntity<?> UniversityIntoExcel(@RequestPart MultipartFile file) {
         List<SchoolDto> univList=null;
@@ -195,6 +204,7 @@ public class DataInputController {
     }
 
     // 2년제 대학교 데이터를 엑셀로 받아오는 함수. csv 파일에 UTF-8 고정
+    @ApiOperation(value = "2~3년제 대학교 데이터 입력", notes = "2~3년 대학교 정보를 읽어온다. 서비스 이전 데이터 입력 요망")
     @PostMapping("/input/college")
     public ResponseEntity<?> CollegeIntoExcel(@RequestPart MultipartFile file) {
         List<SchoolDto> collegeList = null;
@@ -211,6 +221,7 @@ public class DataInputController {
     }
 
     // 대학원 데이터를 엑셀로 받아오는 함수. csv 파일에 UTF-8 고정
+    @ApiOperation(value = "대학원 데이터 입력", notes = "대학원 데이터정보를 읽어온다. 서비스 이전 데이터 입력 요망")
     @PostMapping("/input/graduateschool")
     public ResponseEntity<?> GraduateSchoolIntoExcel(@RequestPart MultipartFile file){
         List<SchoolDto> GraduateList = null;
