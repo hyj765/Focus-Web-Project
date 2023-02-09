@@ -141,12 +141,12 @@
                   >
                     <i class="text-lg bx bx-square"></i>
                   </th>
-                  <th
+                  <!-- <th
                     scope="col"
                     class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                   >
                     사진
-                  </th>
+                  </th> -->
                   <th
                     scope="col"
                     class="px-6 py-4 text-sm font-medium text-left text-gray-900"
@@ -194,11 +194,11 @@
                   >
                     <i class="text-lg bx bx-check-square"></i>
                   </td>
-                  <td
+                  <!-- <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
                     image url: {{ evaluator.image }}
-                  </td>
+                  </td> -->
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
@@ -251,53 +251,33 @@ const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 const evaluators = ref(null);
 // 총 페이지 값 (페이징 구현할 때 필요할 것으로 예상)
 let totalPageCount = 0;
-const pageSize = 5;
+const pageSize = 4;
 // 페이징 컴포넌트에 따라 달라지는 반응형으로 교체
 const pageNumber = 1;
 
 const getEvaluatorsInfo = () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  // 1. 기업관리자 id값 요청
-  // 임의로 아이디 값 배정
-  const companyId = 2;
-  // axios
-  //   .get(`${BASE_URL}/companyusers/me`, {
-  //     Authorization: `Bearer ${user.accessToken}`,
-  //   })
-  //   .then(res => {
-  //     console.log('id: ', res);
-  //   });
-
-  // 2. 기업관리자 id값을 바탕으로 평가자 계정 수 가져오기
   let evaluatorCount = 0;
   let remainder = 0;
   axios
-    .get(`${BASE_URL}/companyusers/evaluatorCount/${companyId}`)
+    .get(`${BASE_URL}/companyusers/evaluators/list`, {
+      // params: {
+      //   size: pageSize,
+      //   page: pageNumber,
+      // },
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
     .then(res => {
-      // 필요한 총 페이지 수 계산
-      evaluatorCount = res.data;
+      // 페이징 기능 구현 시 필요한 totalPageCount 값 계산
+      evaluatorCount = res.data.size;
       remainder = evaluatorCount % pageSize;
       if (remainder === 0) {
         totalPageCount = parseInt(evaluatorCount / pageSize);
       } else {
         totalPageCount = parseInt(evaluatorCount / pageSize) + 1;
       }
-      console.log(totalPageCount);
-    });
-
-  // 3. 조회
-  axios
-    .get(`${BASE_URL}/companyusers/evaluators/list`, {
-      params: {
-        size: pageSize,
-        page: pageNumber,
-      },
-      headers: {
-        Authorization: `Bearer ${user.accessToken}`,
-      },
-    })
-    .then(res => {
-      // console.log('evaluators list: ', res.data.content);
       evaluators.value = res.data.content;
       console.log('evaluators: ', evaluators.value);
     });
