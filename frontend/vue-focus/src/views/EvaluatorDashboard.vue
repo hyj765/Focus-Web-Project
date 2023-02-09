@@ -126,6 +126,12 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import router from '@/router';
+import EvaluateHomeRecentlySchedule from './EvaluateHomeRecentlySchedule.vue';
+import EvaluateHomeSchedule from './EvaluateHomeSchedule.vue';
+
+const goSettingRoom = () => router.push({ name: 'InterviewRoom' });
+</script>
 
 <style lang="scss" scoped></style>

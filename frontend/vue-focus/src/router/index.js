@@ -4,6 +4,7 @@ import ServiceHomeView from '@/views/ServiceHomeView';
 import CorporateHomeView from '@/views/CorporateHomeView';
 import EvaluatorHomeView from '@/views/EvaluatorHomeView';
 import ApplicantHomeView from '@/views/ApplicantHomeView';
+import InterviewRoom from '@/views/InterviewDisplay/InterviewRoom';
 
 const routes = [
   {
@@ -15,25 +16,30 @@ const routes = [
     path: '/service',
     name: 'Service',
     component: ServiceHomeView,
-    // beforeEnter: [checkLogin],
+    beforeEnter: [checkLogin],
   },
   {
     path: '/corporate',
     name: 'Corporate',
     component: CorporateHomeView,
-    // beforeEnter: [checkLogin],
+    beforeEnter: [checkLogin],
   },
   {
     path: '/evaluate',
     name: 'Evaluator',
     component: EvaluatorHomeView,
-    // beforeEnter: [checkLogin],
+    beforeEnter: [checkLogin],
   },
   {
     path: '/apply',
     name: 'Applicant',
     component: ApplicantHomeView,
-    // beforeEnter: [checkLogin],
+    beforeEnter: [checkLogin],
+  },
+  {
+    path: '/interviewroom',
+    name: 'InterviewRoom',
+    component: InterviewRoom,
   },
 ];
 

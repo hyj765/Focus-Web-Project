@@ -202,7 +202,11 @@
       <!-- <div>
         <h2>chocolate yummy</h2>
       </div> -->
-      <component class="flex-auto" :is="currentComp" />
+      <component
+        class="flex-auto"
+        :is="currentComp"
+        @update:comp="changeCurrentComp(CorporateManageEvaluatorCreate)"
+      />
     </div>
   </div>
 </template>
@@ -214,6 +218,7 @@ import { useStore } from 'vuex';
 
 import CorporateDashboard from './CoporateDashboard.vue';
 import CorporateManageEvaluator from './CorporateManageEvaluator.vue';
+import CorporateManageEvaluatorCreate from './CorporateManageEvaluatorCreate.vue';
 import CorporateManageProcess from './CorporateManageProcess.vue';
 import CorporateManageApplicant from './CorporateManageApplicant.vue';
 import CorporateManageInterview from './CorporateManageInterview.vue';
