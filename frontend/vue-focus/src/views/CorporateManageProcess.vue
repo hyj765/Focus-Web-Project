@@ -8,53 +8,20 @@
       <h3 class="font-bold text-gray-500">Process</h3>
     </nav>
     <p class="px-10 text-2xl font-medium">예정된 전형</p>
-    <div class="space-y-5">
+    <div v-for="interview in interviews" :key="interview.id" class="space-y-5">
       <!-- 전형목록 -->
       <div class="flex flex-row items-center justify-center space-x-10">
         <div
           class="flex flex-row items-center justify-center px-4 py-2 space-x-4 text-gray-600 bg-white rounded-md shadow-md"
         >
-          <p class="text-lg font-bold">두나무 개발자 FE</p>
+          <p class="text-lg font-bold">{{ interview.name }}</p>
           <p>|</p>
-          <p>2022.02.03 ~ 2022.03.05</p>
+          <p>
+            {{ interview.startDate.slice(0, 10) }} ~
+            {{ interview.endDate.slice(0, 10) }}
+          </p>
           <p>|</p>
-          <p>총 3 차</p>
-        </div>
-
-        <!-- # 버튼 그룹 -->
-        <div class="flex flex-row">
-          <div class="flex justify-center space-x-2">
-            <button
-              type="button"
-              class="inline-block leading-normal text-white uppercase transition duration-150 ease-in-out bg-gray-400 rounded-full shadow-lg hover:bg-gray-500 hover:shadow-lg focus:bg-gray-500 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-500 active:shadow-lg w-9 h-9"
-            >
-              <i class="text-xl bx bx-plus"></i>
-            </button>
-            <button
-              type="button"
-              class="inline-block leading-normal text-white uppercase transition duration-150 ease-in-out bg-gray-400 rounded-full shadow-lg hover:bg-gray-500 hover:shadow-lg focus:bg-gray-500 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-500 active:shadow-lg w-9 h-9"
-            >
-              <i class="text-xl bx bx-copy"></i>
-            </button>
-            <button
-              type="button"
-              class="inline-block leading-normal text-white uppercase transition duration-150 ease-in-out bg-red-400 rounded-full shadow-lg hover:bg-red-500 hover:shadow-lg focus:bg-red-500 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-500 active:shadow-lg w-9 h-9"
-            >
-              <i class="text-xl bx bx-x"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-      <!-- 전형목록 -->
-      <div class="flex flex-row items-center justify-center space-x-10">
-        <div
-          class="flex flex-row items-center justify-center px-4 py-2 space-x-4 text-gray-600 bg-white rounded-md shadow-md"
-        >
-          <p class="text-lg font-bold">두나무 개발자 FE</p>
-          <p>|</p>
-          <p>2022.02.03 ~ 2022.03.05</p>
-          <p>|</p>
-          <p>총 3 차</p>
+          <p>총 {{ interview.interviewCount }} 차</p>
         </div>
 
         <!-- # 버튼 그룹 -->
@@ -85,11 +52,11 @@
         <div
           class="flex flex-row items-center justify-center px-4 py-2 space-x-4 text-gray-600 bg-transparent border-4 border-white rounded-md shadow-md opacity-80"
         >
-          <p class="text-lg font-bold">두나무 개발자 FE</p>
+          <p class="text-lg font-bold">전형명</p>
           <p>|</p>
-          <p>2022.02.03 ~ 2022.03.05</p>
+          <p>시작일자 ~ 종료일자</p>
           <p>|</p>
-          <p>총 3 차</p>
+          <p>총 N 차</p>
         </div>
 
         <!-- # 버튼 그룹 -->
@@ -108,6 +75,30 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+const interviews = ref(null);
+
+const getInterviewInfo = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/interview/process`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log('interviews: ', res.data);
+      interviews.value = res.data;
+    });
+};
+
+onMounted(() => {
+  getInterviewInfo();
+});
+</script>
 
 <style lang="scss" scoped></style>

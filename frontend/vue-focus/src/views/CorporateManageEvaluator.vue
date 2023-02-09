@@ -19,7 +19,7 @@
                   <MenuButton
                     class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
                   >
-                    부서별
+                    {{ departmentFilterLabel }}
                     <ChevronDownIcon
                       class="w-5 h-5 ml-2 -mr-1"
                       aria-hidden="true"
@@ -40,56 +40,35 @@
                   >
                     <div class="py-1">
                       <MenuItem v-slot="{ active }">
-                        <a
-                          href="#"
+                        <p
+                          @click="deactivateDepartmentFilter()"
                           :class="[
                             active
                               ? 'bg-gray-100 text-gray-900'
                               : 'text-gray-700',
                             'block px-4 py-2 text-sm',
                           ]"
-                          >Account settings</a
                         >
+                          전체 (Show All)
+                        </p>
                       </MenuItem>
-                      <MenuItem v-slot="{ active }">
-                        <a
-                          href="#"
+                      <MenuItem
+                        v-slot="{ active }"
+                        v-for="department in departments"
+                        :key="department.id"
+                      >
+                        <p
+                          @click="filterEvaluatorsByDepartment(department)"
                           :class="[
                             active
                               ? 'bg-gray-100 text-gray-900'
                               : 'text-gray-700',
                             'block px-4 py-2 text-sm',
                           ]"
-                          >Support</a
                         >
+                          {{ department }}
+                        </p>
                       </MenuItem>
-                      <MenuItem v-slot="{ active }">
-                        <a
-                          href="#"
-                          :class="[
-                            active
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-700',
-                            'block px-4 py-2 text-sm',
-                          ]"
-                          >License</a
-                        >
-                      </MenuItem>
-                      <form method="POST" action="#">
-                        <MenuItem v-slot="{ active }">
-                          <button
-                            type="submit"
-                            :class="[
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'block w-full px-4 py-2 text-left text-sm',
-                            ]"
-                          >
-                            Sign out
-                          </button>
-                        </MenuItem>
-                      </form>
                     </div>
                   </MenuItems>
                 </transition>
@@ -100,6 +79,7 @@
                   class="relative flex flex-row items-stretch w-auto px-4 rounded input-group"
                 >
                   <input
+                    v-model="searchName"
                     type="search"
                     class="relative flex-auto block w-full min-w-0 px-3 m-0 text-base font-normal text-gray-700 transition ease-in-out bg-white border border-gray-300 border-solid rounded form-control bg-clip-padding focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     placeholder="이름 검색"
@@ -141,12 +121,12 @@
                   >
                     <i class="text-lg bx bx-square"></i>
                   </th>
-                  <th
+                  <!-- <th
                     scope="col"
                     class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                   >
                     사진
-                  </th>
+                  </th> -->
                   <th
                     scope="col"
                     class="px-6 py-4 text-sm font-medium text-left text-gray-900"
@@ -185,7 +165,10 @@
                   </th>
                 </tr>
               </thead>
-              <tbody v-for="(evaluator, index) in evaluators" :key="index">
+              <tbody
+                v-for="(evaluator, index) in currentEvaluators"
+                :key="index"
+              >
                 <tr
                   class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
                 >
@@ -194,11 +177,11 @@
                   >
                     <i class="text-lg bx bx-check-square"></i>
                   </td>
-                  <td
+                  <!-- <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
                     image url: {{ evaluator.image }}
-                  </td>
+                  </td> -->
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
@@ -249,57 +232,72 @@ defineEmits(['update:comp']);
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 
 const evaluators = ref(null);
+const currentEvaluators = ref(null);
+const departments = ref([]);
+const departmentFilterLabel = ref('부서별');
+const filterEvaluatorsByDepartment = department => {
+  departmentFilterLabel.value = department;
+  currentEvaluators.value = evaluators.value;
+  currentEvaluators.value = currentEvaluators.value.filter(
+    evaluator => evaluator.department === department,
+  );
+  console.log(currentEvaluators.value);
+};
+const deactivateDepartmentFilter = () => {
+  departmentFilterLabel.value = '부서별';
+  currentEvaluators.value = evaluators.value;
+};
+
+const searchName = ref('');
+// const filterEvaluatorsByName = (name) => {
+
+// }
+
 // 총 페이지 값 (페이징 구현할 때 필요할 것으로 예상)
 let totalPageCount = 0;
-const pageSize = 5;
+const pageSize = 4;
 // 페이징 컴포넌트에 따라 달라지는 반응형으로 교체
 const pageNumber = 1;
 
 const getEvaluatorsInfo = () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  // 1. 기업관리자 id값 요청
-  // 임의로 아이디 값 배정
-  const companyId = 2;
-  // axios
-  //   .get(`${BASE_URL}/companyusers/me`, {
-  //     Authorization: `Bearer ${user.accessToken}`,
-  //   })
-  //   .then(res => {
-  //     console.log('id: ', res);
-  //   });
-
-  // 2. 기업관리자 id값을 바탕으로 평가자 계정 수 가져오기
   let evaluatorCount = 0;
   let remainder = 0;
   axios
-    .get(`${BASE_URL}/companyusers/evaluatorCount/${companyId}`)
+    .get(`${BASE_URL}/companyusers/evaluators/list`, {
+      // params: {
+      //   size: pageSize,
+      //   page: pageNumber,
+      // },
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
     .then(res => {
-      // 필요한 총 페이지 수 계산
-      evaluatorCount = res.data;
+      // console.log('res.data: ', res.data);
+      // 페이징 기능 구현 시 필요한 totalPageCount 값 계산
+      evaluatorCount = res.data.totalElements;
       remainder = evaluatorCount % pageSize;
       if (remainder === 0) {
         totalPageCount = parseInt(evaluatorCount / pageSize);
       } else {
         totalPageCount = parseInt(evaluatorCount / pageSize) + 1;
       }
-      console.log(totalPageCount);
-    });
-
-  // 3. 조회
-  axios
-    .get(`${BASE_URL}/companyusers/evaluators/list`, {
-      params: {
-        size: pageSize,
-        page: pageNumber,
-      },
-      headers: {
-        Authorization: `Bearer ${user.accessToken}`,
-      },
-    })
-    .then(res => {
-      // console.log('evaluators list: ', res.data.content);
       evaluators.value = res.data.content;
-      console.log('evaluators: ', evaluators.value);
+      currentEvaluators.value = res.data.content;
+      // console.log('evaluators: ', evaluators.value);
+      // console.log('currentEvaluators: ', currentEvaluators.value);
+
+      // Departments Filter
+      const tempDepartments = evaluators.value.map(
+        evaluator => evaluator.department,
+      );
+      for (const department of tempDepartments) {
+        if (!departments.value.includes(department)) {
+          departments.value.push(department);
+        }
+      }
+      // console.log('departments: ', departments.value);
     });
 };
 
