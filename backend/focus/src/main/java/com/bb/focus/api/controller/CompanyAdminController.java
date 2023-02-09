@@ -199,7 +199,7 @@ public class CompanyAdminController {
   public ResponseEntity<Page<EvaluatorRes>> getEvaluators(
       @ApiIgnore Authentication authentication,
       @PathVariable(value = "search-name", required = false) String search,
-      @PageableDefault(sort="code", direction = Direction.ASC) Pageable pageable) {
+      Pageable pageable) {
 
     FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
     Long companyAdminId = userDetails.getUser().getId();
@@ -225,7 +225,7 @@ public class CompanyAdminController {
   public ResponseEntity<Page<EvaluatorRes>> getDepartmentsEvaluators(
           @ApiIgnore Authentication authentication,
           @PathVariable("departments") List<String> departmentList,
-          @PageableDefault(sort="code", direction = Direction.ASC) Pageable pageable) {
+          Pageable pageable) {
 
     FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
     Long companyAdminId = userDetails.getUser().getId();
@@ -259,7 +259,7 @@ public class CompanyAdminController {
       @ApiIgnore Authentication authentication,
       @PathVariable(value = "process-id", required = true) Long processId,
       @PathVariable(value = "search-name", required = false) String search,
-      @PageableDefault(sort = "code", direction = Direction.ASC) Pageable pageable) {
+      Pageable pageable) {
 
     FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
     Long companyAdminId = userDetails.getUser().getId();

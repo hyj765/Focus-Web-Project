@@ -78,7 +78,7 @@ public class DataInputController {
     public ResponseEntity<?> DownloadEvaluatorExcel(HttpServletResponse response){
         response.setHeader("Content-Disposition", "attachment;filename=evaluator_input_here.xlsx");
         response.setContentType("application/octet-stream");
-        String[] headers ={"이름","사번","부서","직급","전화번호","이메일"};
+        String[] headers ={"사번","부서","이메일","이름","직급","전화번호"};
         Workbook workbook = DataService.CreateWorkbook(headers);
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -96,7 +96,7 @@ public class DataInputController {
     public ResponseEntity<?> DownloadApplicantExcel(HttpServletResponse response){
         response.setHeader("Content-Disposition", "attachment;filename=Applicant_input_here.xlsx");
         response.setContentType("application/octet-stream");
-        String[] headers ={"수험번호","이름","성별","생년월일","이메일","전화번호","학위"};
+        String[] headers ={"수험번호", "이름", "전화번호","생년월일", "이메일", "성별", "학위(j:전문학사,b:학사,m:석사,d:박사", "4년제 대학교", "전문 대학교", "대학원", "전공", "학점", "학점 만점", "대외활동 수", "수상 횟수"};
         Workbook workbook = DataService.CreateWorkbook(headers);
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
