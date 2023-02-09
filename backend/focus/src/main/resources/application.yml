@@ -32,11 +32,6 @@ spring:
       file-size-threshold: 2KB
       max-file-size: 500KB
       max-request-size: 215MB
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: blackbunnya106@gmail.com
-    password: ppcohvausdqwdzie
   properties:
     mail:
       smtp:
@@ -44,6 +39,11 @@ spring:
           enable: true
           required: true
           auth: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: blackbunnya106@gmail.com
+    password: ppcohvausdqwdzie
 jwt:
   secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
   expiration: 1296000000
