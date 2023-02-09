@@ -8,10 +8,7 @@ import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.applicant.school.ApplicantCollege;
 import com.bb.focus.db.entity.applicant.school.ApplicantGraduate;
 import com.bb.focus.db.entity.applicant.school.ApplicantUniv;
-import com.bb.focus.db.repository.ApplicantRepository;
-import com.bb.focus.db.repository.CollegeRepository;
-import com.bb.focus.db.repository.GraduateSchoolRepository;
-import com.bb.focus.db.repository.UniversityRepository;
+import com.bb.focus.db.repository.*;
 import io.swagger.annotations.Api;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.*;
 import java.util.List;
 
@@ -59,14 +57,47 @@ public class DataInputController {
         this.graduateSchoolRepository = graduateSchoolRepository;
     }
 
-    @PostMapping("/upload/image")
-    public ResponseEntity<?> UploadImage(@RequestPart MultipartFile file){
+    @PostMapping("/upload/logo/image/")
+    public ResponseEntity<?> UploadlogoImage(@RequestBody Long companyId,@RequestPart MultipartFile file){
         if(!imageUtil.ExtensionCheck(file)){
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
+    @PostMapping("/upload/introduce/image/")
+    public ResponseEntity<?> UploadIntroducePaperImage(@RequestBody Long applicantId,@RequestPart MultipartFile file){
+        if(!imageUtil.ExtensionCheck(file)){
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+    @PostMapping("/upload/applicantsface/image/")
+    public ResponseEntity<?> UploadApplicantFaceImage(@RequestBody Long applicantId,@RequestPart MultipartFile file){
+        String savedImageName= null;
+        if(!imageUtil.ExtensionCheck(file)){
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+        Applicant applicant=applicantRepository.findById(applicantId).orElseThrow(IllegalArgumentException::new);
+        savedImageName = imageUtil.Upload(file,"face",applicant.getId());
+
+        applicant.setImage(savedImageName);
+        applicantRepository.save(applicant);
+
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+    @PostMapping("/upload/evaluatorface/image/")
+    public ResponseEntity<?> UploadEvaluatorFaceImage(@RequestBody Long evaluatorId,@RequestPart MultipartFile file){
+        if(!imageUtil.ExtensionCheck(file)){
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
 
     @GetMapping("/test/image")
     public ResponseEntity<?> testImage(){

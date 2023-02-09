@@ -14,7 +14,8 @@ public class ImageUtil {
   private final String filePath = "/etc/image";
   private final String companyLogoPath = filePath + "/logo";
   private final String introducePath = filePath + "/introduce";
-  private final String facePath = filePath + "/face";
+  private final String applicantFacePath = filePath + "/applicant";
+  private final String evaluatorFacePath = filePath + "/evaluator";
   public boolean ExtensionCheck(MultipartFile file){
     String extension = FilenameUtils
                       .getExtension(file.getOriginalFilename())
@@ -26,15 +27,19 @@ public class ImageUtil {
 
     return false;
   }
-
-  public int getImageCount(String keyword){
-    if(keyword.equals("face")){
-      keyword = facePath;
+  public String getFilePathByKeyword(String keyword){
+    if(keyword.equals("applicant")){
+      return applicantFacePath;
     }else if(keyword.equals("company")){
-      keyword = companyLogoPath;
-    }else{
-      keyword = introducePath;
+      return companyLogoPath;
+    }else if(keyword.equals(evaluatorFacePath)){
+     return evaluatorFacePath;
+    }else {
+      return introducePath;
     }
+  }
+  public int getImageCount(String keyword){
+    keyword = getFilePathByKeyword(keyword);
     File directory = new File(keyword);
     File[] files = directory.listFiles();
     if(files == null){
@@ -56,7 +61,7 @@ public class ImageUtil {
   public byte[] Read_image(String fileName, String folderPath) throws FileNotFoundException, IOException{
     File file = new File(folderPath);
     byte[] imageByteArray;
-    String path = folderPath + "\\" + fileName;
+    String path = folderPath + '/'+ fileName;
     if(!isFileExist(path)){
       return null;
     }
@@ -67,12 +72,13 @@ public class ImageUtil {
 
     return imageByteArray;
   }
-  public String Upload(MultipartFile file,String baseFileName){
-    int serialNumber =getImageCount(filePath);
-
-    String saveName = baseFileName + serialNumber + file.getOriginalFilename();
+  public String Upload(MultipartFile file,String baseFileName,Long uniqueValue){
+//    int serialNumber =getImageCount(baseFileName);
+    String savefilePath = getFilePathByKeyword(baseFileName);
+    String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+    String saveName = baseFileName + uniqueValue+ "."+extension;
     try {
-      File createdFile = new File(filePath+"\\"+saveName);
+      File createdFile = new File(savefilePath+"/"+saveName);
       file.transferTo(createdFile);
     }catch(IOException e){
         return null;
