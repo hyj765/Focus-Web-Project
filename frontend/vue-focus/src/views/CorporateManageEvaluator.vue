@@ -87,6 +87,7 @@
                     aria-describedby="button-addon2"
                   />
                   <span
+                    @click="filterEvaluatorsByName(searchName)"
                     class="input-group-text flex items-center px-3 py-1.5 text-base font-normal text-gray-700 text-center whitespace-nowrap rounded"
                     id="basic-addon2"
                   >
@@ -241,17 +242,29 @@ const filterEvaluatorsByDepartment = department => {
   currentEvaluators.value = currentEvaluators.value.filter(
     evaluator => evaluator.department === department,
   );
-  console.log(currentEvaluators.value);
+  console.log('currentEvaluators: ', currentEvaluators.value);
+  searchName.value = null;
 };
 const deactivateDepartmentFilter = () => {
   departmentFilterLabel.value = '부서별';
   currentEvaluators.value = evaluators.value;
+  searchName.value = null;
 };
 
 const searchName = ref('');
-// const filterEvaluatorsByName = (name) => {
-
-// }
+const filterEvaluatorsByName = name => {
+  if (departmentFilterLabel.value === '부서별') {
+    currentEvaluators.value = evaluators.value;
+  } else {
+    currentEvaluators.value = evaluators.value.filter(
+      evaluator => evaluator.department === departmentFilterLabel.value,
+    );
+  }
+  console.log('filterByName currentEvaluators: ', currentEvaluators.value);
+  currentEvaluators.value = currentEvaluators.value.filter(
+    evaluator => evaluator.name === name,
+  );
+};
 
 // 총 페이지 값 (페이징 구현할 때 필요할 것으로 예상)
 let totalPageCount = 0;
