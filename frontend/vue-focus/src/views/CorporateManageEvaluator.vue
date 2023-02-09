@@ -79,6 +79,7 @@
                   class="relative flex flex-row items-stretch w-auto px-4 rounded input-group"
                 >
                   <input
+                    v-model="searchName"
                     type="search"
                     class="relative flex-auto block w-full min-w-0 px-3 m-0 text-base font-normal text-gray-700 transition ease-in-out bg-white border border-gray-300 border-solid rounded form-control bg-clip-padding focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     placeholder="이름 검색"
@@ -247,6 +248,11 @@ const deactivateDepartmentFilter = () => {
   currentEvaluators.value = evaluators.value;
 };
 
+const searchName = ref('');
+// const filterEvaluatorsByName = (name) => {
+
+// }
+
 // 총 페이지 값 (페이징 구현할 때 필요할 것으로 예상)
 let totalPageCount = 0;
 const pageSize = 4;
@@ -268,7 +274,7 @@ const getEvaluatorsInfo = () => {
       },
     })
     .then(res => {
-      console.log('res.data: ', res.data);
+      // console.log('res.data: ', res.data);
       // 페이징 기능 구현 시 필요한 totalPageCount 값 계산
       evaluatorCount = res.data.totalElements;
       remainder = evaluatorCount % pageSize;
@@ -279,8 +285,8 @@ const getEvaluatorsInfo = () => {
       }
       evaluators.value = res.data.content;
       currentEvaluators.value = res.data.content;
-      console.log('evaluators: ', evaluators.value);
-      console.log('currentEvaluators: ', currentEvaluators.value);
+      // console.log('evaluators: ', evaluators.value);
+      // console.log('currentEvaluators: ', currentEvaluators.value);
 
       // Departments Filter
       const tempDepartments = evaluators.value.map(
@@ -291,7 +297,7 @@ const getEvaluatorsInfo = () => {
           departments.value.push(department);
         }
       }
-      console.log('departments: ', departments.value);
+      // console.log('departments: ', departments.value);
     });
 };
 
