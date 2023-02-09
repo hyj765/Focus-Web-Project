@@ -107,10 +107,10 @@ public class ApplicantServiceImpl implements ApplicantService{
     String newPwd = getRandomString();
 
     //메일
-//    Map<String, String> content = new HashMap<>();
-//    content.put("id", newId);
-//    content.put("pwd", newPwd);
-//    mailService.sendAccountMail(applicant.getEmail(), content);
+    Map<String, String> content = new HashMap<>();
+    content.put("id", newId);
+    content.put("pwd", newPwd);
+    mailService.sendAccountMail(applicant.getEmail(), content);
 
     //암호화
 //    String encodedPwd = EncryptionUtils.encryptSHA256(newPwd);

@@ -28,7 +28,7 @@ public class EvaluatorServiceImpl implements EvaluatorService{
 
   private final EvaluatorRepository evaluatorRepository;
 
-//  private final MailService mailService;
+  private final MailService mailService;
 //  private final PasswordEncoder passwordEncoder;
 
   /**
@@ -72,10 +72,10 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     String newPwd = getRandomString();
 
     //메일
-//    Map<String, String> content = new HashMap<>();
-//    content.put("id", newId);
-//    content.put("pwd", newPwd);
-//    mailService.sendAccountMail(evaluator.getEmail(), content);
+    Map<String, String> content = new HashMap<>();
+    content.put("id", newId);
+    content.put("pwd", newPwd);
+    mailService.sendAccountMail(evaluator.getEmail(), content);
 
     //암호화
 //    String encodedPwd = EncryptionUtils.encryptSHA256(newPwd);

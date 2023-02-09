@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class ImageUtil {
 
+  private final String filePath = "/etc/image";
+
   public boolean ExtensionCheck(MultipartFile file){
     String extension = FilenameUtils
                       .getExtension(file.getOriginalFilename())
@@ -76,11 +78,11 @@ public class ImageUtil {
     return imageByteArray;
   }
   public boolean Upload(MultipartFile file,String baseFileName){
-    String filePath = "tmp/image";
+//    String filePath = "tmp/image";
     int serialNumber =getImageCount(filePath);
 
     String saveName = baseFileName + serialNumber + file.getOriginalFilename();
-    filePath = filePath + "\\selfintroduce";
+//    filePath = filePath + "\\selfintroduce";
     try {
 
       File createdFile = new File(filePath+"\\"+saveName);
