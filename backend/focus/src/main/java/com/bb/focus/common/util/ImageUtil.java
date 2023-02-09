@@ -12,7 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImageUtil {
 
   private final String filePath = "/etc/image";
-
+  private final String companyLogoPath = filePath + "/logo";
+  private final String introducePath = filePath + "/introduce";
+  private final String facePath = filePath + "/face";
   public boolean ExtensionCheck(MultipartFile file){
     String extension = FilenameUtils
                       .getExtension(file.getOriginalFilename())
@@ -25,25 +27,14 @@ public class ImageUtil {
     return false;
   }
 
-  public boolean checkFolder(String folderName){
-    String filePath = System.getProperty("user.dir");
-    if(!folderName.equals("")){
-      folderName = "\\"+folderName;
-    }
-    File file = new File(filePath+ "\\images" + folderName);
-
-    if(file.exists()){
-      return true;
-    }else{
-      file.mkdir();
-      if(file.exists()){
-        return true;
-      }
-    }
-    return false;
-  }
-
   public int getImageCount(String keyword){
+    if(keyword.equals("face")){
+      keyword = facePath;
+    }else if(keyword.equals("company")){
+      keyword = companyLogoPath;
+    }else{
+      keyword = introducePath;
+    }
     File directory = new File(keyword);
     File[] files = directory.listFiles();
     if(files == null){
@@ -66,7 +57,6 @@ public class ImageUtil {
     File file = new File(folderPath);
     byte[] imageByteArray;
     String path = folderPath + "\\" + fileName;
-
     if(!isFileExist(path)){
       return null;
     }
@@ -77,20 +67,17 @@ public class ImageUtil {
 
     return imageByteArray;
   }
-  public boolean Upload(MultipartFile file,String baseFileName){
-//    String filePath = "tmp/image";
+  public String Upload(MultipartFile file,String baseFileName){
     int serialNumber =getImageCount(filePath);
 
     String saveName = baseFileName + serialNumber + file.getOriginalFilename();
-//    filePath = filePath + "\\selfintroduce";
     try {
-
       File createdFile = new File(filePath+"\\"+saveName);
       file.transferTo(createdFile);
     }catch(IOException e){
-        return false;
+        return null;
     }
-    return true;
+    return saveName;
   }
 
   public boolean Delete(String fileName,String folderPath){
