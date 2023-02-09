@@ -19,7 +19,7 @@
                   <MenuButton
                     class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
                   >
-                    부서별
+                    {{ departmentFilterLabel }}
                     <ChevronDownIcon
                       class="w-5 h-5 ml-2 -mr-1"
                       aria-hidden="true"
@@ -40,56 +40,35 @@
                   >
                     <div class="py-1">
                       <MenuItem v-slot="{ active }">
-                        <a
-                          href="#"
+                        <p
+                          @click="deactivateDepartmentFilter()"
                           :class="[
                             active
                               ? 'bg-gray-100 text-gray-900'
                               : 'text-gray-700',
                             'block px-4 py-2 text-sm',
                           ]"
-                          >Account settings</a
                         >
+                          전체 (Show All)
+                        </p>
                       </MenuItem>
-                      <MenuItem v-slot="{ active }">
-                        <a
-                          href="#"
+                      <MenuItem
+                        v-slot="{ active }"
+                        v-for="department in departments"
+                        :key="department.id"
+                      >
+                        <p
+                          @click="filterEvaluatorsByDepartment(department)"
                           :class="[
                             active
                               ? 'bg-gray-100 text-gray-900'
                               : 'text-gray-700',
                             'block px-4 py-2 text-sm',
                           ]"
-                          >Support</a
                         >
+                          {{ department }}
+                        </p>
                       </MenuItem>
-                      <MenuItem v-slot="{ active }">
-                        <a
-                          href="#"
-                          :class="[
-                            active
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-700',
-                            'block px-4 py-2 text-sm',
-                          ]"
-                          >License</a
-                        >
-                      </MenuItem>
-                      <form method="POST" action="#">
-                        <MenuItem v-slot="{ active }">
-                          <button
-                            type="submit"
-                            :class="[
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'block w-full px-4 py-2 text-left text-sm',
-                            ]"
-                          >
-                            Sign out
-                          </button>
-                        </MenuItem>
-                      </form>
                     </div>
                   </MenuItems>
                 </transition>
@@ -185,7 +164,10 @@
                   </th>
                 </tr>
               </thead>
-              <tbody v-for="(evaluator, index) in evaluators" :key="index">
+              <tbody
+                v-for="(evaluator, index) in currentEvaluators"
+                :key="index"
+              >
                 <tr
                   class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
                 >
@@ -249,6 +231,22 @@ defineEmits(['update:comp']);
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 
 const evaluators = ref(null);
+const currentEvaluators = ref(null);
+const departments = ref([]);
+const departmentFilterLabel = ref('부서별');
+const filterEvaluatorsByDepartment = department => {
+  departmentFilterLabel.value = department;
+  currentEvaluators.value = evaluators.value;
+  currentEvaluators.value = currentEvaluators.value.filter(
+    evaluator => evaluator.department === department,
+  );
+  console.log(currentEvaluators.value);
+};
+const deactivateDepartmentFilter = () => {
+  departmentFilterLabel.value = '부서별';
+  currentEvaluators.value = evaluators.value;
+};
+
 // 총 페이지 값 (페이징 구현할 때 필요할 것으로 예상)
 let totalPageCount = 0;
 const pageSize = 4;
@@ -270,8 +268,9 @@ const getEvaluatorsInfo = () => {
       },
     })
     .then(res => {
+      console.log('res.data: ', res.data);
       // 페이징 기능 구현 시 필요한 totalPageCount 값 계산
-      evaluatorCount = res.data.size;
+      evaluatorCount = res.data.totalElements;
       remainder = evaluatorCount % pageSize;
       if (remainder === 0) {
         totalPageCount = parseInt(evaluatorCount / pageSize);
@@ -279,7 +278,20 @@ const getEvaluatorsInfo = () => {
         totalPageCount = parseInt(evaluatorCount / pageSize) + 1;
       }
       evaluators.value = res.data.content;
+      currentEvaluators.value = res.data.content;
       console.log('evaluators: ', evaluators.value);
+      console.log('currentEvaluators: ', currentEvaluators.value);
+
+      // Departments Filter
+      const tempDepartments = evaluators.value.map(
+        evaluator => evaluator.department,
+      );
+      for (const department of tempDepartments) {
+        if (!departments.value.includes(department)) {
+          departments.value.push(department);
+        }
+      }
+      console.log('departments: ', departments.value);
     });
 };
 

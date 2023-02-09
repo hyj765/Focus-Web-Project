@@ -13,33 +13,52 @@
     </p>
     <div class="space-y-5">
       <!-- 전형목록 -->
-      <div class="flex flex-row items-center justify-center space-x-10">
+      <div
+        v-for="interview in interviews"
+        :key="interview.id"
+        class="flex flex-row items-center justify-center space-x-10"
+      >
         <div
           class="flex flex-row items-center justify-center px-4 py-2 space-x-4 text-gray-600 bg-white rounded-md shadow-md"
         >
-          <p class="text-lg font-bold">두나무 개발자 FE</p>
+          <p class="text-lg font-bold">{{ interview.name }}</p>
           <p>|</p>
-          <p>2022.02.03 ~ 2022.03.05</p>
+          <p>
+            {{ interview.startDate.slice(0, 10) }} ~
+            {{ interview.startDate.slice(0, 10) }}
+          </p>
           <p>|</p>
-          <p>총 3 차</p>
-        </div>
-      </div>
-      <!-- 전형목록 -->
-      <div class="flex flex-row items-center justify-center space-x-10">
-        <div
-          class="flex flex-row items-center justify-center px-4 py-2 space-x-4 text-gray-600 bg-white rounded-md shadow-md"
-        >
-          <p class="text-lg font-bold">두나무 개발자 FE</p>
-          <p>|</p>
-          <p>2022.02.03 ~ 2022.03.05</p>
-          <p>|</p>
-          <p>총 3 차</p>
+          <p>총 {{ interview.interviewCount }} 차</p>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+const interviews = ref(null);
+
+const getInterviewInfo = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/interview/process`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log('interviews: ', res.data);
+      interviews.value = res.data;
+    });
+};
+
+onMounted(() => {
+  getInterviewInfo();
+});
+</script>
 
 <style lang="scss" scoped></style>

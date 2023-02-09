@@ -51,7 +51,7 @@ const getInterviewInfo = () => {
       },
     })
     .then(res => {
-      console.log(res.data);
+      console.log('interviews: ', res.data);
       interviews.value = res.data;
     });
 };
