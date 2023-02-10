@@ -12,6 +12,7 @@ import com.bb.focus.api.service.ServiceAdminService;
 import com.bb.focus.api.service.ServiceNoticeCategoryService;
 import com.bb.focus.api.service.ServiceNoticeService;
 import com.bb.focus.common.auth.FocusUserDetails;
+import com.bb.focus.common.exception.exception.RestApiException;
 import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.db.entity.admin.ServiceAdmin;
 import com.bb.focus.db.entity.admin.ServiceNotice;
@@ -25,6 +26,7 @@ import io.swagger.annotations.ApiResponses;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -90,12 +92,12 @@ public class ServiceAdminController {
       @ApiResponse(code = 500, message = "서버 오류")
   })
   public ResponseEntity<? extends BaseResponseBody> registerCompanyAdmin(
-      @RequestBody @ApiParam(value = "회원가입 정보", required = true) CompanyAdminRegisterPostReq registerInfo) {
+      @RequestBody @ApiParam(value = "회원가입 정보", required = true) @Valid CompanyAdminRegisterPostReq registerInfo)
+      {
 
     CompanyAdmin companyAdmin = companyAdminService.createCompanyAdmin(registerInfo);
-    System.out.println("companyAdmin : "+companyAdmin.getId());
     Long sequenceId = companyAdmin.getId();
-    companyAdmin.setUserId(companyAdmin.getUserId()+sequenceId);
+    companyAdmin.setUserId(companyAdmin.getUserId() + sequenceId);
     CompanyAdmin companyAdminRevised = companyAdminService.updateCompanyAdminUserId(companyAdmin);
 
     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
@@ -182,16 +184,18 @@ public class ServiceAdminController {
 
   @ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
   @GetMapping("/me")
-  public ResponseEntity<ServiceAdminRes> getUserInfo(@ApiIgnore Authentication authentication) {
+  public ResponseEntity<?> getUserInfo(@ApiIgnore Authentication authentication) {
     /**
      * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
      * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
      */
+
     FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
     Long id = userDetails.getUser().getId();
     ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminById(id);
 
     return ResponseEntity.status(200).body(ServiceAdminRes.of(serviceAdmin));
+//      throw new RestApiException(UserErrorCode.INACTIVE_USER);
   }
 
   @ApiOperation(value = "서비스 공지 사항 생성", notes = "서비스 공지 사항을 생성한다.")

@@ -3,6 +3,9 @@ package com.bb.focus.api.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDateTime;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +18,7 @@ import lombok.Setter;
 public class CompanyAdminRegisterPostReq {
 
   @ApiModelProperty(name = "기업 이름", example = "삼성")
+  @NotBlank(message="회사 이름을 입력해주세요.")
   String companyName;
   @ApiModelProperty(name = "계약 시작 날짜", example = "2022-01-23T17:43:02.945175")
   LocalDateTime startDate;
