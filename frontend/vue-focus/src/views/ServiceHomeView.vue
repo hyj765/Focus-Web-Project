@@ -128,6 +128,7 @@
         class="flex-auto"
         :is="currentComp"
         @update:comp="changeCurrentComp(ServiceAccountCreate)"
+        @update:compnotice="changeCurrentComp(ServiceNoticeCreate)"
       />
     </div>
   </div>
@@ -142,6 +143,7 @@ import ServiceAccount from '@/views/ServiceAccount.vue';
 import ServiceDashboard from '@/views/ServiceDashboard.vue';
 import ServiceNotice from './ServiceNotice.vue';
 import ServiceAccountCreate from '@/views/ServiceAccountCreate.vue';
+import ServiceNoticeCreate from './ServiceNoticeCreate.vue';
 
 const currentComp = shallowRef(ServiceDashboard);
 const changeCurrentComp = comp => (currentComp.value = comp);
