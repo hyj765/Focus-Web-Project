@@ -93,6 +93,10 @@ public class ServiceAdminController {
       @RequestBody @ApiParam(value = "회원가입 정보", required = true) CompanyAdminRegisterPostReq registerInfo) {
 
     CompanyAdmin companyAdmin = companyAdminService.createCompanyAdmin(registerInfo);
+    System.out.println("companyAdmin : "+companyAdmin.getId());
+    Long sequenceId = companyAdmin.getId();
+    companyAdmin.setUserId(companyAdmin.getUserId()+sequenceId);
+    CompanyAdmin companyAdminRevised = companyAdminService.updateCompanyAdminUserId(companyAdmin);
 
     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
   }

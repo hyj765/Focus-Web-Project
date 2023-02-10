@@ -13,6 +13,8 @@ import java.util.List;
 public interface CompanyAdminService {
     CompanyAdmin createCompanyAdmin(CompanyAdminRegisterPostReq userRegisterInfo);
 
+    CompanyAdmin updateCompanyAdminUserId(CompanyAdmin companyAdminRevised);
+
     CompanyAdmin getCompanyAdminByUserId(String userId);
     CompanyAdmin getCompanyAdminById(Long id);
 
