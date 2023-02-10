@@ -20,7 +20,7 @@ public class ServiceAdminServiceImpl implements ServiceAdminService {
   public ServiceAdmin createUser(ServiceAdminRegisterPostReq serviceAdminRegisterInfo) {
     ServiceAdmin serviceAdmin = new ServiceAdmin();
     serviceAdmin.setUserId(serviceAdminRegisterInfo.getUserId());
-//    serviceAdmin.setPwd(EncryptionUtils.encryptSHA256(serviceAdminRegisterInfo.getPassword()));
+//    serviceAdmin.setPwd(passwordEncoder.encode(serviceAdminRegisterInfo.getPassword()));
     serviceAdmin.setPwd(serviceAdminRegisterInfo.getPassword());
     serviceAdmin.setEmail(serviceAdminRegisterInfo.getEmail());
     serviceAdmin.setTel(serviceAdminRegisterInfo.getTel());
@@ -32,12 +32,6 @@ public class ServiceAdminServiceImpl implements ServiceAdminService {
   @Override
   public ServiceAdmin getServiceAdminByUserId(String userId) {
     ServiceAdmin serviceAdmin = serviceAdminRepository.findServiceAdminByUserId(userId);
-    return serviceAdmin;
-  }
-
-  @Override
-  public ServiceAdmin getServiceAdminById(Long id) {
-    ServiceAdmin serviceAdmin = serviceAdminRepository.findServiceAdminById(id);
     return serviceAdmin;
   }
 }

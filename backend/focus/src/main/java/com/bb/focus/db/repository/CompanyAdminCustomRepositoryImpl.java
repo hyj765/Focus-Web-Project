@@ -2,10 +2,7 @@ package com.bb.focus.db.repository;
 
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.company.QCompanyAdmin;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,13 +18,6 @@ public class CompanyAdminCustomRepositoryImpl implements CompanyAdminCustomRepos
   public CompanyAdmin findCompanyAdminByUserId(String userId) {
     CompanyAdmin companyAdmin = jpaQueryFactory.select(qCompanyAdmin).from(qCompanyAdmin)
         .where(qCompanyAdmin.userId.eq(userId)).fetchOne();
-    return companyAdmin;
-  }
-
-  @Override
-  public CompanyAdmin findCompanyAdminById(Long id) {
-    CompanyAdmin companyAdmin = jpaQueryFactory.select(qCompanyAdmin).from(qCompanyAdmin)
-        .where(qCompanyAdmin.id.eq(id)).fetchOne();
     return companyAdmin;
   }
 
@@ -57,17 +47,6 @@ public class CompanyAdminCustomRepositoryImpl implements CompanyAdminCustomRepos
         .execute();
 
     return companyAdminId;
-  }
-
-  @Override
-  public List<CompanyAdmin> findAllContainsToday() {
-    return jpaQueryFactory
-        .select(qCompanyAdmin)
-        .from(qCompanyAdmin)
-        .where(qCompanyAdmin.startDate.lt(LocalDateTime.now()), qCompanyAdmin.endDate.gt(LocalDateTime.now()))
-        .orderBy(qCompanyAdmin.endDate.asc())
-        .fetch();
-
   }
 
 

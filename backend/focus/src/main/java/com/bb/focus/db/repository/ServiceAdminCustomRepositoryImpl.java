@@ -20,11 +20,4 @@ public class ServiceAdminCustomRepositoryImpl implements ServiceAdminCustomRepos
         .where(qServiceAdmin.userId.eq(userId)).fetchOne();
     return serviceAdmin;
   }
-
-  @Override
-  public ServiceAdmin findServiceAdminById(Long id) {
-    ServiceAdmin serviceAdmin = jpaQueryFactory.select(qServiceAdmin).from(qServiceAdmin)
-        .where(qServiceAdmin.id.eq(id)).fetchOne();
-    return serviceAdmin;
-  }
 }

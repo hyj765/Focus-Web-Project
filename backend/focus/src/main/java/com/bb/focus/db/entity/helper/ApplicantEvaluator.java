@@ -5,7 +5,6 @@ import com.bb.focus.db.entity.evaluation.EvaluationResult;
 import com.bb.focus.db.entity.evaluation.EvaluationSheet;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.entity.interview.Interview;
-import com.bb.focus.db.entity.interview.InterviewRoom;
 import com.sun.istack.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "applicants_evaluators")
 public class ApplicantEvaluator {
 
@@ -44,10 +43,6 @@ public class ApplicantEvaluator {
   @JoinColumn(name="evaluation_sheet_id")
   private EvaluationSheet evaluationSheet;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "interview_room_id")
-  private InterviewRoom interviewRoom;
-
   @Column(length = 1000)
   private String memo;
 
@@ -56,13 +51,5 @@ public class ApplicantEvaluator {
 
   @OneToMany(targetEntity = com.bb.focus.db.entity.evaluation.EvaluationResult.class, mappedBy = "applicantEvaluator")
   private List<EvaluationResult> evaluationResultList = new ArrayList<>();
-
-  public boolean addEvaluationResult(EvaluationResult evaluationResult){
-    this.evaluationResultList.add(evaluationResult);
-    if(evaluationResult.getApplicantEvaluator() != this){
-      evaluationResult.setApplicantEvaluator(this);
-    }
-    return true;
-  }
 
 }

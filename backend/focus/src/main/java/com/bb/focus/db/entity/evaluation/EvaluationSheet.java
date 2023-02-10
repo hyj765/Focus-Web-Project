@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor()
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "evaluation_sheets")
 public class EvaluationSheet {
 
@@ -31,13 +31,7 @@ public class EvaluationSheet {
     @Column(length = 30)
     private String name;
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.evaluation.EvaluationItem.class, mappedBy = "evaluationSheet",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    @OneToMany(targetEntity = com.bb.focus.db.entity.evaluation.EvaluationItem.class, mappedBy = "evaluationSheet")
     private List<EvaluationItem> evaluationItemList = new ArrayList<>();
 
-    public void addEvaluationItem(EvaluationItem evaluationItem){
-        this.evaluationItemList.add(evaluationItem);
-        if(evaluationItem.getEvaluationSheet() != this){
-            evaluationItem.setEvaluationSheet(this);
-        }
-    }
 }

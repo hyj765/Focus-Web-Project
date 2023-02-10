@@ -1,59 +1,28 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.CompanyAdminRegisterPostReq;
-import com.bb.focus.api.response.ApplicantLogRes;
-import com.bb.focus.api.response.InterviewRoomRes;
-import com.bb.focus.api.response.ProcessRes;
-import com.bb.focus.db.entity.applicant.ApplicantPassLog;
-import com.bb.focus.db.entity.applicant.Status;
 import com.bb.focus.db.entity.company.CompanyAdmin;
-import com.bb.focus.db.entity.interview.Interview;
-import com.bb.focus.db.entity.interview.InterviewRoom;
-import com.bb.focus.db.entity.process.Process;
-import com.bb.focus.db.repository.ApplicantPassLogRepository;
 import com.bb.focus.db.repository.CompanyAdminRepository;
-import com.bb.focus.db.repository.InterviewRoomRepository;
-import com.bb.focus.db.repository.ProcessRepository;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service("companyAdminService")
 public class CompanyAdminServiceImpl implements CompanyAdminService {
 
-  CompanyAdminRepository companyAdminRepository;
-  ProcessRepository processRepository;
-  InterviewRoomRepository interviewRoomRepository;
-  ApplicantPassLogRepository applicantPassLogRepository;
-
   @Autowired
-  public CompanyAdminServiceImpl(CompanyAdminRepository companyAdminRepo
-      , ProcessRepository processRepo
-      , InterviewRoomRepository interviewRoomRepo
-      , ApplicantPassLogRepository applicantPassLogRepo) {
-    companyAdminRepository = companyAdminRepo;
-    processRepository = processRepo;
-    interviewRoomRepository = interviewRoomRepo;
-    applicantPassLogRepository = applicantPassLogRepo;
-  }
+  CompanyAdminRepository companyAdminRepository;
+
+//  @Autowired
+//  PasswordEncoder passwordEncoder;
 
   @Override
   public CompanyAdmin createCompanyAdmin(CompanyAdminRegisterPostReq userRegisterInfo) {
     CompanyAdmin companyAdmin = new CompanyAdmin();
-
-    String userId =
-        userRegisterInfo.getCompanyName() + "CA" + userRegisterInfo.getStartDate().toLocalDate()
-            .format(
-                DateTimeFormatter.ofPattern("yyyyMMdd"));
-    String pwd = getRandomString();
-//    String pwd = EncryptionUtils.encryptSHA256(getRandomString());
-
-    companyAdmin.setUserId(userId);
-    companyAdmin.setPwd(pwd);
+    companyAdmin.setUserId(userRegisterInfo.getUserId());
+//    companyAdmin.setPwd(passwordEncoder.encode(userRegisterInfo.getPwd()));
+    companyAdmin.setPwd(userRegisterInfo.getPwd());
     companyAdmin.setCompanyName(userRegisterInfo.getCompanyName());
     companyAdmin.setStartDate(userRegisterInfo.getStartDate());
     companyAdmin.setEndDate(userRegisterInfo.getEndDate());
@@ -75,12 +44,6 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
   }
 
   @Override
-  public CompanyAdmin getCompanyAdminById(Long id) {
-    CompanyAdmin companyAdmin = companyAdminRepository.findCompanyAdminById(id);
-    return companyAdmin;
-  }
-
-  @Override
   public List<CompanyAdmin> getAll() {
     List<CompanyAdmin> companyAdminList = companyAdminRepository.findAll();
     return companyAdminList;
@@ -89,6 +52,9 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
   @Override
   public Long updateCompanyAdminByUserInfo(CompanyAdminRegisterPostReq userUpdateInfo) {
     CompanyAdmin companyAdmin = new CompanyAdmin();
+    companyAdmin.setUserId(userUpdateInfo.getUserId());
+//    companyAdmin.setPwd(passwordEncoder.encode(userUpdateInfo.getPwd()));
+    companyAdmin.setPwd(userUpdateInfo.getPwd());
     companyAdmin.setCompanyName(userUpdateInfo.getCompanyName());
     companyAdmin.setStartDate(userUpdateInfo.getStartDate());
     companyAdmin.setEndDate(userUpdateInfo.getEndDate());
@@ -103,114 +69,4 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
     Long companyAdminId = companyAdminRepository.updateCompanyAdminByUserId(companyAdmin);
     return companyAdminId;
   }
-
-  @Override
-  public int getAllEvaluationCount(Long companyAdminId) {
-    CompanyAdmin companyAdmin = companyAdminRepository.findCompanyAdminById(companyAdminId);
-    return companyAdmin.getEvaluatorList().size();
-  }
-
-  @Override
-  public int getAllApplicantCount(Long companyAdminId) {
-    CompanyAdmin companyAdmin = companyAdminRepository.findCompanyAdminById(companyAdminId);
-    int applicantCount = 0;
-
-    List<Process> processes = companyAdmin.getProcessList();
-    for (Process process : processes) {
-      applicantCount += process.getApplicantList().size();
-    }
-
-    return applicantCount;
-  }
-
-  @Override
-  public List<ProcessRes> getAllProcess(Long companyAdminId) {
-    List<ProcessRes> processResList = processRepository.findAllExpectedProcess(companyAdminId);
-    return processResList;
-  }
-
-  @Override
-  public List<InterviewRoomRes> getAllReservedInterview(Long processId) {
-    Process process = processRepository.findById(processId).orElseThrow(IllegalAccessError::new);
-    Long cur_step = (long) process.getCurrentStep();
-    String processName = process.getName();
-    List<InterviewRoom> interviewRoomList = interviewRoomRepository.findByProcessNameAndInterviewRound(
-        processName, cur_step);
-    List<InterviewRoomRes> interviewRoomResList = new ArrayList<>();
-
-    for (InterviewRoom interviewRoom : interviewRoomList) {
-      if (interviewRoom.getStartTime().isAfter(LocalDateTime.now())) {
-        InterviewRoomRes interviewRoomRes = new InterviewRoomRes(interviewRoom);
-        interviewRoomResList.add(interviewRoomRes);
-      }
-    }
-
-    return interviewRoomResList;
-  }
-
-
-  @Override
-  public List<ApplicantLogRes> getAllInterviewPerPassApplicant(Long processId) {
-    Process process = processRepository.findById(processId).orElseThrow(IllegalAccessError::new);
-    if (process == null) {
-      return null;
-    }
-    int cur_step = process.getCurrentStep();
-    String processName = process.getName();
-    List<ApplicantPassLog> applicantPassLogsList = applicantPassLogRepository.findByProcessNameAndStep(
-        processName, cur_step);
-    List<ApplicantLogRes> applicantLogResList = new ArrayList<>();
-
-    for (ApplicantPassLog applicantPassLog : applicantPassLogsList) {
-      if (applicantPassLog.getStatus() == Status.P) {
-        ApplicantLogRes applicantLogRes = new ApplicantLogRes(applicantPassLog);
-        applicantLogResList.add(applicantLogRes);
-      }
-    }
-
-    return applicantLogResList;
-  }
-
-  @Override
-  public List<ProcessRes> getFinishStepPerProcessInfo(Long companyId) {
-    List<Process> processList = processRepository.findAllByCompanyAdminId(companyId);
-    List<ProcessRes> processResList = new ArrayList<>();
-    for (Process process : processList) {
-      if (process.getCurrentStep() > process.getInterviewCount()) {
-        continue;
-      }
-      for (Interview interview : process.getInterviewList()) {
-        if (process.getCurrentStep() == interview.getStep()) {
-          if (LocalDateTime.now().isAfter(interview.getEndDate())) {
-            ProcessRes processRes = new ProcessRes();
-            processRes.GetProcess(process);
-            processResList.add(processRes);
-          }
-        }
-      }
-    }
-
-    return processResList;
-  }
-
-  @Override
-  public List<CompanyAdmin> getAllContainsToday() {
-    return companyAdminRepository.findAllContainsToday();
-  }
-
-  private String getRandomString() {
-    int leftLimit = 48;     //숫자 0
-    int rightLimit = 122;   //영문자 z
-    int targetStringLength = 10;    //10글자로 생성
-    Random random = new Random();
-
-    String generatedString = random.ints(leftLimit, rightLimit + 1)
-//        .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-        .limit(targetStringLength)
-        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-        .toString();
-
-    return generatedString;
-  }
-
 }

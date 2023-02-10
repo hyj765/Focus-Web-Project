@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "evaluators_interview_rooms")
 public class EvaluatorInterviewRoom {
 
@@ -28,5 +28,4 @@ public class EvaluatorInterviewRoom {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="interview_room_id")
     private InterviewRoom interviewRoom;
-
 }
