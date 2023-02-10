@@ -23,7 +23,7 @@
         type="tel"
         id="tel"
         required="true"
-        placeholder="010-xxx-xxxx"
+        placeholder="010-1234-5678"
       />
       <p>담당자 이메일</p>
       <br />

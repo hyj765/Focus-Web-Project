@@ -6,6 +6,7 @@ const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 export default createStore({
   state: {
     user: null,
+    currentDepartments: null,
   },
   getters: {
     loggedIn(state) {
@@ -29,6 +30,10 @@ export default createStore({
       localStorage.removeItem('user');
       axios.defaults.headers.common['Authorization'] = null;
     },
+    SAVE_DEPARTMENTS(state, departments) {
+      state.currentDepartments = departments;
+      console.log('currentDepartments: ', state.currentDepartments);
+    },
   },
   actions: {
     login({ commit }, credentials) {
@@ -44,6 +49,9 @@ export default createStore({
     },
     logout({ commit }) {
       commit('LOGOUT');
+    },
+    saveDepartments({ commit }, departments) {
+      commit('SAVE_DEPARTMENTS', departments);
     },
   },
 });
