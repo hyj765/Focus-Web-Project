@@ -7,6 +7,7 @@ import com.bb.focus.db.entity.interview.Room;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,7 +28,7 @@ public class RoomController {
   @ApiOperation(value = "룸 생성", notes = "기업관리자로부터 입력받은 정보로 룸을 생성한다.")
   @PostMapping("/evaluators/{interview-id}")
   public ResponseEntity<?> createRoom(
-      @RequestBody @ApiParam(value = "룸 생성 정보", required = true) RoomReq.Create roomInfoList) {
+      @RequestBody @Valid @ApiParam(value = "룸 생성 정보", required = true) RoomReq.Create roomInfoList) {
 
     Room room = roomService.createRoom(roomInfoList);
     roomService.updateRoomById(room); // 면접실 코드, 대기실 코드 바로 넣어주기

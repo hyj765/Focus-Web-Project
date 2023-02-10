@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -39,6 +40,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {// R
     log.warn("handleIllegalArgument", e);
     ErrorCode errorCode = CommonErrorCode.INVALID_PARAMETER;
     return handleExceptionInternal(e, errorCode);
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+      HttpHeaders headers, HttpStatus status, WebRequest request) {
+    ErrorCode errorCode = CommonErrorCode.INVALID_PARAMETER_MAYBE_DATETIME;
+    return handleExceptionInternal(errorCode);
   }
 
   // IllegalArgumentException 에러 처리

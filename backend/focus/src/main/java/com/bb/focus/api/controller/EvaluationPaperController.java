@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.HashMap;
 import java.util.Map;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class EvaluationPaperController {
     @PostMapping("/sheets")
     public ResponseEntity<?> CreateSheet(
         @ApiIgnore Authentication authentication,
-        @RequestBody @ApiParam(value = "평가지 이름", required = true) EvaluationSheetReq.Create evaluationSheetReq){
+        @RequestBody @Valid @ApiParam(value = "평가지 이름", required = true) EvaluationSheetReq.Create evaluationSheetReq){
 
         FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
         Long companyAdminId = userDetails.getUser().getId();
@@ -57,7 +58,7 @@ public class EvaluationPaperController {
     @PostMapping("/sheets/items/{evaluation-sheet-id}")
     public ResponseEntity<?> CreateSheetItem(
             @PathVariable(name="evaluation-sheet-id")long sheetId,
-            @RequestBody @ApiParam(required = true) EvaluationItemReq evaluationItemReq){
+            @RequestBody @Valid @ApiParam(required = true) EvaluationItemReq evaluationItemReq){
 
         evaluationPaperService.CreateEvaluationItem(sheetId,evaluationItemReq);
 
@@ -92,7 +93,7 @@ public class EvaluationPaperController {
 
 
     @PutMapping("/sheets/modifysheet/{sheet-id}")
-    public ResponseEntity<?> ModifyEvaluationSheet(@PathVariable(name="sheet-id") Long sheetId, @RequestBody String sheetName){
+    public ResponseEntity<?> ModifyEvaluationSheet(@PathVariable(name="sheet-id") Long sheetId, @RequestBody @Valid String sheetName){
         if(evaluationPaperService.modifyEvaluationSheet(sheetId,sheetName)){
             return new ResponseEntity<String>("",HttpStatus.BAD_REQUEST);
         }
@@ -102,7 +103,7 @@ public class EvaluationPaperController {
     @PutMapping("/sheets/modifyitem/{sheet-id}/{sheetitem-id}")
     public ResponseEntity<?> ModifyEvaluationSheetItem(@PathVariable(name="sheet-id") Long sheetId,
                                                        @PathVariable(name="sheetitem-id") Long sheetItemId,
-                                                       @RequestBody EvaluationItemReq itemReq)
+                                                       @RequestBody @Valid EvaluationItemReq itemReq)
     {
         if(!evaluationPaperService.modifyEvaluationItem(sheetId,sheetItemId,itemReq.getScore(),itemReq.getContent())){
             return new ResponseEntity<String>("평가항목 수정 실패",HttpStatus.OK);

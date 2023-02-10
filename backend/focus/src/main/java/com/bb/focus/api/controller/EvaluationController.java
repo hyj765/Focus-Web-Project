@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.swagger.annotations.ApiOperation;
+import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -62,9 +63,9 @@ public class EvaluationController {
   @Transactional
   @PostMapping("/evaluation")
   public ResponseEntity<?> EvaluationApplicant(
-      @RequestBody EvaluationResultReq evaluationResultReq,
-      @RequestBody Long applicantEvaluatorId,
-      @RequestBody Long evaluationItemId
+      @RequestBody @Valid EvaluationResultReq evaluationResultReq,
+      @RequestBody @Valid Long applicantEvaluatorId,
+      @RequestBody @Valid Long evaluationItemId
       )
   {
     //처음 평가 시에 생성 -> 그 다음에는 해당 면접에서 해당 지원자 넘버가 있을 시 ->
@@ -81,7 +82,7 @@ public class EvaluationController {
   @ApiOperation(value = "합불여부 체크", notes = "각 인터뷰 마지막에 합불여부를 결정하는 API")
   @Transactional
   @PostMapping("/decision/pass")
-  public ResponseEntity<?> FinishInterview(@RequestBody List<InterviewResultReq> resultReq,@RequestBody Long processId){
+  public ResponseEntity<?> FinishInterview(@RequestBody @Valid List<InterviewResultReq> resultReq,@RequestBody @Valid Long processId){
 
     for (int i = 0; i < resultReq.size(); ++i) {
         evaluationService.LoggingUserPass(  processId
@@ -94,7 +95,7 @@ public class EvaluationController {
   @ApiOperation(value = "통계 테이블 갱신", notes = "현재 존재하는 사용자들에 대한 통계데이터 갱신")
   @Transactional
   @PostMapping("/staticstic/givestatistics")
-  public ResponseEntity<?> UpdateStatistic(@RequestBody Long processId){
+  public ResponseEntity<?> UpdateStatistic(@RequestBody @Valid Long processId){
     Map<String,Integer> major=dataProcessService.UpdateStatisticTable(processId);
     dataProcessService.CreateMajorTable(major,processId);
 
@@ -105,7 +106,7 @@ public class EvaluationController {
   @ApiOperation(value = "평가내역 수정함수", notes = "평가내역 수정함수 decision/pass가 사용되기 전에만 가능")
   @Transactional
   @PutMapping("/modify/evaluation")
-  public ResponseEntity<?> ModifyApplicantEvaluation(@RequestBody EvaluationResultReq evaluationResultReq, @RequestBody Long applicantEvaluationId){
+  public ResponseEntity<?> ModifyApplicantEvaluation(@RequestBody @Valid EvaluationResultReq evaluationResultReq, @RequestBody @Valid Long applicantEvaluationId){
 
     if(!evaluationService.ModifyApplicantEvaluation(evaluationResultReq)){
       return new ResponseEntity<String>("수정에 실패하였습니다.",HttpStatus.BAD_REQUEST);
@@ -121,7 +122,7 @@ public class EvaluationController {
   @ApiOperation(value = "평가자의 평가 메모 내용 갱신", notes = "평가자의 평가 메모를 갱신해주는 API")
   @Transactional
   @PutMapping("/save/memo")
-  public ResponseEntity<?> EvaluatorSaveMemo(@RequestBody Long applicantEvaluatorId,@RequestBody String memo) {
+  public ResponseEntity<?> EvaluatorSaveMemo(@RequestBody @Valid Long applicantEvaluatorId,@RequestBody @Valid String memo) {
     // applicantevaluatorId와 메모
     if(!evaluationService.UpdateApplicantEvaluationMemo(applicantEvaluatorId,memo)){
       return new ResponseEntity<String>("메모 갱신 실패",HttpStatus.BAD_REQUEST);

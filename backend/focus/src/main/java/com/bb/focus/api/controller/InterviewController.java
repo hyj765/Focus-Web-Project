@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -27,7 +28,7 @@ public class InterviewController {
   public ResponseEntity<?> createInterview(
       @ApiIgnore Authentication authentication,
       @PathVariable("process-id") Long processId,
-      @RequestBody @ApiParam(value = "면접 생성 정보", required = true) List<InterviewReq> interviewReq) {
+      @RequestBody @Valid @ApiParam(value = "면접 생성 정보", required = true) List<InterviewReq> interviewReq) {
 
     for (InterviewReq interview : interviewReq) {
       interviewService.createInterview(processId, interview);

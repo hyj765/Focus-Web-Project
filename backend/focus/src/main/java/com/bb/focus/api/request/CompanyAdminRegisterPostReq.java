@@ -28,12 +28,10 @@ public class CompanyAdminRegisterPostReq {
 
   @ApiModelProperty(name = "계약 시작 날짜", example = "2022-01-23T00:00:00.000000")
   @NotNull(message = "계약 시작 날짜를 입력해주세요.")
-  @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
   private LocalDateTime startDate;
 
   @ApiModelProperty(name = "계약 종료 날짜", example = "2025-01-23T00:00:00.000000")
   @NotNull(message = "계약 종료 날짜를 입력해주세요.")
-  @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
   private LocalDateTime endDate;
 
   @ApiModelProperty(name = "기업 대표 전화 번호", example = "02-1234-1234")

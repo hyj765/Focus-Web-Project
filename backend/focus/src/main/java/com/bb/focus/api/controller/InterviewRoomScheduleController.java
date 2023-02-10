@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiParam;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -49,7 +50,7 @@ public class InterviewRoomScheduleController {
   public ResponseEntity<?> createInterviewRoom(
       @ApiIgnore Authentication authentication,
       @PathVariable(value = "process-id") Long processId,
-      @RequestBody @ApiParam(value = "면접 일정 생성 정보", required = true) InterviewRoomReq interviewRoomReq) {
+      @RequestBody @Valid @ApiParam(value = "면접 일정 생성 정보", required = true) InterviewRoomReq interviewRoomReq) {
 
     InterviewRoom interviewRoom = interviewRoomService.createInterviewRoom(interviewRoomReq);
 
@@ -77,7 +78,7 @@ public class InterviewRoomScheduleController {
   public ResponseEntity<Map<String, Long>> updateInterviewRoom(
       @ApiIgnore Authentication authentication,
       @PathVariable(value = "interview-room-id") Long interviewRoomId,
-      @RequestBody @ApiParam(value = "면접 일정 수정 정보", required = true) InterviewRoomReq interviewRoomReq) {
+      @RequestBody @Valid @ApiParam(value = "면접 일정 수정 정보", required = true) InterviewRoomReq interviewRoomReq) {
 
     Long id = interviewRoomService.updateInterviewRoom(interviewRoomId, interviewRoomReq);
 
@@ -101,7 +102,7 @@ public class InterviewRoomScheduleController {
   @PostMapping("/add/evaluator")
   public ResponseEntity<?> addEvaluator(
       @ApiIgnore Authentication authentication,
-      @RequestBody @ApiParam(value = "평가자 추가 요청 정보") AddRemoveEvaluatorReq addEvaluatorReq) {
+      @RequestBody @Valid @ApiParam(value = "평가자 추가 요청 정보") AddRemoveEvaluatorReq addEvaluatorReq) {
 
     interviewRoomService.addEvaluatorToInterviewRoom(addEvaluatorReq.getInterviewRoomId(),
         addEvaluatorReq.getEvaluatorId());
@@ -118,7 +119,7 @@ public class InterviewRoomScheduleController {
   @PostMapping("/add/applicant")
   public ResponseEntity<?> addApplicant(
       @ApiIgnore Authentication authentication,
-      @RequestBody @ApiParam(value = "지원자 추가 요청 정보") AddRemoveApplicantReq addApplicantReq) {
+      @RequestBody @Valid @ApiParam(value = "지원자 추가 요청 정보") AddRemoveApplicantReq addApplicantReq) {
 
     interviewRoomService.addApplicantToInterviewRoom(addApplicantReq.getInterviewRoomId(),
         addApplicantReq.getApplicantId());
@@ -132,7 +133,7 @@ public class InterviewRoomScheduleController {
   @DeleteMapping("/remove/evaluator")
   public ResponseEntity<?> removeEvaluator(
       @ApiIgnore Authentication authentication,
-      @RequestBody @ApiParam(value = "평가자 삭제 요청 정보") AddRemoveEvaluatorReq removeEvaluatorReq) {
+      @RequestBody @Valid @ApiParam(value = "평가자 삭제 요청 정보") AddRemoveEvaluatorReq removeEvaluatorReq) {
 
     interviewRoomService.removeEvaluator(removeEvaluatorReq.getInterviewRoomId(),
         removeEvaluatorReq.getEvaluatorId());
@@ -147,7 +148,7 @@ public class InterviewRoomScheduleController {
   @DeleteMapping("/remove/applicant")
   public ResponseEntity<?> removeApplicant(
       @ApiIgnore Authentication authentication,
-      @RequestBody @ApiParam(value = "지원자 삭제 요청 정보") AddRemoveApplicantReq removeApplicantReq) {
+      @RequestBody @Valid @ApiParam(value = "지원자 삭제 요청 정보") AddRemoveApplicantReq removeApplicantReq) {
 
     interviewRoomService.removeApplicant(removeApplicantReq.getInterviewRoomId(),
         removeApplicantReq.getApplicantId());
