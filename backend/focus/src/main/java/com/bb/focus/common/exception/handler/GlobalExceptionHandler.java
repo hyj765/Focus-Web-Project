@@ -23,7 +23,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @Slf4j
-@RestControllerAdvice
+@RestControllerAdvice/*(basePackages = {"com.bb.focus.api.controller"})*/
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {// RuntimeException 처리
   @ExceptionHandler(RestApiException.class)
   public ResponseEntity<Object> handleCustomException(RestApiException e) {
