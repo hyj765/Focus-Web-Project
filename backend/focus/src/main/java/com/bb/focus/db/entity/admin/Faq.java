@@ -12,11 +12,14 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "faqs")
 public class Faq {
 
@@ -34,6 +37,7 @@ public class Faq {
     private String title;
 
     @NotNull
+    @CreatedDate
     private LocalDateTime createdAt;
 
     @NotNull

@@ -1,5 +1,6 @@
 package com.bb.focus.db.repository;
 
+import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import java.util.List;
 import java.util.Optional;

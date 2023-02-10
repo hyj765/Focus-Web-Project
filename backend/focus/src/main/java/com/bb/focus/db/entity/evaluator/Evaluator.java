@@ -68,15 +68,16 @@ public class Evaluator {
 
     @NotNull
     @ColumnDefault("3")
-    private Byte userRole;
+    private Byte userRole;   //1:서비스관리자, 2:기업관리자, 3:평가자, 4:지원자
 
     @Column(length = 2090)
-    private String image;   //1:서비스관리자, 2:기업관리자, 3:평가자, 4:지원자
+    private String image;
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantEvaluator.class, mappedBy = "evaluator")
     private List<ApplicantEvaluator> applicantEvaluatorList = new ArrayList<>();
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class, mappedBy = "evaluator")
+    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.EvaluatorInterviewRoom.class,
+        mappedBy = "evaluator" ,cascade = {CascadeType.REMOVE})
     private List<EvaluatorInterviewRoom> evaluatorInterviewRoomList = new ArrayList<>();
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.InterviewEvaluator.class, mappedBy = "evaluator")
@@ -85,5 +86,11 @@ public class Evaluator {
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ProcessEvaluator.class, mappedBy = "evaluator")
     private List<ProcessEvaluator> processEvaluatorList = new ArrayList<>();
 
+    public void setApplicantEvaluator(ApplicantEvaluator applicantEvaluator){
+        this.applicantEvaluatorList.add(applicantEvaluator);
+        if(applicantEvaluator.getEvaluator() == null){
+            applicantEvaluator.setEvaluator(this);
+        }
+    }
 
 }

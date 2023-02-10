@@ -50,6 +50,19 @@ public class EvaluatorRes {
     image = evaluator.getImage();
   }
 
+  public EvaluatorRes(Long id, String name, String code, String department, String position,
+      String image, String userId, String tel, String email) {
+    this.id = id;
+    this.name = name;
+    this.code = code;
+    this.department = department;
+    this.position = position;
+    this.image = image;
+    this.userId = userId;
+    this.tel = tel;
+    this.email = email;
+  }
+
   public static EvaluatorRes of(Evaluator user){
     EvaluatorRes res = new EvaluatorRes();
     res.setUserId(user.getUserId());

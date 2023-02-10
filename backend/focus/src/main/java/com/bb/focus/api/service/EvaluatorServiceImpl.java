@@ -1,19 +1,23 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.EvaluatorInfoReq;
+import com.bb.focus.api.response.EvaluatorRes;
+import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.repository.CompanyAdminRepository;
 import com.bb.focus.db.repository.EvaluatorRepository;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+
+import java.util.*;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.mail.MessagingException;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,7 +29,7 @@ public class EvaluatorServiceImpl implements EvaluatorService{
   private final EvaluatorRepository evaluatorRepository;
 
   private final MailService mailService;
-  private final PasswordEncoder passwordEncoder;
+//  private final PasswordEncoder passwordEncoder;
 
   /**
    * 평가자 계정 생성
@@ -41,11 +45,13 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     evaluator.setPosition(evaluatorInfo.getPosition());
     evaluator.setTel(evaluatorInfo.getTel());
     evaluator.setEmail(evaluatorInfo.getEmail());
-    evaluator.setImage(evaluatorInfo.getImage());
 
     validateDuplicateEvaluator(evaluator);
 
     CompanyAdmin companyAdmin = companyAdminRepository.findById(companyAdminId).orElseThrow(IllegalArgumentException::new);
+
+    evaluator.setExpireDate(companyAdmin.getEndDate());
+
     companyAdmin.addEvaluator(evaluator);
 
     evaluatorRepository.save(evaluator);
@@ -58,7 +64,7 @@ public class EvaluatorServiceImpl implements EvaluatorService{
    *           비밀번호 : 랜덤 생성 문자열
    */
   @Transactional
-  public void autoAssignAccount(Long id) {
+  public void autoAssignAccount(Long id) throws MessagingException {
 
     Evaluator evaluator = evaluatorRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 
@@ -66,13 +72,13 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     String newPwd = getRandomString();
 
     //메일
-//    Map<String, String> content = new HashMap<>();
-//    content.put("id", newId);
-//    content.put("pwd", newPwd);
-//    mailService.sendAccountMail(evaluator.getEmail(), content);
+    Map<String, String> content = new HashMap<>();
+    content.put("id", newId);
+    content.put("pwd", newPwd);
+    mailService.sendAccountMail(evaluator.getEmail(), content);
 
     //암호화
-//    String encodedPwd = passwordEncoder.encode(newPwd);
+//    String encodedPwd = EncryptionUtils.encryptSHA256(newPwd);
     String encodedPwd = newPwd;
 
     evaluator.setUserId(newId);
@@ -93,7 +99,6 @@ public class EvaluatorServiceImpl implements EvaluatorService{
     evaluator.setPosition(evaluatorInfo.getPosition());
     evaluator.setTel(evaluatorInfo.getTel());
     evaluator.setEmail(evaluatorInfo.getEmail());
-    evaluator.setImage(evaluatorInfo.getImage());
   }
 
   @Transactional
@@ -102,8 +107,8 @@ public class EvaluatorServiceImpl implements EvaluatorService{
   }
 
   @Override
-  public Page<Evaluator> findAllEvaluatorsUsePaging(Pageable pageable, Long companyAdminId) {
-    Page<Evaluator> evaluators = evaluatorRepository.findAllEvaluatorsByCompanyAdminIdUsePaging(pageable, companyAdminId);
+  public Page<EvaluatorRes> findAllEvaluatorsUsePaging(Pageable pageable, String search, Long companyAdminId) {
+    Page<EvaluatorRes> evaluators = evaluatorRepository.findAllEvaluatorsByCompanyAdminIdUsePaging(pageable, search, companyAdminId);
     return evaluators;
   }
 
@@ -124,6 +129,30 @@ public class EvaluatorServiceImpl implements EvaluatorService{
   public Evaluator getEvaluatorByUserId(String userId) {
     Evaluator evaluator = evaluatorRepository.findEvaluatorByUserId(userId);
     return evaluator;
+  }
+
+  @Override
+  public Evaluator getEvaluatorById(Long id) {
+    Evaluator evaluator = evaluatorRepository.findEvaluatorById(id);
+    return evaluator;
+  }
+
+  @Override
+  public List<String> getDepartments(Long companyAdminId) {
+    List<String> departments = evaluatorRepository.findAllDepartmentsByCompanyAdminId(companyAdminId);
+    return departments;
+  }
+
+  @Override
+  public Page<EvaluatorRes> findDepartmentEvaluators(Pageable pageable, List<String> departmentList, Long companyAdminId) {
+    Page<EvaluatorRes> evaluators = evaluatorRepository.findDepartmentEvaluators(pageable, departmentList, companyAdminId);
+    return evaluators;
+  }
+
+  @Override
+  public List<InterviewRoomRes> getInterviewRoomsById(Long id) {
+    List<InterviewRoomRes> interviewRooms = evaluatorRepository.findInterviewRoomsById(id);
+    return interviewRooms;
   }
 
   /**

@@ -8,5 +8,6 @@ public interface ServiceAdminService {
     ServiceAdmin createUser(ServiceAdminRegisterPostReq serviceAdminRegisterInfo);
 
     ServiceAdmin getServiceAdminByUserId(String userId);
+    ServiceAdmin getServiceAdminById(Long id);
 
 }

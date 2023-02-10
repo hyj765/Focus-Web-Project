@@ -5,13 +5,14 @@ import com.bb.focus.db.entity.applicant.school.ApplicantGraduate;
 import com.bb.focus.db.entity.applicant.school.ApplicantUniv;
 import com.bb.focus.db.entity.company.Chat;
 import com.bb.focus.db.entity.company.CompanyAdmin;
+import com.bb.focus.db.entity.evaluation.EvaluationSheet;
+import com.bb.focus.db.entity.helper.ApplicantEvaluator;
 import com.bb.focus.db.entity.helper.ApplicantInterviewRoom;
-import com.bb.focus.db.entity.helper.ProcessApplicant;
+import com.bb.focus.db.entity.process.Process;
 import com.sun.istack.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -49,6 +50,10 @@ public class Applicant {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="company_admin_id")
     private CompanyAdmin companyAdmin;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "process_id")
+    private Process process;
 
     @Column(length = 50)
     private String userId;
@@ -95,8 +100,6 @@ public class Applicant {
     private String degree;
 
     private LocalDateTime expireDate;
-    private LocalDateTime realEnterTime;
-    private LocalDateTime realExitTime;
 
     @NotNull
     @ColumnDefault("4")
@@ -110,17 +113,41 @@ public class Applicant {
     @ColumnDefault("0")
     private Byte activityCount;
 
+    @NotNull
+    @Column(length = 255)
+    private String major;
+
+    @NotNull
+    private float totalCredit;
+
+    @NotNull
+    private float credit;
+
     @OneToMany(targetEntity = com.bb.focus.db.entity.applicant.ApplicantPassLog.class, mappedBy = "applicant")
     private List<ApplicantPassLog> applicantPassLogList = new ArrayList<>();
 
     @OneToOne(targetEntity = com.bb.focus.db.entity.company.Chat.class, mappedBy = "applicant", fetch = FetchType.LAZY)
     private Chat chat;
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class, mappedBy = "applicant")
+    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantInterviewRoom.class,
+        mappedBy = "applicant", cascade = {CascadeType.REMOVE})
     private List<ApplicantInterviewRoom> applicantInterviewRoomList = new ArrayList<>();
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ProcessApplicant.class, mappedBy = "applicant")
-    private List<ProcessApplicant> processApplicantList = new ArrayList<>();
+    //연관관계 메서드
+    public void setProcess(Process process){
+        if(this.process != null){
+            this.process.getApplicantList().remove(this);
+        }
+        this.process = process;
+        process.getApplicantList().add(this);
+    }
+
+    public void addApplicantPasslog(ApplicantPassLog applicantPassLog){
+        this.applicantPassLogList.add(applicantPassLog);
+        if(applicantPassLog.getApplicant() != this){
+            applicantPassLog.setApplicant(this);
+        }
+    }
 
 
 }
