@@ -5,9 +5,9 @@
     -->
     <nav class="flex flex-wrap justify-between p-8 text-gray-800">
       <h1 class="font-bold">네이버 님, 안녕하세요</h1>
-      <h3 class="font-bold text-gray-500">Evaluator</h3>
+      <h3 class="font-bold text-gray-500">Applicant</h3>
     </nav>
-    <p class="px-10 text-2xl font-medium">평가자 리스트 조회</p>
+    <p class="px-10 text-2xl font-medium">지원자 리스트 조회</p>
     <div class="flex flex-col py-5">
       <div class="flex flex-col justify-center">
         <div class="inline-block w-auto space-y-4 sm:px-6 lg:px-8">
@@ -54,7 +54,7 @@
                       </MenuItem>
                       <MenuItem v-slot="{ active }">
                         <p
-                          @click="filterEvaluatorByUserId(false)"
+                          @click="filterApplicantByUserId(false)"
                           :class="[
                             active
                               ? 'bg-gray-100 text-gray-900'
@@ -67,7 +67,7 @@
                       </MenuItem>
                       <MenuItem v-slot="{ active }">
                         <p
-                          @click="filterEvaluatorByUserId(true)"
+                          @click="filterApplicantByUserId(true)"
                           :class="[
                             active
                               ? 'bg-gray-100 text-gray-900'
@@ -83,66 +83,6 @@
                 </transition>
               </Menu>
 
-              <!-- # 부서별 필터 -->
-              <Menu as="div" class="relative inline-block text-left">
-                <div>
-                  <MenuButton
-                    class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
-                  >
-                    {{ departmentFilterLabel }}
-                    <ChevronDownIcon
-                      class="w-5 h-5 ml-2 -mr-1"
-                      aria-hidden="true"
-                    />
-                  </MenuButton>
-                </div>
-
-                <transition
-                  enter-active-class="transition duration-100 ease-out"
-                  enter-from-class="transform scale-95 opacity-0"
-                  enter-to-class="transform scale-100 opacity-100"
-                  leave-active-class="transition duration-75 ease-in"
-                  leave-from-class="transform scale-100 opacity-100"
-                  leave-to-class="transform scale-95 opacity-0"
-                >
-                  <MenuItems
-                    class="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  >
-                    <div class="py-1">
-                      <MenuItem v-slot="{ active }">
-                        <p
-                          @click="deactivateFilters()"
-                          :class="[
-                            active
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-700',
-                            'block px-4 py-2 text-sm',
-                          ]"
-                        >
-                          전체 (Show All)
-                        </p>
-                      </MenuItem>
-                      <MenuItem
-                        v-slot="{ active }"
-                        v-for="department in departments"
-                        :key="department.id"
-                      >
-                        <p
-                          @click="filterEvaluatorsByDepartment(department)"
-                          :class="[
-                            active
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-700',
-                            'block px-4 py-2 text-sm',
-                          ]"
-                        >
-                          {{ department }}
-                        </p>
-                      </MenuItem>
-                    </div>
-                  </MenuItems>
-                </transition>
-              </Menu>
               <!-- # 이름 검색 -->
               <div class="flex justify-center">
                 <div
@@ -150,7 +90,7 @@
                 >
                   <input
                     v-model="searchName"
-                    @keyup.enter="filterEvaluatorsByName(searchName)"
+                    @keyup.enter="getApplicantsInfoByName(searchName)"
                     type="search"
                     class="relative flex-auto block w-full min-w-0 px-3 m-0 text-base font-normal text-gray-700 transition ease-in-out bg-white border border-gray-300 border-solid rounded form-control bg-clip-padding focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     placeholder="이름 검색"
@@ -158,7 +98,7 @@
                     aria-describedby="button-addon2"
                   />
                   <span
-                    @click="filterEvaluatorsByName(searchName)"
+                    @click="getApplicantsInfoByName(searchName)"
                     class="input-group-text flex items-center px-3 py-1.5 text-base font-normal text-gray-700 text-center whitespace-nowrap rounded"
                     id="basic-addon2"
                   >
@@ -177,9 +117,9 @@
               <button
                 type="button"
                 class="inline-block h-10 px-6 font-medium leading-tight text-white uppercase transition duration-150 ease-in-out bg-blue-700 rounded shadow-md text-md hover:bg-blue-800 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg"
-                @click="$emit('update:comp')"
+                @click="createApplicant()"
               >
-                평가자 생성
+                지원자 생성
               </button>
             </div>
           </div>
@@ -197,25 +137,13 @@
                     scope="col"
                     class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                   >
+                    수험번호
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                  >
                     이름
-                  </th>
-                  <th
-                    scope="col"
-                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
-                  >
-                    사번
-                  </th>
-                  <th
-                    scope="col"
-                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
-                  >
-                    부서
-                  </th>
-                  <th
-                    scope="col"
-                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
-                  >
-                    직급
                   </th>
                   <th
                     scope="col"
@@ -238,7 +166,7 @@
                 </tr>
               </thead>
               <tbody
-                v-for="(evaluator, index) in currentEvaluators"
+                v-for="(applicant, index) in currentApplicants"
                 :key="index"
               >
                 <tr
@@ -252,46 +180,36 @@
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    {{ evaluator.name }}
+                    {{ applicant.code }}
                   </td>
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    {{ evaluator.code }}
+                    {{ applicant.name }}
                   </td>
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    {{ evaluator.department }}
+                    {{ applicant.tel }}
                   </td>
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    {{ evaluator.position }}
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    {{ evaluator.tel }}
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    {{ evaluator.email }}
+                    {{ applicant.email }}
                   </td>
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
                     <div>
                       <div
-                        v-if="evaluator.userId"
+                        v-if="applicant.userId"
                         class="flex justify-center space-x-2"
                       >
-                        {{ evaluator.userId }}
+                        {{ applicant.userId }}
                       </div>
                       <div v-else class="flex justify-center space-x-2">
                         <button
-                          @click="assignEvaluatorId(evaluator)"
+                          @click="assignApplicantId(applicant)"
                           type="button"
                           class="inline-block rounded bg-indigo-900 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
                         >
@@ -348,97 +266,69 @@ import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { useStore } from 'vuex';
 
-defineEmits(['update:comp']);
+const emit = defineEmits(['create-applicant']);
+const createApplicant = () => {
+  emit('create-applicant', processId.value);
+};
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
-const evaluators = ref(null);
-const currentEvaluators = ref(null);
+const applicants = ref(null);
+const currentApplicants = ref(null);
+const processId = ref(null);
+const store = useStore();
 
 // 계정 할당 여부
 const userIdFilterLabel = ref('계정 할당 여부');
-const filterEvaluatorByUserId = needId => {
-  currentEvaluators.value = evaluators.value;
-  if (departmentFilterLabel.value !== '부서별') {
-    currentEvaluators.value = currentEvaluators.value.filter(
-      evaluator => evaluator.department === departmentFilterLabel.value,
-    );
-  }
+const filterApplicantByUserId = needId => {
+  currentApplicants.value = applicants.value;
   if (needId === true) {
-    currentEvaluators.value = currentEvaluators.value.filter(
-      evaluator => evaluator.userId === null,
+    currentApplicants.value = currentApplicants.value.filter(
+      applicant => applicant.userId === null,
     );
     userIdFilterLabel.value = 'ID 미할당 인원';
   } else {
-    currentEvaluators.value = currentEvaluators.value.filter(
-      evaluator => evaluator.userId !== null,
+    currentApplicants.value = currentApplicants.value.filter(
+      applicant => applicant.userId !== null,
     );
     userIdFilterLabel.value = 'ID 할당 인원';
   }
-  console.log('filterByUserId currentEvaluators: ', currentEvaluators.value);
-};
-
-// 부서별
-const departments = ref([]);
-const departmentFilterLabel = ref('부서별');
-const filterEvaluatorsByDepartment = department => {
-  departmentFilterLabel.value = department;
-  currentEvaluators.value = evaluators.value;
-  currentEvaluators.value = currentEvaluators.value.filter(
-    evaluator => evaluator.department === department,
-  );
-  console.log(
-    'filterByDepartment currentEvaluators: ',
-    currentEvaluators.value,
-  );
-  userIdFilterLabel.value = '계정 할당 여부';
-  searchName.value = null;
+  console.log('filterByUserId currentApplicants: ', currentApplicants.value);
 };
 
 // 필터 해제
 const deactivateFilters = () => {
   userIdFilterLabel.value = '계정 할당 여부';
-  departmentFilterLabel.value = '부서별';
-  currentEvaluators.value = evaluators.value;
+  currentApplicants.value = applicants.value;
   searchName.value = null;
 };
 
 // 이름별
 const searchName = ref('');
-const filterEvaluatorsByName = name => {
-  if (
-    departmentFilterLabel.value === '부서별' &&
-    userIdFilterLabel.value === '계정 할당 여부'
-  ) {
-    currentEvaluators.value = evaluators.value;
-  } else if (userIdFilterLabel.value === '계정 할당 여부') {
-    currentEvaluators.value = evaluators.value.filter(
-      evaluator => evaluator.department === departmentFilterLabel.value,
-    );
-  } else if (
-    departmentFilterLabel.value === '부서별' &&
-    userIdFilterLabel.value === 'ID 할당 인원'
-  ) {
-    currentEvaluators.value = evaluators.value.filter(
-      evaluator => evaluator.userId !== null,
-    );
-  } else if (
-    departmentFilterLabel.value === '부서별' &&
-    userIdFilterLabel.value === 'ID 미할당 인원'
-  ) {
-    currentEvaluators.value = evaluators.value.filter(
-      evaluator => evaluator.userId === null,
-    );
-  }
-  console.log('filterByName currentEvaluators: ', currentEvaluators.value);
-  currentEvaluators.value = currentEvaluators.value.filter(
-    evaluator => evaluator.name === name,
-  );
+const getApplicantsInfoByName = searchName => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  processId.value = store.state.currentApplicantProcessId;
+  axios
+    .get(
+      `${BASE_URL}/companyusers/applicants/${processId.value}/list/${searchName}`,
+      {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      },
+    )
+    .then(res => {
+      console.log('getApplicantsByName: ', res.data);
+      console.log('current page: ', currentPage.value);
+      console.log('isFirstPage: ', isFirstPage.value);
+      console.log('isLastPage: ', isLastPage.value);
+      applicants.value = res.data.content;
+      currentApplicants.value = res.data.content;
+    });
 };
 
 // Pagination
 const currentPage = ref(1);
 const isFirstPage = ref(true);
 const isLastPage = ref(false);
-
 const pagePlus = () => {
   currentPage.value++;
 };
@@ -447,13 +337,14 @@ const pageMinus = () => {
 };
 const updatePage = () => {
   const user = JSON.parse(localStorage.getItem('user'));
+  processId.value = store.state.currentApplicantProcessId;
   if (currentPage.value === 1) {
     isFirstPage.value = true;
   } else {
     isFirstPage.value = false;
   }
   axios
-    .get(`${BASE_URL}/companyusers/evaluators/list`, {
+    .get(`${BASE_URL}/companyusers/applicants/${processId.value}/list`, {
       params: {
         size: 15,
         page: currentPage.value + 1,
@@ -470,10 +361,9 @@ const updatePage = () => {
       }
     })
     .then(() => {
-      getEvaluatorsInfo();
+      getApplicantsInfo();
     });
 };
-
 const firstPage = computed(() => {
   return { disabled: isFirstPage.value === true };
 });
@@ -481,12 +371,12 @@ const lastPage = computed(() => {
   return { disabled: isLastPage.value === true };
 });
 
-const getEvaluatorsInfo = () => {
+// 현 페이지 계정 리스트
+const getApplicantsInfo = () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  // let evaluatorCount = 0;
-  // let remainder = 0;
+  processId.value = store.state.currentApplicantProcessId;
   axios
-    .get(`${BASE_URL}/companyusers/evaluators/list`, {
+    .get(`${BASE_URL}/companyusers/applicants/${processId.value}/list`, {
       params: {
         size: 15,
         page: currentPage.value,
@@ -496,57 +386,40 @@ const getEvaluatorsInfo = () => {
       },
     })
     .then(res => {
-      console.log('getEvaluators: ', res.data);
+      console.log('getapplicants: ', res.data);
       console.log('current page: ', currentPage.value);
       console.log('isFirstPage: ', isFirstPage.value);
       console.log('isLastPage: ', isLastPage.value);
-      evaluators.value = res.data.content;
-      currentEvaluators.value = res.data.content;
-
-      // Departments Filter
-      const tempDepartments = evaluators.value.map(
-        evaluator => evaluator.department,
-      );
-      for (const department of tempDepartments) {
-        if (!departments.value.includes(department)) {
-          departments.value.push(department);
-        }
-      }
-      // console.log('departments: ', departments.value);
+      applicants.value = res.data.content;
+      currentApplicants.value = res.data.content;
     });
 };
 
 // 계정 할당
-const assignEvaluatorId = evaluator => {
+const assignApplicantId = applicant => {
   const user = JSON.parse(localStorage.getItem('user'));
   console.log(user.accessToken);
-  const evaluatorId = evaluator.id;
-  console.log('evaluatorId: ', evaluatorId);
+  const applicantId = applicant.id;
+  console.log('applicantId: ', applicantId);
   axios
-    .post(`${BASE_URL}/companyusers/evaluators/create/${evaluatorId}`, {
+    .post(`${BASE_URL}/companyusers/applicants/create/${applicantId}`, {
       headers: {
         Authorization: `Bearer ${user.accessToken}`,
       },
     })
     .then(res => {
       console.log('id assign success! ', res.data);
-      getEvaluatorsInfo();
+      getApplicantsInfo();
     })
     .catch(err => {
       console.log('id assign failed! ', err.message);
     });
 };
 
-const store = useStore();
-const saveDepartments = () => {
-  store.dispatch('saveDepartments', departments);
-};
-
 onMounted(() => {
   currentPage.value = 1;
   updatePage();
-  getEvaluatorsInfo();
-  saveDepartments();
+  getApplicantsInfo();
 });
 </script>
 

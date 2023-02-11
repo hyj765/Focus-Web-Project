@@ -207,6 +207,11 @@
         :is="currentComp"
         @update:comp="changeCurrentComp(CorporateManageEvaluatorCreate)"
         @evaluator-created="changeCurrentComp(CorporateManageEvaluator)"
+        @get-interview-applicants="
+          changeCurrentComp(CorporateManageApplicantList)
+        "
+        @create-applicant="changeCurrentComp(CorporateManageApplicantCreate)"
+        @applicant-created="changeCurrentComp(CorporateManageApplicantList)"
       />
     </div>
   </div>
@@ -222,6 +227,8 @@ import CorporateManageEvaluator from './CorporateManageEvaluator.vue';
 import CorporateManageEvaluatorCreate from './CorporateManageEvaluatorCreate.vue';
 import CorporateManageProcess from './CorporateManageProcess.vue';
 import CorporateManageApplicant from './CorporateManageApplicant.vue';
+import CorporateManageApplicantList from './CorporateManageApplicantList.vue';
+import CorporateManageApplicantCreate from './CorporateManageApplicantCreate.vue';
 import CorporateManageInterview from './CorporateManageInterview.vue';
 import CorporateManagePass from './CorporateManagePass.vue';
 import CorporateSheet from './CorporateSheet.vue';
