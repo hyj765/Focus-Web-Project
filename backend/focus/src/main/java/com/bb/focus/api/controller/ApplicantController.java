@@ -1,36 +1,25 @@
 package com.bb.focus.api.controller;
 
-import com.bb.focus.api.request.CompanyAdminRegisterPostReq;
-import com.bb.focus.api.request.ServiceAdminRegisterPostReq;
+
 import com.bb.focus.api.response.ApplicantRes;
-import com.bb.focus.api.response.CompanyAdminRes;
-import com.bb.focus.api.response.ServiceAdminRes;
 import com.bb.focus.api.service.ApplicantService;
-import com.bb.focus.api.service.CompanyAdminService;
-import com.bb.focus.api.service.ServiceAdminService;
 import com.bb.focus.common.auth.FocusUserDetails;
-import com.bb.focus.common.model.response.BaseResponseBody;
-import com.bb.focus.db.entity.admin.ServiceAdmin;
+import com.bb.focus.common.util.ImageUtil;
 import com.bb.focus.db.entity.applicant.Applicant;
-import com.bb.focus.db.entity.company.CompanyAdmin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -40,6 +29,8 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/api/applicants")
 @CrossOrigin("*")
 public class ApplicantController {
+    @Autowired
+    ImageUtil imageUtil;
     @Autowired
     ApplicantService applicantService;
     @ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
@@ -55,4 +46,5 @@ public class ApplicantController {
 
         return ResponseEntity.status(200).body(ApplicantRes.of(applicant));
     }
+
 }

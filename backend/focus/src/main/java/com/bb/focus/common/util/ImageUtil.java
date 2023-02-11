@@ -1,6 +1,7 @@
 package com.bb.focus.common.util;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.Locale;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -11,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class ImageUtil {
 
-  private final String filePath = "/etc/image";
+  private final String filePath = "/etc";
   private final String companyLogoPath = filePath + "/logo";
   private final String introducePath = filePath + "/introduce";
   private final String applicantFacePath = filePath + "/applicant";
@@ -32,36 +33,37 @@ public class ImageUtil {
       return applicantFacePath;
     }else if(keyword.equals("company")){
       return companyLogoPath;
-    }else if(keyword.equals(evaluatorFacePath)){
+    }else if(keyword.equals("evaluator")){
      return evaluatorFacePath;
     }else {
       return introducePath;
     }
   }
-  public int getImageCount(String keyword){
-    keyword = getFilePathByKeyword(keyword);
-    File directory = new File(keyword);
-    File[] files = directory.listFiles();
-    if(files == null){
-      return -1;
-    }
-    int fileCount =0;
+//  public int getImageCount(String keyword){
+//    keyword = getFilePathByKeyword(keyword);
+//    File directory = new File(keyword);
+//    File[] files = directory.listFiles();
+//    if(files == null){
+//      return -1;
+//    }
+//    int fileCount =0;
+//
+//    for(int i=0; i<files.length; ++i){
+//      File file = files[i];
+//
+//      if(file.isFile()) {
+//        fileCount++;
+//      }
+//    }
+//    return fileCount;
+//  }
 
-    for(int i=0; i<files.length; ++i){
-      File file = files[i];
+  public byte[] ReadImage(String keyword, String fileName) throws FileNotFoundException, IOException{
 
-      if(file.isFile()) {
-        fileCount++;
-      }
-    }
-
-    return fileCount;
-  }
-
-  public byte[] Read_image(String fileName, String folderPath) throws FileNotFoundException, IOException{
-    File file = new File(folderPath);
     byte[] imageByteArray;
+    String folderPath=getFilePathByKeyword(keyword);
     String path = folderPath + '/'+ fileName;
+
     if(!isFileExist(path)){
       return null;
     }
@@ -73,12 +75,17 @@ public class ImageUtil {
     return imageByteArray;
   }
   public String Upload(MultipartFile file,String baseFileName,Long uniqueValue){
-//    int serialNumber =getImageCount(baseFileName);
-    String savefilePath = getFilePathByKeyword(baseFileName);
+    String saveFilePath = getFilePathByKeyword(baseFileName);
     String extension = FilenameUtils.getExtension(file.getOriginalFilename());
     String saveName = baseFileName + uniqueValue+ "."+extension;
+    saveFilePath += "/"+saveName;
+    if(isFileExist(saveFilePath)){
+      File curFile = new File(saveFilePath);
+      curFile.delete();
+    }
+
     try {
-      File createdFile = new File(savefilePath+"/"+saveName);
+      File createdFile = new File(saveFilePath);
       file.transferTo(createdFile);
     }catch(IOException e){
         return null;
@@ -109,5 +116,9 @@ public class ImageUtil {
 
     return true;
   }
-
+  public String GetContentType(String keyword,String fileName) throws IOException{
+    String realPath = getFilePathByKeyword(keyword) +"/" + fileName;
+    File file =new File(realPath);
+    return Files.probeContentType(file.toPath());
+  }
 }

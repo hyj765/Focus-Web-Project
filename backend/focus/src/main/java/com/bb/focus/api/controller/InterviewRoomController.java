@@ -11,11 +11,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(value = "면접 일정 API", tags = {"InterviewRoom"})
 @RestController
@@ -42,7 +38,7 @@ public class InterviewRoomController {
   @ApiOperation(value = "면접실 코드번호 조회")
   @GetMapping("/enter/real")
   public ResponseEntity<?> getRealRoomCode(
-      @RequestBody @Valid @ApiParam(value = "면접 일정 시퀀스 넘버", required = true) Long interviewRoomId) {
+      @RequestParam(name="room-id") @ApiParam(value = "면접 일정 시퀀스 넘버", required = true) Long interviewRoomId) {
 
     Optional<InterviewRoom> interviewRoom = interviewRoomService.findById(interviewRoomId);
     Room room = interviewRoom.get().getRoom();
