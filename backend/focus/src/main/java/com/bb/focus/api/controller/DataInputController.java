@@ -1,8 +1,11 @@
 package com.bb.focus.api.controller;
 
+import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.SchoolDto;
+import com.bb.focus.api.service.ApplicantSchoolService;
 import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.SchoolService;
+import com.bb.focus.common.auth.FocusUserDetails;
 import com.bb.focus.common.util.ImageUtil;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.applicant.school.ApplicantCollege;
@@ -26,11 +29,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
+import java.util.Optional;
 
 @Api(value = "데이터 입력 API", tags = {"DataInput"})
 @RestController
@@ -46,6 +53,7 @@ public class DataInputController {
     private final GraduateSchoolRepository graduateSchoolRepository;
     private final EvaluatorRepository evaluatorRepo;
     private final CompanyAdminRepository companyAdminRepo;
+    private final ApplicantSchoolService applicantSchoolService;
 
     //ApplicantService
     //EvaluatorService
@@ -53,7 +61,7 @@ public class DataInputController {
     public DataInputController(DataProcessService Dservice, SchoolService scService, ImageUtil iUtil,
         ApplicantRepository applicantRepository, UniversityRepository universityRepository,
         CollegeRepository collegeRepository, GraduateSchoolRepository graduateSchoolRepository
-        ,EvaluatorRepository evaluatorRepository,CompanyAdminRepository companyAdminRepository){
+        ,EvaluatorRepository evaluatorRepository,CompanyAdminRepository companyAdminRepository, ApplicantSchoolService applicantSchoolService){
         DataService = Dservice;
         schoolSerivce = scService;
         imageUtil = iUtil;
@@ -63,6 +71,7 @@ public class DataInputController {
         this.graduateSchoolRepository = graduateSchoolRepository;
         this.evaluatorRepo = evaluatorRepository;
         this.companyAdminRepo = companyAdminRepository;
+        this.applicantSchoolService = applicantSchoolService;
     }
     @GetMapping("applicant/image/{applicant-id}")
     public ResponseEntity<?> getApplicantImage(@PathVariable(name= "applicant-id") Long applicantId ){
@@ -400,6 +409,25 @@ public class DataInputController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+    @ApiOperation(value = "대학원 데이터 전체 조회")
+    @GetMapping("/colleges")
+    public ResponseEntity<?> getCollegeList() {
+        List<ApplicantCollege> applicantCollegesList = applicantSchoolService.findAllColleges();
+        return ResponseEntity.status(200).body(applicantCollegesList);
+    }
 
 
+    @ApiOperation(value = "대학원 데이터 전체 조회")
+    @GetMapping("/graduates")
+    public ResponseEntity<?> getGraduateList() {
+        List<ApplicantGraduate> applicantGraduatesList = applicantSchoolService.findAllGraduates();
+        return ResponseEntity.status(200).body(applicantGraduatesList);
+    }
+
+    @ApiOperation(value = "대학원 데이터 전체 조회")
+    @GetMapping("/univs")
+    public ResponseEntity<?> getUnivList() {
+        List<ApplicantUniv> applicantUnivsList = applicantSchoolService.findAllUnivs();
+        return ResponseEntity.status(200).body(applicantUnivsList);
+    }
 }
