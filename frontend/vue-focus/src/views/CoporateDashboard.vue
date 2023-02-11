@@ -9,7 +9,7 @@
     </nav>
     <!-- 
 # 현재 인원
- -->
+-->
     <div class="flex space-x-2 justify-center">
       <div
         class="bg-white shadow-lg mx-auto w-2/5 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block"
@@ -31,7 +31,7 @@
     </div>
     <!-- 
     # 면접진행률
- -->
+-->
     <!-- <div class="flex space-x-2 justify-center">
       <div
         class="bg-white shadow-lg mx-auto w-2/5 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block"
@@ -55,7 +55,7 @@
     </div> -->
     <!--     
     # 예정된 면접
- -->
+-->
     <div class="flex space-x-2 justify-center">
       <div
         class="bg-white shadow-lg mx-auto w-2/5 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block"
