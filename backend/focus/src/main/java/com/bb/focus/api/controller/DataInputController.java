@@ -409,7 +409,7 @@ public class DataInputController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @ApiOperation(value = "대학원 데이터 전체 조회")
+    @ApiOperation(value = "2년제 데이터 전체 조회")
     @GetMapping("/colleges")
     public ResponseEntity<?> getCollegeList() {
         List<ApplicantCollege> applicantCollegesList = applicantSchoolService.findAllColleges();
@@ -424,7 +424,7 @@ public class DataInputController {
         return ResponseEntity.status(200).body(applicantGraduatesList);
     }
 
-    @ApiOperation(value = "대학원 데이터 전체 조회")
+    @ApiOperation(value = "4년제 데이터 전체 조회")
     @GetMapping("/univs")
     public ResponseEntity<?> getUnivList() {
         List<ApplicantUniv> applicantUnivsList = applicantSchoolService.findAllUnivs();
