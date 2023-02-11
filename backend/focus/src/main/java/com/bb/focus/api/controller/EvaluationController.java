@@ -6,7 +6,6 @@ import com.bb.focus.api.response.EvaluationSheetResultRes;
 import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.EvaluationService;
 import com.bb.focus.db.entity.applicant.Status;
-import com.bb.focus.db.entity.helper.ApplicantEvaluator;
 import io.swagger.annotations.Api;
 import java.util.List;
 import java.util.Map;

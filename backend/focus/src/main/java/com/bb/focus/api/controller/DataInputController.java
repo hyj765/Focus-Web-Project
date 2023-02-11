@@ -8,6 +8,8 @@ import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.applicant.school.ApplicantCollege;
 import com.bb.focus.db.entity.applicant.school.ApplicantGraduate;
 import com.bb.focus.db.entity.applicant.school.ApplicantUniv;
+import com.bb.focus.db.entity.company.CompanyAdmin;
+import com.bb.focus.db.entity.evaluator.Evaluator;
 import com.bb.focus.db.repository.*;
 import io.swagger.annotations.Api;
 import java.time.LocalDate;
@@ -19,13 +21,13 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 import java.io.*;
 import java.util.List;
 
@@ -41,13 +43,16 @@ public class DataInputController {
     private final UniversityRepository universityRepository;
     private final CollegeRepository collegeRepository;
     private final GraduateSchoolRepository graduateSchoolRepository;
+    private final EvaluatorRepository evaluatorRepo;
+    private final CompanyAdminRepository companyAdminRepo;
 
     //ApplicantService
     //EvaluatorService
     @Autowired
     public DataInputController(DataProcessService Dservice, SchoolService scService, ImageUtil iUtil,
         ApplicantRepository applicantRepository, UniversityRepository universityRepository,
-        CollegeRepository collegeRepository, GraduateSchoolRepository graduateSchoolRepository){
+        CollegeRepository collegeRepository, GraduateSchoolRepository graduateSchoolRepository
+        ,EvaluatorRepository evaluatorRepository,CompanyAdminRepository companyAdminRepository){
         DataService = Dservice;
         schoolSerivce = scService;
         imageUtil = iUtil;
@@ -55,21 +60,125 @@ public class DataInputController {
         this.universityRepository = universityRepository;
         this.collegeRepository = collegeRepository;
         this.graduateSchoolRepository = graduateSchoolRepository;
+        this.evaluatorRepo = evaluatorRepository;
+        this.companyAdminRepo = companyAdminRepository;
     }
+    @GetMapping("applicant/image/{applicant-id}")
+    public ResponseEntity<?> getApplicantImage(@PathVariable(name= "applicant-id") Long applicantId ){
+        Applicant applicant= applicantRepository.findApplicantById(applicantId);
+        if(applicant == null){
+            return new ResponseEntity<String>("사용자를 찾을 수 없습니다.",HttpStatus.BAD_REQUEST);
+        }
+        String imageName = applicant.getImage();
+        if(imageName == null){
+            return new ResponseEntity<String>("이미지를 찾을 수 없습니다.",HttpStatus.BAD_REQUEST);
+        }
+        byte[] bytes = null;
+        HttpHeaders headers = new HttpHeaders();
+        try{
+            bytes=imageUtil.ReadImage("applicant",imageName);
+            headers.add("Context-Type", imageUtil.GetContentType("applicant",imageName));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return new ResponseEntity<byte[]>(bytes,headers,HttpStatus.OK);
+    }
+    @GetMapping("applicant/introduce/{applicant-id}")
+    public ResponseEntity<?> getApplicantIntroduceImage(@PathVariable(name= "applicant-id") Long applicantId ){
+        Applicant applicant= applicantRepository.findApplicantById(applicantId);
+        if(applicant == null){
+            return new ResponseEntity<String>("사용자를 찾을 수 없습니다.",HttpStatus.BAD_REQUEST);
+        }
+        String imageName = applicant.getResume();
+        if(imageName == null){
+            return new ResponseEntity<String>("이미지를 찾을 수 없습니다.",HttpStatus.BAD_REQUEST);
+        }
+        byte[] bytes = null;
+        HttpHeaders headers = new HttpHeaders();
+        try{
+            bytes=imageUtil.ReadImage("introduce",imageName);
+            headers.add("Context-Type", imageUtil.GetContentType("introduce",imageName));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return new ResponseEntity<byte[]>(bytes,headers,HttpStatus.OK);
+    }
+
+    @GetMapping("company/logo")
+    public ResponseEntity<?> getCompanyLogoImage(@RequestParam Long companyId ){
+        CompanyAdmin companyAdmin = companyAdminRepo.findCompanyAdminById(companyId);
+        if(companyAdmin == null){
+            return new ResponseEntity<String>("사용자를 찾을 수 없습니다.",HttpStatus.BAD_REQUEST);
+        }
+        String imageName = companyAdmin.getLogoImage();
+        if(imageName == null){
+            return new ResponseEntity<String>("이미지를 찾을 수 없습니다.",HttpStatus.BAD_REQUEST);
+        }
+        byte[] bytes = null;
+        HttpHeaders headers = new HttpHeaders();
+        try{
+            bytes=imageUtil.ReadImage("logo",imageName);
+            headers.add("Context-Type", imageUtil.GetContentType("logo",imageName));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return new ResponseEntity<byte[]>(bytes,headers,HttpStatus.OK);
+    }
+    @GetMapping("evaluator/{evaluator-id}")
+    public ResponseEntity<?> getEvaluatorImage(@PathVariable(name="evaluator-id")Long evaluatorId){
+        Evaluator evaluator=evaluatorRepo.findEvaluatorById(evaluatorId);
+        if(evaluator == null){
+            return new ResponseEntity<String>("사용자를 찾을 수 없습니다.",HttpStatus.BAD_REQUEST);
+        }
+        String imageName = evaluator.getImage();
+        if(imageName == null){
+            return new ResponseEntity<String>("이미지를 찾을 수 없습니다.",HttpStatus.BAD_REQUEST);
+        }
+        byte[] bytes = null;
+        HttpHeaders headers = new HttpHeaders();
+        try{
+            bytes=imageUtil.ReadImage("evaluator",imageName);
+            headers.add("Context-Type", imageUtil.GetContentType("evaluator",imageName));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return new ResponseEntity<byte[]>(bytes,headers,HttpStatus.OK);
+    }
+
+
 
     @PostMapping("/upload/logo/image/")
     public ResponseEntity<?> UploadlogoImage(@RequestBody Long companyId,@RequestPart MultipartFile file){
         if(!imageUtil.ExtensionCheck(file)){
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         }
+        String savedImageName= null;
+        if(!imageUtil.ExtensionCheck(file)){
+            return new ResponseEntity<String>("확장자가 올바르지 않습니다.",HttpStatus.BAD_REQUEST);
+        }
+        CompanyAdmin companyAdmin = companyAdminRepo.findCompanyAdminById(companyId);
+        if(companyAdmin == null){
+            return new ResponseEntity<String>("해당 번호의 사용자가 존재하지 않습니다.",HttpStatus.BAD_REQUEST);
+        }
+        savedImageName = imageUtil.Upload(file,"companyId",companyId);
+        companyAdmin.setLogoImage(savedImageName);
+        companyAdminRepo.save(companyAdmin);
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
     @PostMapping("/upload/introduce/image/")
     public ResponseEntity<?> UploadIntroducePaperImage(@RequestBody Long applicantId,@RequestPart MultipartFile file){
+        String savedImageName= null;
         if(!imageUtil.ExtensionCheck(file)){
-            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("확장자가 올바르지 않습니다.",HttpStatus.BAD_REQUEST);
         }
+        Applicant applicant=applicantRepository.findById(applicantId).orElseThrow(IllegalArgumentException::new);
+        if(applicant == null){
+            return new ResponseEntity<String>("해당 번호의 사용자가 존재하지 않습니다.",HttpStatus.BAD_REQUEST);
+        }
+        savedImageName = imageUtil.Upload(file,"applicant",applicantId);
+        applicant.setResume(savedImageName);
+        applicantRepository.save(applicant);
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
@@ -77,27 +186,30 @@ public class DataInputController {
     public ResponseEntity<?> UploadApplicantFaceImage(@RequestBody Long applicantId,@RequestPart MultipartFile file){
         String savedImageName= null;
         if(!imageUtil.ExtensionCheck(file)){
-            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("확장자가 올바르지 않습니다.",HttpStatus.BAD_REQUEST);
         }
         Applicant applicant=applicantRepository.findById(applicantId).orElseThrow(IllegalArgumentException::new);
-        savedImageName = imageUtil.Upload(file,"face",applicant.getId());
-
+        if(applicant == null){
+            return new ResponseEntity<String>("해당 번호의 사용자가 존재하지 않습니다.",HttpStatus.BAD_REQUEST);
+        }
+        savedImageName = imageUtil.Upload(file,"applicant",applicantId);
         applicant.setImage(savedImageName);
         applicantRepository.save(applicant);
-
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
     @PostMapping("/upload/evaluatorface/image/")
     public ResponseEntity<?> UploadEvaluatorFaceImage(@RequestBody Long evaluatorId,@RequestPart MultipartFile file){
         if(!imageUtil.ExtensionCheck(file)){
-            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("확장자가 올바르지 않습니다.",HttpStatus.BAD_REQUEST);
         }
-
-
+        Evaluator evaluator = evaluatorRepo.findEvaluatorById(evaluatorId);
+        if(evaluator == null) {
+            return new ResponseEntity<String>("해당 번호의 사용자가 존재하지 않습니다.",HttpStatus.BAD_REQUEST);
+        }
+        String savedImageName = imageUtil.Upload(file,"evaluator",evaluatorId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
-
 
     @GetMapping("/test/image")
     public ResponseEntity<?> testImage(){
