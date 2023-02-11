@@ -20,6 +20,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +64,7 @@ public class AuthController {
       @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
   })
   public ResponseEntity<UserLoginPostRes> login(
-      @RequestBody @ApiParam(value = "로그인 정보", required = true) UserReq.Login loginInfo) {
+      @RequestBody @Valid @ApiParam(value = "로그인 정보", required = true) UserReq.Login loginInfo) {
     String userId = loginInfo.getId();
     String password = loginInfo.getPassword();
     ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminByUserId(userId);
@@ -138,7 +139,7 @@ public class AuthController {
 
   @PostMapping("/logout")
   public ResponseEntity<?> logout(
-      @RequestBody @ApiParam(value = "로그아웃 정보", required = true) UserReq.Logout logoutInfo) {
+      @RequestBody @Valid @ApiParam(value = "로그아웃 정보", required = true) UserReq.Logout logoutInfo) {
     String userId = JwtTokenUtil.getUserId(logoutInfo.getAccessToken());
     System.out.println("userId : " + userId);
     Long expiration = JwtTokenUtil.getLeftExpiration(logoutInfo.getAccessToken());

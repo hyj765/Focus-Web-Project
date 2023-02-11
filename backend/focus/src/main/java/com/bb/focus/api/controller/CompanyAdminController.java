@@ -25,6 +25,7 @@ import io.swagger.annotations.ApiParam;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -62,7 +63,7 @@ public class CompanyAdminController {
   @PostMapping("/evaluators")
   public ResponseEntity<?> createEvaluator(
       @ApiIgnore Authentication authentication,
-      @RequestBody @ApiParam(value = "평가자 계정 생성 정보", required = true) List<EvaluatorInfoReq> evaluatorInfoList) {
+      @RequestBody @Valid @ApiParam(value = "평가자 계정 생성 정보", required = true) List<EvaluatorInfoReq> evaluatorInfoList) {
 
     FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
     Long companyAdminId = userDetails.getUser().getId();
@@ -79,7 +80,7 @@ public class CompanyAdminController {
   public ResponseEntity<? extends BaseResponseBody> createApplicant(
       @ApiIgnore Authentication authentication,
       @PathVariable("process-id") Long processId,
-      @RequestBody @ApiParam(value = "지원자 계정 생성 정보", required = true) List<ApplicantInfoReq> ApplicantInfoList) {
+      @RequestBody @Valid @ApiParam(value = "지원자 계정 생성 정보", required = true) List<ApplicantInfoReq> ApplicantInfoList) {
 
     FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
     Long companyAdminId = userDetails.getUser().getId();
@@ -155,7 +156,7 @@ public class CompanyAdminController {
   public ResponseEntity<Map<String, Long>> updateEvaluator(
       @ApiIgnore Authentication authentication,
       @PathVariable("evaluator-id") Long id,
-      @RequestBody @ApiParam(value = "평가자 계정 기본 정보", required = true) EvaluatorInfoReq evaluatorInfo) {
+      @RequestBody @Valid @ApiParam(value = "평가자 계정 기본 정보", required = true) EvaluatorInfoReq evaluatorInfo) {
 
     evaluatorService.updateEvaluatorInfo(id, evaluatorInfo);
 
@@ -170,7 +171,7 @@ public class CompanyAdminController {
   public ResponseEntity<Map<String, Long>> updateApplicant(
       @ApiIgnore Authentication authentication,
       @PathVariable("applicant-id") Long id,
-      @RequestBody @ApiParam(value = "지원자 계정 기본 정보", required = true) ApplicantInfoReq applicantInfo) {
+      @RequestBody @Valid @ApiParam(value = "지원자 계정 기본 정보", required = true) ApplicantInfoReq applicantInfo) {
 
     applicantService.updateApplicantInfo(id, applicantInfo);
 

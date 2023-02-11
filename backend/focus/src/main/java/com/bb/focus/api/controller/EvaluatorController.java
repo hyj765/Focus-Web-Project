@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -58,7 +59,7 @@ public class EvaluatorController {
   @ApiOperation(value = "해당 평가자의 면접실 코드번호 조회")
   @GetMapping("/enter")
   public ResponseEntity<?> getRealRoomCode(
-      @RequestBody @ApiParam(value = "면접 일정 시퀀스 넘버", required = true) Long evaluatorId) {
+      @RequestBody @Valid @ApiParam(value = "면접 일정 시퀀스 넘버", required = true) Long evaluatorId) {
 
     return ResponseEntity.status(200).body(evaluatorId);
   }

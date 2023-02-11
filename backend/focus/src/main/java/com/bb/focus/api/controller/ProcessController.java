@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiParam;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -41,7 +42,7 @@ public class ProcessController {
   @PostMapping()
   public ResponseEntity<?> createProcess(
       @ApiIgnore Authentication authentication,
-      @RequestBody @ApiParam(value = "프로세스 생성 정보", required = true) ProcessReq processReq) {
+      @RequestBody @Valid @ApiParam(value = "프로세스 생성 정보", required = true) ProcessReq processReq) {
     FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
     Long companyAdminId = userDetails.getUser().getId();
 
@@ -56,7 +57,7 @@ public class ProcessController {
   public ResponseEntity<Map<String, Long>> updateProcess(
       @ApiIgnore Authentication authentication,
       @PathVariable("process-id") Long id,
-      @RequestBody @ApiParam(value = "프로세스 생성 정보", required = true) ProcessReq processReq) {
+      @RequestBody @Valid @ApiParam(value = "프로세스 생성 정보", required = true) ProcessReq processReq) {
 
     processService.updateProcess(id, processReq);
 

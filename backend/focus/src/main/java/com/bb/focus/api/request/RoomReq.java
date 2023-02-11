@@ -1,20 +1,7 @@
 package com.bb.focus.api.request;
 
-import com.bb.focus.db.entity.interview.Interview;
-import com.bb.focus.db.entity.interview.InterviewRoom;
-import com.sun.istack.NotNull;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,12 +11,14 @@ import lombok.Setter;
 
 public class RoomReq {
 
-    @Getter
-    @Setter
-    public static class Create {
-        @ApiModelProperty(name = "면접 ID", example = "1")
-        Long interviewId;
-    }
+  @Getter
+  @Setter
+  public static class Create {
+
+    @NotNull(message = "면접 시퀀스 넘버를 입력해주세요.")
+    @ApiModelProperty(name = "면접 ID", example = "1")
+    Long interviewId;
+  }
 
 
 }

@@ -2,10 +2,13 @@ server:
   port: 8082
 
 spring:
+  web:
+    resources:
+      add-mappings: false
   datasource:
     url: jdbc:mysql://localhost:3306/focus_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
     hikari:
-      username: ssafy
+      username: root
       password: ssafy
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
@@ -23,7 +26,9 @@ spring:
   redis:
     host: i8a106.p.ssafy.io
     port: 6379
+    password: blackbunny
   mvc:
+    throw-exception-if-no-handler-found: true
     pathmatch:
       matching-strategy: ant_path_matcher
   servlet:

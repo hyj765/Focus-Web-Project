@@ -25,6 +25,7 @@ import io.swagger.annotations.ApiResponses;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -73,7 +74,7 @@ public class ServiceAdminController {
       @ApiResponse(code = 500, message = "서버 오류")
   })
   public ResponseEntity<? extends BaseResponseBody> register(
-      @RequestBody @ApiParam(value = "회원가입 정보", required = true) ServiceAdminRegisterPostReq registerInfo) {
+      @RequestBody @Valid @ApiParam(value = "회원가입 정보", required = true) ServiceAdminRegisterPostReq registerInfo) {
 
     //임의로 리턴된 User 인스턴스. 현재 코드는 회원 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
     ServiceAdmin serviceAdmin = serviceAdminService.createUser(registerInfo);
@@ -90,9 +91,12 @@ public class ServiceAdminController {
       @ApiResponse(code = 500, message = "서버 오류")
   })
   public ResponseEntity<? extends BaseResponseBody> registerCompanyAdmin(
-      @RequestBody @ApiParam(value = "회원가입 정보", required = true) CompanyAdminRegisterPostReq registerInfo) {
+      @RequestBody @Valid @ApiParam(value = "회원가입 정보", required = true) CompanyAdminRegisterPostReq registerInfo) {
 
     CompanyAdmin companyAdmin = companyAdminService.createCompanyAdmin(registerInfo);
+    Long sequenceId = companyAdmin.getId();
+    companyAdmin.setUserId(companyAdmin.getUserId() + sequenceId);
+    CompanyAdmin companyAdminRevised = companyAdminService.updateCompanyAdminUserId(companyAdmin);
 
     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
   }
@@ -171,29 +175,31 @@ public class ServiceAdminController {
       @ApiResponse(code = 500, message = "서버 오류")
   })
   public ResponseEntity<? extends BaseResponseBody> updateCompanyAdminInfo(
-      @RequestBody @ApiParam(value = "기업 관리자 정보 수정 내역", required = true) CompanyAdminRegisterPostReq updateInfo) {
+      @RequestBody @Valid @ApiParam(value = "기업 관리자 정보 수정 내역", required = true) CompanyAdminRegisterPostReq updateInfo) {
     Long companyAdminId = companyAdminService.updateCompanyAdminByUserInfo(updateInfo);
     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
   }
 
   @ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
   @GetMapping("/me")
-  public ResponseEntity<ServiceAdminRes> getUserInfo(@ApiIgnore Authentication authentication) {
+  public ResponseEntity<?> getUserInfo(@ApiIgnore Authentication authentication) {
     /**
      * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
      * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
      */
+
     FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
     Long id = userDetails.getUser().getId();
     ServiceAdmin serviceAdmin = serviceAdminService.getServiceAdminById(id);
 
     return ResponseEntity.status(200).body(ServiceAdminRes.of(serviceAdmin));
+//      throw new RestApiException(UserErrorCode.INACTIVE_USER);
   }
 
   @ApiOperation(value = "서비스 공지 사항 생성", notes = "서비스 공지 사항을 생성한다.")
   @PostMapping("/notices")
   public ResponseEntity<? extends BaseResponseBody> createServiceNotice(
-      @RequestBody @ApiParam(value = "생성하고자 하는 서비스 공지 사항 내용", required = true) ServiceNoticeReq.Create serviceNoticeReq,
+      @RequestBody @Valid @ApiParam(value = "생성하고자 하는 서비스 공지 사항 내용", required = true) ServiceNoticeReq.Create serviceNoticeReq,
       @ApiIgnore Authentication authentication
   ) {
     FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();

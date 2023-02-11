@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 import io.swagger.annotations.ApiOperation;
+import javax.validation.Valid;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
@@ -148,7 +149,7 @@ public class DataInputController {
 
 
     @PostMapping("/upload/logo/image/")
-    public ResponseEntity<?> UploadlogoImage(@RequestBody Long companyId,@RequestPart MultipartFile file){
+    public ResponseEntity<?> UploadlogoImage(@RequestBody @Valid Long companyId,@RequestPart MultipartFile file){
         if(!imageUtil.ExtensionCheck(file)){
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         }
@@ -167,7 +168,7 @@ public class DataInputController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
     @PostMapping("/upload/introduce/image/")
-    public ResponseEntity<?> UploadIntroducePaperImage(@RequestBody Long applicantId,@RequestPart MultipartFile file){
+    public ResponseEntity<?> UploadIntroducePaperImage(@RequestBody @Valid Long applicantId,@RequestPart MultipartFile file){
         String savedImageName= null;
         if(!imageUtil.ExtensionCheck(file)){
             return new ResponseEntity<String>("확장자가 올바르지 않습니다.",HttpStatus.BAD_REQUEST);
@@ -183,7 +184,7 @@ public class DataInputController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
     @PostMapping("/upload/applicantsface/image/")
-    public ResponseEntity<?> UploadApplicantFaceImage(@RequestBody Long applicantId,@RequestPart MultipartFile file){
+    public ResponseEntity<?> UploadApplicantFaceImage(@RequestBody @Valid Long applicantId,@RequestPart MultipartFile file){
         String savedImageName= null;
         if(!imageUtil.ExtensionCheck(file)){
             return new ResponseEntity<String>("확장자가 올바르지 않습니다.",HttpStatus.BAD_REQUEST);
@@ -199,7 +200,7 @@ public class DataInputController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
     @PostMapping("/upload/evaluatorface/image/")
-    public ResponseEntity<?> UploadEvaluatorFaceImage(@RequestBody Long evaluatorId,@RequestPart MultipartFile file){
+    public ResponseEntity<?> UploadEvaluatorFaceImage(@RequestBody @Valid Long evaluatorId,@RequestPart MultipartFile file){
         if(!imageUtil.ExtensionCheck(file)){
             return new ResponseEntity<String>("확장자가 올바르지 않습니다.",HttpStatus.BAD_REQUEST);
         }

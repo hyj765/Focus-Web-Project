@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.Optional;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class InterviewRoomController {
   @ApiOperation(value = "대기실 코드번호 조회")
   @GetMapping("/enter/wait")
   public ResponseEntity<?> getWaitRoomCode(
-      @RequestBody @ApiParam(value = "면접 일정 시퀀스 넘버", required = true) Long interviewRoomId) {
+      @RequestBody @Valid @ApiParam(value = "면접 일정 시퀀스 넘버", required = true) Long interviewRoomId) {
 
     Optional<InterviewRoom> interviewRoom = interviewRoomService.findById(interviewRoomId);
     Room room = interviewRoom.get().getRoom();

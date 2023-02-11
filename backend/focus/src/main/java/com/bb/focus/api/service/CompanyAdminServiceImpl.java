@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("companyAdminService")
 public class CompanyAdminServiceImpl implements CompanyAdminService {
@@ -66,6 +67,26 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
     companyAdmin.setSkinColor(userRegisterInfo.getSkinColor());
     companyAdmin.setUserRole(userRegisterInfo.getUserRole());
     return companyAdminRepository.save(companyAdmin);
+  }
+
+  @Override
+  @Transactional
+  public CompanyAdmin updateCompanyAdminUserId(CompanyAdmin companyAdminRevised) {
+    CompanyAdmin companyAdmin = new CompanyAdmin();
+    companyAdmin.setUserId(companyAdminRevised.getUserId());
+    companyAdmin.setCompanyName(companyAdminRevised.getCompanyName());
+    companyAdmin.setStartDate(companyAdminRevised.getStartDate());
+    companyAdmin.setEndDate(companyAdminRevised.getEndDate());
+    companyAdmin.setTel(companyAdminRevised.getTel());
+    companyAdmin.setEmail(companyAdminRevised.getEmail());
+    companyAdmin.setName(companyAdminRevised.getName());
+    companyAdmin.setIndustry(companyAdminRevised.getIndustry());
+    companyAdmin.setSize(companyAdminRevised.getSize());
+    companyAdmin.setLogoImage(companyAdminRevised.getLogoImage());
+    companyAdmin.setSkinColor(companyAdminRevised.getSkinColor());
+    companyAdmin.setUserRole(companyAdminRevised.getUserRole());
+    Long companyAdminId = companyAdminRepository.updateCompanyAdminByUserId(companyAdmin);
+    return companyAdmin;
   }
 
   @Override
