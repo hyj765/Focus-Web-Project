@@ -310,11 +310,11 @@
               <ul class="flex list-style-none">
                 <li
                   class="page-item"
-                  :class="hasPrevPage"
-                  @click="[pageMinus(), updatePage()]"
+                  :class="firstPage"
+                  @click.prevent="[pageMinus(), updatePage()]"
                 >
                   <a
-                    class="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-500 pointer-events-none focus:shadow-none"
+                    class="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
                     href="#"
                     tabindex="-1"
                     aria-disabled="true"
@@ -323,8 +323,8 @@
                 </li>
                 <li
                   class="page-item"
-                  :class="hasLastPage"
-                  @click="[pagePlus(), updatePage()]"
+                  :class="lastPage"
+                  @click.prevent="[pagePlus(), updatePage()]"
                 >
                   <a
                     class="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
@@ -474,11 +474,11 @@ const updatePage = () => {
     });
 };
 
-const hasPrevPage = computed(() => {
-  return { disabled: !(isFirstPage.value === true) };
+const firstPage = computed(() => {
+  return { disabled: isFirstPage.value === true };
 });
-const hasLastPage = computed(() => {
-  return { disabled: !(isLastPage.value === true) };
+const lastPage = computed(() => {
+  return { disabled: isLastPage.value === true };
 });
 
 const getEvaluatorsInfo = () => {
@@ -505,6 +505,8 @@ const getEvaluatorsInfo = () => {
       //   totalPageCount = parseInt(evaluatorCount / pageSize) + 1;
       // }
       console.log('current page: ', currentPage.value);
+      console.log('isFirstPage: ', isFirstPage.value);
+      console.log('isLastPage: ', isLastPage.value);
       evaluators.value = res.data.content;
       currentEvaluators.value = res.data.content;
 
@@ -555,4 +557,9 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+</style>
