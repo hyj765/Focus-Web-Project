@@ -118,7 +118,7 @@
         <div>
           <div class="flex justify-end pt-5">
             <button
-              @click="createCompanyAdmin()"
+              @click="[createCompanyAdmin(), emitCompanyCreated()]"
               type="button"
               class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
             >
@@ -137,6 +137,8 @@ import axios from 'axios';
 
 // 굳이 vuex store 사용할 필요없음
 // logo image url과 skin color가 테이블 컬럼으로 있던데 이건 어떻게 처리?
+
+const emit = defineEmits(['company-created']);
 
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 const getToday = date => {
@@ -196,6 +198,9 @@ const createCompanyAdmin = () => {
     .catch(err => {
       console.log(err.message);
     });
+};
+const emitCompanyCreated = () => {
+  emit('company-created');
 };
 </script>
 

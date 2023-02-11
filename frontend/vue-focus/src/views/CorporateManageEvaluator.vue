@@ -304,6 +304,37 @@
               </tbody>
             </table>
           </div>
+          <!-- Pagination -->
+          <div class="flex justify-center">
+            <nav aria-label="Page navigation example">
+              <ul class="flex list-style-none">
+                <li
+                  class="page-item"
+                  :class="firstPage"
+                  @click.prevent="[pageMinus(), updatePage()]"
+                >
+                  <a
+                    class="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
+                    href="#"
+                    tabindex="-1"
+                    aria-disabled="true"
+                    >Previous</a
+                  >
+                </li>
+                <li
+                  class="page-item"
+                  :class="lastPage"
+                  @click.prevent="[pagePlus(), updatePage()]"
+                >
+                  <a
+                    class="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
+                    href="#"
+                    >Next</a
+                  >
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
       </div>
     </div>
@@ -313,13 +344,16 @@
 <script setup>
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/20/solid';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { useStore } from 'vuex';
 
 defineEmits(['update:comp']);
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+const evaluators = ref(null);
+const currentEvaluators = ref(null);
 
+// 계정 할당 여부
 const userIdFilterLabel = ref('계정 할당 여부');
 const filterEvaluatorByUserId = needId => {
   currentEvaluators.value = evaluators.value;
@@ -342,8 +376,7 @@ const filterEvaluatorByUserId = needId => {
   console.log('filterByUserId currentEvaluators: ', currentEvaluators.value);
 };
 
-const evaluators = ref(null);
-const currentEvaluators = ref(null);
+// 부서별
 const departments = ref([]);
 const departmentFilterLabel = ref('부서별');
 const filterEvaluatorsByDepartment = department => {
@@ -359,6 +392,8 @@ const filterEvaluatorsByDepartment = department => {
   userIdFilterLabel.value = '계정 할당 여부';
   searchName.value = null;
 };
+
+// 필터 해제
 const deactivateFilters = () => {
   userIdFilterLabel.value = '계정 할당 여부';
   departmentFilterLabel.value = '부서별';
@@ -366,6 +401,7 @@ const deactivateFilters = () => {
   searchName.value = null;
 };
 
+// 이름별
 const searchName = ref('');
 const filterEvaluatorsByName = name => {
   if (
@@ -398,40 +434,81 @@ const filterEvaluatorsByName = name => {
   );
 };
 
-// 총 페이지 값 (페이징 구현할 때 필요할 것으로 예상)
-let totalPageCount = 0;
-const pageSize = 4;
-// 페이징 컴포넌트에 따라 달라지는 반응형으로 교체
-const pageNumber = 1;
+// Pagination
+const currentPage = ref(1);
+const isFirstPage = ref(true);
+const isLastPage = ref(false);
 
-const getEvaluatorsInfo = () => {
+const pagePlus = () => {
+  currentPage.value++;
+};
+const pageMinus = () => {
+  currentPage.value--;
+};
+const updatePage = () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  let evaluatorCount = 0;
-  let remainder = 0;
+  if (currentPage.value === 1) {
+    isFirstPage.value = true;
+  } else {
+    isFirstPage.value = false;
+  }
   axios
     .get(`${BASE_URL}/companyusers/evaluators/list`, {
-      // params: {
-      //   size: pageSize,
-      //   page: pageNumber,
-      // },
+      params: {
+        size: 15,
+        page: currentPage.value + 1,
+      },
       headers: {
         Authorization: `Bearer ${user.accessToken}`,
       },
     })
     .then(res => {
-      console.log('res.data: ', res.data);
-      // 페이징 기능 구현 시 필요한 totalPageCount 값 계산
-      evaluatorCount = res.data.totalElements;
-      remainder = evaluatorCount % pageSize;
-      if (remainder === 0) {
-        totalPageCount = parseInt(evaluatorCount / pageSize);
+      if (res.data.totalElements === 0) {
+        isLastPage.value = true;
       } else {
-        totalPageCount = parseInt(evaluatorCount / pageSize) + 1;
+        isLastPage.value = false;
       }
+    })
+    .then(() => {
+      getEvaluatorsInfo();
+    });
+};
+
+const firstPage = computed(() => {
+  return { disabled: isFirstPage.value === true };
+});
+const lastPage = computed(() => {
+  return { disabled: isLastPage.value === true };
+});
+
+const getEvaluatorsInfo = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  // let evaluatorCount = 0;
+  // let remainder = 0;
+  axios
+    .get(`${BASE_URL}/companyusers/evaluators/list`, {
+      params: {
+        size: 15,
+        page: currentPage.value,
+      },
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log('getEvaluators: ', res.data);
+      // evaluatorCount = res.data.totalElements;
+      // remainder = evaluatorCount % pageSize;
+      // if (remainder === 0) {
+      //   totalPageCount = parseInt(evaluatorCount / pageSize);
+      // } else {
+      //   totalPageCount = parseInt(evaluatorCount / pageSize) + 1;
+      // }
+      console.log('current page: ', currentPage.value);
+      console.log('isFirstPage: ', isFirstPage.value);
+      console.log('isLastPage: ', isLastPage.value);
       evaluators.value = res.data.content;
       currentEvaluators.value = res.data.content;
-      // console.log('evaluators: ', evaluators.value);
-      // console.log('currentEvaluators: ', currentEvaluators.value);
 
       // Departments Filter
       const tempDepartments = evaluators.value.map(
@@ -446,6 +523,7 @@ const getEvaluatorsInfo = () => {
     });
 };
 
+// 계정 할당
 const assignEvaluatorId = evaluator => {
   const user = JSON.parse(localStorage.getItem('user'));
   console.log(user.accessToken);
@@ -472,9 +550,16 @@ const saveDepartments = () => {
 };
 
 onMounted(() => {
+  currentPage.value = 1;
+  updatePage();
   getEvaluatorsInfo();
   saveDepartments();
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+</style>
