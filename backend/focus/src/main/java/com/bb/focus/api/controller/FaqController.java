@@ -37,7 +37,7 @@ public class FaqController {
   @ApiOperation(value = "FAQ 글 생성")
   @PostMapping("/")
   public ResponseEntity<? extends BaseResponseBody> createFaq(
-      @RequestBody @Valid @ApiParam(value = "FAQ 생성 정보", required = true) FaqReq.Create faq
+      @RequestBody @ApiParam(value = "FAQ 생성 정보", required = true) FaqReq.Create faq
   ) {
     Faq saveFaq = new Faq();
     saveFaq.setTitle(faq.getTitle());
