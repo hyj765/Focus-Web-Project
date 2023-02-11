@@ -206,6 +206,7 @@
         class="flex-auto"
         :is="currentComp"
         @update:comp="changeCurrentComp(CorporateManageEvaluatorCreate)"
+        @evaluator-created="changeCurrentComp(CorporateManageEvaluator)"
       />
     </div>
   </div>

@@ -96,7 +96,7 @@
         <div>
           <div class="flex justify-end pt-5">
             <button
-              @click="createEvaluator()"
+              @click="[createEvaluator(), emitEvaluatorCreated()]"
               type="button"
               class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
             >
@@ -113,6 +113,8 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useStore } from 'vuex';
+
+const emit = defineEmits(['evaluator-created']);
 
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 const store = useStore();
@@ -173,6 +175,9 @@ const createEvaluator = () => {
     .catch(err => {
       console.log(err.message);
     });
+};
+const emitEvaluatorCreated = () => {
+  emit('evaluator-created');
 };
 
 onMounted(() => {
