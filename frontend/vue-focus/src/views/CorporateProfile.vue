@@ -36,7 +36,7 @@
             <p>업종 : IT기업</p>
             <p>규모 : 대기업</p>
             <p>기업로고 :</p>
-            <p>면접방 스킨색 :</p>
+            <p>면접방 스킨색 : <i class="text-green-500 bx bxs-brush"></i></p>
           </div>
           <button class="absolute top-0 right-0 p-5">
             <i class="text-2xl bx bx-edit-alt"></i>
