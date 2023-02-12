@@ -209,6 +209,19 @@ public class DataInputController {
         String savedImageName = imageUtil.Upload(file,"evaluator",evaluatorId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
+    //테스트 코드
+    @PostMapping(value = "/upload/test/logo/image",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> testUploadlogoImage(@RequestBody Long CompanyId ,@RequestParam MultipartFile file){
+        
+        System.out.println(file);
+        try {
+            File uploaded = new File("C:\\Users\\User\\Desktop\\testvueroom\\recents front\\test\\test.png");
+            file.transferTo(uploaded);
+        }catch(IOException e){
+            System.out.println(e);
+        }
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
 
     @GetMapping("/test/image")
     public ResponseEntity<?> testImage(){
