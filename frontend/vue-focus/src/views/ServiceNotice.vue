@@ -10,9 +10,9 @@
       </nav>
       <div class="flex flex-col">
         <div class="flex flex-col justify-center">
-          <div class="inline-block w-auto py-2 sm:px-6 lg:px-8 space-y-4">
+          <div class="inline-block w-auto py-2 space-y-4 sm:px-6 lg:px-8">
             <div class="flex flex-wrap justify-between px-5">
-              <p class="font-medium text-2xl">공지 게시판</p>
+              <p class="text-2xl font-medium">공지 게시판</p>
               <div class="flex justify-center space-x-2">
                 <button
                   @click="$emit('update:compnotice')"
@@ -25,23 +25,23 @@
             </div>
             <div class="overflow-hidden rounded-md shadow-lg">
               <table class="min-w-full">
-                <thead class="border-b bg-white">
+                <thead class="bg-white border-b">
                   <tr>
                     <th
                       scope="col"
-                      class="px-6 py-4 text-left text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                     >
                       카테고리
                     </th>
                     <th
                       scope="col"
-                      class="px-6 py-4 text-left text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                     >
                       공지명
                     </th>
                     <th
                       scope="col"
-                      class="px-6 py-4 text-left text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                     >
                       날짜
                     </th>
@@ -52,22 +52,22 @@
                     v-for="(item, index) in boardList"
                     :content="item.value"
                     :key="index"
-                    class="border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100"
+                    class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
                   >
                     <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                     >
                       {{ index + 1 }}
                     </td>
                     <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                     >
                       <a href="">
                         {{ item.title }}
                       </a>
                     </td>
                     <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                     >
                       {{ item.createdAt.slice(0, 10) }}
                     </td>
