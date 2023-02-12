@@ -9,4 +9,6 @@ public interface CollegeRepository extends JpaRepository<ApplicantCollege, Long>
 
     ApplicantCollege findByName(String name);
     List<ApplicantCollege> findByNameLike(String name);
+
+    List<ApplicantCollege> findByNameContainingIgnoreCase(String name);
 }

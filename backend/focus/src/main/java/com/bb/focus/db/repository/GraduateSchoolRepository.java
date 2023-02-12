@@ -11,4 +11,6 @@ public interface GraduateSchoolRepository extends JpaRepository<ApplicantGraduat
 
     ApplicantGraduate findByName(String name);
     List<ApplicantGraduate> findByNameLike(String name);
+
+    List<ApplicantGraduate> findByNameContainingIgnoreCase(String name);
 }
