@@ -38,11 +38,15 @@
               ></span>
             </li>
             <!-- # 종 -->
-            <li class="rounded-lg bg-white/60">
-              <span
+            <li
+              @click="changeCurrentComp(CorporateNotice)"
+              class="rounded-lg bg-white/60"
+            >
+              <button
                 class="inline-flex items-center justify-center w-12 h-12 text-2xl text-gray-800"
-                ><i class="bx bx-bell"></i
-              ></span>
+              >
+                <i class="bx bx-bell"></i>
+              </button>
             </li>
             <!-- # 프로필 -->
             <button

@@ -49,7 +49,7 @@
                 </thead>
                 <tbody>
                   <tr
-                    v-for="(item, index) in boardList"
+                    v-for="(item, index) in boardList.slice().reverse()"
                     :content="item.value"
                     :key="index"
                     class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
