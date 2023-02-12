@@ -32,5 +32,7 @@ module.exports = {
         endOfLine: 'auto', // 한줄 추가
       },
     ],
+    'arrow-body-style': 'off',
+    'prefer-arrow-callback': 'off',
   },
 };
