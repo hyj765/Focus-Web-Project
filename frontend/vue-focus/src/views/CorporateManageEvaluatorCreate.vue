@@ -5,7 +5,16 @@
       <h3 class="font-bold text-gray-500">DASHBOARD</h3>
     </nav>
     <p class="px-10 text-xl font-gray-900">평가자 계정을 생성하세요</p>
-    <div class="flex items-center p-10">
+    <!-- <div class="flex justify-end mx-5">
+      <button
+        @click="copyEvaluatorForm()"
+        type="button"
+        class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
+      >
+        평가자 추가
+      </button>
+    </div> -->
+    <div class="flex items-center p-10" id="evaluator-form">
       <div
         class="p-5 space-y-5 bg-white divide-y divide-gray-200 rounded-lg shadow-lg"
       >
@@ -179,6 +188,15 @@ const createEvaluator = () => {
 const emitEvaluatorCreated = () => {
   emit('evaluator-created');
 };
+
+// let evalutorFormIdNum = 0;
+// const copyEvaluatorForm = () => {
+//   const evaluatorForm = document.getElementById('evaluator-form');
+//   const newEvaluatorForm = evaluatorForm.cloneNode(true);
+//   evalutorFormIdNum++;
+//   newEvaluatorForm.id = 'copy-evaluator-form' + evalutorFormIdNum;
+//   evaluatorForm.after(newEvaluatorForm);
+// };
 
 onMounted(() => {
   console.log(store.state.currentDepartments);
