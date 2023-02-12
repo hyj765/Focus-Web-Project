@@ -41,183 +41,27 @@
               </thead>
               <tbody>
                 <tr
+                  v-for="(item, index) in boardList.slice().reverse()"
+                  :content="item.value"
+                  :key="index"
                   class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
                 >
                   <td
                     class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                   >
-                    1
+                    {{ index + 1 }}
                   </td>
-
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    v.1234으로 업데이트
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    2022.04.06
-                  </td>
-                </tr>
-                <tr
-                  class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
-                >
                   <td
                     class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                   >
-                    1
+                    <a href="">
+                      {{ item.title }}
+                    </a>
                   </td>
-
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    v.1234으로 업데이트
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    2022.04.06
-                  </td>
-                </tr>
-                <tr
-                  class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
-                >
                   <td
                     class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                   >
-                    1
-                  </td>
-
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    v.1234으로 업데이트
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    2022.04.06
-                  </td>
-                </tr>
-                <tr
-                  class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
-                >
-                  <td
-                    class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    1
-                  </td>
-
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    v.1234으로 업데이트
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    2022.04.06
-                  </td>
-                </tr>
-                <tr
-                  class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
-                >
-                  <td
-                    class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    1
-                  </td>
-
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    v.1234으로 업데이트
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    2022.04.06
-                  </td>
-                </tr>
-                <tr
-                  class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
-                >
-                  <td
-                    class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    1
-                  </td>
-
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    v.1234으로 업데이트
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    2022.04.06
-                  </td>
-                </tr>
-                <tr
-                  class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
-                >
-                  <td
-                    class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    1
-                  </td>
-
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    v.1234으로 업데이트
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    2022.04.06
-                  </td>
-                </tr>
-                <tr
-                  class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
-                >
-                  <td
-                    class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    1
-                  </td>
-
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    v.1234으로 업데이트
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    2022.04.06
-                  </td>
-                </tr>
-                <tr
-                  class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
-                >
-                  <td
-                    class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    1
-                  </td>
-
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    v.1234으로 업데이트
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    2022.04.06
+                    {{ item.createdAt.slice(0, 10) }}
                   </td>
                 </tr>
               </tbody>
@@ -229,6 +73,34 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, onMounted, shallowRef } from 'vue';
+import axios from 'axios';
+import CoporateDashboard from '@/views/CoporateDashboard.vue';
+
+const boardList = ref([]);
+
+onMounted(() => {
+  getContextList();
+});
+const list = [];
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+const user = JSON.parse(localStorage.getItem('user'));
+const getContextList = () => {
+  axios
+    .get(`${BASE_URL}/serviceusers/notices`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(data => {
+      console.log(data.data.content);
+      boardList.value = data.data.content;
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+</script>
 
 <style lang="scss" scoped></style>
