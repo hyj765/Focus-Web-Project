@@ -398,44 +398,44 @@ public class DataInputController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-//    @ApiOperation(value = "2년제 데이터 전체 조회")
-//    @GetMapping("/colleges")
-//    public ResponseEntity<?> getCollegeList() {
-//        List<ApplicantCollege> applicantCollegesList = applicantSchoolService.findAllColleges();
-//        return ResponseEntity.status(200).body(applicantCollegesList);
-//    }
+    @ApiOperation(value = "2년제 데이터 전체 조회")
+    @GetMapping("/colleges")
+    public ResponseEntity<?> getCollegeList() {
+        List<ApplicantCollege> applicantCollegesList = applicantSchoolService.findAllColleges();
+        return ResponseEntity.status(200).body(applicantCollegesList);
+    }
 
 
-//    @ApiOperation(value = "대학원 데이터 전체 조회")
-//    @GetMapping("/graduates")
-//    public ResponseEntity<?> getGraduateList() {
-//        List<ApplicantGraduate> applicantGraduatesList = applicantSchoolService.findAllGraduates();
-//        return ResponseEntity.status(200).body(applicantGraduatesList);
-//    }
+    @ApiOperation(value = "대학원 데이터 전체 조회")
+    @GetMapping("/graduates")
+    public ResponseEntity<?> getGraduateList() {
+        List<ApplicantGraduate> applicantGraduatesList = applicantSchoolService.findAllGraduates();
+        return ResponseEntity.status(200).body(applicantGraduatesList);
+    }
 
-//    @ApiOperation(value = "4년제 데이터 전체 조회")
-//    @GetMapping("/univs")
-//    public ResponseEntity<?> getUnivList() {
-//        List<ApplicantUniv> applicantUnivsList = applicantSchoolService.findAllUnivs();
-//        return ResponseEntity.status(200).body(applicantUnivsList);
-//    }
+    @ApiOperation(value = "4년제 데이터 전체 조회")
+    @GetMapping("/univs")
+    public ResponseEntity<?> getUnivList() {
+        List<ApplicantUniv> applicantUnivsList = applicantSchoolService.findAllUnivs();
+        return ResponseEntity.status(200).body(applicantUnivsList);
+    }
 
     @ApiOperation(value = "2년제 대학교 데이터: 이름으로 검색")
-    @GetMapping("/colleges")
+    @GetMapping("/search/colleges")
     public ResponseEntity<?> findCollegeListByName(@RequestParam(value = "name", required = false) String name){
         List<ApplicantCollege> applicantCollegeList = schoolService.GetCollegebyLikeName(name);
         return ResponseEntity.status(200).body(applicantCollegeList);
     }
 
     @ApiOperation(value = "4년제 대학교 데이터: 이름으로 검색")
-    @GetMapping("/univs")
+    @GetMapping("/search/univs")
     public ResponseEntity<?> findUnivListByName(@RequestParam(value = "name", required = false) String name){
         List<ApplicantUniv> applicantUnivList = schoolSerivce.GetUnivbyLikeName(name);
         return ResponseEntity.status(200).body(applicantUnivList);
     }
 
-    @ApiOperation(value = "대학원 데이터 : 이름으로 검색")
-    @GetMapping("/graduates")
+    @ApiOperation(value = "대학원 데이터: 이름으로 검색")
+    @GetMapping("/search/graduates")
     public ResponseEntity<?> findGraduateListByName(@RequestParam(value = "name", required = false) String name){
         List<ApplicantGraduate> applicantGraduateList = schoolSerivce.GetGraduateSchoolbyLikeName(name);
         return ResponseEntity.status(200).body(applicantGraduateList);
