@@ -8,14 +8,16 @@
         <h1 class="font-bold">네이버 님, 안녕하세요</h1>
         <h3 class="font-bold text-gray-500">Notice</h3>
       </nav>
+      <div class="flex flex-wrap justify-between px-5">
+        <p class="text-2xl font-medium">공지 게시판</p>
+      </div>
       <div class="flex flex-col">
-        <div class="flex flex-col justify-center">
-          <div class="flex flex-wrap justify-between px-5">
-            <p class="text-2xl font-medium">공지 게시판</p>
-          </div>
-          <div class="overflow-hidden rounded-md shadow-lg">
+        <div class="flex flex-col justify-center px-10">
+          <div
+            class="px-10 overflow-hidden bg-white border-b rounded-md shadow-lg"
+          >
             <table class="min-w-full">
-              <thead class="bg-white border-b">
+              <thead>
                 <tr>
                   <th
                     scope="col"
