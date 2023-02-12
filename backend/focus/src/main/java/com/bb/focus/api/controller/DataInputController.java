@@ -146,7 +146,7 @@ public class DataInputController {
 
 
 
-    @PostMapping("/upload/logo/image/")
+    @PostMapping("/upload/logo/image")
     public ResponseEntity<?> UploadlogoImage(@RequestBody @Valid Long companyId,@RequestPart MultipartFile file){
         if(!imageUtil.ExtensionCheck(file)){
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
@@ -165,7 +165,7 @@ public class DataInputController {
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
-    @PostMapping("/upload/introduce/image/")
+    @PostMapping("/upload/introduce/image")
     public ResponseEntity<?> UploadIntroducePaperImage(@RequestBody @Valid Long applicantId,@RequestPart MultipartFile file){
         String savedImageName= null;
         if(!imageUtil.ExtensionCheck(file)){
@@ -181,7 +181,7 @@ public class DataInputController {
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
-    @PostMapping("/upload/applicantsface/image/")
+    @PostMapping("/upload/applicantface/image")
     public ResponseEntity<?> UploadApplicantFaceImage(@RequestBody @Valid Long applicantId,@RequestPart MultipartFile file){
         String savedImageName= null;
         if(!imageUtil.ExtensionCheck(file)){
@@ -197,7 +197,7 @@ public class DataInputController {
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
-    @PostMapping("/upload/evaluatorface/image/")
+    @PostMapping("/upload/evaluatorface/image")
     public ResponseEntity<?> UploadEvaluatorFaceImage(@RequestBody @Valid Long evaluatorId,@RequestPart MultipartFile file){
         if(!imageUtil.ExtensionCheck(file)){
             return new ResponseEntity<String>("확장자가 올바르지 않습니다.",HttpStatus.BAD_REQUEST);
