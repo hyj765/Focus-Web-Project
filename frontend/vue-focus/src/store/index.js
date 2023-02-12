@@ -7,6 +7,7 @@ export default createStore({
   state: {
     user: null,
     currentDepartments: null,
+    currentApplicantProcessId: null,
   },
   getters: {
     loggedIn(state) {
@@ -34,6 +35,13 @@ export default createStore({
       state.currentDepartments = departments;
       console.log('currentDepartments: ', state.currentDepartments);
     },
+    SAVE_CURRENT_APPLICANT_PROCESS_ID(state, processId) {
+      state.currentApplicantProcessId = processId;
+      console.log(
+        'currentApplicantProcessId: ',
+        state.currentApplicantProcessId,
+      );
+    },
   },
   actions: {
     login({ commit }, credentials) {
@@ -52,6 +60,9 @@ export default createStore({
     },
     saveDepartments({ commit }, departments) {
       commit('SAVE_DEPARTMENTS', departments);
+    },
+    saveCurrentApplicantProcessId({ commit }, processId) {
+      commit('SAVE_CURRENT_APPLICANT_PROCESS_ID', processId);
     },
   },
 });

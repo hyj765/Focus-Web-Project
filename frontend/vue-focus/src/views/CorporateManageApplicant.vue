@@ -14,6 +14,7 @@
     <div class="space-y-5">
       <!-- 전형목록 -->
       <div
+        @click="getInterviewApplicants(interview.id)"
         v-for="interview in interviews"
         :key="interview.id"
         class="flex flex-row items-center justify-center space-x-10"
@@ -38,6 +39,10 @@
 <script setup>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const emit = defineEmits(['get-interview-applicants']);
 
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 const interviews = ref(null);
@@ -54,6 +59,10 @@ const getInterviewInfo = () => {
       console.log('interviews: ', res.data);
       interviews.value = res.data;
     });
+};
+const getInterviewApplicants = processId => {
+  emit('get-interview-applicants');
+  store.dispatch('saveCurrentApplicantProcessId', processId);
 };
 
 onMounted(() => {
