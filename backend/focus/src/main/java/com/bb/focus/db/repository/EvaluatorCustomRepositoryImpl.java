@@ -55,7 +55,6 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository 
             qEvaluator.tel,
             qEvaluator.email))
         .from(qEvaluator)
-//        .join(qEvaluator.companyAdmin, qCompanyAdmin)
         .where(
             eqCompanyAdminId(companyAdminId),
             containName(search)
@@ -65,7 +64,16 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository 
         .limit(pageable.getPageSize())
         .fetch();
 
-    return new PageImpl<>(results, pageable, results.size());
+    long totalCount = jpaQueryFactory
+            .select(qEvaluator.count())
+            .from(qEvaluator)
+            .where(
+                eqCompanyAdminId(companyAdminId),
+                containName(search)
+            )
+            .fetchOne();
+
+    return new PageImpl<>(results, pageable, totalCount);
   }
 
 
@@ -131,7 +139,16 @@ public class EvaluatorCustomRepositoryImpl implements EvaluatorCustomRepository 
         .limit(pageable.getPageSize())
         .fetch();
 
-    return new PageImpl<>(results, pageable, results.size());
+    long totalCount = jpaQueryFactory
+            .select(qEvaluator.count())
+            .from(qEvaluator)
+            .where(
+                    eqCompanyAdminId(companyAdminId),
+                    qEvaluator.department.in(departmentList)
+            )
+            .fetchOne();
+
+    return new PageImpl<>(results, pageable, totalCount);
   }
 
   @Override

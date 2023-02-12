@@ -81,7 +81,17 @@ public class ApplicantCustomRepositoryImpl implements ApplicantCustomRepository 
             .limit(pageable.getPageSize())
             .fetch();
 
-    return new PageImpl<>(results, pageable, results.size());
+    long totalCount = jpaQueryFactory
+            .select(qApplicant.count())
+            .from(qApplicant)
+            .where(
+                    eqCompanyAdminId(companyAdminId),
+                    eqProcessId(processId),
+                    containName(search)
+            )
+            .fetchOne();
+
+    return new PageImpl<>(results, pageable, totalCount);
 
   }
 
