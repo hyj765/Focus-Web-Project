@@ -8,6 +8,8 @@ export default createStore({
     user: null,
     currentDepartments: null,
     currentApplicantProcessId: null,
+    roomID: [],
+    roomCodeInfo: [],
   },
   getters: {
     loggedIn(state) {
@@ -42,6 +44,15 @@ export default createStore({
         state.currentApplicantProcessId,
       );
     },
+    GET_ROOMID(state, roomID) {
+      state.roomID = roomID;
+      console.log('state.roomID : ', state.roomID);
+      console.log('roomID[0] : ', state.roomID[0].id);
+    },
+    GET_ROOMCODE_INFO(state, roomCodeInfo) {
+      state.roomCodeInfo = roomCodeInfo;
+      console.log('roomCodeInfo : ', state.roomCodeInfo);
+    },
   },
   actions: {
     login({ commit }, credentials) {
@@ -63,6 +74,23 @@ export default createStore({
     },
     saveCurrentApplicantProcessId({ commit }, processId) {
       commit('SAVE_CURRENT_APPLICANT_PROCESS_ID', processId);
+    },
+
+    getRoomId(context) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      axios({
+        method: 'get',
+        url: `${BASE_URL}/interview/schedule/1/`,
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      })
+        .then(res => {
+          context.commit('GET_ROOMID', res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
   },
 });

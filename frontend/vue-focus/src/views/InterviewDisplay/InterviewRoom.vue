@@ -5,25 +5,8 @@
       <div>
         <!-- <PracticeRoom /> -->
         <SwitchCamera @set-device="setDevice($event)" />
+        <p>유저 이름 : {{ this.myName }}</p>
         <div class="form-group">
-          <p>
-            <label>성함 : </label>
-            <input
-              v-model="myUserName"
-              class="form-control"
-              type="text"
-              required
-            />
-          </p>
-          <p>
-            <label>방 코드 : </label>
-            <input
-              v-model="mySessionId"
-              class="form-control"
-              type="text"
-              required
-            />
-          </p>
           <p class="text-center">
             <button
               type="button"
@@ -48,6 +31,8 @@
     <!-- ----------------------------------------------------------- 채팅방 들어가면 나오는 화면 ------------------------------------------------------------ -->
 
     <div v-if="session" id="session">
+      <p>NAME : {{ this.myName }}</p>
+      <p>Real_Code : {{ interviewRoomCode }}</p>
       <!------------------- 채팅 기능 Start ---------------------->
       <div
         v-if="chatmodal == true"
@@ -235,10 +220,14 @@ import SwitchCamera from './components/SwitchCamera.vue';
 
 import UserList from './components/UserList.vue';
 
+import { useStore } from 'vuex';
+
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const OPENVIDU_SERVER_URL = 'https://' + 'i8a106.p.ssafy.io';
 const OPENVIDU_SERVER_SECRET = 'cKlIVFkVgNinXpF';
+
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 
 export default {
   name: 'App',
@@ -273,8 +262,10 @@ export default {
       publisher: undefined,
       subscribers: [],
 
-      mySessionId: 'Room' + Math.floor(Math.random() * 100),
-      myUserName: '지원자' + Math.floor(Math.random() * 100),
+      // mySessionId: 'Room' + Math.floor(Math.random() * 100),
+      // myUserName: '지원자' + Math.floor(Math.random() * 100),
+      interviewRoomCode: undefined,
+      myName: '',
 
       // <------------------- 비디오/보이스 On/Off Start ---------->
       mute: false,
@@ -305,7 +296,45 @@ export default {
     };
   },
 
+  created() {
+    this.getRoomCodeInfo();
+    this.getMyName();
+  },
+
   methods: {
+    getMyName() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      console.log('current user : ', user);
+      console.log('userRole : ', user.userRole);
+      if (user.userRole === 1) {
+        this.myName = '서비스 관리자';
+      } else if (user.userRole === 2) {
+        this.myName = '기업 관리자';
+      } else if (user.userRole === 3) {
+        this.myName = '면접관';
+      } else if (user.userRole === 4) {
+        this.myName = '지원자';
+      }
+    },
+
+    getRoomCodeInfo() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      axios({
+        method: 'get',
+        url: `${BASE_URL}/interviewrooms/enter/real/1/`,
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      })
+        .then(res => {
+          this.interviewRoomCode = res.data;
+          console.log('interviewRoomCode : ', this.interviewRoomCode);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+
     joinSession() {
       // --- Get an OpenVidu object ---
       this.OV = new OpenVidu();
