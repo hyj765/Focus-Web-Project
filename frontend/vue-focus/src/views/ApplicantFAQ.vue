@@ -65,7 +65,6 @@
 <script setup>
 import { ref, onMounted, shallowRef } from 'vue';
 import axios from 'axios';
-import ServiceDashboard from '@/views/ServiceDashboard.vue';
 
 const boardList = ref([]);
 // const BASE_URL = 'http://localhost:8082/api';
