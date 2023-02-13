@@ -1,6 +1,7 @@
 package com.bb.focus.api.response;
 
 import com.bb.focus.db.entity.interview.InterviewRoom;
+import com.bb.focus.db.entity.interview.Room;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
@@ -35,7 +36,10 @@ public class InterviewRoomRes implements Comparable<InterviewRoomRes> {
 
   @ApiModelProperty(name = "면접 일정 걸리는 시간(분)", example = "30")
   private int duration;
-  
+
+  @ApiModelProperty(name = "룸 정보")
+  private String realRoomCode;
+
   public InterviewRoomRes(InterviewRoom interviewRoom) {
     id = interviewRoom.getId();
     name = interviewRoom.getName();
@@ -43,10 +47,11 @@ public class InterviewRoomRes implements Comparable<InterviewRoomRes> {
     endTime = interviewRoom.getEndTime();
     duration = interviewRoom.getDuration();
     date = interviewRoom.getDate();
+    realRoomCode = interviewRoom.getRoom().getRealCode();
   }
 
   public InterviewRoomRes(Long id, String name, LocalDateTime startTime, LocalDateTime endTime,
-      int duration, LocalDate date, int interviewRound, String processName) {
+      int duration, LocalDate date, int interviewRound, String processName, String realRoomCode) {
     this.id = id;
     this.name = name;
     this.startTime = startTime;
@@ -55,6 +60,7 @@ public class InterviewRoomRes implements Comparable<InterviewRoomRes> {
     this.date = date;
     this.interviewRound = interviewRound;
     this.processName = processName;
+    this.realRoomCode = realRoomCode;
   }
 
   @Override

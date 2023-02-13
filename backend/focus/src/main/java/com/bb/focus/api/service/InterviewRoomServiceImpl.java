@@ -174,7 +174,8 @@ public class InterviewRoomServiceImpl implements InterviewRoomService {
             ir.getDuration(),
             ir.getDate(),
             ir.getInterviewRound(),
-            ir.getProcessName()
+            ir.getProcessName(),
+                ir.getRoom().getRealCode()
         )).collect(Collectors.toList());
 
     return results;
