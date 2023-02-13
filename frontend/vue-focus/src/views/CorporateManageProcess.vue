@@ -7,6 +7,15 @@
       <h1 class="font-bold">네이버 님, 안녕하세요</h1>
       <h3 class="font-bold text-gray-500">Process</h3>
     </nav>
+    <!-- <div class="flex justify-end mx-5">
+      <button
+        @click="copyEvaluatorForm()"
+        type="button"
+        class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
+      >
+        평가자 추가
+      </button>
+    </div> -->
     <p class="px-10 text-2xl font-medium">예정된 전형</p>
     <div v-for="interview in interviews" :key="interview.id" class="space-y-5">
       <!-- 전형목록 -->
