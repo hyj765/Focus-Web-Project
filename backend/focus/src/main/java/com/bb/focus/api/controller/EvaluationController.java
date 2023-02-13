@@ -74,6 +74,7 @@ public class EvaluationController {
         InterviewRoomRes interviewRoomRes = new InterviewRoomRes(interviewRoomRepository.findById(evaluationApplicantReq.getInterviewRoomId()).get());
         Long applicantEvaluatorId = 0L;
         System.out.println("size : "+interviewRoomRes.getApplicantEvaluatorList().size());
+        System.out.println("evaluatorId : "+evaluatorId);
         for (ApplicantEvaluator ae : interviewRoomRes.getApplicantEvaluatorList()) {
             if (ae.getApplicant().getId() == evaluationApplicantReq.getApplicantId()
                     && ae.getEvaluator().getId() == evaluatorId) {
