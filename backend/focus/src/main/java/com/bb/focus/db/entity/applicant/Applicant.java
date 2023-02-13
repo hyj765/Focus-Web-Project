@@ -9,6 +9,7 @@ import com.bb.focus.db.entity.evaluation.EvaluationSheet;
 import com.bb.focus.db.entity.helper.ApplicantEvaluator;
 import com.bb.focus.db.entity.helper.ApplicantInterviewRoom;
 import com.bb.focus.db.entity.process.Process;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;

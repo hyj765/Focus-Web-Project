@@ -1,5 +1,6 @@
 package com.bb.focus.api.controller;
 
+import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.EvaluatorRes;
 import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.api.service.EvaluatorService;
@@ -116,7 +117,7 @@ public class EvaluatorController {
 
     FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
     Long id = userDetails.getUser().getId();
-    HashMap<Long, List<Applicant>> results = new HashMap<>();
+    HashMap<Long, List<ApplicantRes>> results = new HashMap<>();
     List<InterviewRoom> interviewRoomList = new ArrayList<>();
     Evaluator evaluator = evaluatorService.getEvaluatorById(id);
     List<EvaluatorInterviewRoom> evaluatorInterviewRoomList = evaluator.getEvaluatorInterviewRoomList();
@@ -126,9 +127,9 @@ public class EvaluatorController {
     for (InterviewRoom ir : interviewRoomList) {
       List<ApplicantInterviewRoom> applicantInterviewRoomList = ir.getApplicantInterviewRoomList();
       Long key = ir.getId();
-      List<Applicant> tmp = new ArrayList<>();
+      List<ApplicantRes> tmp = new ArrayList<>();
       for (ApplicantInterviewRoom air : applicantInterviewRoomList) {
-        tmp.add(air.getApplicant());
+        tmp.add(new ApplicantRes(air.getApplicant()));
       }
       results.put(key, tmp);
     }
