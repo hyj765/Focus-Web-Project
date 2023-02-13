@@ -18,15 +18,20 @@
         <div class="flex flex-row pb-3 pl-2 pr-4 bg-white rounded-lg shadow-lg">
           <div class="flex flex-col items-center w-auto h-auto text-gray-900">
             <p class="flex items-center justify-center p-4 text-2xl font-bold">
-              두나무 증권 개발자
+              {{ name }}
             </p>
             <p
               class="flex items-center justify-center px-4 py-1 text-white bg-indigo-900 rounded-xl"
             >
-              13:40 ~ 14:40 (50분)
+              {{ startTime.slice(11, 16) }} ~
+              {{ endTime.slice(11, 16) }}
             </p>
           </div>
           <div class="flex items-center justify-center">
+            <p>
+              {{ startTime.slice(0, 10) }} ~
+              {{ endTime.slice(0, 10) }}
+            </p>
             <button
               @click="goSettingRoom"
               type="button"
@@ -82,29 +87,36 @@
                   ></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody
+                v-for="(item, index) in scheduledList"
+                :content="item.value"
+                :key="index"
+              >
                 <tr
                   class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
                 >
                   <td
                     class="px-6 py-4 text-lg font-medium text-gray-900 whitespace-nowrap"
                   >
-                    두나무 개발자 FE
+                    {{ item.name }}
                   </td>
                   <td
                     class="px-6 py-4 text-lg font-light text-gray-900 whitespace-nowrap"
                   >
-                    02/25
+                    {{ item.startTime.slice(0, 10) }}
                   </td>
                   <td
                     class="px-6 py-4 text-lg font-light text-gray-900 whitespace-nowrap"
                   >
-                    13:40 ~ 15:50 (50분)
+                    {{ item.startTime.slice(11, 16) }} ~
+                    {{ item.endTime.slice(11, 16) }}
                   </td>
                   <td
                     class="px-6 py-4 text-lg font-light text-gray-900 whitespace-nowrap"
                   >
-                    3차
+                    <div>
+                      {{ item.interviewRound }}
+                    </div>
                   </td>
                   <td
                     class="px-6 py-4 text-lg font-light text-gray-900 whitespace-nowrap"
@@ -130,30 +142,56 @@
 </template>
 
 <script setup>
-import router from '@/router';
 import axios from 'axios';
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 
-const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+import router from '@/router';
 const goSettingRoom = () => router.push({ name: 'InterviewRoom' });
 
-const getRoomId = () => {
+const name = ref('');
+const startTime = ref('');
+const endTime = ref('');
+
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+
+const scheduled = ref(null);
+const scheduledList = ref(null);
+
+const getRecentlySchedule = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   axios
-    .get(`${BASE_URL}/interview/schedule/1/`, {
+    .get(`${BASE_URL}/evaluators/next`, {
       headers: {
         Authorization: `Bearer ${user.accessToken}`,
       },
     })
     .then(res => {
-      console.log('RoomIdInfo : ', res.data);
-      console.log('RoomId : ', res.data[0].id);
-      console.log('RoomId : ', res.data[1].id);
+      scheduled.value = res;
+      // console.log(scheduled.value.data.name);
+      name.value = scheduled.value.data.name;
+      startTime.value = scheduled.value.data.startTime;
+      endTime.value = scheduled.value.data.endTime;
+    });
+};
+
+const getScheduleList = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/evaluators/list`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log('res.data: ', res.data);
+      scheduledList.value = res.data['2023-02-17'];
+      console.log(scheduledList.value);
     });
 };
 
 onMounted(() => {
-  getRoomId();
+  getRecentlySchedule();
+  getScheduleList();
 });
 </script>
 
