@@ -62,7 +62,7 @@
               <h4
                 class="font-semibold tracking-wide text-gray-700 capitalize font-poppins"
               >
-                James Smith
+                삼성물산_김민경
               </h4>
               <!-- 로그아웃 -->
               <li class="rounded-lg bg-white/60" @click="logout()">
@@ -196,6 +196,18 @@
                   <span class="text-sm font-medium">공지게시판</span>
                 </a>
               </li>
+              <li @click="changeCurrentComp(CorporateFAQ)">
+                <a
+                  href="#"
+                  class="flex flex-row items-center h-12 text-gray-500 transition-transform duration-200 ease-in transform hover:translate-x-2 hover:text-gray-800"
+                >
+                  <span
+                    class="inline-flex items-center justify-center w-12 h-12 text-lg text-gray-400"
+                    ><i class="bx bx-question-mark"></i
+                  ></span>
+                  <span class="text-sm font-medium">FAQ</span>
+                </a>
+              </li>
             </div>
           </ul>
         </div>
@@ -243,6 +255,7 @@ import CorporateSheetCreate from './CorporateSheetCreate.vue';
 import CorporateStatics from './CorporateStatics.vue';
 import CorporateNotice from './CorporateNotice.vue';
 import CorporateProfile from './CorporateProfile.vue';
+import CorporateFAQ from './CorporateFAQ.vue';
 
 const currentComp = shallowRef(CorporateDashboard);
 const changeCurrentComp = comp => (currentComp.value = comp);
