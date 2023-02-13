@@ -76,7 +76,7 @@ public class EvaluationController {
         System.out.println("size : " + interviewRoomRes.getApplicantEvaluatorList().size());
         System.out.println("evaluatorId : " + evaluatorId);
         for (ApplicantEvaluator ae : interviewRoomRes.getApplicantEvaluatorList()) {
-            System.out.println("applicantId : " + ae.getApplicant().getId() + " evaluatorId : " + ae.getEvaluator().getId());
+            System.out.println("applicantId : " + ae.getApplicant().getId() + " evaluatorId : " + ae.getEvaluator().getId()+", applicantEvaluatorId : "+ae.getId());
             if (ae.getApplicant().getId() == evaluationApplicantReq.getApplicantId()
                     && ae.getEvaluator().getId() == evaluatorId) {
                 applicantEvaluatorId = ae.getId();
