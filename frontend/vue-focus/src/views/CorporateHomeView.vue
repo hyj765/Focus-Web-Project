@@ -218,6 +218,7 @@
         "
         @create-applicant="changeCurrentComp(CorporateManageApplicantCreate)"
         @applicant-created="changeCurrentComp(CorporateManageApplicantList)"
+        @process-create="changeCurrentComp(CorporateManageProcessCreate)"
       />
     </div>
   </div>
@@ -232,6 +233,7 @@ import CorporateDashboard from './CoporateDashboard.vue';
 import CorporateManageEvaluator from './CorporateManageEvaluator.vue';
 import CorporateManageEvaluatorCreate from './CorporateManageEvaluatorCreate.vue';
 import CorporateManageProcess from './CorporateManageProcess.vue';
+import CorporateManageProcessCreate from './CorporateManageProcessCreate.vue';
 import CorporateManageApplicant from './CorporateManageApplicant.vue';
 import CorporateManageApplicantList from './CorporateManageApplicantList.vue';
 import CorporateManageApplicantCreate from './CorporateManageApplicantCreate.vue';
