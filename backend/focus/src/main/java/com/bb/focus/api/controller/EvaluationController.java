@@ -8,10 +8,8 @@ import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.EvaluationService;
 import com.bb.focus.common.auth.FocusUserDetails;
-import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.applicant.Status;
 import com.bb.focus.db.entity.helper.ApplicantEvaluator;
-import com.bb.focus.db.entity.interview.InterviewRoom;
 import com.bb.focus.db.repository.InterviewRoomRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,7 +23,6 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Api(value = "평가 API", tags = {"Evaluation"})
 @RestController
@@ -76,15 +73,16 @@ public class EvaluationController {
         // applicantId, evaluatorId, interviewRoomId로 applicantEvaluatorId 찾기
         InterviewRoomRes interviewRoomRes = new InterviewRoomRes(interviewRoomRepository.findById(evaluationApplicantReq.getInterviewRoomId()).get());
         Long applicantEvaluatorId = 0L;
-        for(ApplicantEvaluator ae : interviewRoomRes.getApplicantEvaluatorList()){
-            if(ae.getApplicant().getId()==evaluationApplicantReq.getApplicantId()
-            && ae.getEvaluator().getId()==evaluatorId){
+        for (ApplicantEvaluator ae : interviewRoomRes.getApplicantEvaluatorList()) {
+            if (ae.getApplicant().getId() == evaluationApplicantReq.getApplicantId()
+                    && ae.getEvaluator().getId() == evaluatorId) {
                 applicantEvaluatorId = ae.getId();
             }
         }
 
         // 평가 항목 결과들 저장
-        for(EvaluationItemInfoReq eii : evaluationApplicantReq.getEvaluationItemInfoList()){
+        for (EvaluationItemInfoReq eii : evaluationApplicantReq.getEvaluationItemInfoList()) {
+            System.out.println("EvaluationItemInfoReq : " + eii.getContent());
             evaluationService.ApplicantEvaluation(eii, applicantEvaluatorId, eii.getEvaluationItemId());
             evaluationService.UpdateApplicantEvaluationScore(applicantEvaluatorId);
         }
