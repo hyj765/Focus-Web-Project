@@ -47,7 +47,7 @@ public class ApplicantRes {
     name = applicant.getName();
     userId = applicant.getUserId();
     code = applicant.getCode();
-    image = applicant.getCode();
+    image = applicant.getImage();
     major = applicant.getMajor();
     totalCredit = applicant.getTotalCredit();
     credit = applicant.getCredit();
