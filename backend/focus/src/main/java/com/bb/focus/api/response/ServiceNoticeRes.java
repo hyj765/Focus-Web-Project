@@ -25,7 +25,7 @@ public class ServiceNoticeRes {
   private Long serviceAdminId;
 
   @ApiModelProperty(name = "해당 글의 카테고리 시퀀스 넘버", example = "1")
-  private Long categoryId;
+  private String category;
 
   @ApiModelProperty(name = "제목", example = "1")
   private String title;
@@ -40,7 +40,7 @@ public class ServiceNoticeRes {
     return ServiceNoticeRes.builder()
         .id(serviceNotice.getId())
         .serviceAdminId(serviceNotice.getServiceAdmin().getId())
-        .categoryId(serviceNotice.getCategory().getId())
+        .category(serviceNotice.getCategory().getName())
         .title(serviceNotice.getTitle())
         .content(serviceNotice.getContent())
         .createdAt(serviceNotice.getCreatedAt())
