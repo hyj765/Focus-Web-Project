@@ -8,6 +8,8 @@ import InterviewRoom from '@/views/InterviewDisplay/InterviewRoom';
 import CorporateSheetDetail from '@/views/CorporateSheetDetail';
 import CorporateSheetCreate from '@/views/CorporateSheetCreate';
 import CorporateSheetEdit from '@/views/CorporateSheetEdit';
+import BoardDetail from '@/views/BoardDetail/BoardDetail';
+
 const routes = [
   {
     path: '/',
@@ -57,6 +59,11 @@ const routes = [
     path: '/evaluation/sheets/modifysheet/:id',
     name: 'SheetEdit',
     component: CorporateSheetEdit,
+  },
+  {
+    path: '/service/notice/:id',
+    name: 'BoardDetail',
+    component: BoardDetail,
   },
 ];
 
