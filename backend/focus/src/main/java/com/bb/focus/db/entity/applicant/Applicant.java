@@ -134,6 +134,9 @@ public class Applicant {
         mappedBy = "applicant", cascade = {CascadeType.REMOVE})
     private List<ApplicantInterviewRoom> applicantInterviewRoomList = new ArrayList<>();
 
+    @OneToMany(targetEntity = com.bb.focus.db.entity.helper.ApplicantEvaluator.class,
+            mappedBy = "applicant", cascade = {CascadeType.REMOVE})
+    private  List<ApplicantEvaluator> applicantEvaluatorList = new ArrayList<>();
     //연관관계 메서드
     public void setProcess(Process process){
         if(this.process != null){
@@ -149,6 +152,5 @@ public class Applicant {
             applicantPassLog.setApplicant(this);
         }
     }
-
 
 }

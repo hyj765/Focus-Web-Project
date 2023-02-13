@@ -1,5 +1,6 @@
 package com.bb.focus.api.controller;
 
+import com.bb.focus.api.request.DecisionReq;
 import com.bb.focus.api.request.EvaluationApplicantReq;
 import com.bb.focus.api.request.EvaluationItemInfoReq;
 import com.bb.focus.api.request.InterviewResultReq;
@@ -97,14 +98,21 @@ public class EvaluationController {
     @ApiOperation(value = "합불여부 체크", notes = "각 인터뷰 마지막에 합불여부를 결정하는 API")
     @Transactional
     @PostMapping("/decision/pass")
-    public ResponseEntity<?> FinishInterview(@RequestBody @Valid List<InterviewResultReq> resultReq, @RequestBody @Valid Long processId) {
-
-        for (int i = 0; i < resultReq.size(); ++i) {
-            evaluationService.LoggingUserPass(processId
-                    , resultReq.get(i).getApplicantId()
-                    , Status.valueOf(resultReq.get(i).getPass()));
+    public ResponseEntity<?> FinishInterview(@RequestBody DecisionReq decisionReq) {
+        if(evaluationService.LoggingUserPass(decisionReq.getProcessId(),decisionReq.getInterviewResultReqList())){
+            return new ResponseEntity<String>("데이터 합불여부 처리 실패",HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<String>("합불여부 처리 성공",HttpStatus.OK);
+    }
+
+    @ApiOperation(value="전형 현재 진행사항에 따른 합격자 값 가져오기" ,notes="cur_step의 값을 통하여 이전 n차 면접 합격자 값을 가져오는 API")
+    @GetMapping("/interview/applicants/{process-Id}")
+    public ResponseEntity<?> GetApplicantPerPass(@PathVariable(name="process-Id") Long processId){
+        List<ApplicantRes> applicantResList= evaluationService.findApplicantByPass(processId);
+        if(applicantResList == null){
+            return new ResponseEntity<String>("전형 합격자 리스트 가져오기 실패",HttpStatus.OK);
+        }
+        return new ResponseEntity<List<ApplicantRes>>(applicantResList,HttpStatus.OK);
     }
 
     @ApiOperation(value = "통계 테이블 갱신", notes = "현재 존재하는 사용자들에 대한 통계데이터 갱신")

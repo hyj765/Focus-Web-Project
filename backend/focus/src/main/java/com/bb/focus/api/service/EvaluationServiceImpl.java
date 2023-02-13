@@ -1,6 +1,7 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.EvaluationItemInfoReq;
+import com.bb.focus.api.request.InterviewResultReq;
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
 import com.bb.focus.db.entity.applicant.Applicant;
@@ -48,7 +49,6 @@ public class EvaluationServiceImpl implements EvaluationService{
         if (evaluationResult.getEvaluationItem().getId() == evaluationItemId) {
           evaluationResult.setContent(result.getContent());
           evaluationResult.setScore(result.getScore());
-          evaluationResultRepo.save(evaluationResult);
           return true;
         }
       }
@@ -70,52 +70,60 @@ public class EvaluationServiceImpl implements EvaluationService{
   public boolean UpdateApplicantEvaluationMemo(Long applicantEvaluatorId,String memo) {
     ApplicantEvaluator applicantEvaluator=applicantEvaluatorRepo.findById(applicantEvaluatorId).orElseThrow(IllegalAccessError::new);
     applicantEvaluator.setMemo(memo);
-    applicantEvaluatorRepo.save(applicantEvaluator);
-    return false;
+    return true;
   }
 
   // 면접 합격 결과를 로그로 찍는 함수. 결과에 들어갈 필요가 있음.
-  public  boolean LoggingUserPass(Long processId,Long applicantId, Status status){
+  public boolean LoggingUserPass(Long processId, List<InterviewResultReq> interviewResultReqList){
     // 로그 생성 후 -> process -> applicant -> interview를 통하여 각자 데이터 추출 이 때 status가 p라면 applicant의 현재 합격 여부 +1;
-    ApplicantPassLog applicantPassLog= new ApplicantPassLog();
-    Applicant applicant=applicantRepo.findById(applicantId).orElseThrow(IllegalAccessError::new);
-    applicant.addApplicantPasslog(applicantPassLog);
-
     Process process =processRepo.findById(processId).orElseThrow(IllegalAccessError::new);
 
-    if(!applicantPassLog.setApplicantData(applicant)) {
-      return false;
-    }
-
-    if(!applicantPassLog.setProcess(process)){
-      return false;
-    }
-
-    if(status == Status.P && process.getCurrentStep() != process.getInterviewCount()){
-      byte currentPassValue = (byte)(applicant.getPass()+1);
-      applicant.setPass(currentPassValue);
-    }
-
-    applicantPassLog.setStatus(status);
-    List<Interview> interviewList =process.getInterviewList();
-
-    for(Interview interview :interviewList){
-      if(interview.getStep() == process.getCurrentStep()){
-        applicantPassLog.setInterviewName(interview.getName());
-
-        break;
+    for(InterviewResultReq interviewResultReq:interviewResultReqList){
+      ApplicantPassLog applicantPassLog= new ApplicantPassLog();
+      Applicant applicant=applicantRepo.findById(interviewResultReq.getApplicantId()).orElseThrow(IllegalAccessError::new);
+      applicant.addApplicantPasslog(applicantPassLog);
+      if(!applicantPassLog.setApplicantData(applicant)){
+        return false;
       }
+      if(!applicantPassLog.setProcess(process)){
+        return false;
+      }
+      List<Interview> interviewList =process.getInterviewList();
+
+      for(Interview interview :interviewList){
+        if(interview.getStep() == process.getCurrentStep()){
+          applicantPassLog.setInterviewName(interview.getName());
+          break;
+        }
+      }
+      Status status = Status.valueOf(interviewResultReq.getPass());
+      if(Status.valueOf(interviewResultReq.getPass()) == Status.P){
+        byte cur_pass= (byte)(applicant.getPass()+1);
+        applicant.setPass(cur_pass);
+      }
+      applicantPassLog.setStatus(status);
+      applicantPassLog.setCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
+
+      // 총점 구하기 위해서 applicantEvaluator에 접근
+      int total=0;
+      List<ApplicantEvaluator> applicantEvaluatorList=applicant.getApplicantEvaluatorList();
+      for(ApplicantEvaluator applicantEvaluator:applicantEvaluatorList) {
+        if (applicantEvaluator.getInterview().getStep() == process.getCurrentStep()) {
+          total += applicantEvaluator.getScore();
+        }
+      }
+      applicantPassLog.setScore(total);
+      applicantPassLogRepo.save(applicantPassLog);
     }
 
-    applicantPassLog.setCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
     byte CurStep = (byte)(process.getCurrentStep()+1);
-
-    if(process.getInterviewCount() != process.getCurrentStep()) {
-       process.setCurrentStep(CurStep);
-    }
-    applicantPassLogRepo.save(applicantPassLog);
+    process.setCurrentStep(CurStep);
+    //    if(process.getInterviewCount() != process.getCurrentStep()) {
+//       process.setCurrentStep(CurStep);
+//    }
     return true;
   }
+
 
   public List<EvaluationSheetResultRes> findApplicantEvaluation(Long evaluatorId,Long applicantId,Long interviewId){
     ApplicantEvaluator applicantEvaluator = applicantEvaluatorRepo.findByEvaluatorIdAndApplicantIdAndInterviewId(evaluatorId,applicantId,interviewId);
@@ -136,12 +144,21 @@ public class EvaluationServiceImpl implements EvaluationService{
 //    }
 //    evaluationResult.setContent(evaluationResultReq.getContent());
 //    evaluationResult.setScore(evaluationResultReq.getScore());
-//    evaluationResultRepo.save(evaluationResult);
 //
 //    return true;
 //
 //  }
-
+  public List<ApplicantRes> findApplicantByPass(Long processId){
+    Process process = processRepo.findById(processId).orElseThrow(IllegalAccessError::new);
+    byte cur_step = (byte)(process.getCurrentStep()-1);
+    List<Applicant> applicantList= applicantRepo.findAllByProcessIdAndPass(processId,cur_step);
+    List<ApplicantRes> applicantResList = new ArrayList<>();
+    for(Applicant applicant:applicantList){
+      ApplicantRes applicantRes = new ApplicantRes(applicant);
+      applicantResList.add(applicantRes);
+    }
+    return applicantResList;
+  }
   public boolean createApplicantEvaluator(Long interviewId,InterviewRoom interviewRoom, Long evaluatorId,Long applicantId){
     ApplicantEvaluator applicantEvaluator = new ApplicantEvaluator();
 
@@ -157,7 +174,6 @@ public class EvaluationServiceImpl implements EvaluationService{
     applicantEvaluator.setInterviewRoom(interviewRoom);
 
     applicantEvaluatorRepo.save(applicantEvaluator);
-
     return true;
   }
 

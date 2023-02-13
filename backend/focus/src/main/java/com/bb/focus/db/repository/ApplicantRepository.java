@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface ApplicantRepository extends JpaRepository<Applicant, Long>, ApplicantCustomRepository{
         List<Applicant> findAllByProcessId(Long processId);
+        List<Applicant> findAllByProcessIdAndPass(Long processId,Byte pass);
 }
