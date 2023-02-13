@@ -95,6 +95,29 @@ public class InterviewRoomCustomRepositoryImpl implements InterviewRoomCustomRep
     }
 
     @Override
+    public List<InterviewRoomRes> findInterviewRoomByApplicantId(Long applicantId) {
+        return jpaQueryFactory
+                .select(Projections.constructor(InterviewRoomRes.class,
+                        qInterviewRoom.id,
+                        qInterviewRoom.name,
+                        qInterviewRoom.startTime,
+                        qInterviewRoom.endTime,
+                        qInterviewRoom.duration,
+                        qInterviewRoom.date,
+                        qInterviewRoom.interviewRound,
+                        qInterviewRoom.processName,
+                        qInterviewRoom.room.realCode
+                ))
+                .from(qInterviewRoom)
+                .innerJoin(qApplicantInterviewRoom)
+                .on(qApplicantInterviewRoom.interviewRoom.eq(qInterviewRoom))
+                .innerJoin(qApplicant).on(qApplicantInterviewRoom.applicant.eq(qApplicant))
+                .where(eqApplicantId(applicantId), qInterviewRoom.startTime.gt(LocalDateTime.now()))
+                .orderBy(qInterviewRoom.startTime.asc())
+                .fetch();
+    }
+
+    @Override
     public List<InterviewRoomRes> findPastInterviewRoomByEvaluatorId(Long evaluatorId) {
         return jpaQueryFactory
                 .select(Projections.constructor(InterviewRoomRes.class,
@@ -130,4 +153,13 @@ public class InterviewRoomCustomRepositoryImpl implements InterviewRoomCustomRep
         }
         return qEvaluator.id.eq(evaluatorId);
     }
+
+
+    private BooleanExpression eqApplicantId(Long applicantId) {
+        if (applicantId.equals(null)) {
+            return null;
+        }
+        return qApplicant.id.eq(applicantId);
+    }
+
 }

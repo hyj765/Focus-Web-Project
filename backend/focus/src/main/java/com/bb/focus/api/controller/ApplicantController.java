@@ -2,7 +2,9 @@ package com.bb.focus.api.controller;
 
 
 import com.bb.focus.api.response.ApplicantRes;
+import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.api.service.ApplicantService;
+import com.bb.focus.api.service.InterviewRoomService;
 import com.bb.focus.common.auth.FocusUserDetails;
 import com.bb.focus.common.util.ImageUtil;
 import com.bb.focus.db.entity.applicant.Applicant;
@@ -20,6 +22,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -33,6 +36,10 @@ public class ApplicantController {
     ImageUtil imageUtil;
     @Autowired
     ApplicantService applicantService;
+
+    @Autowired
+    InterviewRoomService interviewRoomService;
+
     @ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
     @GetMapping("/me")
     public ResponseEntity<ApplicantRes> getUserInfo(@ApiIgnore Authentication authentication) {
@@ -45,6 +52,18 @@ public class ApplicantController {
         Applicant applicant = applicantService.getApplicantById(id);
 
         return ResponseEntity.status(200).body(ApplicantRes.of(applicant));
+    }
+
+    @ApiOperation(value = "해당 지원자에게 가장 가까운 면접 1개 정보 조회")
+    @GetMapping("/next")
+    public ResponseEntity<?> getNextInterviewRoomInfo(
+            @ApiIgnore Authentication authentication) {
+
+        FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
+        Long id = userDetails.getUser().getId();
+        List<InterviewRoomRes> resultList = interviewRoomService.findUpToByApplicant(id);
+        InterviewRoomRes result = resultList.get(0);
+        return ResponseEntity.status(200).body(result);
     }
 
 }

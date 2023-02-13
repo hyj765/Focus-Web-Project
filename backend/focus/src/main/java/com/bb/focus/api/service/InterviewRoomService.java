@@ -46,5 +46,7 @@ public interface InterviewRoomService {
 
   public List<InterviewRoomRes> findUpToByEvaluator(Long evaluatorId);
 
+  public List<InterviewRoomRes> findUpToByApplicant(Long applicantId);
+
   public List<InterviewRoomRes> findPastByEvaluator(Long evaluatorId);
 }

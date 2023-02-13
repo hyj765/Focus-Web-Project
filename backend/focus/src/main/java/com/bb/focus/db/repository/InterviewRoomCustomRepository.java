@@ -15,5 +15,7 @@ public interface InterviewRoomCustomRepository {
 
   List<InterviewRoomRes> findInterviewRoomByEvaluatorId(Long evaluatorId);
 
+  List<InterviewRoomRes> findInterviewRoomByApplicantId(Long applicantId);
+
   List<InterviewRoomRes> findPastInterviewRoomByEvaluatorId(Long evaluatorId);
 }
