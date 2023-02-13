@@ -1,6 +1,7 @@
 package com.bb.focus.api.controller;
 
 import com.bb.focus.api.request.EvaluationApplicantReq;
+import com.bb.focus.api.request.EvaluationItemInfoReq;
 import com.bb.focus.api.request.InterviewResultReq;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
 import com.bb.focus.api.response.InterviewRoomRes;
@@ -83,7 +84,7 @@ public class EvaluationController {
         }
 
         // 평가 항목 결과들 저장
-        for(EvaluationApplicantReq.EvaluationItemInfo eii : evaluationApplicantReq.getEvaluationItemInfoList()){
+        for(EvaluationItemInfoReq eii : evaluationApplicantReq.getEvaluationItemInfoList()){
             evaluationService.ApplicantEvaluation(eii, applicantEvaluatorId, eii.getEvaluationItemId());
             evaluationService.UpdateApplicantEvaluationScore(applicantEvaluatorId);
         }
