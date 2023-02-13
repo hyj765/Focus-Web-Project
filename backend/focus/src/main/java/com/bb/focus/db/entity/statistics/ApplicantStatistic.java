@@ -5,6 +5,7 @@ import com.bb.focus.db.entity.process.Process;
 import com.sun.istack.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,7 +32,7 @@ public class ApplicantStatistic {
   @Column(name="statistic_id")
   private Long id;
 
-  @OneToOne(fetch =  FetchType.LAZY)
+  @OneToOne(fetch =  FetchType.LAZY, cascade = CascadeType.REMOVE)
   @JoinColumn(name="process_id")
   private Process processId;
 
