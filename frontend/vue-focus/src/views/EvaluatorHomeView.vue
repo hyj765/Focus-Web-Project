@@ -37,15 +37,16 @@
             <div class="flex items-center space-x-2">
               <img
                 class="h-8 rounded-full"
-                src="http://www.gravatar.com/avatar/2acfb745ecf9d4dccb3364752d17f65f?s=260&d=mp"
+                src="~@/assets/오상식.jpg"
                 alt="James Bhatta"
               />
-
-              <h4
-                class="font-semibold tracking-wide text-gray-700 capitalize font-poppins"
-              >
-                James Smith
-              </h4>
+              <button @click="changeCurrentComp(EvaluatorProfile)">
+                <h4
+                  class="font-semibold tracking-wide text-gray-700 capitalize font-poppins"
+                >
+                  {{ userId }} {{ name }}
+                </h4>
+              </button>
               <!-- 로그아웃 -->
               <li class="rounded-lg bg-white/60" @click="logout()">
                 <span
@@ -80,6 +81,9 @@
               </li>
               <li @click="changeCurrentComp(EvaluatorTime)">
                 <a
+                  v-for="(item, index) in scheduledList"
+                  :content="item.value"
+                  :key="index"
                   href="#"
                   class="flex flex-row items-center h-12 text-gray-500 transition-transform duration-200 ease-in transform hover:translate-x-2 hover:text-gray-800"
                 >
@@ -87,7 +91,10 @@
                     class="inline-flex items-center justify-center w-12 h-12 text-lg text-gray-400"
                     ><i class="bx bx-time-five"></i
                   ></span>
-                  <span class="text-sm font-medium">12:30 ~ 12:30</span>
+                  <span class="text-sm font-medium">
+                    {{ item.startTime.slice(11, 16) }} ~
+                    {{ item.endTime.slice(11, 16) }}
+                  </span>
                 </a>
               </li>
             </div>
@@ -132,7 +139,8 @@
 </template>
 
 <script setup>
-import { ref, shallowRef } from 'vue';
+import axios from 'axios';
+import { ref, shallowRef, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -141,6 +149,7 @@ import EvaluatorRecord from './EvaluatorRecord.vue';
 import EvaluatorSetting from './EvaluatorSetting.vue';
 import EvaluatorTime from './EvaluatorTime.vue';
 import EvaluatorFAQ from './EvaluatorFAQ.vue';
+import EvaluatorProfile from './EvaluatorProfile.vue';
 
 const currentComp = shallowRef(EvaluatorDashboard);
 const changeCurrentComp = comp => (currentComp.value = comp);
@@ -148,11 +157,58 @@ const changeCurrentComp = comp => (currentComp.value = comp);
 const router = useRouter();
 const store = useStore();
 
+const scheduledList = ref(null);
+const myinfo = ref(null);
+const name = ref('');
+const email = ref('');
+const tel = ref('');
+const userId = ref('');
+
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+
 const logout = () => {
   store.dispatch('logout').then(() => {
     router.push({ name: 'Login' });
   });
 };
+
+const getScheduleList = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/evaluators/list`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log('res.data: ', res.data);
+      scheduledList.value = res.data['2023-02-17'];
+      console.log(scheduledList.value);
+    });
+};
+
+const getMyInfo = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/evaluators/me`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log('myInfo : ', res.data);
+      myinfo.value = res;
+      name.value = myinfo.value.data.name;
+      email.value = myinfo.value.data.email;
+      tel.value = myinfo.value.data.tel;
+      userId.value = myinfo.value.data.userId;
+    });
+};
+
+onMounted(() => {
+  getScheduleList();
+  getMyInfo();
+});
 </script>
 
 <style lang="scss" scoped></style>

@@ -97,7 +97,6 @@ import ServiceNavbar from '@/components/ServiceNavbar.vue';
 
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import { useRouter } from 'vue-router';
 
 defineEmits(['update:compnotice']);
 

@@ -51,7 +51,7 @@
               <p>2022.02.04 ~ 2022.02.05</p>
             </div>
           </li>
-          <li class="flex flex-row items-center">
+          <!-- <li class="flex flex-row items-center">
             <div
               class="flex items-center justify-center w-5 h-5 bg-indigo-500 rounded-full shadow-lg ring-1 ring-slate-900/5"
             >
@@ -60,7 +60,7 @@
             <div class="px-2">
               <p>2022.02.04 ~ 2022.02.05</p>
             </div>
-          </li>
+          </li> -->
           <!-- 
               #리스트 component end
               -->
@@ -107,6 +107,12 @@
 </template>
 
 <script setup>
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+const scheduledList = ref(null);
+
 const products = [
   {
     id: 1,
@@ -150,6 +156,25 @@ const products = [
   },
   // More products...
 ];
+
+const getScheduleList = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/evaluators/list`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log('res.data: ', res.data);
+      scheduledList.value = res.data['2023-02-17'];
+      console.log(scheduledList.value);
+    });
+};
+
+onMounted(() => {
+  getScheduleList();
+});
 </script>
 
 <style lang="scss" scoped></style>
