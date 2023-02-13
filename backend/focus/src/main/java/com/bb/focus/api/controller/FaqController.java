@@ -59,6 +59,9 @@ public class FaqController {
     Page<FaqRes> results = null;
 
     switch (userRole) {
+      case 1: // 서비스 관리자
+        results = faqService.findAll(pageable).map(FaqRes::from);
+        break;
       case 2: // 기업 관리자
         results = faqService.findAll(pageable).map(FaqRes::from);
         break;
