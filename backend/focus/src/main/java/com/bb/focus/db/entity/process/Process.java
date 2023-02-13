@@ -6,6 +6,7 @@ import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.helper.ProcessApplicantPassLog;
 import com.bb.focus.db.entity.helper.ProcessEvaluator;
 import com.bb.focus.db.entity.interview.Interview;
+import com.bb.focus.db.entity.statistics.ApplicantStatistic;
 import com.sun.istack.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -61,6 +62,10 @@ public class Process {
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.applicant.Applicant.class, mappedBy = "process")
     private List<Applicant> applicantList = new ArrayList<>();
+
+    @OneToOne(targetEntity = com.bb.focus.db.entity.statistics.ApplicantStatistic.class,
+        mappedBy = "processId", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private ApplicantStatistic applicantStatistic;
 
     public void AddProcessPassLog(ApplicantPassLog applicantPassLog){
       ProcessApplicantPassLog processApplicantPassLog=new ProcessApplicantPassLog();
