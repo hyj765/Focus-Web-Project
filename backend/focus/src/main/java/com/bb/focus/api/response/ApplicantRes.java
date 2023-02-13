@@ -51,6 +51,8 @@ public class ApplicantRes {
     major = applicant.getMajor();
     totalCredit = applicant.getTotalCredit();
     credit = applicant.getCredit();
+    tel = applicant.getTel();
+    email = applicant.getEmail();
   }
 
   public ApplicantRes(Long id, String name, String userId, String code, String image, String tel, String email, String major, float totalCredit, float credit) {
