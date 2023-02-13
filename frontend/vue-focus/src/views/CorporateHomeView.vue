@@ -206,6 +206,8 @@
         class="flex-auto"
         :is="currentComp"
         @update:comp="changeCurrentComp(CorporateManageEvaluatorCreate)"
+        @update:sheet="changeCurrentComp(CorporateSheetCreate)"
+        @update:detail="changeCurrentComp(CorporateSheetDetail)"
         @evaluator-created="changeCurrentComp(CorporateManageEvaluator)"
         @get-interview-applicants="
           changeCurrentComp(CorporateManageApplicantList)
@@ -232,6 +234,8 @@ import CorporateManageApplicantCreate from './CorporateManageApplicantCreate.vue
 import CorporateManageInterview from './CorporateManageInterview.vue';
 import CorporateManagePass from './CorporateManagePass.vue';
 import CorporateSheet from './CorporateSheet.vue';
+import CorporateSheetDetail from './CorporateSheetDetail.vue';
+import CorporateSheetCreate from './CorporateSheetCreate.vue';
 import CorporateStatics from './CorporateStatics.vue';
 import CorporateNotice from './CorporateNotice.vue';
 import CorporateProfile from './CorporateProfile.vue';
