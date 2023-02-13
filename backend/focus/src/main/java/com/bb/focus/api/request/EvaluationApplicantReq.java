@@ -1,0 +1,48 @@
+package com.bb.focus.api.request;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.List;
+
+@Getter
+@Setter
+@ApiModel("EvaluationApplicantReq")
+public class EvaluationApplicantReq {
+
+    @ApiModelProperty(name = "지원자 시퀀스 넘버", example = "1")
+    @NotNull(message = "지원자의 시퀀스 넘버를 입력해주세요.")
+    private Long applicantId;
+
+    @ApiModelProperty(name = "해당 지원자에 대한 평가자의 평가 내용 전체")
+    private List<EvaluationItemInfo> evaluationItemInfoList;
+
+    @ApiModelProperty(name = "해당 지원자에 대한 평가자의 메모", example = "잘함")
+    @NotBlank(message = "해당 지원자에 대한 평가자의 메모를 입력해주세요.")
+    private String memo;
+
+    @ApiModelProperty(name = "면접실 시퀀스 넘버", example = "1")
+    @NotNull(message = "면접실의 시퀀스 넘버를 입력해주세요.")
+    private Long interviewRoomId;
+
+    @Getter
+    @Setter
+    @ApiModel("EvaluationItemInfo")
+    public class EvaluationItemInfo {
+
+        @ApiModelProperty(name = "평가 항목 시퀀스 넘버", example = "1")
+        @NotBlank(message = "평가 항목 시퀀스 넘버를 입력해주세요.")
+        private Long evaluationItemId;
+
+        @ApiModelProperty(name = "평가 내용", example = "1")
+        private String content;
+
+        @ApiModelProperty(name = "면접실 시퀀스 넘버", example = "1")
+        private byte score;
+    }
+}

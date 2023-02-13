@@ -1,5 +1,6 @@
 package com.bb.focus.api.service;
 
+import com.bb.focus.api.request.EvaluationApplicantReq;
 import com.bb.focus.api.request.EvaluationResultReq;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
 import com.bb.focus.db.entity.applicant.Applicant;
@@ -60,7 +61,7 @@ public class EvaluationServiceImpl implements EvaluationService{
   }
 
   // 면접평가 시에 해당 데이터를 저장하는 함수
-  public boolean ApplicantEvaluation(EvaluationResultReq result,Long applicantEvaluatorId, Long evaluationItemId){
+  public boolean ApplicantEvaluation(EvaluationApplicantReq.EvaluationItemInfo result, Long applicantEvaluatorId, Long evaluationItemId){
     ApplicantEvaluator applicantEvaluator=applicantEvaluatorRepo.findById(applicantEvaluatorId).orElseThrow(IllegalAccessError::new);
     List<EvaluationResult> evaluationResultList=applicantEvaluator.getEvaluationResultList();
 
