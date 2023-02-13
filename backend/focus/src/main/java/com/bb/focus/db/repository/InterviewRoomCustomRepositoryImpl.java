@@ -82,7 +82,7 @@ public class InterviewRoomCustomRepositoryImpl implements InterviewRoomCustomRep
                         qInterviewRoom.date,
                         qInterviewRoom.interviewRound,
                         qInterviewRoom.processName,
-                        qInterviewRoom.room
+                        qInterviewRoom.room.realCode
                 ))
                 .from(qInterviewRoom)
                 .innerJoin(qEvaluatorInterviewRoom)
