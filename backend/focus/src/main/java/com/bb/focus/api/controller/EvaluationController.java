@@ -8,6 +8,7 @@ import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.EvaluationService;
 import com.bb.focus.common.auth.FocusUserDetails;
+import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.db.entity.applicant.Status;
 import com.bb.focus.db.entity.helper.ApplicantEvaluator;
 import com.bb.focus.db.repository.InterviewRoomRepository;
@@ -70,26 +71,18 @@ public class EvaluationController {
         // evaluatorId 얻기
         FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
         Long evaluatorId = userDetails.getUser().getId();
-
-        // applicantId, evaluatorId, interviewRoomId로 applicantEvaluatorId 찾기
-//        InterviewRoomRes interviewRoomRes = new InterviewRoomRes(interviewRoomRepository.findById(evaluationApplicantReq.getInterviewRoomId()).get());
         List<ApplicantEvaluator> applicantEvaluatorList = interviewRoomRepository.findById(evaluationApplicantReq.getInterviewRoomId()).get().getApplicantEvaluatorList();
 
         Long applicantEvaluatorId = 0L;
-        System.out.println("size : " + applicantEvaluatorList.size());
-        System.out.println("evaluatorId : " + evaluatorId);
         for (ApplicantEvaluator ae : applicantEvaluatorList) {
-            System.out.println("applicantId : " + ae.getApplicant().getId() + " evaluatorId : " + ae.getEvaluator().getId()+", applicantEvaluatorId : "+ae.getId());
             if ((Objects.equals(ae.getApplicant().getId(), evaluationApplicantReq.getApplicantId()))
                     && (Objects.equals(ae.getEvaluator().getId(), evaluatorId))) {
                 applicantEvaluatorId = ae.getId();
             }
         }
-        System.out.println("applicantEvaluatorId : " + applicantEvaluatorId);
 
         // 평가 항목 결과들 저장
         for (EvaluationItemInfoReq eii : evaluationApplicantReq.getEvaluationItemInfoList()) {
-            System.out.println("EvaluationItemInfoReq : " + eii.getContent());
             evaluationService.ApplicantEvaluation(eii, applicantEvaluatorId, eii.getEvaluationItemId());
             evaluationService.UpdateApplicantEvaluationScore(applicantEvaluatorId);
         }
@@ -97,7 +90,7 @@ public class EvaluationController {
         // 평가 메모 저장
         evaluationService.UpdateApplicantEvaluationMemo(applicantEvaluatorId, evaluationApplicantReq.getMemo());
 
-        return new ResponseEntity<String>("평가내역 저장완료", HttpStatus.OK);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
     @ApiOperation(value = "합불여부 체크", notes = "각 인터뷰 마지막에 합불여부를 결정하는 API")

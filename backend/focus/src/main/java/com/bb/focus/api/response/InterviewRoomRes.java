@@ -44,8 +44,6 @@ public class InterviewRoomRes implements Comparable<InterviewRoomRes> {
   @ApiModelProperty(name = "룸 정보")
   private String realRoomCode;
 
-  @ApiModelProperty(name="지원자-평가자 매핑 정보")
-  private List<ApplicantEvaluator> applicantEvaluatorList;
 
   public InterviewRoomRes(InterviewRoom interviewRoom) {
     id = interviewRoom.getId();
@@ -57,7 +55,6 @@ public class InterviewRoomRes implements Comparable<InterviewRoomRes> {
     processName = interviewRoom.getProcessName();
     interviewRound = interviewRoom.getInterviewRound();
     realRoomCode = interviewRoom.getRoom().getRealCode();
-//    applicantEvaluatorList = interviewRoom.getApplicantEvaluatorList();
   }
 
   public InterviewRoomRes of(InterviewRoom interviewRoom){
@@ -70,7 +67,6 @@ public class InterviewRoomRes implements Comparable<InterviewRoomRes> {
     res.setDate(interviewRoom.getDate());
     res.setProcessName(interviewRoom.getProcessName());
     res.setInterviewRound(interviewRoom.getInterviewRound());
-    res.setApplicantEvaluatorList(interviewRoom.getApplicantEvaluatorList());
     return res;
   }
 
