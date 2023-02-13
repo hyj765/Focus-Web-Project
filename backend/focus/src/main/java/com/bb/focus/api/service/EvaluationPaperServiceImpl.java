@@ -135,7 +135,7 @@ public class EvaluationPaperServiceImpl implements EvaluationPaperService {
     @Override
     public List<EvaluationSheetRes> GetAllCompanyEvaluationSheet(Long companyId){
 
-        List<EvaluationSheet> evaluationSheetList =sheetRepo.findAllByCompanyId(companyId);
+        List<EvaluationSheet> evaluationSheetList =sheetRepo.findAllByCompanyAdminId(companyId);
         List<EvaluationSheetRes> evaluationSheetResList = new ArrayList<>();
         for(int i=0; i<evaluationSheetList.size(); ++i){
             EvaluationSheetRes evaluationSheetRes = new EvaluationSheetRes(evaluationSheetList.get(i));
