@@ -23,7 +23,7 @@ public class ServiceAdminDashboardController {
   private final ServiceAdminDashboardService serviceAdminDashboardService;
 
   @ApiOperation(value = "현재 면접 진행중인 기업 리스트 및 프로세스 리스트")
-  @GetMapping("/proceeding/companies")
+  @GetMapping("/proceeding/companies/")
   public ResponseEntity<?> getProceedingCompanies(){
 
     List<ProceedingProcessRes> list = serviceAdminDashboardService.findProceedingCompanys();
@@ -35,7 +35,7 @@ public class ServiceAdminDashboardController {
   }
 
   @ApiOperation(value = "현재 면접 진행중인 기업 수")
-  @GetMapping("/proceeding/companies/count")
+  @GetMapping("/proceeding/companies/count/")
   public ResponseEntity<?> getProceedingCompaniesCount(){
 
     Long count = serviceAdminDashboardService.getProceedingCompanysCount();
