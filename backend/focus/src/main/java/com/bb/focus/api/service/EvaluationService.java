@@ -2,6 +2,7 @@ package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.EvaluationResultReq;
 import com.bb.focus.api.response.ApplicantRes;
+import com.bb.focus.api.request.EvaluationItemInfoReq;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
 import com.bb.focus.db.entity.applicant.Status;
 import com.bb.focus.db.entity.helper.ApplicantEvaluator;
@@ -14,7 +15,7 @@ public interface EvaluationService {
 
 
   boolean LoggingUserPass(Long processId,Long applicantId,  Status status);
-  boolean ApplicantEvaluation(EvaluationResultReq result,Long ApplicantEvaluatorId,Long evaluationItemId);
+  boolean ApplicantEvaluation(EvaluationItemInfoReq result, Long ApplicantEvaluatorId, Long evaluationItemId);
 
   List<EvaluationSheetResultRes> findApplicantEvaluation(Long evaluatorId,Long applicantId,Long interviewId);
 //  boolean ModifyApplicantEvaluation(EvaluationResultReq evaluationResultReq);

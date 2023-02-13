@@ -1,32 +1,31 @@
 package com.bb.focus.api.controller;
 
-import com.bb.focus.api.request.EvaluationResultReq;
+import com.bb.focus.api.request.EvaluationApplicantReq;
+import com.bb.focus.api.request.EvaluationItemInfoReq;
 import com.bb.focus.api.request.InterviewResultReq;
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
+import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.EvaluationService;
+import com.bb.focus.common.auth.FocusUserDetails;
+import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.db.entity.applicant.Status;
+import com.bb.focus.db.entity.helper.ApplicantEvaluator;
+import com.bb.focus.db.repository.InterviewRoomRepository;
 import io.swagger.annotations.Api;
-import java.util.List;
-import java.util.Map;
-
 import io.swagger.annotations.ApiOperation;
-import javax.validation.Valid;
-
-import io.swagger.annotations.ApiParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Api(value = "평가 API", tags = {"Evaluation"})
 @RestController
@@ -34,75 +33,89 @@ import javax.transaction.Transactional;
 @RequestMapping("/api/interview")
 public class EvaluationController {
 
-  EvaluationService evaluationService;
-  DataProcessService dataProcessService;
+    EvaluationService evaluationService;
+    DataProcessService dataProcessService;
+    private final InterviewRoomRepository interviewRoomRepository;
 
-  public EvaluationController(EvaluationService evaluationS
-                             ,DataProcessService dataProcessS){
-    evaluationService = evaluationS;
-    dataProcessService= dataProcessS;
+    public EvaluationController(EvaluationService evaluationS
+            , DataProcessService dataProcessS,
+                                InterviewRoomRepository interviewRoomRepository) {
+        evaluationService = evaluationS;
+        dataProcessService = dataProcessS;
 
-  }
-
-
-  @ApiOperation(value = "자신이 평가한 지원자 조회", notes = "평가자는 이전에 자신이 평가한 지원자 정보를 읽어온다.")
-  @GetMapping("/evaluation/{interview-id}/{evaluator-id}/{applicant-id}")
-  public ResponseEntity<?> GetApplicantEvaluationInfo(@PathVariable(name="interview-id")Long interviewId,
-      @PathVariable(name="evaluator-id")Long evaluatorId
-      ,@PathVariable(name="applicant-id")Long applicantId){
-
-    List<EvaluationSheetResultRes> evaluationSheetResultResList=evaluationService.findApplicantEvaluation(evaluatorId,applicantId,interviewId);
-
-    if(evaluationSheetResultResList == null){
-      return new ResponseEntity<String>("해당 사용자의 평가정보가 없습니다.",HttpStatus.BAD_REQUEST);
+        this.interviewRoomRepository = interviewRoomRepository;
     }
 
-    return new ResponseEntity<List<EvaluationSheetResultRes>>(evaluationSheetResultResList,HttpStatus.OK);
 
-  }
+    @ApiOperation(value = "자신이 평가한 지원자 조회", notes = "평가자는 이전에 자신이 평가한 지원자 정보를 읽어온다.")
+    @GetMapping("/evaluation/{interview-id}/{evaluator-id}/{applicant-id}")
+    public ResponseEntity<?> GetApplicantEvaluationInfo(@PathVariable(name = "interview-id") Long interviewId,
+                                                        @PathVariable(name = "evaluator-id") Long evaluatorId
+            , @PathVariable(name = "applicant-id") Long applicantId) {
 
-  @ApiOperation(value = "평가자의 사용자 평가 기능", notes = "평가 시 사용될 API")
-  @Transactional
-  @PostMapping("/evaluation")
-  public ResponseEntity<?> EvaluationApplicant(
-      @RequestBody @Valid EvaluationResultReq evaluationResultReq,
-      @ApiParam @Valid Long applicantEvaluatorId,
-      @ApiParam @Valid Long evaluationItemId
-      )
-  {
-    //처음 평가 시에 생성 -> 그 다음에는 해당 면접에서 해당 지원자 넘버가 있을 시 ->
-    try {
-      evaluationService.ApplicantEvaluation(evaluationResultReq, applicantEvaluatorId, evaluationItemId);
-      evaluationService.UpdateApplicantEvaluationScore(applicantEvaluatorId);
-    }catch (Exception e){
-      return new ResponseEntity<String>("평가내역 저장실패",HttpStatus.BAD_REQUEST);
+        List<EvaluationSheetResultRes> evaluationSheetResultResList = evaluationService.findApplicantEvaluation(evaluatorId, applicantId, interviewId);
+
+        if (evaluationSheetResultResList == null) {
+            return new ResponseEntity<String>("해당 사용자의 평가정보가 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<List<EvaluationSheetResultRes>>(evaluationSheetResultResList, HttpStatus.OK);
+
     }
 
-    return new ResponseEntity<String>("평가내역 저장완료",HttpStatus.OK);
-  }
+    @ApiOperation(value = "평가자의 사용자 평가 기능", notes = "평가 시 사용될 API")
+    @Transactional
+    @PostMapping("/evaluation")
+    public ResponseEntity<?> EvaluationApplicant(
+            @RequestBody @Valid EvaluationApplicantReq evaluationApplicantReq, @ApiIgnore Authentication authentication
+    ) {
+        // evaluatorId 얻기
+        FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
+        Long evaluatorId = userDetails.getUser().getId();
+        List<ApplicantEvaluator> applicantEvaluatorList = interviewRoomRepository.findById(evaluationApplicantReq.getInterviewRoomId()).get().getApplicantEvaluatorList();
 
-  @ApiOperation(value = "합불여부 체크", notes = "각 인터뷰 마지막에 합불여부를 결정하는 API")
-  @Transactional
-  @PostMapping("/decision/pass")
-  public ResponseEntity<?> FinishInterview(@RequestBody @Valid List<InterviewResultReq> resultReq,@RequestBody @Valid Long processId){
+        Long applicantEvaluatorId = 0L;
+        for (ApplicantEvaluator ae : applicantEvaluatorList) {
+            if ((Objects.equals(ae.getApplicant().getId(), evaluationApplicantReq.getApplicantId()))
+                    && (Objects.equals(ae.getEvaluator().getId(), evaluatorId))) {
+                applicantEvaluatorId = ae.getId();
+            }
+        }
 
-    for (int i = 0; i < resultReq.size(); ++i) {
-        evaluationService.LoggingUserPass(  processId
-                                          , resultReq.get(i).getApplicantId()
-                                          , Status.valueOf(resultReq.get(i).getPass()));
+        // 평가 항목 결과들 저장
+        for (EvaluationItemInfoReq eii : evaluationApplicantReq.getEvaluationItemInfoList()) {
+            evaluationService.ApplicantEvaluation(eii, applicantEvaluatorId, eii.getEvaluationItemId());
+            evaluationService.UpdateApplicantEvaluationScore(applicantEvaluatorId);
+        }
+
+        // 평가 메모 저장
+        evaluationService.UpdateApplicantEvaluationMemo(applicantEvaluatorId, evaluationApplicantReq.getMemo());
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
-    return new ResponseEntity<Void>(HttpStatus.OK);
-  }
 
-  @ApiOperation(value = "통계 테이블 갱신", notes = "현재 존재하는 사용자들에 대한 통계데이터 갱신")
-  @Transactional
-  @PostMapping("/staticstic/givestatistics")
-  public ResponseEntity<?> UpdateStatistic(@RequestBody @Valid Long processId){
-    Map<String,Integer> major=dataProcessService.UpdateStatisticTable(processId);
-    dataProcessService.CreateMajorTable(major,processId);
+    @ApiOperation(value = "합불여부 체크", notes = "각 인터뷰 마지막에 합불여부를 결정하는 API")
+    @Transactional
+    @PostMapping("/decision/pass")
+    public ResponseEntity<?> FinishInterview(@RequestBody @Valid List<InterviewResultReq> resultReq, @RequestBody @Valid Long processId) {
 
-    return new ResponseEntity<String>("통계데이터 업데이트 성공",HttpStatus.OK);
-  }
+        for (int i = 0; i < resultReq.size(); ++i) {
+            evaluationService.LoggingUserPass(processId
+                    , resultReq.get(i).getApplicantId()
+                    , Status.valueOf(resultReq.get(i).getPass()));
+        }
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "통계 테이블 갱신", notes = "현재 존재하는 사용자들에 대한 통계데이터 갱신")
+    @Transactional
+    @PostMapping("/staticstic/givestatistics")
+    public ResponseEntity<?> UpdateStatistic(@RequestBody @Valid Long processId) {
+        Map<String, Integer> major = dataProcessService.UpdateStatisticTable(processId);
+        dataProcessService.CreateMajorTable(major, processId);
+
+        return new ResponseEntity<String>("통계데이터 업데이트 성공", HttpStatus.OK);
+    }
 
 
 //  @ApiOperation(value = "평가내역 수정함수", notes = "평가내역 수정함수 decision/pass가 사용되기 전에만 가능")
@@ -121,16 +134,16 @@ public class EvaluationController {
 //  }
 
 
-  @ApiOperation(value = "평가자의 평가 메모 내용 갱신", notes = "평가자의 평가 메모를 갱신해주는 API")
-  @Transactional
-  @PutMapping("/save/memo")
-  public ResponseEntity<?> EvaluatorSaveMemo(@RequestBody @Valid Long applicantEvaluatorId,@RequestBody @Valid String memo) {
-    // applicantevaluatorId와 메모
-    if(!evaluationService.UpdateApplicantEvaluationMemo(applicantEvaluatorId,memo)){
-      return new ResponseEntity<String>("메모 갱신 실패",HttpStatus.BAD_REQUEST);
+    @ApiOperation(value = "평가자의 평가 메모 내용 갱신", notes = "평가자의 평가 메모를 갱신해주는 API")
+    @Transactional
+    @PutMapping("/save/memo")
+    public ResponseEntity<?> EvaluatorSaveMemo(@RequestBody @Valid Long applicantEvaluatorId, @RequestBody @Valid String memo) {
+        // applicantevaluatorId와 메모
+        if (!evaluationService.UpdateApplicantEvaluationMemo(applicantEvaluatorId, memo)) {
+            return new ResponseEntity<String>("메모 갱신 실패", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<String>("메모 저장 완료", HttpStatus.OK);
     }
-    return new ResponseEntity<String>("메모 저장 완료",HttpStatus.OK);
-  }
 
   @ApiOperation(value = "면접실에 참여하는 지원자 리스트 조회")
   @GetMapping("/room/applicants/{interview-room-id}")

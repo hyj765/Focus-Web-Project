@@ -1,11 +1,15 @@
 package com.bb.focus.api.response;
 
+import com.bb.focus.db.entity.helper.ApplicantEvaluator;
 import com.bb.focus.db.entity.interview.InterviewRoom;
 import com.bb.focus.db.entity.interview.Room;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,6 +44,7 @@ public class InterviewRoomRes implements Comparable<InterviewRoomRes> {
   @ApiModelProperty(name = "룸 정보")
   private String realRoomCode;
 
+
   public InterviewRoomRes(InterviewRoom interviewRoom) {
     id = interviewRoom.getId();
     name = interviewRoom.getName();
@@ -50,6 +55,19 @@ public class InterviewRoomRes implements Comparable<InterviewRoomRes> {
     processName = interviewRoom.getProcessName();
     interviewRound = interviewRoom.getInterviewRound();
     realRoomCode = interviewRoom.getRoom().getRealCode();
+  }
+
+  public InterviewRoomRes of(InterviewRoom interviewRoom){
+    InterviewRoomRes res = new InterviewRoomRes();
+    res.setId(interviewRoom.getId());
+    res.setName(interviewRoom.getName());
+    res.setStartTime(interviewRoom.getStartTime());
+    res.setEndTime(interviewRoom.getEndTime());
+    res.setDuration(interviewRoom.getDuration());
+    res.setDate(interviewRoom.getDate());
+    res.setProcessName(interviewRoom.getProcessName());
+    res.setInterviewRound(interviewRoom.getInterviewRound());
+    return res;
   }
 
   public InterviewRoomRes(Long id, String name, LocalDateTime startTime, LocalDateTime endTime,
