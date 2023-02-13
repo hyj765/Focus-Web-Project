@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -50,7 +51,6 @@ public class ApplicantEvaluator {
 
   @Column(length = 1000)
   private String memo;
-
   @NotNull
   private int score;
 

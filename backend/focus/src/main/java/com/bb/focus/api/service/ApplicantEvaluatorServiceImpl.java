@@ -55,8 +55,8 @@ public class ApplicantEvaluatorServiceImpl implements ApplicantEvaluatorService 
       applicantEvaluator.setInterview(interview);
       applicantEvaluator.setEvaluationSheet(evaluationSheet);
       applicantEvaluator.setInterviewRoom(interviewRoom);
-
       applicantEvaluatorRepository.save(applicantEvaluator);
+      applicant.getApplicantEvaluatorList().add(applicantEvaluator);
     }
   }
 

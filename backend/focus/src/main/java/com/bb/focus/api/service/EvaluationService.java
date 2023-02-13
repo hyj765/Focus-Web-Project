@@ -1,6 +1,7 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.EvaluationResultReq;
+import com.bb.focus.api.request.InterviewResultReq;
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.request.EvaluationItemInfoReq;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
@@ -14,9 +15,10 @@ import org.springframework.stereotype.Service;
 public interface EvaluationService {
 
 
-  boolean LoggingUserPass(Long processId,Long applicantId,  Status status);
+  boolean LoggingUserPass(Long processId, List<InterviewResultReq> interviewResultReqList);
   boolean ApplicantEvaluation(EvaluationItemInfoReq result, Long ApplicantEvaluatorId, Long evaluationItemId);
 
+  List<ApplicantRes> findApplicantByPass(Long processId);
   List<EvaluationSheetResultRes> findApplicantEvaluation(Long evaluatorId,Long applicantId,Long interviewId);
 //  boolean ModifyApplicantEvaluation(EvaluationResultReq evaluationResultReq);
   boolean UpdateApplicantEvaluationScore(Long ApplicantEvaluatorId);
