@@ -12,6 +12,8 @@ import java.util.Map;
 
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
+
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -63,8 +65,8 @@ public class EvaluationController {
   @PostMapping("/evaluation")
   public ResponseEntity<?> EvaluationApplicant(
       @RequestBody @Valid EvaluationResultReq evaluationResultReq,
-      @RequestBody @Valid Long applicantEvaluatorId,
-      @RequestBody @Valid Long evaluationItemId
+      @ApiParam @Valid Long applicantEvaluatorId,
+      @ApiParam @Valid Long evaluationItemId
       )
   {
     //처음 평가 시에 생성 -> 그 다음에는 해당 면접에서 해당 지원자 넘버가 있을 시 ->

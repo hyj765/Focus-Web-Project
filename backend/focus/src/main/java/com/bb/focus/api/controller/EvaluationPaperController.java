@@ -88,6 +88,7 @@ public class EvaluationPaperController {
         }
         return new ResponseEntity<List<EvaluationSheetItemRes>>(evaluationSheetItemResList,HttpStatus.OK);
     }
+
     @GetMapping("/interview/{interview-room-id}")
     public ResponseEntity<?> GetInterviewRoomEvaluationItems(@PathVariable(name="interview-room-id")Long interviewRoomId ){
 
