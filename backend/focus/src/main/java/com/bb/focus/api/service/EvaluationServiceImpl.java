@@ -149,19 +149,19 @@ public class EvaluationServiceImpl implements EvaluationService{
 
     return evaluationSheetResultResList;
   }
-  public boolean ModifyApplicantEvaluation(EvaluationResultReq evaluationResultReq){
-    EvaluationResult evaluationResult =evaluationResultRepo.findById(evaluationResultReq.getEvaluationResultId()).orElseThrow(IllegalAccessError::new);
-
-    if(evaluationResult == null) {
-      return false;
-    }
-    evaluationResult.setContent(evaluationResultReq.getContent());
-    evaluationResult.setScore(evaluationResultReq.getScore());
-    evaluationResultRepo.save(evaluationResult);
-
-    return true;
-
-  }
+//  public boolean ModifyApplicantEvaluation(EvaluationResultReq evaluationResultReq){
+//    EvaluationResult evaluationResult =evaluationResultRepo.findById(evaluationResultReq.getEvaluationResultId()).orElseThrow(IllegalAccessError::new);
+//
+//    if(evaluationResult == null) {
+//      return false;
+//    }
+//    evaluationResult.setContent(evaluationResultReq.getContent());
+//    evaluationResult.setScore(evaluationResultReq.getScore());
+//    evaluationResultRepo.save(evaluationResult);
+//
+//    return true;
+//
+//  }
 
   public boolean createApplicantEvaluator(Long interviewId,InterviewRoom interviewRoom, Long evaluatorId,Long applicantId){
     ApplicantEvaluator applicantEvaluator = new ApplicantEvaluator();

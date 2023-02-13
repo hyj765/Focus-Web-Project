@@ -104,20 +104,20 @@ public class EvaluationController {
   }
 
 
-  @ApiOperation(value = "평가내역 수정함수", notes = "평가내역 수정함수 decision/pass가 사용되기 전에만 가능")
-  @Transactional
-  @PutMapping("/modify/evaluation")
-  public ResponseEntity<?> ModifyApplicantEvaluation(@RequestBody @Valid EvaluationResultReq evaluationResultReq, @RequestBody @Valid Long applicantEvaluationId){
-
-    if(!evaluationService.ModifyApplicantEvaluation(evaluationResultReq)){
-      return new ResponseEntity<String>("수정에 실패하였습니다.",HttpStatus.BAD_REQUEST);
-    }
-    if(evaluationService.UpdateApplicantEvaluationScore(applicantEvaluationId)){
-      return new ResponseEntity<String>("총점 재계산 실패",HttpStatus.OK);
-    }
-
-    return new ResponseEntity<String>("수정 성공",HttpStatus.OK);
-  }
+//  @ApiOperation(value = "평가내역 수정함수", notes = "평가내역 수정함수 decision/pass가 사용되기 전에만 가능")
+//  @Transactional
+//  @PutMapping("/modify/evaluation")
+//  public ResponseEntity<?> ModifyApplicantEvaluation(@RequestBody @Valid EvaluationResultReq evaluationResultReq, @RequestBody @Valid Long applicantEvaluationId){
+//
+//    if(!evaluationService.ModifyApplicantEvaluation(evaluationResultReq)){
+//      return new ResponseEntity<String>("수정에 실패하였습니다.",HttpStatus.BAD_REQUEST);
+//    }
+//    if(evaluationService.UpdateApplicantEvaluationScore(applicantEvaluationId)){
+//      return new ResponseEntity<String>("총점 재계산 실패",HttpStatus.OK);
+//    }
+//
+//    return new ResponseEntity<String>("수정 성공",HttpStatus.OK);
+//  }
 
 
   @ApiOperation(value = "평가자의 평가 메모 내용 갱신", notes = "평가자의 평가 메모를 갱신해주는 API")
