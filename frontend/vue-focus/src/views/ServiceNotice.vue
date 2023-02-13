@@ -86,7 +86,7 @@
 import { ref, onMounted, shallowRef } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import ServiceDashboard from '@/views/ServiceDashboard.vue';
+import { useRouter } from 'vue-router';
 
 defineEmits(['update:compnotice']);
 
@@ -113,6 +113,7 @@ onMounted(() => {
 const list = [];
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 const user = JSON.parse(localStorage.getItem('user'));
+
 const getContextList = () => {
   axios
     .get(`${BASE_URL}/serviceusers/notices`, {

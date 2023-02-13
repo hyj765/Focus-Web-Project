@@ -6,13 +6,11 @@
     <p>{{ createdAt.value }}</p>
   </div>
 </template>
-
 <script setup>
 import axios from 'axios';
-import { useRouter, useRoute } from 'vue-router';
 import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
-const router = useRouter();
 const route = useRoute();
 
 onMounted(() => {
@@ -27,7 +25,7 @@ const createdAt = ref(null);
 const onLoadBoardDetail = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   axios
-    .post(`${BASE_URL}/serviceusers/notice/${route.params.id}`, {
+    .post(`${BASE_URL}/serviceusers/notices/${route.params.id}`, {
       headers: {
         Authorization: `Bearer ${user.accessToken}`,
       },
@@ -42,24 +40,6 @@ const onLoadBoardDetail = () => {
       console.log(err.message);
     });
 };
-// const onLoadBoardDetail = () => {
-//   const user = localStorage.getItem('user');
-//   axios
-//     .post(`${BASE_URL}/serviceusers/notices/${this.$route.params.id}`, {
-//       headers: {
-//         Authorization: Bearer ${user.accessToken},
-//       },
-//     })
-//     .then(res => {
-//       title.value = res.data.title;
-//       content.value = res.data.content;
-//       tag.value = res.data.tag;
-//       createdAt.value = res.data.createdAt;
-//     })
-//     .catch(err => {
-//       console.log(err.message);
-//     });
-// };
 </script>
 
 <style></style>
