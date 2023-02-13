@@ -73,10 +73,10 @@ public class EvaluationController {
         // applicantId, evaluatorId, interviewRoomId로 applicantEvaluatorId 찾기
         InterviewRoomRes interviewRoomRes = new InterviewRoomRes(interviewRoomRepository.findById(evaluationApplicantReq.getInterviewRoomId()).get());
         Long applicantEvaluatorId = 0L;
-        System.out.println("size : "+interviewRoomRes.getApplicantEvaluatorList().size());
-        System.out.println("evaluatorId : "+evaluatorId);
+        System.out.println("size : " + interviewRoomRes.getApplicantEvaluatorList().size());
+        System.out.println("evaluatorId : " + evaluatorId);
         for (ApplicantEvaluator ae : interviewRoomRes.getApplicantEvaluatorList()) {
-            System.out.println("applicantId : "+ae.getApplicant().getId());
+            System.out.println("applicantId : " + ae.getApplicant().getId() + " evaluatorId : " + ae.getEvaluator().getId());
             if (ae.getApplicant().getId() == evaluationApplicantReq.getApplicantId()
                     && ae.getEvaluator().getId() == evaluatorId) {
                 applicantEvaluatorId = ae.getId();
