@@ -79,6 +79,7 @@ public class EvaluationController {
                 applicantEvaluatorId = ae.getId();
             }
         }
+        System.out.println("applicantEvaluatorId : " + applicantEvaluatorId);
 
         // 평가 항목 결과들 저장
         for (EvaluationItemInfoReq eii : evaluationApplicantReq.getEvaluationItemInfoList()) {
