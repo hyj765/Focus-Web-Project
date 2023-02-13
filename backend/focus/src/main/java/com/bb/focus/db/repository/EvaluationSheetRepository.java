@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface EvaluationSheetRepository extends JpaRepository<EvaluationSheet, Long> {
     Optional<EvaluationSheet> findById(Long evaluationSheetId);
-    List<EvaluationSheet> findAllByCompanyId(Long companyId);
+    List<EvaluationSheet> findAllByCompanyAdminId(Long companyAdminId);
 
 }
