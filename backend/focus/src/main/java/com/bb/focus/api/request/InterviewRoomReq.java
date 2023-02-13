@@ -18,11 +18,11 @@ public class InterviewRoomReq {
   @ApiModelProperty(name = "면접실 이름", example = "두나무 FE1-1")
   private String name;
 
-  @NotBlank(message="면접 일정 시작 시간을 입력해주세요.")
+  @NotNull(message="면접 일정 시작 시간을 입력해주세요.")
   @ApiModelProperty(name = "실제 면접 시작 시간", example = "2021-11-09T11:44:30.327959")
   private LocalDateTime startTime;
 
-  @NotBlank(message="면접 일정 종료 시간을 입력해주세요.")
+  @NotNull(message="면접 일정 종료 시간을 입력해주세요.")
   @ApiModelProperty(name = "실제 면접 종료 시간", example = "2021-11-09T11:44:30.327959")
   private LocalDateTime endTime;
 

@@ -1,6 +1,7 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.EvaluationResultReq;
+import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.applicant.ApplicantPassLog;
@@ -20,44 +21,22 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class EvaluationServiceImpl implements EvaluationService{
-  ApplicantPassLogRepository applicantPassLogRepo;
-  ApplicantRepository applicantRepo;
-  ProcessRepository processRepo;
-  ApplicantEvaluatorRepository applicantEvaluatorRepo;
-  EvaluationSheetItemRepository evaluationSheetItemRepo;
-  EvaluationSheetRepository evaluationSheetRepo;
-  EvaluationResultRepository evaluationResultRepo;
-  InterviewRepository interviewRepo;
-  EvaluatorRepository evaluatorRepo;
+  private final ApplicantPassLogRepository applicantPassLogRepo;
+  private final ApplicantRepository applicantRepo;
+  private final ProcessRepository processRepo;
+  private final ApplicantEvaluatorRepository applicantEvaluatorRepo;
+  private final EvaluationSheetItemRepository evaluationSheetItemRepo;
+  private final EvaluationSheetRepository evaluationSheetRepo;
+  private final EvaluationResultRepository evaluationResultRepo;
+  private final InterviewRepository interviewRepo;
+  private final EvaluatorRepository evaluatorRepo;
 
-  @Autowired
-  public EvaluationServiceImpl(ApplicantPassLogRepository applicantPassLogRepository
-      , ProcessRepository processRepository
-      , ApplicantRepository applicantRepository
-      , ApplicantEvaluatorRepository applicantEvaluatorRepository
-      , EvaluationSheetItemRepository evaluationSheetItemRepository
-      , EvaluationResultRepository evaluationResultRepository
-      , InterviewRepository interviewRepository
-      , EvaluatorRepository evaluatorRepository
-      , EvaluationSheetRepository evaluationSheetRepository
-      )
-  {
-
-    applicantPassLogRepo = applicantPassLogRepository;
-    processRepo = processRepository;
-    applicantRepo = applicantRepository;
-    applicantEvaluatorRepo = applicantEvaluatorRepository;
-    evaluationSheetItemRepo = evaluationSheetItemRepository;
-    evaluationResultRepo = evaluationResultRepository;
-    interviewRepo = interviewRepository;
-    evaluatorRepo = evaluatorRepository;
-    evaluationSheetRepo = evaluationSheetRepository;
-  }
 
   // 면접평가 시에 해당 데이터를 저장하는 함수
   public boolean ApplicantEvaluation(EvaluationResultReq result,Long applicantEvaluatorId, Long evaluationItemId){
@@ -180,6 +159,12 @@ public class EvaluationServiceImpl implements EvaluationService{
     applicantEvaluatorRepo.save(applicantEvaluator);
 
     return true;
+  }
+
+  //면접실에 참여하는 지원자 정보 리스트 조회
+  public List<ApplicantRes> findAttendingApplicants(Long interviewRoomId) {
+    List<ApplicantRes> result = applicantEvaluatorRepo.findAttendingApplicants(interviewRoomId);
+    return result;
   }
 
   // 총점 재계산하는 함수

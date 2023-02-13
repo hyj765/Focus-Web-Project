@@ -2,6 +2,7 @@ package com.bb.focus.api.controller;
 
 import com.bb.focus.api.request.EvaluationResultReq;
 import com.bb.focus.api.request.InterviewResultReq;
+import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
 import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.EvaluationService;
@@ -129,6 +130,15 @@ public class EvaluationController {
       return new ResponseEntity<String>("메모 갱신 실패",HttpStatus.BAD_REQUEST);
     }
     return new ResponseEntity<String>("메모 저장 완료",HttpStatus.OK);
+  }
+
+  @ApiOperation(value = "면접실에 참여하는 지원자 리스트 조회")
+  @GetMapping("/room/applicants/{interview-room-id}")
+  public ResponseEntity<?> findAttendingApplicants(
+      @PathVariable("interview-room-id") Long interviewRoomId) {
+
+    List<ApplicantRes> result = evaluationService.findAttendingApplicants(interviewRoomId);
+    return ResponseEntity.status(200).body(result);
   }
 
 }

@@ -1,9 +1,11 @@
 package com.bb.focus.db.repository;
 
+import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.db.entity.applicant.QApplicant;
 import com.bb.focus.db.entity.evaluator.QEvaluator;
 import com.bb.focus.db.entity.helper.QApplicantEvaluator;
 import com.bb.focus.db.entity.interview.QInterviewRoom;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -62,12 +64,37 @@ public class ApplicantEvaluatorCustomRepositoryImpl implements ApplicantEvaluato
         .distinct().fetch();
   }
 
+  @Override
+  public List<ApplicantRes> findAttendingApplicants(Long interviewRoomId) {
+
+    return jpaQueryFactory
+        .select(Projections.constructor(ApplicantRes.class,
+            qApplicant.id,
+            qApplicant.name,
+            qApplicant.userId,
+            qApplicant.code,
+            qApplicant.image,
+            qApplicant.tel,
+            qApplicant.email,
+            qApplicant.major,
+            qApplicant.totalCredit,
+            qApplicant.credit
+        ))
+        .distinct()
+        .from(qApplicantEvaluator)
+        .innerJoin(qApplicant).on(qApplicant.id.eq(qApplicantEvaluator.applicant.id))
+        .where(qApplicantEvaluator.interviewRoom.id.eq(interviewRoomId))
+        .orderBy(qApplicant.code.asc())
+        .fetch();
+  }
+
   private BooleanExpression eqInterviewRoomId(Long interviewRoomId) {
     if(interviewRoomId.equals(null)){
       return null;
     }
     return qInterviewRoom.id.eq(interviewRoomId);
   }
+
 
   private BooleanExpression eqEvaluatorId(Long evaluatorId) {
     if(evaluatorId.equals(null)){

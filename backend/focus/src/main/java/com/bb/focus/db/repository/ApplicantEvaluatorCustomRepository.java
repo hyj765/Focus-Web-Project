@@ -1,5 +1,6 @@
 package com.bb.focus.db.repository;
 
+import com.bb.focus.api.response.ApplicantRes;
 import java.util.List;
 
 public interface ApplicantEvaluatorCustomRepository {
@@ -11,5 +12,7 @@ public interface ApplicantEvaluatorCustomRepository {
   List<Long> findApplicantIds(Long interviewRoomId);
 
   List<Long> findEvaluatorIds(Long interviewRoomId);
+
+  List<ApplicantRes> findAttendingApplicants(Long interviewRoomId);
 
 }
