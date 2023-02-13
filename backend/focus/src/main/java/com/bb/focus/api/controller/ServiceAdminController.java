@@ -247,7 +247,7 @@ public class ServiceAdminController {
     ServiceNoticeRes serviceNoticeRes = new ServiceNoticeRes(
         serviceNotice.getId(),
         serviceNotice.getServiceAdmin().getId(),
-        serviceNotice.getCategory().getId(),
+        serviceNotice.getCategory().getName(),
         serviceNotice.getTitle(),
         serviceNotice.getCreatedAt(),
         serviceNotice.getContent()
