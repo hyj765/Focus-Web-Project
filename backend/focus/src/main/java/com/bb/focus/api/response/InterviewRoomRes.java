@@ -48,6 +48,7 @@ public class InterviewRoomRes implements Comparable<InterviewRoomRes> {
     duration = interviewRoom.getDuration();
     date = interviewRoom.getDate();
     processName = interviewRoom.getProcessName();
+    interviewRound = interviewRoom.getInterviewRound();
     realRoomCode = interviewRoom.getRoom().getRealCode();
   }
 
