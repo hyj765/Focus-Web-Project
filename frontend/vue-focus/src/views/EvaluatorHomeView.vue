@@ -104,16 +104,16 @@
                   <span class="text-sm font-medium">평가내역</span>
                 </a>
               </li>
-              <li @click="changeCurrentComp(EvaluatorSetting)">
+              <li @click="changeCurrentComp(EvaluatorFAQ)">
                 <a
                   href="#"
                   class="flex flex-row items-center h-12 text-gray-500 transition-transform duration-200 ease-in transform hover:translate-x-2 hover:text-gray-800"
                 >
                   <span
                     class="inline-flex items-center justify-center w-12 h-12 text-lg text-gray-400"
-                    ><i class="bx bxs-zap"></i
+                    ><i class="bx bx-question-mark"></i
                   ></span>
-                  <span class="text-sm font-medium">환경설정</span>
+                  <span class="text-sm font-medium">FAQ</span>
                 </a>
               </li>
             </div>
@@ -140,6 +140,7 @@ import EvaluatorDashboard from './EvaluatorDashboard.vue';
 import EvaluatorRecord from './EvaluatorRecord.vue';
 import EvaluatorSetting from './EvaluatorSetting.vue';
 import EvaluatorTime from './EvaluatorTime.vue';
+import EvaluatorFAQ from './EvaluatorFAQ.vue';
 
 const currentComp = shallowRef(EvaluatorDashboard);
 const changeCurrentComp = comp => (currentComp.value = comp);
