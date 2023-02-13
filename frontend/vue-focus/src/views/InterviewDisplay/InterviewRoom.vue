@@ -34,6 +34,9 @@
       <p>NAME : {{ this.myName }}</p>
       <p>Real_Code : {{ interviewRoomCode }}</p>
       <!------------------- 채팅 기능 Start ---------------------->
+      <div>
+        <h5>{{ getEvaluatorSheets.content }}</h5>
+      </div>
       <div
         v-if="chatmodal == true"
         class="black-bg"
@@ -299,6 +302,7 @@ export default {
   created() {
     this.getRoomCodeInfo();
     this.getMyName();
+    // this.getEvaluatorSheets();
   },
 
   methods: {
@@ -334,6 +338,10 @@ export default {
           console.log(err);
         });
     },
+
+    // getEvaluatorSheets() {
+    //   this.$store.dispatch('getEvaluatorSheets');
+    // },
 
     joinSession() {
       // --- Get an OpenVidu object ---

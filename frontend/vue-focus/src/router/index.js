@@ -5,7 +5,9 @@ import CorporateHomeView from '@/views/CorporateHomeView';
 import EvaluatorHomeView from '@/views/EvaluatorHomeView';
 import ApplicantHomeView from '@/views/ApplicantHomeView';
 import InterviewRoom from '@/views/InterviewDisplay/InterviewRoom';
-
+import CorporateSheetDetail from '@/views/CorporateSheetDetail';
+import CorporateSheetCreate from '@/views/CorporateSheetCreate';
+import CorporateSheetEdit from '@/views/CorporateSheetEdit';
 const routes = [
   {
     path: '/',
@@ -40,6 +42,21 @@ const routes = [
     path: '/interviewroom',
     name: 'InterviewRoom',
     component: InterviewRoom,
+  },
+  {
+    path: '/evaluation/sheets/:id',
+    name: 'SheetDetail',
+    component: CorporateSheetDetail,
+  },
+  {
+    path: '/evaluation/sheets',
+    name: 'SheetCreate',
+    component: CorporateSheetCreate,
+  },
+  {
+    path: '/evaluation/sheets/modifysheet/:id',
+    name: 'SheetEdit',
+    component: CorporateSheetEdit,
   },
 ];
 

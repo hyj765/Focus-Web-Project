@@ -8,6 +8,7 @@ export default createStore({
     user: null,
     currentDepartments: null,
     currentApplicantProcessId: null,
+    sheets: [],
     roomID: [],
     roomCodeInfo: [],
   },
@@ -53,6 +54,9 @@ export default createStore({
       state.roomCodeInfo = roomCodeInfo;
       console.log('roomCodeInfo : ', state.roomCodeInfo);
     },
+    GET_EVALUATOR_SHEET(state, sheets) {
+      state.sheets = sheets;
+    },
   },
   actions: {
     login({ commit }, credentials) {
@@ -87,6 +91,23 @@ export default createStore({
       })
         .then(res => {
           context.commit('GET_ROOMID', res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    getEvaluatorSheets(context) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      axios({
+        method: 'get',
+        url: `${BASE_URL}/evaluation/sheets/1/`,
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      })
+        .then(res => {
+          console.log('평가지 잘 불러옴?', res.data);
+          context.commit('GET_EVALUATOR_SHEET', res.data);
         })
         .catch(err => {
           console.log(err);
