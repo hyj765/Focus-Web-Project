@@ -1,8 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginView from '@/views/LoginView';
-import ServiceHomeView from '@/views/ServiceHomeView';
+// 서비스관리자
+import ServiceHomeView from '@/views/Service/ServiceHomeView';
+import ServiceFAQ from '@/views/Service/ServiceFAQ';
+import ServiceNotice from '@/views/Service/ServiceNotice';
+import ServiceNoticeCreate from '@/views/Service/ServiceNoticeCreate';
+import ServiceAccount from '@/views/Service/ServiceAccount';
+import ServiceAccountCreate from '@/views/Service/ServiceAccountCreate';
+// 기업관리자
 import CorporateHomeView from '@/views/CorporateHomeView';
+// 평가자
 import EvaluatorHomeView from '@/views/EvaluatorHomeView';
+// 지원자
 import ApplicantHomeView from '@/views/ApplicantHomeView';
 import InterviewRoom from '@/views/InterviewDisplay/InterviewRoom';
 import CorporateSheetDetail from '@/views/CorporateSheetDetail';
@@ -16,10 +25,41 @@ const routes = [
     name: 'Login',
     component: LoginView,
   },
+  //서비스관리자
   {
     path: '/service',
     name: 'Service',
     component: ServiceHomeView,
+    beforeEnter: [checkLogin],
+  },
+  {
+    path: '/service/faq',
+    name: 'ServiceFAQ',
+    component: ServiceFAQ,
+    beforeEnter: [checkLogin],
+  },
+  {
+    path: '/service/notice',
+    name: 'ServiceNotice',
+    component: ServiceNotice,
+    beforeEnter: [checkLogin],
+  },
+  {
+    path: '/service/notice/create',
+    name: 'ServiceNoticeCreate',
+    component: ServiceNoticeCreate,
+    beforeEnter: [checkLogin],
+  },
+  {
+    path: '/service/account',
+    name: 'ServiceAccount',
+    component: ServiceAccount,
+    beforeEnter: [checkLogin],
+  },
+  {
+    path: '/service/account/create',
+    name: 'ServiceAccountCreate',
+    component: ServiceAccountCreate,
     beforeEnter: [checkLogin],
   },
   {
