@@ -10,9 +10,9 @@
       </nav>
       <div class="flex flex-col">
         <div class="flex flex-col justify-center">
-          <div class="inline-block w-auto py-2 sm:px-6 lg:px-8 space-y-4">
+          <div class="inline-block w-auto py-2 space-y-4 sm:px-6 lg:px-8">
             <div class="flex flex-wrap justify-between px-5">
-              <p class="font-medium text-2xl">계정 리스트 조회</p>
+              <p class="text-2xl font-medium">계정 리스트 조회</p>
               <div class="flex justify-center space-x-2">
                 <button
                   type="button"
@@ -25,49 +25,49 @@
             </div>
             <div class="overflow-hidden rounded-md shadow-lg">
               <table class="min-w-full">
-                <thead class="border-b bg-white">
+                <thead class="bg-white border-b">
                   <tr>
                     <th
                       scope="col"
-                      class="px-6 py-4 text-left text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                     ></th>
                     <th
                       scope="col"
-                      class="px-6 py-4 text-left text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                     ></th>
                     <th
                       scope="col"
-                      class="px-6 py-4 text-left text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                     >
                       기업명
                     </th>
                     <th
                       scope="col"
-                      class="px-6 py-4 text-left text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                     >
                       계약기간
                     </th>
                     <th
                       scope="col"
-                      class="px-6 py-4 text-left text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                     >
                       담당자
                     </th>
                     <th
                       scope="col"
-                      class="px-6 py-4 text-left text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                     >
                       ID
                     </th>
                     <th
                       scope="col"
-                      class="px-6 py-4 text-left text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                     >
                       연락처
                     </th>
                     <th
                       scope="col"
-                      class="px-6 py-4 text-left text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                     >
                       이메일
                     </th>
@@ -78,15 +78,15 @@
                   :key="corporate.id"
                 >
                   <tr
-                    class="border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100"
+                    class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
                   >
                     <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900"
+                      class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                     >
                       {{ index + 1 }}
                     </td>
                     <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
+                      class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -101,33 +101,33 @@
                       </svg>
                     </td>
                     <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
+                      class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                     >
                       {{ corporate.companyName }}
                     </td>
                     <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
+                      class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                     >
                       {{ corporate.startDate.slice(0, 10) }} ~
                       {{ corporate.endDate.slice(0, 10) }}
                     </td>
                     <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
+                      class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                     >
                       {{ corporate.name }}
                     </td>
                     <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
+                      class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                     >
                       {{ corporate.userId }}
                     </td>
                     <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
+                      class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                     >
                       {{ corporate.tel }}
                     </td>
                     <td
-                      class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900"
+                      class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                     >
                       {{ corporate.email }}
                     </td>
@@ -154,7 +154,7 @@ const getCorporateInfos = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   console.log(user.accessToken);
   axios
-    .get(`${BASE_URL}/serviceusers/accounts`, {
+    .get(`${BASE_URL}/serviceusers/accounts/`, {
       Authorization: `Bearer ${user.accessToken}`,
     })
     .then(res => {
