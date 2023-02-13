@@ -2,6 +2,7 @@ package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.EvaluationItemReq;
 import com.bb.focus.api.response.EvaluationSheetItemRes;
+import com.bb.focus.api.response.EvaluationSheetRes;
 import com.bb.focus.db.entity.company.CompanyAdmin;
 import com.bb.focus.db.entity.evaluation.EvaluationItem;
 import com.bb.focus.db.entity.evaluation.EvaluationSheet;
@@ -131,5 +132,16 @@ public class EvaluationPaperServiceImpl implements EvaluationPaperService {
         return true;
     }
 
+    @Override
+    public List<EvaluationSheetRes> GetAllCompanyEvaluationSheet(Long companyId){
+
+        List<EvaluationSheet> evaluationSheetList =sheetRepo.findAllByCompanyId(companyId);
+        List<EvaluationSheetRes> evaluationSheetResList = new ArrayList<>();
+        for(int i=0; i<evaluationSheetList.size(); ++i){
+            EvaluationSheetRes evaluationSheetRes = new EvaluationSheetRes(evaluationSheetList.get(i));
+            evaluationSheetResList.add(evaluationSheetRes);
+        }
+        return evaluationSheetResList;
+    }
 
 }

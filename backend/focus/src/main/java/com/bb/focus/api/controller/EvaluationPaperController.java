@@ -3,6 +3,7 @@ package com.bb.focus.api.controller;
 import com.bb.focus.api.request.EvaluationItemReq;
 import com.bb.focus.api.request.EvaluationSheetReq;
 import com.bb.focus.api.response.EvaluationSheetItemRes;
+import com.bb.focus.api.response.EvaluationSheetRes;
 import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.EvaluationPaperService;
 import com.bb.focus.common.auth.FocusUserDetails;
@@ -37,6 +38,15 @@ public class EvaluationPaperController {
     }
 
 
+    @GetMapping("/sheets/list/{company-id}")
+    public ResponseEntity<?> GetAllEvaluationSheet(@PathVariable(name="company-id")Long companyId){
+
+        List<EvaluationSheetRes> evaluationSheetRes = evaluationPaperService.GetAllCompanyEvaluationSheet(companyId);
+        if(evaluationSheetRes == null){
+            return new ResponseEntity<String>("평가지 데이터 가져오기 실패",HttpStatus.OK);
+        }
+        return new ResponseEntity<List<EvaluationSheetRes>>(evaluationSheetRes,HttpStatus.OK);
+    }
 
     @PostMapping("/sheets")
     public ResponseEntity<?> CreateSheet(
