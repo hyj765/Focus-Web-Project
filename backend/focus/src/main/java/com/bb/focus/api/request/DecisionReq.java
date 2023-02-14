@@ -10,6 +10,6 @@ import java.util.List;
 public class DecisionReq {
 
     private Long processId;
-    private List<InterviewResultReq> interviewResultReqList;
+    private InterviewResultReq interviewResultReq;
 
 }
