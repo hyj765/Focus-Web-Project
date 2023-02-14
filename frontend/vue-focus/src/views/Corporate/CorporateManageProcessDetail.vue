@@ -9,6 +9,11 @@
             <h1 class="font-bold">삼성물산 님, 안녕하세요</h1>
             <h3 class="font-bold text-gray-500">Process</h3>
           </nav>
+          <p class="px-10 text-xl font-medium">
+            <i class="text-indigo-600 bx bxs-check-circle"></i> 프로세스 정보를
+            확인하고 수정하세요
+          </p>
+
           <div class="flex items-center px-10">
             <div
               class="p-5 space-y-5 bg-white divide-y divide-gray-200 rounded-lg shadow-lg"
@@ -85,8 +90,13 @@
           </div>
 
           <!-- 등록된 면접 -->
+
           <div class="flex flex-row pl-2">
             <div v-if="interviewList">
+              <p class="px-10 pt-6 text-xl font-medium">
+                <i class="text-indigo-600 bx bxs-check-circle"></i> 리스트
+                하단의 버튼을 통해 전형을 추가할 수 있습니다
+              </p>
               <div class="flex flex-col space-y-10">
                 <div class="flex flex-col">
                   <div class="flex flex-col justify-center">
@@ -172,7 +182,7 @@
 
             <!-- 면접 N차 생성 -->
 
-            <div v-if="showDiv" class="flex items-center p-2">
+            <div v-if="showDiv" class="flex items-center p-5">
               <div
                 class="p-5 space-y-5 bg-white divide-y divide-gray-200 rounded-lg shadow-lg"
               >
