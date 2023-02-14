@@ -31,7 +31,8 @@ public class EvaluationSheet {
     @Column(length = 30)
     private String name;
 
-    @OneToMany(targetEntity = com.bb.focus.db.entity.evaluation.EvaluationItem.class, mappedBy = "evaluationSheet",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    @OneToMany(targetEntity = com.bb.focus.db.entity.evaluation.EvaluationItem.class,
+        mappedBy = "evaluationSheet", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<EvaluationItem> evaluationItemList = new ArrayList<>();
 
     public void addEvaluationItem(EvaluationItem evaluationItem){

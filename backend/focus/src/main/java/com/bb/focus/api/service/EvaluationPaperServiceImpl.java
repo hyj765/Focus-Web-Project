@@ -67,7 +67,9 @@ public class EvaluationPaperServiceImpl implements EvaluationPaperService {
         return true;
     }
     public List<EvaluationSheetItemRes> GetEvaluationSheetItems(Long evaluationSheetId){
+
         EvaluationSheet evaluationSheet = sheetRepo.findById(evaluationSheetId).orElseThrow(IllegalAccessError::new);
+
         List<EvaluationItem> evaluationItemList = evaluationSheet.getEvaluationItemList();
         List<EvaluationSheetItemRes> evaluationSheetItemResList = new ArrayList<>();
 
