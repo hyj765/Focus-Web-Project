@@ -20,12 +20,16 @@ public class UserLoginPostRes extends BaseResponseBody {
     Byte userRole;
 
 
-    public static UserLoginPostRes of(Integer statusCode, String message, String accessToken, Byte userRole) {
+    @ApiModelProperty(name = "유저 시퀀스 넘버")
+    Long id;
+
+    public static UserLoginPostRes of(Integer statusCode, String message, String accessToken, Byte userRole, Long id) {
         UserLoginPostRes res = new UserLoginPostRes();
         res.setStatusCode(statusCode);
         res.setMessage(message);
         res.setAccessToken(accessToken);
         res.setUserRole(userRole);
+        res.setId(id);
         return res;
     }
 }
