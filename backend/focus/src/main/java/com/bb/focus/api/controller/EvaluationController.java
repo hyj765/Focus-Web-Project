@@ -93,9 +93,10 @@ public class EvaluationController {
     @ApiOperation(value = "합불여부 체크", notes = "각 인터뷰 마지막에 합불여부를 결정하는 API")
     @Transactional
     @PostMapping("/decision/pass")
-    public ResponseEntity<?> FinishInterview(@RequestBody DecisionReq decisionReq) {
-        if (!evaluationService.LoggingUserPass(decisionReq.getProcessId(), decisionReq.getInterviewResultReqList())) {
-            return new ResponseEntity<String>("데이터 합불여부 처리 실패", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> FinishInterview(@RequestBody List<DecisionReq> decisionReq) {
+        Long processId = decisionReq.get(0).getProcessId();
+        if(!evaluationService.LoggingUserPass(processId,decisionReq)){
+            return new ResponseEntity<String>("데이터 합불여부 처리 실패",HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<String>("합불여부 처리 성공", HttpStatus.OK);
     }

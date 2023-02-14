@@ -79,10 +79,6 @@ public class ImageUtil {
     String extension = FilenameUtils.getExtension(file.getOriginalFilename());
     String saveName = baseFileName + uniqueValue+ "."+extension;
     saveFilePath += "/"+saveName;
-    if(isFileExist(saveFilePath)){
-      File curFile = new File(saveFilePath);
-      curFile.delete();
-    }
 
     try {
       File createdFile = new File(saveFilePath);
