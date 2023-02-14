@@ -101,7 +101,8 @@ public class DataInputController {
         }catch (IOException e){
             e.printStackTrace();
         }
-        return new ResponseEntity<byte[]>(bytes,headers,HttpStatus.OK);
+        String encodedImage=Base64.getEncoder().encodeToString(bytes);
+        return new ResponseEntity<String>(encodedImage,headers,HttpStatus.OK);
     }
 
     @GetMapping("company/logo")
