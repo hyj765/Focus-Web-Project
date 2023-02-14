@@ -18,7 +18,7 @@ import io.swagger.annotations.Api;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-
+import java.util.Base64;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 
