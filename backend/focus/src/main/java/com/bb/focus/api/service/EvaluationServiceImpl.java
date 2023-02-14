@@ -1,5 +1,6 @@
 package com.bb.focus.api.service;
 
+import com.bb.focus.api.request.DecisionReq;
 import com.bb.focus.api.request.EvaluationItemInfoReq;
 import com.bb.focus.api.request.EvaluationResultUpdateReq;
 import com.bb.focus.api.request.InterviewResultReq;
@@ -76,16 +77,16 @@ public class EvaluationServiceImpl implements EvaluationService{
   }
 
   // 면접 합격 결과를 로그로 찍는 함수. 결과에 들어갈 필요가 있음.
-  public boolean LoggingUserPass(Long processId, List<InterviewResultReq> interviewResultReqList){
+  public boolean LoggingUserPass(Long processId, List<DecisionReq> decisionReqList){
     // 로그 생성 후 -> process -> applicant -> interview를 통하여 각자 데이터 추출 이 때 status가 p라면 applicant의 현재 합격 여부 +1;
     Process process =processRepo.findById(processId).orElseThrow(IllegalAccessError::new);
 
-    for(InterviewResultReq interviewResultReq:interviewResultReqList){
+    for(DecisionReq decisionReq:decisionReqList){
 
 //      System.out.println("for문 시작........................................................");
 
       ApplicantPassLog applicantPassLog= new ApplicantPassLog();
-      Applicant applicant=applicantRepo.findById(interviewResultReq.getApplicantId()).orElseThrow(IllegalAccessError::new);
+      Applicant applicant=applicantRepo.findById(decisionReq.getInterviewResultReq().getApplicantId()).orElseThrow(IllegalAccessError::new);
       applicant.addApplicantPasslog(applicantPassLog);
 
 //      System.out.println("지원자 이름....................................: "+applicant.getName());
@@ -107,8 +108,8 @@ public class EvaluationServiceImpl implements EvaluationService{
           break;
         }
       }
-      Status status = Status.valueOf(interviewResultReq.getPass());
-      if(Status.valueOf(interviewResultReq.getPass()).equals(Status.P)){
+      Status status = Status.valueOf(decisionReq.getInterviewResultReq().getPass());
+      if(Status.valueOf(decisionReq.getInterviewResultReq().getPass()) == Status.P){
         byte cur_pass= (byte)(applicant.getPass()+1);
         applicant.setPass(cur_pass);
       }
