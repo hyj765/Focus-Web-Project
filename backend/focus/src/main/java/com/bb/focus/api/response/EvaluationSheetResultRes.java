@@ -11,14 +11,14 @@ import lombok.Setter;
 @ApiModel("EvaluationSheetResultRes")
 public class EvaluationSheetResultRes {
 
-    @ApiModelProperty(name="평가항목 아이템", example = "1")
-    private Long id;
-
     @ApiModelProperty(name="평가항목 제목", example = "성실성")
     private String content;
 
     @ApiModelProperty(name="평가항복 최대점수", example = "20")
-    private Byte Maxscore;
+    private Byte maxscore;
+
+    @ApiModelProperty(name="평가 결과 시퀀스 넘버", example = "1")
+    private Long evaluationResultId;
 
     @ApiModelProperty(name="해당 항목의 근거",example = "전문성이 뛰어나보임 1 질문에 대해 답을 못함")
     private  String reason;
@@ -30,7 +30,7 @@ public class EvaluationSheetResultRes {
         content=evaluationResult.getEvaluationItem().getScaleContent();
         reason = evaluationResult.getContent();
         score = evaluationResult.getScore();
-        id = evaluationResult.getId();
-        Maxscore = evaluationResult.getEvaluationItem().getScoreRange();
+        evaluationResultId = evaluationResult.getId();
+        maxscore = evaluationResult.getEvaluationItem().getScoreRange();
     }
 }

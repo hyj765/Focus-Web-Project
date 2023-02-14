@@ -2,6 +2,7 @@ package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.DecisionReq;
 import com.bb.focus.api.request.EvaluationItemInfoReq;
+import com.bb.focus.api.request.EvaluationResultUpdateReq;
 import com.bb.focus.api.request.InterviewResultReq;
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
@@ -23,6 +24,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -79,16 +81,25 @@ public class EvaluationServiceImpl implements EvaluationService{
     // 로그 생성 후 -> process -> applicant -> interview를 통하여 각자 데이터 추출 이 때 status가 p라면 applicant의 현재 합격 여부 +1;
     Process process =processRepo.findById(processId).orElseThrow(IllegalAccessError::new);
 
-    for(DecisionReq decisionReq:decisionReqList){
+    for(InterviewResultReq interviewResultReq:interviewResultReqList){
+
+//      System.out.println("for문 시작........................................................");
+
       ApplicantPassLog applicantPassLog= new ApplicantPassLog();
       Applicant applicant=applicantRepo.findById(decisionReq.getInterviewResultReq().getApplicantId()).orElseThrow(IllegalAccessError::new);
       applicant.addApplicantPasslog(applicantPassLog);
+
+//      System.out.println("지원자 이름....................................: "+applicant.getName());
+
       if(!applicantPassLog.setApplicantData(applicant)){
+//        System.out.println("check1.................................: "+applicantPassLog.setApplicantData(applicant));
         return false;
       }
       if(!applicantPassLog.setProcess(process)){
+//        System.out.println("check2.................................: "+applicantPassLog.setProcess(process));
         return false;
       }
+
       List<Interview> interviewList =process.getInterviewList();
 
       for(Interview interview :interviewList){
@@ -106,22 +117,28 @@ public class EvaluationServiceImpl implements EvaluationService{
       applicantPassLog.setCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
 
       // 총점 구하기 위해서 applicantEvaluator에 접근
-      int total=0;
+      double total = 0; int loop = 0;
       List<ApplicantEvaluator> applicantEvaluatorList=applicant.getApplicantEvaluatorList();
+
       for(ApplicantEvaluator applicantEvaluator:applicantEvaluatorList) {
+//        System.out.println("loop: " + loop + ", step1: "+ applicantEvaluator.getInterview().getStep() + ", step2: " + process.getCurrentStep());
         if (applicantEvaluator.getInterview().getStep() == process.getCurrentStep()) {
           total += applicantEvaluator.getScore();
+          loop++;
         }
       }
-      applicantPassLog.setScore(total);
+
+//      System.out.println("loop......................................: "+loop);
+
+      if(total != 0 && loop != 0){
+        applicantPassLog.setScore(total / loop);
+      } else applicantPassLog.setScore(0);
+
       applicantPassLogRepo.save(applicantPassLog);
     }
 
     byte CurStep = (byte)(process.getCurrentStep()+1);
     process.setCurrentStep(CurStep);
-    //    if(process.getInterviewCount() != process.getCurrentStep()) {
-//       process.setCurrentStep(CurStep);
-//    }
     return true;
   }
 
@@ -137,18 +154,18 @@ public class EvaluationServiceImpl implements EvaluationService{
 
     return evaluationSheetResultResList;
   }
-//  public boolean ModifyApplicantEvaluation(EvaluationResultReq evaluationResultReq){
-//    EvaluationResult evaluationResult =evaluationResultRepo.findById(evaluationResultReq.getEvaluationResultId()).orElseThrow(IllegalAccessError::new);
-//
-//    if(evaluationResult == null) {
-//      return false;
-//    }
-//    evaluationResult.setContent(evaluationResultReq.getContent());
-//    evaluationResult.setScore(evaluationResultReq.getScore());
-//
-//    return true;
-//
-//  }
+  public boolean ModifyApplicantEvaluation(EvaluationResultUpdateReq evaluationResultUpdateReq){
+    EvaluationResult evaluationResult =evaluationResultRepo.findById(evaluationResultUpdateReq.getEvaluationResultId()).orElseThrow(IllegalAccessError::new);
+
+    if(evaluationResult == null) {
+      return false;
+    }
+    evaluationResult.setContent(evaluationResultUpdateReq.getContent());
+    evaluationResult.setScore(evaluationResultUpdateReq.getScore());
+
+    return true;
+
+  }
   public List<ApplicantRes> findApplicantByPass(Long processId){
     Process process = processRepo.findById(processId).orElseThrow(IllegalAccessError::new);
     byte cur_step = (byte)(process.getCurrentStep()-1);
