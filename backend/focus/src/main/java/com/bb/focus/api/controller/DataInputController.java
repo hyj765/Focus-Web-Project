@@ -166,7 +166,7 @@ public class DataInputController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
     @PostMapping("/upload/introduce/image")
-    public ResponseEntity<?> UploadIntroducePaperImage(@RequestBody @Valid Long applicantId,@RequestPart MultipartFile file){
+    public ResponseEntity<?> UploadIntroducePaperImage(@RequestParam @Valid Long applicantId,@RequestParam MultipartFile file){
         String savedImageName= null;
         if(!imageUtil.ExtensionCheck(file)){
             return new ResponseEntity<String>("확장자가 올바르지 않습니다.",HttpStatus.BAD_REQUEST);
@@ -182,8 +182,10 @@ public class DataInputController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
     @PostMapping("/upload/applicantface/image")
-    public ResponseEntity<?> UploadApplicantFaceImage(@RequestBody @Valid Long applicantId,@RequestPart MultipartFile file){
+    public ResponseEntity<?> UploadApplicantFaceImage(@RequestParam @Valid Long applicantId,@RequestParam MultipartFile file){
+
         String savedImageName= null;
+
         if(!imageUtil.ExtensionCheck(file)){
             return new ResponseEntity<String>("확장자가 올바르지 않습니다.",HttpStatus.BAD_REQUEST);
         }
@@ -198,7 +200,7 @@ public class DataInputController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
     @PostMapping("/upload/evaluatorface/image")
-    public ResponseEntity<?> UploadEvaluatorFaceImage(@RequestBody @Valid Long evaluatorId,@RequestPart MultipartFile file){
+    public ResponseEntity<?> UploadEvaluatorFaceImage(@RequestParam @Valid Long evaluatorId,@RequestParam MultipartFile file){
         if(!imageUtil.ExtensionCheck(file)){
             return new ResponseEntity<String>("확장자가 올바르지 않습니다.",HttpStatus.BAD_REQUEST);
         }
@@ -210,35 +212,35 @@ public class DataInputController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
     //테스트 코드
-    @PostMapping(value = "/upload/test/logo/image",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> testUploadlogoImage(@RequestBody Long CompanyId ,@RequestParam MultipartFile file){
-        
-        System.out.println(file);
-        try {
-            File uploaded = new File("C:\\Users\\User\\Desktop\\testvueroom\\recents front\\test\\test.png");
-            file.transferTo(uploaded);
-        }catch(IOException e){
-            System.out.println(e);
-        }
-        return new ResponseEntity<Void>(HttpStatus.OK);
-    }
+//    @PostMapping(value = "/upload/test/logo/image",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+//    public ResponseEntity<?> testUploadlogoImage(@RequestBody Long CompanyId ,@RequestParam MultipartFile file){
+//
+//        System.out.println(file);
+//        try {
+//            File uploaded = new File("C:\\Users\\User\\Desktop\\testvueroom\\recents front\\test\\test.png");
+//            file.transferTo(uploaded);
+//        }catch(IOException e){
+//            System.out.println(e);
+//        }
+//        return new ResponseEntity<Void>(HttpStatus.OK);
+//    }
 
-    @GetMapping("/test/image")
-    public ResponseEntity<?> testImage(){
-        String txt = "테스트메시지";
-        String filepath = "/etc/image/test.txt";
-        try {
-            File file = new File(filepath);
-            FileWriter fw = new FileWriter(file, true);
-            fw.write(txt);
-            fw.flush();
-            fw.close();
-        }catch (IOException e){
-
-        }
-
-        return new ResponseEntity<Void>(HttpStatus.OK);
-    }
+//    @GetMapping("/test/image")
+//    public ResponseEntity<?> testImage(){
+//        String txt = "테스트메시지";
+//        String filepath = "/etc/image/test.txt";
+//        try {
+//            File file = new File(filepath);
+//            FileWriter fw = new FileWriter(file, true);
+//            fw.write(txt);
+//            fw.flush();
+//            fw.close();
+//        }catch (IOException e){
+//
+//        }
+//
+//        return new ResponseEntity<Void>(HttpStatus.OK);
+//    }
 
     // 평가자 엑셀 다운로드 하는 함수 Headers 값의 따라 목록이 늘어남.
 

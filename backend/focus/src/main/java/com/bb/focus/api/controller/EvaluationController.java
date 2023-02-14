@@ -100,7 +100,7 @@ public class EvaluationController {
     @PostMapping("/decision/pass")
     public ResponseEntity<?> FinishInterview(@RequestBody List<DecisionReq> decisionReq) {
         Long processId = decisionReq.get(0).getProcessId();
-        if(evaluationService.LoggingUserPass(processId,decisionReq)){
+        if(!evaluationService.LoggingUserPass(processId,decisionReq)){
             return new ResponseEntity<String>("데이터 합불여부 처리 실패",HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<String>("합불여부 처리 성공",HttpStatus.OK);
