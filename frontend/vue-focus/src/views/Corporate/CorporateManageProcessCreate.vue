@@ -6,8 +6,8 @@
       <div class="w-screen">
         <div class="flex flex-col space-y-10">
           <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-            <h1 class="font-bold">네이버 님, 안녕하세요</h1>
-            <h3 class="font-bold text-gray-500">DASHBOARD</h3>
+            <h1 class="font-bold">삼성물산 님, 안녕하세요</h1>
+            <h3 class="font-bold text-gray-500">Process</h3>
           </nav>
           <p class="px-10 text-xl font-gray-900">새로운 전형을 생성하세요</p>
           <div class="flex items-center p-10">
