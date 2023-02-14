@@ -81,7 +81,7 @@ public class EvaluationServiceImpl implements EvaluationService{
     // 로그 생성 후 -> process -> applicant -> interview를 통하여 각자 데이터 추출 이 때 status가 p라면 applicant의 현재 합격 여부 +1;
     Process process =processRepo.findById(processId).orElseThrow(IllegalAccessError::new);
 
-    for(InterviewResultReq interviewResultReq:interviewResultReqList){
+    for(DecisionReq decisionReq:decisionReqList){
 
 //      System.out.println("for문 시작........................................................");
 
