@@ -112,6 +112,12 @@
                   >
                     올바른 이메일 양식을 적어주세요.
                   </p>
+                  <p
+                    v-show="emailvalid"
+                    class="text-lg font-medium text-green-900"
+                  >
+                    올바른 이메일 양식입니다.
+                  </p>
                 </div>
                 <div class="p-2">
                   <p class="text-lg font-medium text-gray-900">전화번호</p>
@@ -128,6 +134,12 @@
                     class="text-lg font-medium text-red-900"
                   >
                     올바른 전화번호 양식을 적어주세요.
+                  </p>
+                  <p
+                    v-show="telvalid"
+                    class="text-lg font-medium text-green-900"
+                  >
+                    올바른 전화번호입니다.
                   </p>
                 </div>
               </div>

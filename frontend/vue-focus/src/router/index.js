@@ -16,6 +16,7 @@ import CorporateManageProcessCreate from '@/views/Corporate/CorporateManageProce
 import CorporateManageApplicant from '@/views/Corporate/CorporateManageApplicant';
 import CorporateManageApplicantList from '@/views/Corporate/CorporateManageApplicantList';
 import CorporateManageApplicantCreate from '@/views/Corporate/CorporateManageApplicantCreate';
+import CorporateManageApplicantDetail from '@/views/Corporate/CorporateManageApplicantDetail';
 import CorporateManageInterview from '@/views/Corporate/CorporateManageInterview';
 import CorporateManagePass from '@/views/Corporate/CorporateManagePass';
 import CorporateStatistics from '@/views/Corporate/CorporateStatistics';
@@ -117,9 +118,15 @@ const routes = [
     beforeEnter: [checkLogin],
   },
   {
-    path: '/corporate/applicant/:id',
+    path: '/corporate/applicant/list/:id',
     name: 'CorporateManageApplicantList',
     component: CorporateManageApplicantList,
+    beforeEnter: [checkLogin],
+  },
+  {
+    path: '/corporate/applicant/:id',
+    name: 'CorporateManageApplicantDetail',
+    component: CorporateManageApplicantDetail,
     beforeEnter: [checkLogin],
   },
   {
