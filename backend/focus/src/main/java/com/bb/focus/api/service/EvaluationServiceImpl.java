@@ -105,14 +105,15 @@ public class EvaluationServiceImpl implements EvaluationService{
       applicantPassLog.setCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
 
       // 총점 구하기 위해서 applicantEvaluator에 접근
-      int total=0;
+      double total=0; int loop = 0;
       List<ApplicantEvaluator> applicantEvaluatorList=applicant.getApplicantEvaluatorList();
       for(ApplicantEvaluator applicantEvaluator:applicantEvaluatorList) {
         if (applicantEvaluator.getInterview().getStep() == process.getCurrentStep()) {
           total += applicantEvaluator.getScore();
+          loop++;
         }
       }
-      applicantPassLog.setScore(total);
+      applicantPassLog.setScore(total / loop);
       applicantPassLogRepo.save(applicantPassLog);
     }
 

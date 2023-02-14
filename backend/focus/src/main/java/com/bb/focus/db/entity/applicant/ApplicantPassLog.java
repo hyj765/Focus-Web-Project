@@ -71,7 +71,7 @@ public class ApplicantPassLog {
 
     @NotNull
     @ColumnDefault("0")
-    private int score;
+    private double score;
 
     @OneToMany(targetEntity = com.bb.focus.db.entity.helper.InteviewApplicantPassLog.class, mappedBy = "applicantPassLog")
     private List<InteviewApplicantPassLog> inteviewApplicantPassLogList = new ArrayList<>();
