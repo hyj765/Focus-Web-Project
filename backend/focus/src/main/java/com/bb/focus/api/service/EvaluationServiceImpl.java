@@ -1,6 +1,7 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.EvaluationItemInfoReq;
+import com.bb.focus.api.request.EvaluationResultUpdateReq;
 import com.bb.focus.api.request.InterviewResultReq;
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
@@ -137,18 +138,18 @@ public class EvaluationServiceImpl implements EvaluationService{
 
     return evaluationSheetResultResList;
   }
-//  public boolean ModifyApplicantEvaluation(EvaluationResultReq evaluationResultReq){
-//    EvaluationResult evaluationResult =evaluationResultRepo.findById(evaluationResultReq.getEvaluationResultId()).orElseThrow(IllegalAccessError::new);
-//
-//    if(evaluationResult == null) {
-//      return false;
-//    }
-//    evaluationResult.setContent(evaluationResultReq.getContent());
-//    evaluationResult.setScore(evaluationResultReq.getScore());
-//
-//    return true;
-//
-//  }
+  public boolean ModifyApplicantEvaluation(EvaluationResultUpdateReq evaluationResultUpdateReq){
+    EvaluationResult evaluationResult =evaluationResultRepo.findById(evaluationResultUpdateReq.getEvaluationResultId()).orElseThrow(IllegalAccessError::new);
+
+    if(evaluationResult == null) {
+      return false;
+    }
+    evaluationResult.setContent(evaluationResultUpdateReq.getContent());
+    evaluationResult.setScore(evaluationResultUpdateReq.getScore());
+
+    return true;
+
+  }
   public List<ApplicantRes> findApplicantByPass(Long processId){
     Process process = processRepo.findById(processId).orElseThrow(IllegalAccessError::new);
     byte cur_step = (byte)(process.getCurrentStep()-1);

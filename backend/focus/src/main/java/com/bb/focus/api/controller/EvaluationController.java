@@ -1,17 +1,12 @@
 package com.bb.focus.api.controller;
 
-import com.bb.focus.api.request.DecisionReq;
-import com.bb.focus.api.request.EvaluationApplicantReq;
-import com.bb.focus.api.request.EvaluationItemInfoReq;
-import com.bb.focus.api.request.InterviewResultReq;
+import com.bb.focus.api.request.*;
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
-import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.api.service.DataProcessService;
 import com.bb.focus.api.service.EvaluationService;
 import com.bb.focus.common.auth.FocusUserDetails;
 import com.bb.focus.common.model.response.BaseResponseBody;
-import com.bb.focus.db.entity.applicant.Status;
 import com.bb.focus.db.entity.helper.ApplicantEvaluator;
 import com.bb.focus.db.repository.InterviewRoomRepository;
 import io.swagger.annotations.Api;
@@ -99,20 +94,20 @@ public class EvaluationController {
     @Transactional
     @PostMapping("/decision/pass")
     public ResponseEntity<?> FinishInterview(@RequestBody DecisionReq decisionReq) {
-        if(evaluationService.LoggingUserPass(decisionReq.getProcessId(),decisionReq.getInterviewResultReqList())){
-            return new ResponseEntity<String>("데이터 합불여부 처리 실패",HttpStatus.BAD_REQUEST);
+        if (evaluationService.LoggingUserPass(decisionReq.getProcessId(), decisionReq.getInterviewResultReqList())) {
+            return new ResponseEntity<String>("데이터 합불여부 처리 실패", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<String>("합불여부 처리 성공",HttpStatus.OK);
+        return new ResponseEntity<String>("합불여부 처리 성공", HttpStatus.OK);
     }
 
-    @ApiOperation(value="전형 현재 진행사항에 따른 합격자 값 가져오기" ,notes="cur_step의 값을 통하여 이전 n차 면접 합격자 값을 가져오는 API")
+    @ApiOperation(value = "전형 현재 진행사항에 따른 합격자 값 가져오기", notes = "cur_step의 값을 통하여 이전 n차 면접 합격자 값을 가져오는 API")
     @GetMapping("/interview/applicants/{process-Id}")
-    public ResponseEntity<?> GetApplicantPerPass(@PathVariable(name="process-Id") Long processId){
-        List<ApplicantRes> applicantResList= evaluationService.findApplicantByPass(processId);
-        if(applicantResList == null){
-            return new ResponseEntity<String>("전형 합격자 리스트 가져오기 실패",HttpStatus.OK);
+    public ResponseEntity<?> GetApplicantPerPass(@PathVariable(name = "process-Id") Long processId) {
+        List<ApplicantRes> applicantResList = evaluationService.findApplicantByPass(processId);
+        if (applicantResList == null) {
+            return new ResponseEntity<String>("전형 합격자 리스트 가져오기 실패", HttpStatus.OK);
         }
-        return new ResponseEntity<List<ApplicantRes>>(applicantResList,HttpStatus.OK);
+        return new ResponseEntity<List<ApplicantRes>>(applicantResList, HttpStatus.OK);
     }
 
     @ApiOperation(value = "통계 테이블 갱신", notes = "현재 존재하는 사용자들에 대한 통계데이터 갱신")
@@ -126,20 +121,39 @@ public class EvaluationController {
     }
 
 
-//  @ApiOperation(value = "평가내역 수정함수", notes = "평가내역 수정함수 decision/pass가 사용되기 전에만 가능")
-//  @Transactional
-//  @PutMapping("/modify/evaluation")
-//  public ResponseEntity<?> ModifyApplicantEvaluation(@RequestBody @Valid EvaluationResultReq evaluationResultReq, @RequestBody @Valid Long applicantEvaluationId){
-//
-//    if(!evaluationService.ModifyApplicantEvaluation(evaluationResultReq)){
-//      return new ResponseEntity<String>("수정에 실패하였습니다.",HttpStatus.BAD_REQUEST);
-//    }
-//    if(evaluationService.UpdateApplicantEvaluationScore(applicantEvaluationId)){
-//      return new ResponseEntity<String>("총점 재계산 실패",HttpStatus.OK);
-//    }
-//
-//    return new ResponseEntity<String>("수정 성공",HttpStatus.OK);
-//  }
+    @ApiOperation(value = "평가내역 수정함수", notes = "평가내역 수정함수 decision/pass가 사용되기 전에만 가능")
+    @Transactional
+    @PutMapping("/modify/evaluation")
+    public ResponseEntity<?> ModifyApplicantEvaluation(
+            @RequestBody @Valid EvaluationApplicantUpdateReq evaluationApplicantUpdateReq, @ApiIgnore Authentication authentication) {
+
+        // evaluatorId 얻기
+        FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
+        Long evaluatorId = userDetails.getUser().getId();
+        List<ApplicantEvaluator> applicantEvaluatorList = interviewRoomRepository.findById(evaluationApplicantUpdateReq.getInterviewRoomId()).get().getApplicantEvaluatorList();
+
+        // applicantEvaluatorId 구하기
+        Long applicantEvaluatorId = 0L;
+        for (ApplicantEvaluator ae : applicantEvaluatorList) {
+            if ((Objects.equals(ae.getApplicant().getId(), evaluationApplicantUpdateReq.getApplicantId()))
+                    && (Objects.equals(ae.getEvaluator().getId(), evaluatorId))) {
+                applicantEvaluatorId = ae.getId();
+            }
+        }
+
+        // 리스트로 받은 evaluationResult 업데이트 하기
+        for (EvaluationResultUpdateReq erur : evaluationApplicantUpdateReq.getEvaluationResultUpdateReqList()) {
+            evaluationService.ModifyApplicantEvaluation(erur);
+        }
+
+        // 평가 메모 업데이트 하기
+        evaluationService.UpdateApplicantEvaluationMemo(applicantEvaluatorId, evaluationApplicantUpdateReq.getMemo());
+
+        // 점수 업데이트 하기
+        evaluationService.UpdateApplicantEvaluationScore(applicantEvaluatorId);
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
 
 
     @ApiOperation(value = "평가자의 평가 메모 내용 갱신", notes = "평가자의 평가 메모를 갱신해주는 API")
@@ -153,13 +167,13 @@ public class EvaluationController {
         return new ResponseEntity<String>("메모 저장 완료", HttpStatus.OK);
     }
 
-  @ApiOperation(value = "면접실에 참여하는 지원자 리스트 조회")
-  @GetMapping("/room/applicants/{interview-room-id}")
-  public ResponseEntity<?> findAttendingApplicants(
-      @PathVariable("interview-room-id") Long interviewRoomId) {
+    @ApiOperation(value = "면접실에 참여하는 지원자 리스트 조회")
+    @GetMapping("/room/applicants/{interview-room-id}")
+    public ResponseEntity<?> findAttendingApplicants(
+            @PathVariable("interview-room-id") Long interviewRoomId) {
 
-    List<ApplicantRes> result = evaluationService.findAttendingApplicants(interviewRoomId);
-    return ResponseEntity.status(200).body(result);
-  }
+        List<ApplicantRes> result = evaluationService.findAttendingApplicants(interviewRoomId);
+        return ResponseEntity.status(200).body(result);
+    }
 
 }
