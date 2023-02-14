@@ -25,10 +25,11 @@
         >
           <!-- 전형목록 -->
           <div
+            @click="processDetail(interview.id)"
             class="flex flex-row items-center justify-center space-x-10 my-5"
           >
             <div
-              class="flex flex-row items-center justify-center px-4 py-2 space-x-4 text-gray-600 bg-white rounded-md shadow-md"
+              class="flex flex-row items-center justify-center px-4 py-2 space-x-4 text-gray-600 bg-white hover:bg-gray-100 rounded-md shadow-md"
             >
               <p class="text-lg font-bold">{{ interview.name }}</p>
               <p>|</p>
@@ -55,13 +56,6 @@
                 >
                   <i class="text-xl bx bx-copy"></i>
                 </button> -->
-                <button
-                  @click="processDetail(interview.id)"
-                  type="button"
-                  class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
-                >
-                  Go Detail
-                </button>
                 <button
                   @click="deleteProcess(interview.id)"
                   type="button"
