@@ -94,7 +94,7 @@ public class EvaluationController {
     @Transactional
     @PostMapping("/decision/pass")
     public ResponseEntity<?> FinishInterview(@RequestBody DecisionReq decisionReq) {
-        if (evaluationService.LoggingUserPass(decisionReq.getProcessId(), decisionReq.getInterviewResultReqList())) {
+        if (!evaluationService.LoggingUserPass(decisionReq.getProcessId(), decisionReq.getInterviewResultReqList())) {
             return new ResponseEntity<String>("데이터 합불여부 처리 실패", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<String>("합불여부 처리 성공", HttpStatus.OK);
