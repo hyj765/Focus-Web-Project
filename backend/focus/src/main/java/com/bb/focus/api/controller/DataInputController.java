@@ -177,7 +177,7 @@ public class DataInputController {
         if(applicant == null){
             return new ResponseEntity<String>("해당 번호의 사용자가 존재하지 않습니다.",HttpStatus.BAD_REQUEST);
         }
-        savedImageName = imageUtil.Upload(file,"applicant",applicantId);
+        savedImageName = imageUtil.Upload(file,"introduce",applicantId);
         applicant.setResume(savedImageName);
         applicantRepository.save(applicant);
 
