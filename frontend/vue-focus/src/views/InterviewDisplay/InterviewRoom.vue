@@ -221,7 +221,7 @@ import SwitchCamera from './components/SwitchCamera.vue';
 
 import UserList from './components/UserList.vue';
 
-import EvaluatorInteviewSheets from './components/EvaluatorInteviewSheets.vue';
+import EvaluatorInteviewSheets from '@/views/Evaluator/EvaluatorInteviewSheets.vue';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
