@@ -2,6 +2,7 @@ package com.bb.focus.api.controller;
 
 import com.bb.focus.api.request.ApplicantInfoReq;
 import com.bb.focus.api.request.EvaluatorInfoReq;
+import com.bb.focus.api.response.ApplicantDecisionRes;
 import com.bb.focus.api.response.ApplicantDetailRes;
 import com.bb.focus.api.response.ApplicantLogRes;
 import com.bb.focus.api.response.ApplicantRes;
@@ -12,6 +13,7 @@ import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.api.response.ProcessRes;
 import com.bb.focus.api.service.ApplicantService;
 import com.bb.focus.api.service.CompanyAdminService;
+import com.bb.focus.api.service.EvaluationService;
 import com.bb.focus.api.service.EvaluatorService;
 import com.bb.focus.common.auth.FocusUserDetails;
 import com.bb.focus.common.model.response.BaseResponseBody;
@@ -27,6 +29,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -53,9 +56,13 @@ import javax.mail.MessagingException;
 @RequestMapping("/api/companyusers")
 @CrossOrigin("*")
 public class CompanyAdminController {
-
+  @Autowired
+  private final EvaluationService evaluationService;
+  @Autowired
   private final EvaluatorService evaluatorService;
+  @Autowired
   private final ApplicantService applicantService;
+  @Autowired
   private final CompanyAdminService companyAdminService;
 
 
@@ -361,12 +368,13 @@ public class CompanyAdminController {
   @ApiOperation(value= "차수 별 합격자", notes="차수 별 합격자 반환하는 API")
   @GetMapping("/process/pass/{process-id}")
   public ResponseEntity<?>  GetStepPerPassApplicant(@PathVariable(name="process-id") Long processId){
-    List<ApplicantLogRes> applicantLogResList= companyAdminService.getAllInterviewPerPassApplicant(processId);
-    if(applicantLogResList == null){
-      return new ResponseEntity<String>("합격자 정보 불러오기 실패",HttpStatus.BAD_REQUEST);
+    List<ApplicantDecisionRes> applicantResList = evaluationService.findApplicantDecisionByPass(processId);
+
+    if (applicantResList == null) {
+      return new ResponseEntity<String>("전형 합격자 리스트 가져오기 실패", HttpStatus.OK);
     }
 
-    return new ResponseEntity<List<ApplicantLogRes>>(applicantLogResList,HttpStatus.OK);
+    return new ResponseEntity<List<ApplicantDecisionRes>>(applicantResList, HttpStatus.OK);
   }
 
   @ApiOperation(value= "종료된 프로세스 정보 가져와서 정보 출력", notes="스텝이 종료된 프로세스 정보만 출력하는 API")

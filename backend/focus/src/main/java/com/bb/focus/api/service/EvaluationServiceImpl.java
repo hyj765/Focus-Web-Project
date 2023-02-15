@@ -4,6 +4,7 @@ import com.bb.focus.api.request.DecisionReq;
 import com.bb.focus.api.request.EvaluationItemInfoReq;
 import com.bb.focus.api.request.EvaluationResultUpdateReq;
 import com.bb.focus.api.request.InterviewResultReq;
+import com.bb.focus.api.response.ApplicantDecisionRes;
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
 import com.bb.focus.db.entity.applicant.Applicant;
@@ -165,6 +166,20 @@ public class EvaluationServiceImpl implements EvaluationService{
 
     return true;
 
+  }
+  public List<ApplicantDecisionRes> findApplicantDecisionByPass(Long processId){
+    Process process = processRepo.findById(processId).orElseThrow(IllegalAccessError::new);
+    byte cur_step = (byte)(process.getCurrentStep()-1);
+    List<Applicant> applicantList= applicantRepo.findAllByProcessIdAndPass(processId,cur_step);
+    List<ApplicantDecisionRes> applicantDecisionResList = new ArrayList<>();
+    for(Applicant applicant :applicantList){
+      ApplicantDecisionRes applicantDecisionRes = new ApplicantDecisionRes();
+      for(ApplicantPassLog applicantPassLog:applicant.getApplicantPassLogList()){
+        applicantDecisionRes.getScoreList().put(applicantPassLog.getName(),applicantPassLog.getScore());
+      }
+      applicantDecisionResList.add(applicantDecisionRes);
+    }
+    return applicantDecisionResList;
   }
   public List<ApplicantRes> findApplicantByPass(Long processId){
     Process process = processRepo.findById(processId).orElseThrow(IllegalAccessError::new);

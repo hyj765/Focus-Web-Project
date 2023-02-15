@@ -21,6 +21,7 @@ public interface EvaluationService {
   boolean LoggingUserPass(Long processId, List<DecisionReq> decisionReqList);
   boolean ApplicantEvaluation(EvaluationItemInfoReq result, Long ApplicantEvaluatorId, Long evaluationItemId);
 
+  List<ApplicantDecisionRes> findApplicantDecisionByPass(Long processId);
   List<ApplicantRes> findApplicantByPass(Long processId);
   List<EvaluationSheetResultRes> findApplicantEvaluation(Long evaluatorId,Long applicantId,Long interviewId);
   boolean ModifyApplicantEvaluation(EvaluationResultUpdateReq evaluationResultUpdateReq);
