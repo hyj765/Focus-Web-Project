@@ -168,7 +168,7 @@ public class InterviewRoomScheduleController {
   }
 
 
-  @ApiOperation(value = "특정 체 면접 일정 조회")
+  @ApiOperation(value = "특정 면접 일정 조회")
   @GetMapping("/detail/{interview-room-id}")
   public ResponseEntity<InterviewRoomRes> getInterviewScheduleInfo(
       @PathVariable(value = "interview-room-id") Long interviewRoomId) {

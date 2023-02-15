@@ -61,7 +61,10 @@ public class InterviewRoomCustomRepositoryImpl implements InterviewRoomCustomRep
                         qApplicant.code,
                         qApplicant.image,
                         qApplicant.tel,
-                        qApplicant.email
+                        qApplicant.email,
+                        qApplicant.major,
+                        qApplicant.totalCredit,
+                        qApplicant.credit
                 ))
                 .from(qApplicant)
                 .innerJoin(qApplicantInterviewRoom).on(qApplicantInterviewRoom.applicant.eq(qApplicant))

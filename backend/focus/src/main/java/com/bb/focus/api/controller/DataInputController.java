@@ -18,7 +18,7 @@ import io.swagger.annotations.Api;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-
+import java.util.Base64;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 
@@ -80,7 +80,8 @@ public class DataInputController {
         }catch (IOException e){
             e.printStackTrace();
         }
-        return new ResponseEntity<byte[]>(bytes,headers,HttpStatus.OK);
+        String encodedImage=Base64.getEncoder().encodeToString(bytes);
+        return new ResponseEntity<String>(encodedImage,headers,HttpStatus.OK);
     }
     @GetMapping("applicant/introduce/{applicant-id}")
     public ResponseEntity<?> getApplicantIntroduceImage(@PathVariable(name= "applicant-id") Long applicantId ){
@@ -100,7 +101,8 @@ public class DataInputController {
         }catch (IOException e){
             e.printStackTrace();
         }
-        return new ResponseEntity<byte[]>(bytes,headers,HttpStatus.OK);
+        String encodedImage=Base64.getEncoder().encodeToString(bytes);
+        return new ResponseEntity<String>(encodedImage,headers,HttpStatus.OK);
     }
 
     @GetMapping("company/logo")
