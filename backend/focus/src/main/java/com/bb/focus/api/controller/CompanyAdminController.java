@@ -371,7 +371,7 @@ public class CompanyAdminController {
     List<ApplicantDecisionRes> applicantResList = evaluationService.findApplicantDecisionByPass(processId);
 
     if (applicantResList == null) {
-      return new ResponseEntity<String>("전형 합격자 리스트 가져오기 실패", HttpStatus.OK);
+      return new ResponseEntity<String>("전형 합격자 리스트 가져오기 실패", HttpStatus.BAD_REQUEST);
     }
 
     return new ResponseEntity<List<ApplicantDecisionRes>>(applicantResList, HttpStatus.OK);
