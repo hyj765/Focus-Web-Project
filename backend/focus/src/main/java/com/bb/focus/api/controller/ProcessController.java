@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -99,5 +101,15 @@ public class ProcessController {
     return ResponseEntity.status(200).body(processDetailRes);
   }
 
+  @ApiOperation(value="1차 이 후 프로세스만 조회")
+  @GetMapping("/passed/process")
+  public ResponseEntity<?> getAllPassedProcess(@RequestParam Long CompanyId){
 
+    List<ProcessRes> processResList = processService.getAllPassedProcess(CompanyId);
+    if(processResList == null){
+      return new ResponseEntity<String>("면접 데이터를 가져오지 못했습니다.",HttpStatus.BAD_REQUEST);
+    }
+
+    return new ResponseEntity<List<ProcessRes>>(processResList, HttpStatus.OK);
+  }
 }

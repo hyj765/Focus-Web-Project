@@ -9,6 +9,7 @@ import com.bb.focus.db.entity.interview.Interview;
 import com.bb.focus.db.entity.process.Process;
 import com.bb.focus.db.repository.CompanyAdminRepository;
 import com.bb.focus.db.repository.ProcessRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -84,5 +85,17 @@ public class ProcessServiceImpl implements ProcessService {
 
   public int getProcessGoingOnNumber(){
     return processRepository.findProcessGoingOn();
+  }
+
+  public List<ProcessRes> getAllPassedProcess(Long companyAdminId){
+    List<ProcessRes> processResList = new ArrayList<>();
+    List<Process> processes = processRepository.findAllByCompanyAdminIdAndCurrentStep(companyAdminId,(byte)2);
+    for(Process process:processes){
+      ProcessRes processRes = new ProcessRes();
+      processRes.GetProcess(process);
+      processResList.add(processRes);
+    }
+
+    return processResList;
   }
 }

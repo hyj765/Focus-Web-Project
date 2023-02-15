@@ -19,4 +19,5 @@ public interface ProcessService {
 
   public int getProcessGoingOnNumber();
 
+  List<ProcessRes> getAllPassedProcess(Long companyAdminId);
 }
