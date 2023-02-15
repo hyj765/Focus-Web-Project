@@ -4,6 +4,7 @@ import com.bb.focus.api.request.DecisionReq;
 import com.bb.focus.api.request.EvaluationResultReq;
 import com.bb.focus.api.request.EvaluationResultUpdateReq;
 import com.bb.focus.api.request.InterviewResultReq;
+import com.bb.focus.api.response.ApplicantDecisionRes;
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.request.EvaluationItemInfoReq;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
@@ -20,7 +21,7 @@ public interface EvaluationService {
   boolean LoggingUserPass(Long processId, List<DecisionReq> decisionReqList);
   boolean ApplicantEvaluation(EvaluationItemInfoReq result, Long ApplicantEvaluatorId, Long evaluationItemId);
 
-  List<ApplicantRes> findApplicantByPass(Long processId);
+  List<ApplicantDecisionRes> findApplicantByPass(Long processId);
   List<EvaluationSheetResultRes> findApplicantEvaluation(Long evaluatorId,Long applicantId,Long interviewId);
   boolean ModifyApplicantEvaluation(EvaluationResultUpdateReq evaluationResultUpdateReq);
   boolean UpdateApplicantEvaluationScore(Long ApplicantEvaluatorId);

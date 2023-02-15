@@ -20,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Base64;
 import io.swagger.annotations.ApiOperation;
+import java.util.Map;
 import javax.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
@@ -58,6 +59,7 @@ public class DataInputController {
     private final CompanyAdminRepository companyAdminRepo;
     private final ApplicantSchoolService applicantSchoolService;
     private final SchoolService schoolService;
+
 
     //ApplicantService
     //EvaluatorService
@@ -457,4 +459,24 @@ public class DataInputController {
         List<ApplicantGraduate> applicantGraduateList = schoolSerivce.GetGraduateSchoolbyLikeName(name);
         return ResponseEntity.status(200).body(applicantGraduateList);
     }
+
+    @GetMapping("/statistic/gradeApplicant/major/{process-id")
+    public ResponseEntity<?> getMajorPerStatistic(@PathVariable(name="process-id")Long processId){
+        Map <String,Integer> majorperapplicant=DataService.GetMajorPerApplicant(processId);
+        if(majorperapplicant == null){
+            return new ResponseEntity<String>("전공 별 지원자 통계 얻기 실패",HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<Map<String,Integer>>(majorperapplicant,HttpStatus.OK);
+    }
+    @GetMapping("/statistic/gradeApplicant/gender/{process-id")
+    public ResponseEntity<?> getGenderPerStatistic(@PathVariable(name="process-id")Long processId){
+        Map <String,Integer> genderPerApplicant=DataService.GetGenders(processId);
+        if(genderPerApplicant == null){
+            return new ResponseEntity<String>("전공 별 지원자 통계 얻기 실패",HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<Map<String,Integer>>(genderPerApplicant,HttpStatus.OK);
+    }
+
 }
