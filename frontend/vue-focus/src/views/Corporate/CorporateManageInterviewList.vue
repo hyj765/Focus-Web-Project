@@ -45,8 +45,10 @@
           <hr />
         </div>
       </div>
+      <!-- 면접 일정 생성 -->
       <div>
-        <h1 @click="getEvaluatorCount(companyId)">test</h1>
+        <h1>면접 일정 생성</h1>
+        <button @click.stop="createInterview()">면접 생성</button>
       </div>
     </div>
   </div>
@@ -56,21 +58,23 @@
 import CorporateHeader from '@/components/CorporateHeader.vue';
 import CorporateNavbar from '@/components/CorporateNavbar.vue';
 
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
 
+const companyId = JSON.parse(localStorage.getItem('user')).id;
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 const route = useRoute();
 const router = useRouter();
+const processId = route.params.id;
 const currentProcessName = ref('');
 const currentProcessStartDate = ref('');
 const currentProcessEndDate = ref('');
 const currentProcessInterviewCount = ref(0);
 const currentInterviewList = ref([]);
-const processId = route.params.id;
 const currentStep = ref(0);
 
+// 현재 프로세스 정보 가져오기
 const getCurrentProcess = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   axios
@@ -91,11 +95,11 @@ const getCurrentProcess = () => {
       console.log(err.message);
     });
 };
-// interviewList 안에 있는 각 객체의 id값으로 해당 면접의 일정 api get 요청
 
+// 1, 2, 3차 탭 눌러 해당 차수의 면접 일정 조회
 const currentSchedules = ref([]);
-
 const getInterviewSchedule = interviewId => {
+  currentInterviewId.value = interviewId;
   const user = JSON.parse(localStorage.getItem('user'));
   axios
     .get(`${BASE_URL}/interview/schedule/${interviewId}`, {
@@ -107,12 +111,14 @@ const getInterviewSchedule = interviewId => {
       console.log('interviewSchedules: ', res.data);
       currentSchedules.value = res.data;
       currentStep.value = res.data.currentStep;
+      console.log('currentInterviewId: ', currentInterviewId.value);
     })
     .catch(err => {
       console.log(err.message);
     });
 };
 
+// 각 면접 일정을 통해 해당 면접 일정 상세 화면으로 이동
 const goScheduleSetting = (processId, interviewId) => {
   router.push({
     name: 'CorporateManageInterviewSetting',
@@ -120,6 +126,7 @@ const goScheduleSetting = (processId, interviewId) => {
   });
 };
 
+// 각 면접 일정 삭제
 const deleteSchedule = (currentStep, interviewRoomId) => {
   const user = JSON.parse(localStorage.getItem('user'));
   axios
@@ -136,69 +143,102 @@ const deleteSchedule = (currentStep, interviewRoomId) => {
     });
 };
 
-const companyId = JSON.parse(localStorage.getItem('user')).id;
-let evaluatorCount = 0;
-let applicantCount = 0;
-const getEvaluatorCount = id => {
+// 면접 일정 생성 ("applicants": [1,2,3], "endTime": "2021-11-09T11:44:30.327959", "evaluators": [1,2,3], "interviewId": 1, "name": "두나무 FE1-1", "startTime": "2021-11-09T11:44:30.327959"}
+
+const evaluators = ref([]);
+const evalutorCount = ref(0);
+const applicants = ref([]);
+const applicantCount = ref(0);
+
+const getEvaluatorsInfo = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   axios
-    .get(`${BASE_URL}/companyusers/evaluatorCount/${id}`, {
+    .get(`${BASE_URL}/companyusers/evaluators/list`, {
       headers: {
         Authorization: `Bearer ${user.accessToken}`,
       },
     })
     .then(res => {
-      evaluatorCount = res.data;
-      console.log(evaluatorCount);
-    })
-    .catch(err => {
-      console.log(err.message);
-    });
-};
-const getApplicantCount = id => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  axios
-    .get(`${BASE_URL}/companyusers/applicantCount/${id}`, {
-      headers: {
-        Authorization: `Bearer ${user.accessToken}`,
-      },
-    })
-    .then(res => {
-      applicantCount = res.data;
-      console.log(applicantCount);
+      // console.log('getEvaluators: ', res.data);
+      evaluators.value = res.data.content;
+      evalutorCount.value = res.data.totalElements;
+      console.log('evaluators: ', evaluators.value);
+      console.log('evalutorCount: ', evalutorCount.value);
     })
     .catch(err => {
       console.log(err.message);
     });
 };
 
-const getEvaluatorsInfo = () => {
+const getApplicantsInfo = () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  // let evaluatorCount = 0;
-  // let remainder = 0;
   axios
-    .get(`${BASE_URL}/companyusers/evaluators/list`, {
-      // params: {
-      //   size: 15,
-      //   page: currentPage.value,
-      // },
+    .get(`${BASE_URL}/companyusers/applicants/${route.params.id}/list`, {
       headers: {
         Authorization: `Bearer ${user.accessToken}`,
       },
     })
     .then(res => {
-      console.log('getEvaluators: ', res.data);
+      // console.log('getApplicants: ', res.data);
+      applicants.value = res.data.content;
+      applicantCount.value = res.data.totalElements;
+      console.log('evaluators: ', applicants.value);
+      console.log('evalutorCount: ', applicantCount.value);
     })
     .catch(err => {
       console.log(err.message);
     });
+};
+
+// 1, 2, 3차탭 누를 때마다 해당 프로세스의 면접 아이디 (몇 차인지) 갱신 --> 해당 면접에 일정 생성용
+const currentInterviewId = ref(0);
+const currentInterview = ref(null);
+const interviewName = ref('');
+watch(currentInterviewId, (newvalue, oldvalue) => {
+  // console.log('currentInterviewList: ', currentInterviewList.value);
+  currentInterview.value = currentInterviewList.value.filter(
+    interview => interview.id === currentInterviewId.value,
+  );
+  console.log('currentInterview: ', currentInterview.value);
+  interviewName.value = currentInterview.value[0].name;
+  console.log('interviewName: ', interviewName.value);
+});
+const startHour = ref('15');
+const startMinute = ref('30');
+const endHour = ref('16');
+const endMinute = ref('00');
+
+const makeInterviewStartTime = () => {
+  return (
+    currentProcessStartDate.value.slice(0, 10) +
+    'T' +
+    startHour.value +
+    ':' +
+    startMinute.value +
+    ':00'
+  );
+};
+const makeInterviewEndTime = () => {
+  return (
+    currentProcessEndDate.value.slice(0, 10) +
+    'T' +
+    startHour.value +
+    ':' +
+    startMinute.value +
+    ':00'
+  );
+};
+
+const createInterview = () => {
+  const startTime = makeInterviewStartTime();
+  const endTime = makeInterviewEndTime();
+  console.log(startTime, endTime);
 };
 
 onMounted(() => {
   getCurrentProcess();
-  getEvaluatorCount(companyId);
-  getApplicantCount(companyId);
   getEvaluatorsInfo();
+  getApplicantsInfo();
 });
 </script>
 
