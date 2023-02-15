@@ -1,6 +1,7 @@
 package com.bb.focus.api.controller;
 
 import com.bb.focus.api.request.*;
+import com.bb.focus.api.response.ApplicantDecisionRes;
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.EvaluationSheetResultRes;
 import com.bb.focus.api.service.DataProcessService;
@@ -101,14 +102,19 @@ public class EvaluationController {
         return new ResponseEntity<String>("합불여부 처리 성공", HttpStatus.OK);
     }
 
+
+
+    //평가지랑 점수
     @ApiOperation(value = "전형 현재 진행사항에 따른 합격자 값 가져오기", notes = "cur_step의 값을 통하여 이전 n차 면접 합격자 값을 가져오는 API")
     @GetMapping("/interview/applicants/{process-Id}")
     public ResponseEntity<?> GetApplicantPerPass(@PathVariable(name = "process-Id") Long processId) {
-        List<ApplicantRes> applicantResList = evaluationService.findApplicantByPass(processId);
+        List<ApplicantDecisionRes> applicantResList = evaluationService.findApplicantByPass(processId);
+
         if (applicantResList == null) {
             return new ResponseEntity<String>("전형 합격자 리스트 가져오기 실패", HttpStatus.OK);
         }
-        return new ResponseEntity<List<ApplicantRes>>(applicantResList, HttpStatus.OK);
+
+        return new ResponseEntity<List<ApplicantDecisionRes>>(applicantResList, HttpStatus.OK);
     }
 
     @ApiOperation(value = "통계 테이블 갱신", notes = "현재 존재하는 사용자들에 대한 통계데이터 갱신")
