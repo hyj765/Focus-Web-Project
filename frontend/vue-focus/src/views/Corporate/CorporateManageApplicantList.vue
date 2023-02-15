@@ -3,8 +3,8 @@
     <CorporateHeader></CorporateHeader>
     <div class="flex">
       <CorporateNavbar></CorporateNavbar>
-      <div class="w-screen">
-        <div class="flex flex-col space-y-10">
+      <div>
+        <div>
           <!-- 
           # 네이버님 안녕하세요
           -->
@@ -175,6 +175,7 @@
                       :key="index"
                     >
                       <tr
+                        @click="moveToApplicantDetail(applicant.id)"
                         class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
                       >
                         <!-- <td
@@ -430,6 +431,13 @@ const assignApplicantId = applicant => {
     .catch(err => {
       console.log('id assign failed! ', err.message);
     });
+};
+
+const moveToApplicantDetail = applicantId => {
+  router.push({
+    name: 'CorporateManageApplicantDetail',
+    params: { id: applicantId },
+  });
 };
 
 onMounted(() => {
