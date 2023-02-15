@@ -179,6 +179,7 @@ public class EvaluationServiceImpl implements EvaluationService{
       }
       applicantDecisionResList.add(applicantDecisionRes);
     }
+    System.out.println("====================================================================================>"+applicantDecisionResList.size());
     return applicantDecisionResList;
   }
   public List<ApplicantRes> findApplicantByPass(Long processId){
