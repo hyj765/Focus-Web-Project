@@ -176,7 +176,7 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
     if (process == null) {
       return null;
     }
-    int cur_step = process.getCurrentStep();
+    Byte cur_step = process.getCurrentStep();
     String processName = process.getName();
     List<ApplicantPassLog> applicantPassLogsList = applicantPassLogRepository.findByProcessNameAndStep(
         processName, cur_step);

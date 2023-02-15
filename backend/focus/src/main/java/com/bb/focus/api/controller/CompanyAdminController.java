@@ -200,7 +200,7 @@ public class CompanyAdminController {
   public ResponseEntity<Page<EvaluatorRes>> getEvaluators(
       @ApiIgnore Authentication authentication,
       @PathVariable(value = "search-name", required = false) String search,
-      Pageable pageable) {
+      @PageableDefault(value = Integer.MAX_VALUE) Pageable pageable) {
 
     FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
     Long companyAdminId = userDetails.getUser().getId();

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ApplicantPassLogRepository extends JpaRepository<ApplicantPassLog,Long> {
 
-    List<ApplicantPassLog> findByProcessNameAndStep(String processName,int Step);
+    List<ApplicantPassLog> findByProcessNameAndStep(String processName,Byte Step);
 
 
 }
