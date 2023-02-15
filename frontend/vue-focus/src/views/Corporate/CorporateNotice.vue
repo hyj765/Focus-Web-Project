@@ -10,7 +10,7 @@
     # 네이버님 안녕하세요
     -->
             <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-              <h1 class="font-bold">네이버 님, 안녕하세요</h1>
+              <h1 class="font-bold">삼성물산 님, 안녕하세요</h1>
               <h3 class="font-bold text-gray-500">Notice</h3>
             </nav>
             <div class="flex flex-wrap justify-between px-5">
@@ -59,7 +59,7 @@
                         <td
                           class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                         >
-                          <a href="">
+                          <a @click="goDetail(item.id)" :data="item">
                             {{ item.title }}
                           </a>
                         </td>
@@ -87,6 +87,7 @@ import CorporateNavbar from '@/components/CorporateNavbar.vue';
 
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const boardList = ref([]);
 
@@ -110,6 +111,17 @@ const getContextList = () => {
     .catch(err => {
       console.log(err);
     });
+};
+
+const router = useRouter();
+const moveToNoticeCreate = () => {
+  router.push({ name: 'CorporateNoticeCreate' });
+};
+const goDetail = corporateNoticeId => {
+  router.push({
+    name: 'CorporateNoticeDetail',
+    params: { id: corporateNoticeId },
+  });
 };
 </script>
 

@@ -1,17 +1,17 @@
 <template>
   <div>
-    <CorporateHeader></CorporateHeader>
+    <EvaluatorHeader></EvaluatorHeader>
     <div class="flex">
-      <CorporateNavbar></CorporateNavbar>
+      <EvaluatorNavbar></EvaluatorNavbar>
 
       <div class="w-screen">
         <div class="flex flex-col space-y-10">
           <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-            <h1 class="font-bold">삼성물산 님, 안녕하세요</h1>
-            <h3 class="font-bold text-gray-500">Notice</h3>
+            <h1 class="font-bold">지원자 님, 안녕하세요</h1>
+            <h3 class="font-bold text-gray-500">FAQ</h3>
           </nav>
           <p class="px-10 text-xl font-medium font-gray-900">
-            <i class="text-indigo-600 bx bxs-check-circle"></i>공지 상세 내용을
+            <i class="text-indigo-600 bx bxs-check-circle"></i>FAQ 상세 내용을
             조회하세요
           </p>
           <div class="flex items-center px-10">
@@ -36,7 +36,7 @@
               <div>
                 <div class="flex justify-end pt-5">
                   <button
-                    @click="moveToCorporateNotice()"
+                    @click="moveToServiceNotice()"
                     type="button"
                     class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
                   >
@@ -53,8 +53,8 @@
 </template>
 
 <script setup>
-import CorporateHeader from '@/components/CorporateHeader.vue';
-import CorporateNavbar from '@/components/CorporateNavbar.vue';
+import EvaluatorHeader from '@/components/EvaluatorHeader.vue';
+import EvaluatorNavbar from '@/components/EvaluatorNavbar.vue';
 
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
@@ -69,10 +69,11 @@ const title = ref('');
 const content = ref('');
 
 const getNoticeDetail = () => {
-  const serviceNoticeId = route.params.id;
+  const faqId = route.params.id;
   const user = JSON.parse(localStorage.getItem('user'));
+  console.log('user: ', user);
   axios
-    .get(`${BASE_URL}/serviceusers/notices/${serviceNoticeId}`, {
+    .get(`${BASE_URL}/serviceusers/notices/${faqId}`, {
       headers: {
         Authorization: `Bearer ${user.accessToken}`,
       },
@@ -88,8 +89,8 @@ const getNoticeDetail = () => {
     });
 };
 
-const moveToCorporateNotice = () => {
-  router.push({ name: 'CorporateNotice' });
+const moveToServiceNotice = () => {
+  router.push({ name: 'EvaluatorFAQ' });
 };
 
 onMounted(() => {

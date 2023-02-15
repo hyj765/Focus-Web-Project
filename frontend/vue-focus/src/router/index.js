@@ -6,7 +6,7 @@ import ServiceFAQ from '@/views/Service/ServiceFAQ';
 import ServiceFAQDetail from '@/views/Service/ServiceFAQDetail';
 import ServiceNotice from '@/views/Service/ServiceNotice';
 import ServiceNoticeCreate from '@/views/Service/ServiceNoticeCreate';
-import ServiceNoticeDetail from '@/views/Service/ServiceNoticeDetail.vue';
+import ServiceNoticeDetail from '@/views/Service/ServiceNoticeDetail';
 import ServiceAccount from '@/views/Service/ServiceAccount';
 import ServiceAccountCreate from '@/views/Service/ServiceAccountCreate';
 // 기업관리자
@@ -28,8 +28,10 @@ import CorporateManagePassDetail from '@/views/Corporate/CorporateManagePassDeta
 import CorporateStatistics from '@/views/Corporate/CorporateStatistics';
 import CorporateStatisticsDetail from '@/views/Corporate/CorporateStatisticsDetail';
 import CorporateNotice from '@/views/Corporate/CorporateNotice';
+import CorporateNoticeDetail from '@/views/Corporate/CorporateNoticeDetail';
 import CorporateProfile from '@/views/Corporate/CorporateProfile';
 import CorporateFAQ from '@/views/Corporate/CorporateFAQ';
+import CorporateFAQDetail from '@/views/Corporate/CorporateFAQDetail';
 
 // 평가자
 import EvaluatorHomeView from '@/views/Evaluator/EvaluatorHomeView';
@@ -37,6 +39,8 @@ import EvaluatorProfile from '@/views/Evaluator/EvaluatorProfile';
 import EvaluatorTime from '@/views/Evaluator/EvaluatorTime';
 import EvaluatorRecord from '@/views/Evaluator/EvaluatorRecord';
 import EvaluatorFAQ from '@/views/Evaluator/EvaluatorFAQ';
+import EvaluatorFAQDetail from '@/views/Evaluator/EvaluatorFAQDetail';
+
 // 지원자
 import ApplicantHomeView from '@/views/Applicant/ApplicantHomeView';
 import InterviewRoom from '@/views/InterviewDisplay/InterviewRoom';
@@ -211,6 +215,12 @@ const routes = [
     beforeEnter: [checkLogin],
   },
   {
+    path: '/corporate/notice/:id',
+    name: 'CorporateNoticeDetail',
+    component: CorporateNoticeDetail,
+    beforeEnter: [checkLogin],
+  },
+  {
     path: '/corporate/profile',
     name: 'CorporateProfile',
     component: CorporateProfile,
@@ -220,6 +230,12 @@ const routes = [
     path: '/corporate/faq',
     name: 'CorporateFAQ',
     component: CorporateFAQ,
+    beforeEnter: [checkLogin],
+  },
+  {
+    path: '/corporate/faq/:id',
+    name: 'CorporateFAQDetail',
+    component: CorporateFAQDetail,
     beforeEnter: [checkLogin],
   },
 
@@ -254,6 +270,12 @@ const routes = [
     path: '/evaluate/faq',
     name: 'EvaluatorFAQ',
     component: EvaluatorFAQ,
+    beforeEnter: [checkLogin],
+  },
+  {
+    path: '/evaluate/faq/:id',
+    name: 'EvaluatorFAQDetail',
+    component: EvaluatorFAQDetail,
     beforeEnter: [checkLogin],
   },
   // 지원자

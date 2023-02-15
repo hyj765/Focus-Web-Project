@@ -46,7 +46,7 @@
                         <td
                           class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                         >
-                          <a href="">
+                          <a @click="goDetail(item.id)" :data="item">
                             {{ item.title }}
                           </a>
                         </td>
@@ -72,6 +72,7 @@
 <script setup>
 import { ref, onMounted, shallowRef } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 import EvaluatorHeader from '@/components/EvaluatorHeader.vue';
 import EvaluatorNavbar from '@/components/EvaluatorNavbar.vue';
@@ -118,6 +119,13 @@ const getContextList = () => {
     .catch(err => {
       console.log(err);
     });
+};
+const router = useRouter();
+const goDetail = faqId => {
+  router.push({
+    name: 'EvaluatorFAQDetail',
+    params: { id: faqId },
+  });
 };
 </script>
 
