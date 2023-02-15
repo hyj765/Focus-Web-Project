@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProcessRepository extends JpaRepository<Process, Long> , ProcessCustomRepository{
     List<Process> findAllByCompanyAdminId(Long companyAdminId);
+    List<Process> findAllByCompanyAdminIdAndCurrentStep(Long companyAdminId,Byte currentStep);
 }
