@@ -9,55 +9,48 @@
             <h1 class="font-bold">네이버 님, 안녕하세요</h1>
             <h3 class="font-bold text-gray-500">Applicant</h3>
           </nav>
-          <p class="px-10 text-xl font-gray-900">지원자 세부 사항</p>
-
+          <div class="flex flex-row justify-between">
+            <p class="px-10 text-xl font-bold font-gray-900">
+              지원자 세부 사항
+            </p>
+            <div class="pr-40">
+              <button
+                @click="goBack()"
+                type="button"
+                class="mr-20 inline-block rounded bg-red-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg"
+              >
+                뒤로가기
+              </button>
+            </div>
+          </div>
           <!-- 나 -->
           <div class="flex items-center px-10">
-            <div class="flex flex-row p-5 space-y-5 rounded-lg shadow-lg bg-">
-              <div class="p-3">
-                <div>
-                  <img class="w-full" id="image" src="" />
-                  <div class="flex flex-row">
-                    <input
-                      class="bg-white min-w-fit"
-                      type="file"
-                      accept="image/*"
-                      id="applicantPicture"
-                    />
-                    <button
-                      type="button"
-                      @click="uploadApplicantPicture()"
-                      class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
-                    >
-                      저장하기
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <button @click="showModal = true">Open Modal</button>
-                  <div class="modal-overlay" v-if="showModal">
-                    <div class="modal-container">
-                      <div class="modal-content">
-                        <button class="modal-close" @click="showModal = false">
-                          X
-                        </button>
-                        <img
-                          class="w-full"
-                          id="introduce"
-                          src=""
-                          alt="Modal Image"
-                        />
-                      </div>
-                    </div>
-                  </div>
+            <div
+              class="flex flex-row p-5 space-y-5 bg-white rounded-lg shadow-lg"
+            >
+              <div class="flex flex-col justify-center p-4">
+                <img class="w-64 p-2" id="image" src="" />
 
-                  <input type="file" accept="image/*" id="applicantIntroduce" />
-                  <button
+                <button
+                  @click="showImg = !showImg"
+                  type="button"
+                  class="px-3 py-2 ml-2 text-sm font-medium leading-4 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm w-36 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  사진 변경
+                </button>
+                <!-- 사진 변경 -->
+                <div v-if="showImg" class="flex flex-row py-4">
+                  <input
+                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-regular file:bg-indigo-900 file:text-white hover:file:bg-indigo-800"
+                    type="file"
+                    accept="image/*"
+                    id="applicantPicture"
+                  /><button
+                    @click.stop="uploadApplicantPicture()"
                     type="button"
-                    @click="uploadApplicantIntroduce()"
-                    class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
+                    class="inline-block leading-normal text-white uppercase transition duration-150 ease-in-out bg-indigo-400 rounded shadow-lg hover:bg-indigo-500 hover:shadow-lg focus:bg-indigo-500 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-500 active:shadow-lg w-9 h-9"
                   >
-                    저장하기
+                    <i class="text-lg bx bx-check"></i>
                   </button>
                 </div>
               </div>
@@ -95,11 +88,7 @@
                       <p class="p-5">{{ gender }}</p>
                     </div>
                     <div class="flex flex-col p-2">
-                      <p class="text-lg font-medium text-gray-900">학력</p>
-                      <p class="p-5">{{ code }}</p>
-                    </div>
-                    <div class="flex flex-col p-2">
-                      <p class="text-lg font-medium text-gray-900">대학교</p>
+                      <p class="text-lg font-medium text-gray-900">최종학력</p>
                       <p class="p-5">{{ converteddegree }}</p>
                     </div>
                     <div class="flex flex-col p-2">
@@ -110,61 +99,81 @@
                 </div>
                 <div class="m-1">
                   <!-- <p class="p-2 text-xl font-medium text-black">담당자 정보</p> -->
-                  <div class="flex flex-row justify-between space-x-5">
-                    <div class="flex flex-col p-2">
-                      <p class="text-lg font-medium text-gray-900">총학점</p>
-                      <p class="p-5">{{ totalCredit }}</p>
-                    </div>
+                  <div class="flex flex-row space-x-5">
                     <div class="flex flex-col p-2">
                       <p class="text-lg font-medium text-gray-900">학점</p>
-                      <p class="p-5">{{ credit }}</p>
+                      <p class="p-5">{{ credit }} / {{ totalCredit }}</p>
                     </div>
                     <div class="flex flex-col p-2">
                       <p class="text-lg font-medium text-gray-900">수상횟수</p>
-                      <p class="p-5">{{ awardCount }}</p>
+                      <p class="p-5">{{ awardCount }}회</p>
                     </div>
                     <div class="flex flex-col p-2">
                       <p class="text-lg font-medium text-gray-900">
                         대외활동 횟수
                       </p>
-                      <p class="p-5">{{ activityCount }}</p>
+                      <p class="p-5">{{ activityCount }}회</p>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="flex justify-end pt-5">
-                    <button
-                      @click="goBack()"
-                      type="button"
-                      class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
+                <!-- # 모달 -->
+                <div class="pt-4">
+                  <button
+                    class="px-4 py-2 text-white bg-indigo-900 rounded"
+                    @click="showModal = true"
+                  >
+                    자소서 보기
+                  </button>
+                  <div
+                    class="fixed top-0 left-0 z-50 w-full h-full bg-white"
+                    v-if="showModal"
+                  >
+                    <div
+                      class="fixed -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 z-60"
                     >
-                      뒤로가기
+                      <div class="bg-white p=2 relative">
+                        <button
+                          class="absolute top-0 right-0 p-0.5"
+                          @click="showModal = false"
+                        >
+                          X
+                        </button>
+                        <img
+                          @click="showModal = false"
+                          id="introduce"
+                          src="@/assets/introduce.png"
+                          alt="Modal Image"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <!-- # 모달 창 끝 -->
+                  <button
+                    @click="showIntroduce = !showIntroduce"
+                    type="button"
+                    class="px-3 py-2 ml-2 text-sm font-medium leading-4 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm w-36 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    자소서 변경
+                  </button>
+                  <!-- 사진 변경 -->
+                  <div v-if="showIntroduce" class="flex flex-row py-4">
+                    <input
+                      class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-regular file:bg-indigo-900 file:text-white hover:file:bg-indigo-800"
+                      type="file"
+                      accept="image/*"
+                      id="applicantIntroduce"
+                    /><button
+                      @click.stop="uploadApplicantIntroduce()"
+                      type="button"
+                      class="inline-block leading-normal text-white uppercase transition duration-150 ease-in-out bg-indigo-400 rounded shadow-lg hover:bg-indigo-500 hover:shadow-lg focus:bg-indigo-500 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-500 active:shadow-lg w-9 h-9"
+                    >
+                      <i class="text-lg bx bx-check"></i>
                     </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          <!-- 영준 -->
-          <p>{{ name }}</p>
-          <p>{{ major }}</p>
-          <p>{{ credit }} : {{ totalCredit }}</p>
-          <p>{{ email }}</p>
-          <p>{{ tel }}</p>
-          <p>수험번호: {{ code }}</p>
-
-          <input type="file" accept="image/*" id="applicantPicture" />
-          <button @click="uploadApplicantPicture()" type="button">
-            지원자 사진 업로드
-          </button>
-          <input type="file" accept="image/*" id="applicantIntroduce" />
-          <button @click="uploadApplicantIntroduce()" type="button">
-            사용자 자기소개서 업로드
-          </button>
-          <button @click="loadApplicantImage()">이미지 가져오기</button>
-          <img id="image" src="" />
-          <img id="introduce" src="" />
         </div>
       </div>
     </div>
@@ -180,6 +189,9 @@ import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
 
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+
+const showImg = ref(false);
+const showIntroduce = ref(false);
 
 const showModal = ref(false);
 
@@ -309,6 +321,8 @@ const loadIntroduceImage = () => {
     .then(data => {
       var image = new Image();
       image.src = `data:image/png;base64,${data.data}`;
+      console.log('image: ', image.src);
+
       document.getElementById('introduce').src = image.src;
     });
 };
