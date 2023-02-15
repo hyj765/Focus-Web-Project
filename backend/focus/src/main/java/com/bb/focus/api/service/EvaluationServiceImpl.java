@@ -173,7 +173,7 @@ public class EvaluationServiceImpl implements EvaluationService{
     List<Applicant> applicantList= applicantRepo.findAllByProcessIdAndPass(processId,cur_step);
     List<ApplicantDecisionRes> applicantDecisionResList = new ArrayList<>();
     for(Applicant applicant :applicantList){
-      ApplicantDecisionRes applicantDecisionRes = new ApplicantDecisionRes();
+      ApplicantDecisionRes applicantDecisionRes = new ApplicantDecisionRes(applicant);
       for(ApplicantPassLog applicantPassLog:applicant.getApplicantPassLogList()){
         applicantDecisionRes.getScoreList().put(applicantPassLog.getName(),applicantPassLog.getScore());
       }
