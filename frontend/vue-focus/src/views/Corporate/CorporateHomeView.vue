@@ -29,9 +29,11 @@
         # 총 평가자 총 지원자
         -->
               <div
-                class="p-3 text-lg bg-white rounded-b-lg break-words text-gray-700 text-center"
+                class="space-x-3 flex flex-row justify-center p-3 text-lg bg-white rounded-b-lg break-words text-gray-700 text-center"
               >
-                총 평가자 13 | 총 지원자 39
+                <p>총 평가자 {{ evaluatorsCount }}명</p>
+                <p>|</p>
+                <p>총 지원자 {{ applicantsCount }}</p>
               </div>
             </div>
           </div>
@@ -74,29 +76,35 @@
               <!--         
         # 면접리스트
         -->
-              <ul>
+              <ul
+                v-for="scheduledInterviewList in scheduledInterviewLists"
+                :key="scheduledInterviewList.id"
+              >
                 <!-- # 면접리스트 1 -->
                 <li
-                  class="p-3 text-lg bg-white rounded-b-lg break-words text-gray-700"
+                  class="p-5 text-lg bg-white rounded-b-lg break-words text-gray-700"
                 >
-                  <section class="flex flex-row px-2">
+                  <section class="flex flex-row px-2 items-center">
                     <div class="flex flex-col space-y-2 w-1/2 justify-center">
-                      <p class="text-xl font-bold">두나무 증권 FE 개발자</p>
+                      <p class="text-xl font-bold">
+                        {{ scheduledInterviewList.name }}
+                      </p>
+                      <p class="text-lg text-gray-600 font-regular">
+                        현재
+                        <strong
+                          >{{ scheduledInterviewList.currentStep }}차</strong
+                        >
+                        / 총
+                        <strong
+                          >{{ scheduledInterviewList.interviewCount }}차</strong
+                        >
+                      </p>
                     </div>
                     <ul class="flex flex-col w-auto space-y-4">
                       <!-- 
               # 리스트 component
               -->
-                      <li class="flex flex-row items-center">
-                        <div
-                          class="bg-blue-500 w-5 h-5 ring-1 ring-slate-900/5 shadow-lg rounded-full flex items-center justify-center"
-                        >
-                          <i class="bx bx-right-arrow-alt text-white"></i>
-                        </div>
-                        <div class="px-2">
-                          <p>2022.02.04 ~ 2022.02.05</p>
-                        </div>
-                      </li>
+
                       <li class="flex flex-row items-center">
                         <div
                           class="animate-bounce bg-blue-500 w-5 h-5 ring-1 ring-slate-900/5 shadow-lg rounded-full flex items-center justify-center"
@@ -104,65 +112,11 @@
                           <i class="bx bx-right-arrow-alt text-white"></i>
                         </div>
                         <div class="px-2">
-                          <p>2022.02.04 ~ 2022.02.05</p>
-                        </div>
-                      </li>
-                      <li class="flex flex-row items-center">
-                        <div
-                          class="bg-blue-500 w-5 h-5 ring-1 ring-slate-900/5 shadow-lg rounded-full flex items-center justify-center"
-                        >
-                          <i class="bx bx-right-arrow-alt text-white"></i>
-                        </div>
-                        <div class="px-2">
-                          <p>2022.02.04 ~ 2022.02.05</p>
-                        </div>
-                      </li>
-                      <!-- 
-              #리스트 component end
-              -->
-                    </ul>
-                  </section>
-                </li>
-                <hr />
-                <li
-                  class="p-3 text-lg bg-white rounded-b-lg break-words text-gray-700"
-                >
-                  <section class="flex flex-row px-2">
-                    <div class="flex flex-col space-y-2 w-1/2 justify-center">
-                      <p class="text-xl font-bold">두나무 증권 FE 개발자</p>
-                    </div>
-                    <ul class="flex flex-col w-auto space-y-4">
-                      <!-- 
-              # 리스트 component
-              -->
-                      <li class="flex flex-row items-center">
-                        <div
-                          class="bg-blue-500 w-5 h-5 ring-1 ring-slate-900/5 shadow-lg rounded-full flex items-center justify-center"
-                        >
-                          <i class="bx bx-right-arrow-alt text-white"></i>
-                        </div>
-                        <div class="px-2">
-                          <p>2022.02.04 ~ 2022.02.05</p>
-                        </div>
-                      </li>
-                      <li class="flex flex-row items-center">
-                        <div
-                          class="animate-bounce bg-blue-500 w-5 h-5 ring-1 ring-slate-900/5 shadow-lg rounded-full flex items-center justify-center"
-                        >
-                          <i class="bx bx-right-arrow-alt text-white"></i>
-                        </div>
-                        <div class="px-2">
-                          <p>2022.02.04 ~ 2022.02.05</p>
-                        </div>
-                      </li>
-                      <li class="flex flex-row items-center">
-                        <div
-                          class="bg-blue-500 w-5 h-5 ring-1 ring-slate-900/5 shadow-lg rounded-full flex items-center justify-center"
-                        >
-                          <i class="bx bx-right-arrow-alt text-white"></i>
-                        </div>
-                        <div class="px-2">
-                          <p>2022.02.04 ~ 2022.02.05</p>
+                          <p>
+                            {{ scheduledInterviewList.startDate.slice(0, 10) }}
+                            ~
+                            {{ scheduledInterviewList.endDate.slice(0, 10) }}
+                          </p>
                         </div>
                       </li>
                       <!-- 
@@ -185,9 +139,12 @@
 import CorporateHeader from '@/components/CorporateHeader.vue';
 import CorporateNavbar from '@/components/CorporateNavbar.vue';
 
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 
 const router = useRouter();
 const store = useStore();
@@ -197,6 +154,66 @@ const logout = () => {
     router.push({ name: 'Login' });
   });
 };
+
+// 총 평가자
+const evaluatorsCount = ref(0);
+const getEvaluators = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  // console.log(user.id);
+  axios
+    .get(`${BASE_URL}/companyusers/evaluatorCount/${user.id}`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      // console.log(res.data);
+      evaluatorsCount.value = res.data;
+      // console.log(evaluatorsCount.value);
+    });
+};
+
+// 총 지원자
+const applicantsCount = ref(0);
+const getApplicants = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  // console.log(user.id);
+  axios
+    .get(`${BASE_URL}/companyusers/applicantCount/${user.id}`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      // console.log(res.data);
+      applicantsCount.value = res.data;
+      // console.log(applicantsCount.value);
+    });
+};
+
+// 예정된 면접
+const scheduledInterviewLists = ref(null);
+const getScheduledInterviewLists = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  axios
+    .get(`${BASE_URL}/companyusers/process/${user.id}`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log(res.data);
+      scheduledInterviewLists.value = res.data;
+      console.log(scheduledInterviewLists.value);
+    });
+};
+
+onMounted(() => {
+  getEvaluators();
+  getApplicants();
+  getScheduledInterviewLists();
+});
 </script>
 
 <style lang="scss" scoped></style>
