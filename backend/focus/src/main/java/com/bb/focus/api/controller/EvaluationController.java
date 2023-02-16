@@ -63,7 +63,7 @@ public class EvaluationController {
 
     }
 
-@ApiOperation(value = "평가자의 사용자 평가 기능", notes = "평가 시 사용될 API")
+    @ApiOperation(value = "평가자의 사용자 평가 기능", notes = "평가 시 사용될 API")
     @Transactional
     @PostMapping("/evaluation")
     public ResponseEntity<?> EvaluationApplicant(
@@ -74,10 +74,11 @@ public class EvaluationController {
 //        String memo = evaluationApplicantReq.get("memo").toString();
 //        List<Map<String,Object>> evaluationItemInfoList = (List<Map<String,Object>>) evaluationApplicantReq.get("evaluationItemInfoList");
         // evaluatorId 얻기
+
+        System.out.println("==========================>" + evaluationApplicantReq.toString());
         FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
         Long evaluatorId = userDetails.getUser().getId();
-        System.out.println("==========================>" + evaluationApplicantReq.toString());
-        
+
    
 //        System.out.println("==================================================================================>"+interviewRoomId);
 //        System.out.println("==================================================================================>"+applicantId);
@@ -95,7 +96,12 @@ public class EvaluationController {
         }
 //
 //        // 평가 항목 결과들 저장
-        for (EvaluationItemInfoReq eii : evaluationApplicantReq.getEvaluationItemInfoList()) {
+        List<EvaluationItemInfoReq> evaluationItemInfoReqList = new ArrayList<>();
+        for(EvaluationInfo eii:evaluationApplicantReq.getEvaluationItemInfoList()){
+            EvaluationItemInfoReq evaluationItemInfoReq = new EvaluationItemInfoReq(eii);
+            evaluationItemInfoReqList.add(evaluationItemInfoReq);
+        }
+        for (EvaluationItemInfoReq eii : evaluationItemInfoReqList) {
             evaluationService.ApplicantEvaluation(eii, applicantEvaluatorId, eii.getEvaluationItemId());
             evaluationService.UpdateApplicantEvaluationScore(applicantEvaluatorId);
         }
@@ -105,6 +111,7 @@ public class EvaluationController {
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
+
 
     
       @ApiOperation(value = "합불여부 체크", notes = "각 인터뷰 마지막에 합불여부를 결정하는 API")
