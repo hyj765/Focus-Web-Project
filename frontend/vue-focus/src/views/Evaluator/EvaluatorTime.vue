@@ -105,7 +105,7 @@
                     <p class="flex flex-row">
                       김수현 <br />
                       010-7337-3460 <br />
-                      yejin@gmail.com <br />
+                      yejin454@gmail.com <br />
                       경영학과 <br />
                       학점 : 3 / 4.5
                     </p>
