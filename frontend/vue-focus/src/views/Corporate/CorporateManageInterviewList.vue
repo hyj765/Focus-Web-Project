@@ -1,221 +1,351 @@
 <template>
   <div>
-    <!-- <CorporateHeader></CorporateHeader> -->
-    <div>
-      <!-- <CorporateNavbar></CorporateNavbar> -->
+    <CorporateHeader></CorporateHeader>
 
-      <!-- 현재 프로세스 정보 -->
-      <div>
-        {{ currentProcessName }} | {{ currentProcessStartDate.slice(0, 10) }} ~
-        {{ currentProcessEndDate.slice(0, 10) }} | 총
-        {{ currentProcessInterviewCount }} 차
-      </div>
-    </div>
     <div class="flex">
       <CorporateNavbar></CorporateNavbar>
       <div class="w-screen">
-        <div class="flex flex-col space-y-10">
+        <div class="flex flex-col space-y-5">
           <!-- 
           # 네이버님 안녕하세요
           -->
           <nav class="flex flex-wrap justify-between p-8 text-gray-800">
             <h1 class="font-bold">네이버 님, 안녕하세요</h1>
-            <h3 class="font-bold text-gray-500">Applicant</h3>
+            <h3 class="font-bold text-gray-500">Interview</h3>
           </nav>
           <p class="px-10 text-2xl font-medium">예정된 전형</p>
           <p class="px-10 pt-1 text-gray-700 font-regular">
-            각각의 전형에 지원자를 배정해주세요
+            각각의 전형에 면접 일정을 추가해주세요
           </p>
-          <div>
-            {{ currentProcessName }} |
-            {{ currentProcessStartDate.slice(0, 10) }} ~
-            {{ currentProcessEndDate.slice(0, 10) }} | 총
-            {{ currentProcessInterviewCount }} 차
-          </div>
-        </div>
-        <div class="flex">
-          <div>
-            <!-- 1, 2, 3차 탭 -->
-            <div>
-              <ul
-                class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400"
-              >
-                <li class="mr-2" v-for="tabnumber in 3" :key="tabnumber">
-                  <a
-                    @click="getInterviewSchedule(tabnumber)"
-                    class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
-                    aria-current="page"
-                    >{{ tabnumber }} 차</a
-                  >
-                </li>
-              </ul>
-            </div>
-            <!-- 해당 프로세스 해당 차수의 면접 일정들 -->
+          <div class="flex flex-col">
             <div
-              v-for="schedule in currentSchedules"
-              :key="schedule.id"
-              @click.stop="goScheduleSetting(processId, schedule.id)"
+              class="flex flex-row items-center justify-center my-5 space-x-10"
             >
-              <p>{{ schedule.name }}</p>
-              <p>{{ schedule.date }}</p>
-              <p>
-                {{ schedule.startTime.slice(11, 16) }} ~
-                {{ schedule.endTime.slice(11, 16) }}
-              </p>
-              <button @click.stop="deleteSchedule(currentStep, schedule.id)">
-                삭제
-              </button>
-              <hr />
-            </div>
-          </div>
-          <!-- 면접 일정 생성 -->
-          <div>
-            <h1>면접 일정 생성</h1>
-            <button @click.stop="createInterview()">면접 생성</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 해당 차수의 면접 일정 생성란 (1차, 2차, 3차 선택해야 뜸) -->
-      <div v-if="currentInterviewId">
-        <!-- 면접 일정 생성 -->
-        <div>
-          <h1>면접 일정 생성</h1>
-          <div>
-            <p>면접명</p>
-            <input type="text" v-model="interviewName" /><br />
-            <input
-              v-model="interviewStartDate"
-              type="date"
-              id="interviewStartDate"
-              required="true"
-            />
-            <input
-              v-model="interviewEndDate"
-              type="date"
-              id="interviewEndDate"
-              required="true"
-            />
-            <br />
-            <input type="text" v-model="startHour" />시
-            <input type="text" v-model="startMinute" />분<br />
-            <input type="text" v-model="endHour" />시
-            <input type="text" v-model="endMinute" />분<br />
-
-            <!-- 평가자 현황 -->
-            <div>
-              <p>평가자</p>
-              <br />
-              <p v-for="evaluator in currentEvaluatorState" :key="evaluator.id">
-                {{ evaluator.name }}({{ evaluator.id }})
-              </p>
-            </div>
-            <!-- 지원자 현황 -->
-            <div>
-              <p>지원자</p>
-              <br />
-              <p v-for="applicant in currentApplicantState" :key="applicant.id">
-                {{ applicant.name }}({{ applicant.id }})
-              </p>
-            </div>
-
-            <!-- 평가자 선택 -->
-            <Menu as="div" class="relative inline-block text-left">
-              <div>
-                <MenuButton
-                  class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
-                >
-                  평가자
-                  <ChevronDownIcon
-                    class="w-5 h-5 ml-2 -mr-1"
-                    aria-hidden="true"
-                  />
-                </MenuButton>
-              </div>
-
-              <transition
-                enter-active-class="transition duration-100 ease-out"
-                enter-from-class="transform scale-95 opacity-0"
-                enter-to-class="transform scale-100 opacity-100"
-                leave-active-class="transition duration-75 ease-in"
-                leave-from-class="transform scale-100 opacity-100"
-                leave-to-class="transform scale-95 opacity-0"
+              <div
+                class="flex flex-row items-center justify-center px-12 py-4 space-x-4 text-xl font-bold text-gray-600 bg-white rounded-md shadow-md hover:bg-gray-100"
               >
-                <MenuItems
-                  class="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                >
-                  <div class="py-1">
-                    <MenuItem
-                      v-slot="{ active }"
-                      v-for="evaluator in evaluators"
-                      :key="evaluator.id"
-                    >
-                      <p
-                        @click="clickEvaluator(evaluator)"
-                        :class="[
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm',
-                        ]"
-                      >
-                        {{ evaluator.name }}
-                      </p>
-                    </MenuItem>
-                  </div>
-                </MenuItems>
-              </transition>
-            </Menu>
-
-            <!-- 지원자 선택 -->
-            <Menu as="div" class="relative inline-block text-left">
-              <div>
-                <MenuButton
-                  class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
-                >
-                  지원자
-                  <ChevronDownIcon
-                    class="w-5 h-5 ml-2 -mr-1"
-                    aria-hidden="true"
-                  />
-                </MenuButton>
+                <p class="text-xl font-bold">{{ currentProcessName }}</p>
+                <p>|</p>
+                <p>
+                  {{ currentProcessStartDate.slice(0, 10) }} ~
+                  {{ currentProcessEndDate.slice(0, 10) }}
+                </p>
+                <p>|</p>
+                <p>총 {{ currentProcessInterviewCount }} 차</p>
               </div>
-
-              <transition
-                enter-active-class="transition duration-100 ease-out"
-                enter-from-class="transform scale-95 opacity-0"
-                enter-to-class="transform scale-100 opacity-100"
-                leave-active-class="transition duration-75 ease-in"
-                leave-from-class="transform scale-100 opacity-100"
-                leave-to-class="transform scale-95 opacity-0"
-              >
-                <MenuItems
-                  class="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            </div>
+            <div class="flex flex-row">
+              <!-- 1, 2, 3차 탭 -->
+              <div class="w-1/2">
+                <ul
+                  class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400"
                 >
-                  <div class="py-1">
-                    <MenuItem
-                      v-slot="{ active }"
-                      v-for="applicant in applicants"
-                      :key="applicant.id"
+                  <li class="mr-2" v-for="tabnumber in 3" :key="tabnumber">
+                    <a
+                      @click="getInterviewSchedule(tabnumber)"
+                      class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+                      aria-current="page"
+                      >{{ tabnumber }} 차</a
                     >
-                      <p
-                        @click="clickApplicant(applicant)"
-                        :class="[
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm',
-                        ]"
+                  </li>
+                </ul>
+                <!-- 해당 프로세스 해당 차수의 면접 일정들 -->
+                <div class="overflow-hidden rounded-md shadow-lg">
+                  <table class="min-w-full">
+                    <thead class="bg-white border-b">
+                      <tr>
+                        <th
+                          scope="col"
+                          class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                        >
+                          면접명
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                        >
+                          날짜
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                        >
+                          시간
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                        >
+                          삭제
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="schedule in currentSchedules"
+                        class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
+                        :key="schedule.id"
+                        @click.stop="goScheduleSetting(processId, schedule.id)"
                       >
-                        {{ applicant.name }}
-                      </p>
-                    </MenuItem>
+                        <td
+                          class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          {{ schedule.name }}
+                        </td>
+                        <td
+                          class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                        >
+                          {{ schedule.date }}
+                        </td>
+                        <td
+                          class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                        >
+                          {{ schedule.startTime.slice(11, 16) }} ~{{
+                            schedule.endTime.slice(11, 16)
+                          }}
+                        </td>
+                        <td
+                          class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                        >
+                          <div class="flex justify-center space-x-2">
+                            <button
+                              @click.stop="
+                                deleteSchedule(currentStep, schedule.id)
+                              "
+                              type="button"
+                              class="inline-block rounded bg-red-600 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg"
+                            >
+                              삭제
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- 생성탭 -->
+              <div class="w-1/2">
+                <!-- 해당 차수의 면접 일정 생성란 (1차, 2차, 3차 선택해야 뜸) -->
+                <div v-if="currentInterviewId">
+                  <!-- 면접 일정 생성 -->
+                  <div class="flex items-center p-10">
+                    <div
+                      class="p-5 space-y-5 bg-white divide-y divide-gray-200 rounded-lg shadow-lg"
+                    >
+                      <div>
+                        <p class="pb-2 text-xl font-bold text-gray-900">
+                          차수별 면접을 생성하세요
+                        </p>
+                        <p class="text-lg font-medium text-gray-900">면접명</p>
+                        <input
+                          class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          type="text"
+                          v-model="interviewName"
+                        />
+                      </div>
+                      <div class="flex flex-row space-x-4">
+                        <div>
+                          <p class="text-lg font-medium text-gray-900">일시</p>
+                          <input
+                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            v-model="interviewStartDate"
+                            type="date"
+                            id="interviewStartDate"
+                            required="true"
+                          />
+                        </div>
+                        <div>
+                          <p class="text-lg font-medium text-gray-900">
+                            시작 시각
+                          </p>
+                          <div class="flex flex-row items-end">
+                            <input
+                              class="block w-12 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                              v-model="startHour"
+                              type="text"
+                            />:
+                            <input
+                              class="block w-12 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                              v-model="startMinute"
+                              type="text"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <p class="text-lg font-medium text-gray-900">
+                            종료 시각
+                          </p>
+                          <div class="flex flex-row items-end">
+                            <input
+                              class="block w-12 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                              v-model="endHour"
+                              type="text"
+                            />:
+                            <input
+                              class="block w-12 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                              v-model="endMinute"
+                              type="text"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <div
+                          class="flex flex-row items-end justify-between pt-3 pb-2"
+                        >
+                          <!-- 평가자 현황 -->
+                          <p class="text-lg font-medium text-gray-900">
+                            평가자 :
+                          </p>
+                          <!-- 평가자 선택 -->
+                          <Menu
+                            as="div"
+                            class="relative inline-block text-left"
+                          >
+                            <div>
+                              <MenuButton
+                                class="inline-flex justify-center w-full px-4 py-2 font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm text-md hover:bg-gray-50"
+                              >
+                                선택
+                                <ChevronDownIcon
+                                  class="w-5 h-5 ml-2 -mr-1"
+                                  aria-hidden="true"
+                                />
+                              </MenuButton>
+                            </div>
+
+                            <transition
+                              enter-active-class="transition duration-100 ease-out"
+                              enter-from-class="transform scale-95 opacity-0"
+                              enter-to-class="transform scale-100 opacity-100"
+                              leave-active-class="transition duration-75 ease-in"
+                              leave-from-class="transform scale-100 opacity-100"
+                              leave-to-class="transform scale-95 opacity-0"
+                            >
+                              <MenuItems
+                                class="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                              >
+                                <div class="py-1">
+                                  <MenuItem
+                                    v-slot="{ active }"
+                                    v-for="evaluator in evaluators"
+                                    :key="evaluator.id"
+                                  >
+                                    <p
+                                      @click="clickEvaluator(evaluator)"
+                                      :class="[
+                                        active
+                                          ? 'bg-gray-100 text-gray-900'
+                                          : 'text-gray-700',
+                                        'block px-4 py-2 text-sm',
+                                      ]"
+                                    >
+                                      {{ evaluator.name }}
+                                    </p>
+                                  </MenuItem>
+                                </div>
+                              </MenuItems>
+                            </transition>
+                          </Menu>
+                        </div>
+                        <div>
+                          <div class="flex flex-row p-1 space-x-1">
+                            <p
+                              v-for="evaluator in currentEvaluatorState"
+                              :key="evaluator.id"
+                            >
+                              {{ evaluator.name }}({{ evaluator.id }})
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div
+                          class="flex flex-row items-end justify-between pt-3 pb-2"
+                        >
+                          <!-- 지원자 현황 -->
+                          <p class="text-lg font-medium text-gray-900">
+                            지원자 :
+                          </p>
+                          <!-- 지원자 선택 -->
+                          <Menu
+                            as="div"
+                            class="relative inline-block text-left"
+                          >
+                            <div>
+                              <MenuButton
+                                class="inline-flex justify-center w-full px-4 py-2 font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm text-md hover:bg-gray-50"
+                              >
+                                선택
+                                <ChevronDownIcon
+                                  class="w-5 h-5 ml-2 -mr-1"
+                                  aria-hidden="true"
+                                />
+                              </MenuButton>
+                            </div>
+
+                            <transition
+                              enter-active-class="transition duration-100 ease-out"
+                              enter-from-class="transform scale-95 opacity-0"
+                              enter-to-class="transform scale-100 opacity-100"
+                              leave-active-class="transition duration-75 ease-in"
+                              leave-from-class="transform scale-100 opacity-100"
+                              leave-to-class="transform scale-95 opacity-0"
+                            >
+                              <MenuItems
+                                class="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                              >
+                                <div class="py-1">
+                                  <MenuItem
+                                    v-slot="{ active }"
+                                    v-for="applicant in applicants"
+                                    :key="applicant.id"
+                                  >
+                                    <p
+                                      @click="clickApplicant(applicant)"
+                                      :class="[
+                                        active
+                                          ? 'bg-gray-100 text-gray-900'
+                                          : 'text-gray-700',
+                                        'block px-4 py-2 text-sm',
+                                      ]"
+                                    >
+                                      {{ applicant.name }}
+                                    </p>
+                                  </MenuItem>
+                                </div>
+                              </MenuItems>
+                            </transition>
+                          </Menu>
+                        </div>
+                        <div>
+                          <div class="flex flex-row p-1 space-x-1">
+                            <p
+                              v-for="applicant in currentApplicantState"
+                              :key="applicant.id"
+                            >
+                              {{ applicant.name }}({{ applicant.id }})
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="flex justify-end space-x-2">
+                        <button
+                          @click.stop="createInterview()"
+                          type="button"
+                          class="inline-block rounded bg-indigo-600 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
+                        >
+                          면접 생성
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </MenuItems>
-              </transition>
-            </Menu>
+                </div>
+              </div>
+            </div>
           </div>
-          <button @click.stop="createInterview()">면접 생성</button>
         </div>
       </div>
     </div>
@@ -382,7 +512,7 @@ const currentInterviewId = ref(0);
 const currentInterview = ref(null);
 const interviewName = ref('');
 const interviewStartDate = ref('');
-const interviewEndDate = ref('');
+// const interviewEndDate = ref('');
 watch(currentInterviewId, (newvalue, oldvalue) => {
   // console.log('currentInterviewList: ', currentInterviewList.value);
   currentInterview.value = currentInterviewList.value.filter(
@@ -391,7 +521,7 @@ watch(currentInterviewId, (newvalue, oldvalue) => {
   console.log('currentInterview: ', currentInterview.value);
   interviewName.value = currentInterview.value[0].name;
   interviewStartDate.value = currentInterview.value[0].startDate.slice(0, 10);
-  interviewEndDate.value = currentInterview.value[0].endDate.slice(0, 10);
+  // interviewEndDate.value = currentInterview.value[0].endDate.slice(0, 10);
   console.log('interviewName: ', interviewName.value);
 });
 
@@ -412,7 +542,13 @@ const makeInterviewStartTime = () => {
 };
 const makeInterviewEndTime = () => {
   return (
-    interviewEndDate.value + 'T' + endHour.value + ':' + endMinute.value + ':00'
+    // interviewEndDate.value + 'T' + endHour.value + ':' + endMinute.value + ':00'
+    interviewStartDate.value +
+    'T' +
+    endHour.value +
+    ':' +
+    endMinute.value +
+    ':00'
   );
 };
 
@@ -494,6 +630,7 @@ onMounted(() => {
   getCurrentProcess();
   getEvaluatorsInfo();
   getApplicantsInfo();
+  getInterviewSchedule(1);
 });
 </script>
 

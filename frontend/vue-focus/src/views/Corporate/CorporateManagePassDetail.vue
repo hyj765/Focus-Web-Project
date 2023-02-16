@@ -134,7 +134,7 @@
                       </tr>
                     </tbody>
                   </table>
-                  <div>
+                  <!-- <div>
                     <div
                       v-for="(applicant, index) in applicantlist"
                       :content="applicant.value"
@@ -146,7 +146,7 @@
                     <button @click="decisionNextStep()">
                       전형 종료 [결과확정]
                     </button>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -192,13 +192,13 @@ const decisionNextStep = () => {
 const getPassAplicant = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   axios
-    .get(`${BASE_URL}/interview/interview/applicants/${route.params.id}`, {
+    .get(`${BASE_URL}/companyusers/process/pass/${route.params.id}`, {
       headers: {
         Authorization: `Bearer ${user.accessToken}`,
       },
     })
     .then(data => {
-      console.log(data.data);
+      console.log(data.data[0]);
       applicantlist.value = data.data;
     });
 };
