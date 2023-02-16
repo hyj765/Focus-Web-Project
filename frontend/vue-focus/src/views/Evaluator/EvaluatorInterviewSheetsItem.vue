@@ -59,7 +59,7 @@
           </div>
           <div class="text-end">
             <button
-              @click="sendEvaluationRecords"
+              @click="sendEvaluationRecords()"
               type="submit"
               class="px-8 py-3 text-base font-semibold text-white bg-indigo-600 rounded-md outline-none hover:shadow-form"
             >
@@ -159,6 +159,7 @@ const sendEvaluationRecords = () => {
     })
     .then(data => {
       console.log(data);
+      alert('평가가 제출되었습니다.');
     })
     .catch(err => {
       console.log(err);
