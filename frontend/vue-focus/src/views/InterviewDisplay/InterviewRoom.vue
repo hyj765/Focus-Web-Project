@@ -81,9 +81,9 @@
         </div>
         <!-------------------- 참가자 목록 End --------------------->
 
-        <div class="flex flex-col justify-center pl-10 space-y-5 py-5">
+        <div class="flex flex-col justify-center py-5 pl-10 space-y-5">
           <!------------------- Sub Screen 출력 Start -------------------->
-          <div id="video-container" class="">
+          <div id="video-container" class="flex flex-row">
             <div v-if="publisher">
               <user-video
                 :stream-manager="publisher"
@@ -116,7 +116,7 @@
           <!-------------------- Mian Screen 출력 End -------------------->
 
           <!------------------- Camera/Voice On/Off Start ------------------->
-          <div class="w-10 ml-44 flex text-center flex-row space-x-2">
+          <div class="flex flex-row w-10 space-x-2 text-center ml-44">
             <img
               v-if="!mute"
               id="mute_img"

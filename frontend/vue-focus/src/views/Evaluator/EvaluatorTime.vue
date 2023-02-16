@@ -99,7 +99,7 @@
                   >
                     <div class="w-full overflow-hidden bg-gray-200 rounded-lg">
                       <img
-                        src="~@/assets/오상식.jpg"
+                        src="~@/assets/손예진.jpg"
                         alt=""
                         class="object-cover object-center w-full h-full group-hover:opacity-75"
                       />
