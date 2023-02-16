@@ -76,7 +76,8 @@ public class EvaluationController {
         // evaluatorId 얻기
         FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
         Long evaluatorId = userDetails.getUser().getId();
-
+        System.out.println("==========================>" + evaluationApplicantReq.toString());
+        
    
 //        System.out.println("==================================================================================>"+interviewRoomId);
 //        System.out.println("==================================================================================>"+applicantId);
