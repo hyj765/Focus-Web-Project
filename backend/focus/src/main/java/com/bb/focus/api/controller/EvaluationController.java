@@ -96,17 +96,9 @@ public class EvaluationController {
     @Transactional
     @PostMapping("/decision/pass")
     public ResponseEntity<?> FinishInterview(@RequestBody List<Map<String, Object>> dataList) {
-//        Long processId = decisionReq.get(0).getProcessId();
-//        if(!evaluationService.LoggingUserPass(processId,decisionReq)){
-//            return new ResponseEntity<String>("데이터 합불여부 처리 실패",HttpStatus.BAD_REQUEST);
-//        }
-        Long processId = null;
-        if (dataList.size() == 0) {
-            return new ResponseEntity<String>("합격자가 없습니다.", HttpStatus.OK);
-        }
         List<DecisionReq> decisionReqList = new ArrayList<>();
         for (Map<String, Object> data : dataList) {
-            processId = Long.valueOf(data.get("processId").toString());
+            Long processId = Long.valueOf(data.get("processId").toString());
             Map<String, Object> interviewResultReq = (Map<String, Object>) data.get("interviewResultReq");
             Long applicantId = Long.valueOf(interviewResultReq.get("applicantId").toString());
             String pass = interviewResultReq.get("pass").toString();
@@ -117,12 +109,20 @@ public class EvaluationController {
             decisionReqList.add(decisionReq);
         }
 
-        if (!evaluationService.LoggingUserPass(processId, decisionReqList)) {
-            return new ResponseEntity<String>("합불여부 처리 실패", HttpStatus.OK);
+        if(!evaluationService.LoggingUserPass(decisionReqList)){
+            return new ResponseEntity<String>("실패",HttpStatus.BAD_REQUEST);
         }
 
-            return new ResponseEntity<String>("합불여부 처리 성공", HttpStatus.OK);
+        return new ResponseEntity<String>("성공",HttpStatus.OK);
     }
+//    public ResponseEntity<String> saveInterviewResult(@RequestBody List<Map<String, Object>> dataList) {
+//    for (Map<String, Object> data : dataList) {
+//        Long processId = Long.valueOf(data.get("processId").toString());
+//        Map<String, Object> interviewResultReq = (Map<String, Object>) data.get("interviewResultReq");
+//        Long applicantId = Long.valueOf(interviewResultReq.get("applicantId").toString());
+//        boolean pass = Boolean.parseBoolean(interviewResultReq.get("pass").toString());
+//
+//     */
 
 
     //평가지랑 점수
