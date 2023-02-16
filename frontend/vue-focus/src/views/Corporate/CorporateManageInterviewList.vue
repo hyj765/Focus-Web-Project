@@ -37,6 +37,10 @@
             <div class="flex flex-row">
               <!-- 1, 2, 3차 탭 -->
               <div class="w-1/2">
+                <p class="px-3 pt-6 text-lg font-medium">
+                  <i class="text-indigo-600 bx bxs-check-circle"></i> 탭을
+                  클릭하여 면접일정을 확인해주세요.
+                </p>
                 <ul
                   class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400"
                 >
@@ -333,7 +337,7 @@
                       </div>
                       <div class="flex justify-end space-x-2">
                         <button
-                          @click.stop="createInterview()"
+                          @click.stop="createInterview(currentStep)"
                           type="button"
                           class="inline-block rounded bg-indigo-600 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
                         >
@@ -400,23 +404,38 @@ const getCurrentProcess = () => {
 
 // 1, 2, 3차 탭 눌러 해당 차수의 면접 일정 조회
 const currentSchedules = ref([]);
-const getInterviewSchedule = interviewId => {
-  currentInterviewId.value = interviewId;
+// step 정보를 바탕으로 현재 process의 interviewid로 변환하여, 해당 interviewid의 일정들로 최신화
+const getInterviewSchedule = step => {
+  currentStep.value = step;
   const user = JSON.parse(localStorage.getItem('user'));
   axios
-    .get(`${BASE_URL}/interview/schedule/${interviewId}`, {
+    .get(`${BASE_URL}/interview/schedule/interview/ids/${processId}`, {
       headers: {
         Authorization: `Bearer ${user.accessToken}`,
       },
     })
     .then(res => {
-      console.log('interviewSchedules: ', res.data);
-      currentSchedules.value = res.data;
-      currentStep.value = res.data.currentStep;
-      console.log('currentInterviewId: ', currentInterviewId.value);
+      return res.data;
     })
-    .catch(err => {
-      console.log(err.message);
+    .then(res => {
+      const currentInterview = res.filter(
+        interview => interview.step === currentStep.value,
+      );
+      return currentInterview[0].interviewId;
+    })
+    .then(res => {
+      console.log(res);
+      currentInterviewId.value = res;
+      axios
+        .get(`${BASE_URL}/interview/schedule/${res}`, {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        })
+        .then(res => {
+          currentSchedules.value = res.data;
+          console.log(currentSchedules.value);
+        });
     });
 };
 
@@ -431,18 +450,24 @@ const goScheduleSetting = (processId, interviewId) => {
 // 각 면접 일정 삭제
 const deleteSchedule = (currentStep, interviewRoomId) => {
   const user = JSON.parse(localStorage.getItem('user'));
-  axios
-    .delete(`${BASE_URL}/interview/schedule/${interviewRoomId}`, {
-      headers: {
-        Authorization: `Bearer ${user.accessToken}`,
-      },
-    })
-    .then(res => {
-      console.log('delete sucess!', res);
-    })
-    .catch(err => {
-      console.log(err.message);
-    });
+  if (confirm('면접 일정을 삭제하시겠습니까?')) {
+    axios
+      .delete(`${BASE_URL}/interview/schedule/${interviewRoomId}`, {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      })
+      .then(res => {
+        console.log('delete sucess!', res);
+        alert('면접 일정이 삭제되었습니다!');
+        getInterviewSchedule(currentStep);
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  } else {
+    alert('삭제가 취소되었습니다!');
+  }
 };
 
 // 면접 일정 생성 ("applicants": [1,2,3], "endTime": "2021-11-09T11:44:30.327959", "evaluators": [1,2,3], "interviewId": 1, "name": "두나무 FE1-1", "startTime": "2021-11-09T11:44:30.327959"}
@@ -604,7 +629,7 @@ const getInterviewInfo = () => {
   return interviewInfo;
 };
 
-const createInterview = () => {
+const createInterview = step => {
   const interviewInfo = JSON.stringify(getInterviewInfo());
   console.log('interviewInfo: ', interviewInfo);
   const user = JSON.parse(localStorage.getItem('user'));
@@ -615,11 +640,16 @@ const createInterview = () => {
       },
     })
     .then(res => {
+      alert('면접 일정이 생성되었습니다!');
       console.log('interview created! ', res.data);
-      router.push({
-        name: 'CorporateManageInterviewList',
-        params: { id: processId },
-      });
+      interviewName.value = currentInterview.value[0].name;
+      interviewStartDate.value = currentInterview.value[0].startDate.slice(
+        0,
+        10,
+      );
+      currentEvaluatorState.value = [];
+      currentApplicantState.value = [];
+      getInterviewSchedule(step);
     })
     .catch(err => {
       console.log(err.message);
@@ -630,7 +660,6 @@ onMounted(() => {
   getCurrentProcess();
   getEvaluatorsInfo();
   getApplicantsInfo();
-  getInterviewSchedule(1);
 });
 </script>
 

@@ -353,6 +353,7 @@ const addEvaluator = () => {
     .then(res => {
       console.log('add evaluator success!', res);
       getInterviewEvaluators(interviewId);
+      setEvaluatorDefault();
     })
     .catch(err => {
       console.log(err.message);
@@ -377,6 +378,7 @@ const addApplicant = () => {
     .then(res => {
       console.log('add applicant success!', res);
       getInterviewApplicants(interviewId);
+      setApplicantDefault();
     })
     .catch(err => {
       console.log(err.message);
