@@ -6,7 +6,7 @@
       <div class="w-screen">
         <div class="flex flex-col space-y-10">
           <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-            <h1 class="font-bold">삼성물산 님, 안녕하세요</h1>
+            <h1 class="font-bold">{{ companyUserName }}님, 안녕하세요</h1>
             <h3 class="font-bold text-gray-500">Pass</h3>
           </nav>
           <p class="px-10 text-lg font-medium">
@@ -54,7 +54,7 @@
                           scope="col"
                           class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                         >
-                          평가총점
+                          점수
                         </th>
                         <th
                           scope="col"
@@ -101,13 +101,13 @@
                         <td
                           class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                         >
-                          평가내역 보기
+                          {{ Object.values(applicant.scoreList)[0] }}
                         </td>
                         <td
                           class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                         >
                           <!-- # 모달 -->
-                          <!-- <div class="pt-4">
+                          <div class="pt-4">
                             <button
                               class="px-4 py-2 text-white bg-indigo-900 rounded"
                               @click="showModal = true"
@@ -137,7 +137,7 @@
                                 </div>
                               </div>
                             </div>
-                          </div> -->
+                          </div>
                           <!-- # 모달 창 끝 -->
                         </td>
                         <td
@@ -176,14 +176,33 @@
 import CorporateHeader from '@/components/CorporateHeader.vue';
 import CorporateNavbar from '@/components/CorporateNavbar.vue';
 
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+const companyUserName = ref('');
+const getCompanyUserName = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/companyusers/me`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log(res.data);
+      companyUserName.value = res.data.companyName;
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
+
+const showModal = ref(false);
+
 // 합불 처리 시에 받는 데이터
 // {사용자 번호 Long, process번호  Long, 합불여부=문자  "p" or "np"}
-//
 const route = useRoute();
 const applicantlist = ref([]);
 
@@ -191,7 +210,7 @@ const decisionNextStep = () => {
   DecisionPassApplicantList();
   const user = JSON.parse(localStorage.getItem('user'));
   let endResult = JSON.stringify(passapplicantlist.value);
-  console.log(passapplicantlist);
+  console.log('passapplicantlist: ', passapplicantlist);
   axios
     .post(`${BASE_URL}/interview/decision/pass`, endResult, {
       headers: {
@@ -199,11 +218,11 @@ const decisionNextStep = () => {
         'Content-Type': 'application/json',
       },
     })
-    .then(data => {
-      console.log(data.data);
+    .then(res => {
+      console.log('decision succeed: ', res.data);
     })
     .catch(err => {
-      console.log(err);
+      console.log(err.message);
     });
 };
 
@@ -230,6 +249,7 @@ const DecisionPassApplicantList = () => {
 };
 
 const passapplicantIds = ref([]);
+const scoreLists = ref([]);
 
 const getPassApplicant = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -239,15 +259,19 @@ const getPassApplicant = () => {
         Authorization: `Bearer ${user.accessToken}`,
       },
     })
-    .then(data => {
-      console.log('data: ', data.data);
-      applicantlist.value = data.data;
+    .then(res => {
+      console.log('getPassApplicant: ', res.data);
+      applicantlist.value = res.data;
       passapplicantIds.value = applicantlist.value.map(
         applicant => applicant.id,
+      );
+      scoreLists.value = applicantlist.value.map(
+        applicant => applicant.scoreList,
       );
     });
 };
 onMounted(() => {
+  getCompanyUserName();
   getPassApplicant();
 });
 </script>

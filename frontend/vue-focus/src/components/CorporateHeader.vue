@@ -58,7 +58,7 @@
             <h4
               class="font-semibold tracking-wide text-gray-700 capitalize font-poppins"
             >
-              삼성물산_김민경
+              {{ companyUserName }}
             </h4>
             <!-- 로그아웃 -->
             <li class="rounded-lg bg-white/60" @click="logout()">
@@ -77,6 +77,27 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+const companyUserName = ref('');
+const getCompanyUserName = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/companyusers/me`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log(res.data);
+      companyUserName.value = res.data.companyName;
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
 
 const router = useRouter();
 const store = useStore();
@@ -95,6 +116,10 @@ const logout = () => {
     router.push({ name: 'Login' });
   });
 };
+
+onMounted(() => {
+  getCompanyUserName();
+});
 </script>
 
 <style lang="scss" scoped></style>
