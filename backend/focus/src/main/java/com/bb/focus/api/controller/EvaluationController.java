@@ -62,7 +62,7 @@ public class EvaluationController {
 
     }
 
- @ApiOperation(value = "평가자의 사용자 평가 기능", notes = "평가 시 사용될 API")
+    @ApiOperation(value = "평가자의 사용자 평가 기능", notes = "평가 시 사용될 API")
     @Transactional
     @PostMapping("/evaluation")
     public ResponseEntity<?> EvaluationApplicant(
