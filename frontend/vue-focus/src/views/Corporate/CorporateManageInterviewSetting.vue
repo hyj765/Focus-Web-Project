@@ -167,7 +167,7 @@ import { useStore } from 'vuex';
 
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 const route = useRoute();
-// const processId = route.params.processid;
+const processId = route.params.processid;
 
 // 1))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 const interviewId = route.params.id;
@@ -315,9 +315,15 @@ const clickApplicant = applicant => {
 };
 
 // 평가자 및 지원자 추가
-const addEvaluator = () => {
-  evaluators.value.push(chosenEvaluator.value);
+const evaluatorAddInfo = () => {
+  const info = {
+    evaluatorId: chosenEvaluator.value.id,
+    interviewRoomId: interviewId,
+    processId: processId,
+  };
+  return info;
 };
+const addEvaluator = () => {};
 const addApplicant = () => {
   applicants.value.push(chosenApplicant.value);
 };

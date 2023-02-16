@@ -142,13 +142,13 @@
                   계정생성
                 </button>
 
-                <input
+                <!-- <input
                   type="file"
                   id="company-logo"
                   accept="image/*"
                   class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
                 />
-                <button @click="ImageUpload()">이미지 업로드</button>
+                <button @click="ImageUpload()">이미지 업로드</button> -->
               </div>
             </div>
           </div>
@@ -224,25 +224,25 @@ watch(tel, (newvalue, oldvalue) => {
   telvalid.value = validation.test(tel.value);
 });
 
-const ImageUpload = () => {
-  const BASE_URL = 'https://i8a106.p.ssafy.io/api';
-  const fd = new FormData();
-  const user = JSON.parse(localStorage.getItem('user'));
-  const image = document.getElementById('company-logo');
-  fd.append('companyId', 1);
-  fd.append('file', image.files[0]);
-  axios.post('http://127.0.0.1:8082/api/data/upload/test/logo/image', fd, {
-    headers: {
-      Authorization: `Bearer ${user.accessToken}`,
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-};
+// const ImageUpload = () => {
+//   const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+//   const fd = new FormData();
+//   const user = JSON.parse(localStorage.getItem('user'));
+//   const image = document.getElementById('company-logo');
+//   fd.append('companyId', 1);
+//   fd.append('file', image.files[0]);
+//   axios.post('http://127.0.0.1:8082/api/data/upload/test/logo/image', fd, {
+//     headers: {
+//       Authorization: `Bearer ${user.accessToken}`,
+//       'Content-Type': 'multipart/form-data',
+//     },
+//   });
+// };
 // 데이터 넘겨줄 때 JSON 문자열로 변환 필요
 
 // localStorage의 토큰 가져올 시 객체로 파싱하여 접근
 const createCompanyAdmin = () => {
-  if (emailvalid.value && telvalid.value) {
+  if (!(emailvalid.value && telvalid.value)) {
     return;
   }
   const companyInfo = JSON.stringify(getCompanyInfo());
@@ -254,7 +254,7 @@ const createCompanyAdmin = () => {
       },
     })
     .then(res => {
-      console.log(res.data);
+      console.log('company admin created! ', res.data);
       moveToServiceAccount();
     })
     .catch(err => {
