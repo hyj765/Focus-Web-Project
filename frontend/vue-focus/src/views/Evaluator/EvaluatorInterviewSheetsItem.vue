@@ -2,7 +2,7 @@
   <div>
     <!-- component -->
     <div class="flex items-center justify-center p-5">
-      <div class="mx-auto w-full max-w-[550px]">
+      <div class="w-full max-h-screen pb-20 pr-40 mx-auto overflow-scroll">
         <form v-on:submit.prevent="submitSheet" method="POST">
           <!-- ---------------------------------- 문항 --------------------------------- -->
           <div
@@ -12,7 +12,7 @@
           >
             <label
               for="name"
-              class="mb-3 text-start block text-base font-medium text-[#07074D]"
+              class="mb-3 text-start block font-medium text-lg text-[#07074D]"
             >
               {{ evaluationSheet.id }}
               {{ evaluationSheet.content }}

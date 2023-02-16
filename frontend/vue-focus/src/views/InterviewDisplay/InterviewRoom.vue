@@ -293,7 +293,7 @@ export default {
       } else if (user.userRole === 3) {
         this.myName = '면접관';
       } else if (user.userRole === 4) {
-        this.myName = '지원자';
+        this.myName = '손예진';
       }
     },
 
@@ -397,7 +397,7 @@ export default {
       // 'token' parameter should be retrieved and returned by your own backend
       this.getToken(this.realRoomCode).then(token => {
         this.session
-          .connect(token, { clientData: this.myUserName })
+          .connect(token, { clientData: this.myName })
           .then(() => {
             // --- Get your own camera stream with the desired properties ---
 
