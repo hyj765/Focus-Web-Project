@@ -178,7 +178,7 @@ import CorporateNavbar from '@/components/CorporateNavbar.vue';
 
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 const companyUserName = ref('');
@@ -204,6 +204,7 @@ const showModal = ref(false);
 // 합불 처리 시에 받는 데이터
 // {사용자 번호 Long, process번호  Long, 합불여부=문자  "p" or "np"}
 const route = useRoute();
+const router = useRouter();
 const applicantlist = ref([]);
 
 const decisionNextStep = () => {
@@ -220,6 +221,8 @@ const decisionNextStep = () => {
     })
     .then(res => {
       console.log('decision succeed: ', res.data);
+      alert('합격 처리가 완료되었습니다.');
+      router.push({ name: 'CorporateManagePass' });
     })
     .catch(err => {
       console.log(err.message);
