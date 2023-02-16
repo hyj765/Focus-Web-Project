@@ -9,7 +9,6 @@ import com.bb.focus.api.service.EvaluationService;
 import com.bb.focus.common.auth.FocusUserDetails;
 import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.db.entity.helper.ApplicantEvaluator;
-import com.bb.focus.db.entity.interview.InterviewRoom;
 import com.bb.focus.db.repository.InterviewRoomRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

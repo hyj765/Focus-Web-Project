@@ -7,12 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import lombok.ToString;
 
 
+@ToString
 @Getter
 @Setter
 @NoArgsConstructor
-@ApiModel("EvaluationItemInfo")
+//@ApiModel("EvaluationItemInfo")
 public class EvaluationItemInfoReq {
 
     @ApiModelProperty(name = "평가 항목 시퀀스 넘버", example = "1")
@@ -24,4 +26,10 @@ public class EvaluationItemInfoReq {
 
     @ApiModelProperty(name = "면접실 시퀀스 넘버", example = "1")
     private byte score;
+
+    public EvaluationItemInfoReq(EvaluationInfo evaluationInfo){
+        evaluationItemId = evaluationInfo.getEvaluationItemId();
+        content = evaluationInfo.getContent();
+        score = evaluationInfo.getScore();
+    }
 }
