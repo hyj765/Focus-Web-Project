@@ -67,7 +67,7 @@
             </button>
           </div>
         </form>
-        <button @click="extractEvaluation()">값보기</button>
+        <!-- <button @click="extractEvaluation()">값보기</button> -->
       </div>
     </div>
   </div>
@@ -153,7 +153,7 @@ const sendEvaluationRecords = () => {
   axios.post(`${BASE_URL}/interview/evaluation`, info, {
     headers: {
       Authorization: `Bearer ${user.accessToken}`,
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'application/json',
     },
   });
 };
