@@ -35,7 +35,9 @@
                         <th
                           scope="col"
                           class="px-6 py-4 text-sm font-medium text-left text-gray-900"
-                        ></th>
+                        >
+                          합불여부
+                        </th>
                         <th
                           scope="col"
                           class="px-6 py-4 text-sm font-medium text-left text-gray-900"
@@ -72,12 +74,6 @@
                         >
                           최종학력
                         </th>
-                        <th
-                          scope="col"
-                          class="px-6 py-4 text-sm font-medium text-left text-gray-900"
-                        >
-                          학과
-                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -93,7 +89,7 @@
                           <input
                             type="checkbox"
                             id="{{ applicant.id }}"
-                            class="w-4 h-4 text-indigo-900 border-gray-300 rounded focus:ring-indigo-900"
+                            class="w-4 h-4 text-indigo-900 justify-end border-gray-300 rounded focus:ring-indigo-900"
                           />
                         </td>
                         <td
@@ -119,17 +115,44 @@
                         <td
                           class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                         >
-                          자소서 보기
+                          <!-- # 모달 -->
+                          <div class="pt-4">
+                            <button
+                              class="px-4 py-2 text-white bg-indigo-900 rounded"
+                              @click="showModal = true"
+                            >
+                              자소서 보기
+                            </button>
+                            <div
+                              class="fixed top-0 left-0 z-50 w-full h-full bg-white"
+                              v-if="showModal"
+                            >
+                              <div
+                                class="fixed -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 z-60"
+                              >
+                                <div class="bg-white p=2 relative">
+                                  <button
+                                    class="absolute top-0 right-0 p-0.5"
+                                    @click="showModal = false"
+                                  >
+                                    X
+                                  </button>
+                                  <img
+                                    @click="showModal = false"
+                                    id="introduce"
+                                    src="@/assets/introduce.png"
+                                    alt="Modal Image"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- # 모달 창 끝 -->
                         </td>
                         <td
                           class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                         >
-                          최종학력
-                        </td>
-                        <td
-                          class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                        >
-                          {{ applicant.major }}
+                          {{ applicant.lastDegree }}
                         </td>
                       </tr>
                     </tbody>
