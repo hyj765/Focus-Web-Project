@@ -62,37 +62,48 @@ public class EvaluationController {
 
     }
 
-    @ApiOperation(value = "평가자의 사용자 평가 기능", notes = "평가 시 사용될 API")
+ @ApiOperation(value = "평가자의 사용자 평가 기능", notes = "평가 시 사용될 API")
     @Transactional
     @PostMapping("/evaluation")
     public ResponseEntity<?> EvaluationApplicant(
-            @RequestBody @Valid EvaluationApplicantReq evaluationApplicantReq, @ApiIgnore Authentication authentication
-    ) {
+            @RequestBody @Valid Map<String,Object> evaluationApplicantReq, @ApiIgnore Authentication authentication)
+    {
+        Long interviewRoomId = Long.valueOf(evaluationApplicantReq.get("interviewRoomId").toString());
+        Long applicantId = Long.valueOf(evaluationApplicantReq.get("applicantId").toString());
+        String memo = evaluationApplicantReq.get("memo").toString();
+        List<Map<String,Object>> evaluationItemInfoList = (List<Map<String,Object>>) evaluationApplicantReq.get("evaluationItemInfoList");
         // evaluatorId 얻기
         FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
         Long evaluatorId = userDetails.getUser().getId();
-        List<ApplicantEvaluator> applicantEvaluatorList = interviewRoomRepository.findById(evaluationApplicantReq.getInterviewRoomId()).get().getApplicantEvaluatorList();
 
-        Long applicantEvaluatorId = 0L;
-        for (ApplicantEvaluator ae : applicantEvaluatorList) {
-            if ((Objects.equals(ae.getApplicant().getId(), evaluationApplicantReq.getApplicantId()))
-                    && (Objects.equals(ae.getEvaluator().getId(), evaluatorId))) {
-                applicantEvaluatorId = ae.getId();
-            }
-        }
+        System.out.println(interviewRoomId);
+        System.out.println(applicantId);
+        System.out.println(memo);
+        System.out.println(evaluationItemInfoList.);
 
-        // 평가 항목 결과들 저장
-        for (EvaluationItemInfoReq eii : evaluationApplicantReq.getEvaluationItemInfoList()) {
-            evaluationService.ApplicantEvaluation(eii, applicantEvaluatorId, eii.getEvaluationItemId());
-            evaluationService.UpdateApplicantEvaluationScore(applicantEvaluatorId);
-        }
-
-        // 평가 메모 저장
-        evaluationService.UpdateApplicantEvaluationMemo(applicantEvaluatorId, evaluationApplicantReq.getMemo());
+//        List<ApplicantEvaluator> applicantEvaluatorList = interviewRoomRepository.findById(evaluationApplicantReq.getInterviewRoomId()).get().getApplicantEvaluatorList();
+//
+//        Long applicantEvaluatorId = 0L;
+//        for (ApplicantEvaluator ae : applicantEvaluatorList) {
+//            if ((Objects.equals(ae.getApplicant().getId(), applicantId))
+//                    && (Objects.equals(ae.getEvaluator().getId(), evaluatorId))) {
+//                applicantEvaluatorId = ae.getId();
+//            }
+//        }
+//
+//        // 평가 항목 결과들 저장
+//        for (EvaluationItemInfoReq eii : evaluationApplicantReq.getEvaluationItemInfoList()) {
+//            evaluationService.ApplicantEvaluation(eii, applicantEvaluatorId, eii.getEvaluationItemId());
+//            evaluationService.UpdateApplicantEvaluationScore(applicantEvaluatorId);
+//        }
+//
+//        // 평가 메모 저장
+//        evaluationService.UpdateApplicantEvaluationMemo(applicantEvaluatorId, evaluationApplicantReq.getMemo());
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
+    
       @ApiOperation(value = "합불여부 체크", notes = "각 인터뷰 마지막에 합불여부를 결정하는 API")
     @Transactional
     @PostMapping("/decision/pass")
