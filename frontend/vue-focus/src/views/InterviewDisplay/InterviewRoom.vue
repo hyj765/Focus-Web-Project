@@ -293,7 +293,7 @@ export default {
       } else if (user.userRole === 3) {
         this.myName = '면접관';
       } else if (user.userRole === 4) {
-        this.myName = '손예진';
+        this.myName = '박신혜';
       }
     },
 
