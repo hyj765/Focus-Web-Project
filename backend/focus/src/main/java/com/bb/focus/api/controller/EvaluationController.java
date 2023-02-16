@@ -97,12 +97,21 @@ public class EvaluationController {
     @Transactional
     @PostMapping("/decision/pass")
     public ResponseEntity<?> FinishInterview(@RequestBody List<Map<String, Object>> dataList) {
+        List<DecisionReq> decisionReqList = new ArrayList<>();
+        Long processId = null;
         for (Map<String, Object> data : dataList) {
-            Long processId = Long.valueOf(data.get("processId").toString());
+            processId = Long.valueOf(data.get("processId").toString());
             Map<String, Object> interviewResultReq = (Map<String, Object>) data.get("interviewResultReq");
             Long applicantId = Long.valueOf(interviewResultReq.get("applicantId").toString());
             String pass = interviewResultReq.get("pass").toString();
-            System.out.println(pass);
+            InterviewResultReq interviewResultReq1 = new InterviewResultReq(applicantId,pass);
+            DecisionReq decisionReq = new DecisionReq();
+            decisionReq.setProcessId(processId);
+            decisionReq.setInterviewResultReq(interviewResultReq1);
+            decisionReqList.add(decisionReq);
+        }
+        if(!evaluationService.LoggingUserPass(processId,decisionReqList)){
+            return new ResponseEntity<String>("fail", HttpStatus.OK);
         }
 
         return ResponseEntity.ok("Interview results saved successfully");
