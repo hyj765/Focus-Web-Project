@@ -71,7 +71,7 @@ public class EvaluationController {
         Long interviewRoomId = Long.valueOf(evaluationApplicantReq.get("interviewRoomId").toString());
         Long applicantId = Long.valueOf(evaluationApplicantReq.get("applicantId").toString());
         String memo = evaluationApplicantReq.get("memo").toString();
-        List<Map<String,Object>> evaluationItemInfoList = (List<Map<String,Object>>) evaluationApplicantReq.get("evaluationItemInfoList");
+        List<InterviewResultReq> evaluationItemInfoList = (List<InterviewResultReq>)evaluationApplicantReq.get("evaluationItemInfoList");
         // evaluatorId 얻기
         FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
         Long evaluatorId = userDetails.getUser().getId();
@@ -81,7 +81,7 @@ public class EvaluationController {
         System.out.println("==================================================================================>"+applicantId);
         System.out.println("==================================================================================>"+memo);
         System.out.println("==================================================================================>"+evaluationItemInfoList.size());
-
+       
 
 //        List<ApplicantEvaluator> applicantEvaluatorList = interviewRoomRepository.findById(evaluationApplicantReq.getInterviewRoomId()).get().getApplicantEvaluatorList();
 //
