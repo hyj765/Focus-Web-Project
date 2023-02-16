@@ -111,7 +111,7 @@ const getEvaluationSheets = () => {
       console.log('idlist: ', idlist.value);
     });
 };
-const evaluationcontent = ref([]);
+const evaluationItemInfoList = ref([]);
 
 const extractEvaluation = () => {
   idlist.value.forEach(element => {
@@ -122,13 +122,13 @@ const extractEvaluation = () => {
     let frame = {
       content: content,
       score: score,
-      id: element,
+      evaluationItemId: element,
     };
-    evaluationcontent.value.push(frame);
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>frame : ', frame);
+    evaluationItemInfoList.value.push(frame);
+    // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>frame : ', frame);
   });
 };
-const evaluationItemInfoList = ref([]);
+
 const memo = ref('');
 
 // 2
@@ -143,6 +143,7 @@ const getInfo = () => {
 };
 
 const sendEvaluationRecords = () => {
+  extractEvaluation();
   const user = JSON.parse(localStorage.getItem('user'));
   let info = {
     applicantId: props.applicantId,
