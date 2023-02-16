@@ -25,6 +25,7 @@
           <br />
           <p v-for="evaluator in evaluators" :key="evaluator.id">
             {{ evaluator.name }}({{ evaluator.id }})
+            <button @click.stop="deleteEvaluator(evaluator.id)">X</button>
           </p>
         </div>
         <!-- 지원자 현황 -->
@@ -33,9 +34,11 @@
           <br />
           <p v-for="applicant in applicants" :key="applicant.id">
             {{ applicant.name }}({{ applicant.id }})
+            <button @click.stop="deleteApplicant(applicant.id)">X</button>
           </p>
         </div>
       </div>
+      <button @click.stop="saveInterview()">저장</button>
     </div>
     <!-- 평가 -->
     <div class="w-screen">
@@ -164,6 +167,7 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
+import router from '@/router';
 
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 const route = useRoute();
@@ -181,6 +185,21 @@ const startHour = ref('');
 const startMinute = ref('');
 const endHour = ref('');
 const endMinute = ref('');
+const makeInterviewStartTime = () => {
+  return (
+    interviewDate.value +
+    'T' +
+    startHour.value +
+    ':' +
+    startMinute.value +
+    ':00'
+  );
+};
+const makeInterviewEndTime = () => {
+  return (
+    interviewDate.value + 'T' + endHour.value + ':' + endMinute.value + ':00'
+  );
+};
 
 // 현재 면접 정보 조회 및 업데이트
 const currentInterview = ref(null);
@@ -247,7 +266,6 @@ const getInterviewEvaluators = interviewId => {
 
 // 2))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 // 선택용 평가자 및 지원자
-const store = useStore();
 const evaluatorsAll = ref([]);
 const applicantsAll = ref([]);
 
@@ -323,9 +341,136 @@ const evaluatorAddInfo = () => {
   };
   return info;
 };
-const addEvaluator = () => {};
+const addEvaluator = () => {
+  const info = JSON.stringify(evaluatorAddInfo());
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .post(`${BASE_URL}/interview/schedule/add/evaluator`, info, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log('add evaluator success!', res);
+      getInterviewEvaluators(interviewId);
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
+const applicantAddInfo = () => {
+  const info = {
+    applicantId: chosenApplicant.value.id,
+    interviewRoomId: interviewId,
+  };
+  return info;
+};
 const addApplicant = () => {
-  applicants.value.push(chosenApplicant.value);
+  const info = JSON.stringify(applicantAddInfo());
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .post(`${BASE_URL}/interview/schedule/add/applicant`, info, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log('add applicant success!', res);
+      getInterviewApplicants(interviewId);
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
+
+// 평가자 지원자 면접 일정에서 삭제
+const deleteEvaluator = evalId => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .delete(`${BASE_URL}/interview/schedule/remove/evaluator`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+      data: {
+        evaluatorId: evalId,
+        interviewRoomId: interviewId,
+        processId: processId,
+      },
+    })
+    .then(res => {
+      console.log('delete evaluator success!', res);
+      getInterviewEvaluators(interviewId);
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
+const deleteApplicant = applicantId => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .delete(`${BASE_URL}/interview/schedule/remove/applicant`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+      data: {
+        applicantId: applicantId,
+        interviewRoomId: interviewId,
+      },
+    })
+    .then(res => {
+      console.log('delete applicant success!', res);
+      getInterviewApplicants(interviewId);
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
+
+// 현재 면접정보 저장 및 이동
+const evaluatorIds = ref([]);
+const applicantIds = ref([]);
+const mapToEvaluatorId = () => {
+  evaluatorIds.value = evaluators.value.map(evaluator => evaluator.id);
+};
+const mapToApplicantId = () => {
+  applicantIds.value = applicants.value.map(applicant => applicant.id);
+};
+
+const getInterviewInfo = () => {
+  mapToApplicantId();
+  mapToEvaluatorId();
+  const interviewInfo = {
+    startTime: makeInterviewStartTime(),
+    endTime: makeInterviewEndTime(),
+    name: interviewName.value,
+    interviewId: interviewId,
+    applicants: applicantIds.value,
+    evaluators: evaluatorIds.value,
+  };
+  return interviewInfo;
+};
+
+const saveInterview = () => {
+  const interviewInfo = JSON.stringify(getInterviewInfo());
+  console.log('interviewInfo: ', interviewInfo);
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .put(`${BASE_URL}/interview/schedule/${interviewId}`, interviewInfo, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(res => {
+      console.log('put success! ', res.data);
+      router.push({
+        name: 'CorporateManageInterviewList',
+        params: { id: processId },
+      });
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
 };
 
 onMounted(() => {
