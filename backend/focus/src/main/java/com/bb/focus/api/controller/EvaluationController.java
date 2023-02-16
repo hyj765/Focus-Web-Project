@@ -79,7 +79,7 @@ public class EvaluationController {
         System.out.println(interviewRoomId);
         System.out.println(applicantId);
         System.out.println(memo);
-        System.out.println(evaluationItemInfoList.);
+        System.out.println(evaluationItemInfoList);
 
 //        List<ApplicantEvaluator> applicantEvaluatorList = interviewRoomRepository.findById(evaluationApplicantReq.getInterviewRoomId()).get().getApplicantEvaluatorList();
 //
