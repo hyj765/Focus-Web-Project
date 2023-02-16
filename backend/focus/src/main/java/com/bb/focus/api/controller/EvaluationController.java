@@ -22,6 +22,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
@@ -118,12 +119,11 @@ public class EvaluationController {
         }
 
         if (!evaluationService.LoggingUserPass(processId, decisionReqList)) {
-            return new ResponseEntity<String>("합불여부 처리 실패", HttpStatus.OK);
+            return new ResponseEntity<String>("합불여부 처리 실패", HttpStatus.BAD_REQUEST);
         }
 
             return new ResponseEntity<String>("합불여부 처리 성공", HttpStatus.OK);
     }
-
 
     //평가지랑 점수
     @ApiOperation(value = "전형 현재 진행사항에 따른 합격자 값 가져오기", notes = "cur_step의 값을 통하여 이전 n차 면접 합격자 값을 가져오는 API")
