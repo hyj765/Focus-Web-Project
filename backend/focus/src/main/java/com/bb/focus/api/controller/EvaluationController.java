@@ -22,6 +22,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
@@ -92,7 +93,7 @@ public class EvaluationController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
-    @ApiOperation(value = "합불여부 체크", notes = "각 인터뷰 마지막에 합불여부를 결정하는 API")
+      @ApiOperation(value = "합불여부 체크", notes = "각 인터뷰 마지막에 합불여부를 결정하는 API")
     @Transactional
     @PostMapping("/decision/pass")
     public ResponseEntity<?> FinishInterview(@RequestBody List<Map<String, Object>> dataList) {
@@ -115,17 +116,8 @@ public class EvaluationController {
 
         return new ResponseEntity<String>("성공",HttpStatus.OK);
     }
-//    public ResponseEntity<String> saveInterviewResult(@RequestBody List<Map<String, Object>> dataList) {
-//    for (Map<String, Object> data : dataList) {
-//        Long processId = Long.valueOf(data.get("processId").toString());
-//        Map<String, Object> interviewResultReq = (Map<String, Object>) data.get("interviewResultReq");
-//        Long applicantId = Long.valueOf(interviewResultReq.get("applicantId").toString());
-//        boolean pass = Boolean.parseBoolean(interviewResultReq.get("pass").toString());
-//
-//     */
 
-
-    //평가지랑 점수
+    
     @ApiOperation(value = "전형 현재 진행사항에 따른 합격자 값 가져오기", notes = "cur_step의 값을 통하여 이전 n차 면접 합격자 값을 가져오는 API")
     @GetMapping("/interview/applicants/{process-Id}")
     public ResponseEntity<?> GetApplicantPerPass(@PathVariable(name = "process-Id") Long processId) {
