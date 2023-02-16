@@ -1,4 +1,5 @@
- <div>
+<template>
+  <div>
     <!-- component -->
     <div class="flex items-center justify-center p-5">
       <div class="mx-auto w-full max-w-[550px]">
@@ -96,7 +97,7 @@ const idlist = ref([]);
 const getEvaluationSheets = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   axios
-    .get(`${BASE_URL}/evaluation/interview/1`, {
+    .get(`${BASE_URL}/evaluation/interview/${props.interviewRoomId}`, {
       headers: {
         Authorization: `Bearer ${user.accessToken}`,
       },
