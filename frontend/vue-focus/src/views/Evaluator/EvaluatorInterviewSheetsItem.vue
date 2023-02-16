@@ -91,7 +91,7 @@ const props = defineProps({
     required: true,
   },
 });
-// const idlist = ref([1, 2, 3, 4, 5]); // 진우형이 추출가능
+
 const idlist = ref([]);
 
 const getEvaluationSheets = () => {
@@ -112,15 +112,11 @@ const getEvaluationSheets = () => {
     });
 };
 const evaluationcontent = ref([]);
-// 1 ==> iteminfolist push
-const content = ref('');
-// const evaluationItemId = ???
-const score = ref(0);
 
 const extractEvaluation = () => {
   idlist.value.forEach(element => {
-    let content = document.getElementById('record1').value;
-    let score = document.getElementById('score1').value;
+    let content = document.getElementById('record' + element).value;
+    let score = document.getElementById('score' + element).value;
     console.log('content : ', content);
     console.log('score : ', score);
     let frame = {
@@ -146,37 +142,20 @@ const getInfo = () => {
   return info;
 };
 
-// 3
-// const sendEvaluation = () => {
-//   const evaluationInfo = getInfo();
-//   const evaluationInfoJson = JSON.stringify(evaluationInfo)
-//   const user = JSON.parse(localStorage.getItem('user'))
-//   axios.post('http://127.0.0.1:8082/api/interview/evaluation', evaluationInfoJson, headers: {
-//     Authorization: `Bearer ${user.accessToken}`
-//   }).then((res)=>{
-//     console.log(res)
-//   }).catch((err)=>{
-//     console.log(err)
-//   })
-// };
-
 const sendEvaluationRecords = () => {
-  const fd = new FormData();
   const user = JSON.parse(localStorage.getItem('user'));
-  const memo = document.getElementById('memo');
-  fd.append('applicantId', props.applicantId); // 1992
-  fd.append('evaluationItemInfoList', idlist);
-  fd.append('interviewRoomId', props.interviewRoomId); //1
-  fd.append('memo', memo); // 잘함여
-  axios.post(`${BASE_URL}/interview/evaluation`, {
+  let info = {
+    applicantId: props.applicantId,
+    evaluationItemInfoList: evaluationItemInfoList.value,
+    interviewRoomId: props.interviewRoomId,
+    memo: memo.value,
+  };
+  axios.post(`${BASE_URL}/interview/evaluation`, info, {
     headers: {
       Authorization: `Bearer ${user.accessToken}`,
       'Content-Type': 'multipart/form-data',
     },
   });
-};
-const loggingvalue = () => {
-  console.log(document.getElementById('content1').value);
 };
 onMounted(() => {
   getEvaluationSheets();

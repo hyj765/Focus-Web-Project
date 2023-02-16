@@ -43,6 +43,8 @@ import EvaluatorFAQDetail from '@/views/Evaluator/EvaluatorFAQDetail';
 
 // 지원자
 import ApplicantHomeView from '@/views/Applicant/ApplicantHomeView';
+import ApplicantFAQ from '@/views/Applicant/ApplicantFAQ';
+import ApplicantProfile from '@/views/Applicant/ApplicantProfile';
 import InterviewRoom from '@/views/InterviewDisplay/InterviewRoom';
 import CorporateSheet from '@/views/Corporate/CorporateSheet';
 import CorporateSheetCreate from '@/views/Corporate/CorporateSheetCreate';
@@ -280,9 +282,21 @@ const routes = [
   },
   // 지원자
   {
-    path: '/Applicant/apply',
+    path: '/applicant',
     name: 'Applicant',
     component: ApplicantHomeView,
+    beforeEnter: [checkLogin],
+  },
+  {
+    path: '/applicant/faq',
+    name: 'ApplicantFAQ',
+    component: ApplicantFAQ,
+    beforeEnter: [checkLogin],
+  },
+  {
+    path: '/applicant/profile/',
+    name: 'ApplicantProfile',
+    component: ApplicantProfile,
     beforeEnter: [checkLogin],
   },
   // 화상면접방
