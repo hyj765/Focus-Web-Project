@@ -91,30 +91,35 @@ public class EvaluationController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
-    @ApiOperation(value = "합불여부 체크", notes = "각 인터뷰 마지막에 합불여부를 결정하는 API")
+      @ApiOperation(value = "합불여부 체크", notes = "각 인터뷰 마지막에 합불여부를 결정하는 API")
     @Transactional
     @PostMapping("/decision/pass")
-    public ResponseEntity<?> FinishInterview(@RequestBody List<DecisionReq> decisionReq) {
-        Long processId = decisionReq.get(0).getProcessId();
-        if(!evaluationService.LoggingUserPass(processId,decisionReq)){
-            return new ResponseEntity<String>("데이터 합불여부 처리 실패",HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<String>("합불여부 처리 성공", HttpStatus.OK);
-    }
-
-    @PostMapping("/interview-result")
-    public ResponseEntity<String> saveInterviewResult(@RequestBody List<Map<String, Object>> dataList) {
+    public ResponseEntity<?> FinishInterview(@RequestBody List<Map<String, Object>> dataList) {
+//        Long processId = decisionReq.get(0).getProcessId();
+//        if(!evaluationService.LoggingUserPass(processId,decisionReq)){
+//            return new ResponseEntity<String>("데이터 합불여부 처리 실패",HttpStatus.BAD_REQUEST);
+//        }
+        Long processId = null;
+        if (dataList.size() == 0)
+            return new ResponseEntity<String>("합격자가 없습니다.", HttpStatus.OK);
+        List<DecisionReq> decisionReqList = new ArrayList<>();
         for (Map<String, Object> data : dataList) {
-            Long processId = Long.valueOf(data.get("processId").toString());
-            Map<String, Object> interviewResultReq = (Map<String, Object>) data.get("interviewResultReq");
-            Long applicantId = Long.valueOf(interviewResultReq.get("applicantId").toString());
-            boolean pass = Boolean.parseBoolean(interviewResultReq.get("pass").toString());
+            processId = Long.valueOf(data.get("processId").toString());
+            InterviewResultReq interviewResultReq = (InterviewResultReq) (Map<String, Object>) data.get(
+                "interviewResultReq");
+            DecisionReq decisionReq = new DecisionReq();
+            decisionReq.setProcessId(processId);
+            decisionReq.setInterviewResultReq(interviewResultReq);
+            decisionReqList.add(decisionReq);
+        }
 
-        // Here you can process the data and save it to the database or do any other necessary operations.
-    }
+        if (!evaluationService.LoggingUserPass(processId, decisionReqList)) {
+            return new ResponseEntity<String>("합불여부 처리 실패", HttpStatus.OK);
+        }
     
-    return ResponseEntity.ok("Interview results saved successfully");
+            return new ResponseEntity<String>("합불여부 처리 성공", HttpStatus.OK);
     }
+
 
     //평가지랑 점수
     @ApiOperation(value = "전형 현재 진행사항에 따른 합격자 값 가져오기", notes = "cur_step의 값을 통하여 이전 n차 면접 합격자 값을 가져오는 API")
