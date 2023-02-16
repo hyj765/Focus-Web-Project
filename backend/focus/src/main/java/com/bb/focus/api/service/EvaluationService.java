@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public interface EvaluationService {
 
 
-  boolean LoggingUserPass(Long processId, List<DecisionReq> decisionReqList);
+  boolean LoggingUserPass( List<DecisionReq> decisionReqList);
   boolean ApplicantEvaluation(EvaluationItemInfoReq result, Long ApplicantEvaluatorId, Long evaluationItemId);
 
   List<ApplicantDecisionRes> findApplicantDecisionByPass(Long processId);

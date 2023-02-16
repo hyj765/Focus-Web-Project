@@ -116,8 +116,8 @@ public class EvaluationController {
 
         return new ResponseEntity<String>("성공",HttpStatus.OK);
     }
+
     
-    //평가지랑 점수
     @ApiOperation(value = "전형 현재 진행사항에 따른 합격자 값 가져오기", notes = "cur_step의 값을 통하여 이전 n차 면접 합격자 값을 가져오는 API")
     @GetMapping("/interview/applicants/{process-Id}")
     public ResponseEntity<?> GetApplicantPerPass(@PathVariable(name = "process-Id") Long processId) {
