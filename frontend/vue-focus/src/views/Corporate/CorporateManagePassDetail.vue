@@ -105,12 +105,12 @@
                         <td
                           class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                         >
-                          평가총점
+                          {{ applicant.scoreList[applicant.name] }}
                         </td>
                         <td
                           class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                         >
-                          평가지 보기
+                          평가내역 보기
                         </td>
                         <td
                           class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
@@ -214,6 +214,7 @@ const decisionNextStep = () => {
 
 const getPassAplicant = () => {
   const user = JSON.parse(localStorage.getItem('user'));
+  console.log(user.accessToken);
   axios
     .get(`${BASE_URL}/companyusers/process/pass/${route.params.id}`, {
       headers: {
@@ -221,7 +222,7 @@ const getPassAplicant = () => {
       },
     })
     .then(data => {
-      console.log(data.data[0]);
+      console.log(data.data);
       applicantlist.value = data.data;
     });
 };
