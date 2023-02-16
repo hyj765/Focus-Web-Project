@@ -1,12 +1,14 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.InterviewReq;
+import com.bb.focus.api.response.InterviewRoomInfoRes;
 import com.bb.focus.db.entity.evaluation.EvaluationSheet;
 import com.bb.focus.db.entity.interview.Interview;
 import com.bb.focus.db.entity.process.Process;
 import com.bb.focus.db.repository.EvaluationSheetRepository;
 import com.bb.focus.db.repository.InterviewRepository;
 import com.bb.focus.db.repository.ProcessRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +40,13 @@ public class InterviewServiceImpl implements InterviewService {
     interview.setEndDate(interviewReq.getEndDate());
 
     interviewRepository.save(interview);
+  }
+
+  @Override
+  public List<InterviewRoomInfoRes> findInterviewRoomIds(Long processId) {
+
+    List<InterviewRoomInfoRes> interviewRoomIdList = interviewRepository.findInterviewRoomIds(processId);
+    return interviewRoomIdList;
   }
 
   @Override

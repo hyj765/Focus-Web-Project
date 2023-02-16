@@ -5,10 +5,12 @@ import com.bb.focus.api.request.AddRemoveEvaluatorReq;
 import com.bb.focus.api.request.InterviewRoomReq;
 import com.bb.focus.api.response.ApplicantRes;
 import com.bb.focus.api.response.EvaluatorRes;
+import com.bb.focus.api.response.InterviewRoomInfoRes;
 import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.api.service.ApplicantEvaluatorService;
 import com.bb.focus.api.service.EvaluationService;
 import com.bb.focus.api.service.InterviewRoomService;
+import com.bb.focus.api.service.InterviewService;
 import com.bb.focus.api.service.ProcessEvaluatorService;
 import com.bb.focus.common.model.response.BaseResponseBody;
 import com.bb.focus.db.entity.interview.InterviewRoom;
@@ -44,6 +46,7 @@ public class InterviewRoomScheduleController {
   private final EvaluationService evaluationService;
   private final ProcessEvaluatorService processEvaluatorService;
   private final ApplicantEvaluatorService applicantEvaluatorService;
+  private final InterviewService interviewService;
 
   @ApiOperation(value = "면접 일정 생성")
   @PostMapping("/{process-id}")
@@ -199,5 +202,21 @@ public class InterviewRoomScheduleController {
     List<ApplicantRes> result = interviewRoomService.findApplicants(interviewRoomId);
 
     return ResponseEntity.status(200).body(result);
+  }
+
+  /**
+   * request : processId
+   * response : interviewId List
+   */
+  @ApiOperation(value = "프로세스 id로 interview Id 리스트 얻기")
+  @GetMapping("/interview/ids/{process-id}")
+  public ResponseEntity<?> getInterviewIdList(
+      @ApiIgnore Authentication authentication,
+      @PathVariable(value = "process-id") Long processId) {
+
+    List<InterviewRoomInfoRes> result = interviewService.findInterviewRoomIds(processId);
+
+    return ResponseEntity.status(200).body(result);
+
   }
 }
