@@ -97,13 +97,13 @@
                       class="w-full overflow-hidden bg-gray-200 rounded-lg h-60"
                     >
                       <img
-                        src="~@/assets/손예진.jpg"
+                        src="~@/assets/김수현.jpg"
                         alt=""
                         class="object-cover object-center w-full h-full group-hover:opacity-75"
                       />
                     </div>
                     <p class="flex flex-row">
-                      손예진 <br />
+                      김수현 <br />
                       010-7337-3460 <br />
                       yejin@gmail.com <br />
                       경영학과 <br />
@@ -115,13 +115,13 @@
                       class="w-full overflow-hidden bg-gray-200 rounded-lg h-60"
                     >
                       <img
-                        src="~@/assets/박신혜jpg.jpg"
+                        src="~@/assets/박보검.jpg"
                         alt=""
                         class="object-cover object-center w-full h-full group-hover:opacity-75"
                       />
                     </div>
                     <p class="flex flex-row">
-                      박신혜 <br />
+                      박보검 <br />
                       010-2345-2345 <br />
                       sinhye@gmail.com <br />
                       경제학과 <br />
