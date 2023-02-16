@@ -150,12 +150,19 @@ const sendEvaluationRecords = () => {
     memo: memo.value,
   };
   let realinfo = JSON.stringify(info);
-  axios.post(`${BASE_URL}/interview/evaluation`, realinfo, {
-    headers: {
-      Authorization: `Bearer ${user.accessToken}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  axios
+    .post(`${BASE_URL}/interview/evaluation`, realinfo, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(data => {
+      console.log(data);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 onMounted(() => {
   getEvaluationSheets();
