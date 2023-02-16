@@ -90,14 +90,12 @@
                 <p class="pb-5 text-2xl font-medium">평가 예정 지원자</p>
 
                 <div
-                  class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
+                  class="grid grid-cols-3 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 xl:gap-x-8"
                 >
-                  <a
-                    v-for="(i, key) in scheduledApplicants[props.id]"
-                    :key="i"
-                    class="group"
-                  >
-                    <div class="w-full overflow-hidden bg-gray-200 rounded-lg">
+                  <div>
+                    <div
+                      class="w-full overflow-hidden bg-gray-200 rounded-lg h-60"
+                    >
                       <img
                         src="~@/assets/손예진.jpg"
                         alt=""
@@ -105,14 +103,31 @@
                       />
                     </div>
                     <p class="flex flex-row">
-                      {{ scheduledApplicants[props.id][key].name }} <br />
-                      {{ scheduledApplicants[props.id][key].tel }} <br />
-                      {{ scheduledApplicants[props.id][key].email }} <br />
-                      {{ scheduledApplicants[props.id][key].major }} <br />
-                      학점 : {{ scheduledApplicants[props.id][key].credit }} /
-                      {{ scheduledApplicants[props.id][key].totalCredit }}
+                      손예진 <br />
+                      010-7337-3460 <br />
+                      yejin@gmail.com <br />
+                      경영학과 <br />
+                      학점 : 3 / 4.5
                     </p>
-                  </a>
+                  </div>
+                  <div>
+                    <div
+                      class="w-full overflow-hidden bg-gray-200 rounded-lg h-60"
+                    >
+                      <img
+                        src="~@/assets/박신혜jpg.jpg"
+                        alt=""
+                        class="object-cover object-center w-full h-full group-hover:opacity-75"
+                      />
+                    </div>
+                    <p class="flex flex-row">
+                      박신혜 <br />
+                      010-2345-2345 <br />
+                      sinhye@gmail.com <br />
+                      경제학과 <br />
+                      학점 : 3.2 / 4.5
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
