@@ -31,7 +31,7 @@
                 <p>|</p>
                 <p>
                   {{ interview.startDate.slice(0, 10) }} ~
-                  {{ interview.startDate.slice(0, 10) }}
+                  {{ interview.endDate.slice(0, 10) }}
                 </p>
                 <p>|</p>
                 <p>총 {{ interview.interviewCount }} 차</p>
