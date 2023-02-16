@@ -117,8 +117,6 @@ const extractEvaluation = () => {
   idlist.value.forEach(element => {
     let content = document.getElementById('record' + element).value;
     let score = document.getElementById('score' + element).value;
-    console.log('content : ', content);
-    console.log('score : ', score);
     let frame = {
       content: content,
       score: score,
@@ -151,7 +149,8 @@ const sendEvaluationRecords = () => {
     interviewRoomId: props.interviewRoomId,
     memo: memo.value,
   };
-  axios.post(`${BASE_URL}/interview/evaluation`, info, {
+  let realinfo = JSON.stringify(info);
+  axios.post(`${BASE_URL}/interview/evaluation`, realinfo, {
     headers: {
       Authorization: `Bearer ${user.accessToken}`,
       'Content-Type': 'application/json',
