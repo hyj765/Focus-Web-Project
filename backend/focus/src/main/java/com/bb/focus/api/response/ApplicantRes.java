@@ -70,11 +70,16 @@ public class ApplicantRes {
 
   public static ApplicantRes of(Applicant user){
     ApplicantRes res = new ApplicantRes();
+    res.setId(user.getId());
     res.setUserId(user.getUserId());
     res.setTel(user.getTel());
     res.setEmail(user.getEmail());
     res.setName(user.getName());
     res.setMajor(user.getMajor());
+    res.setCode(user.getCode());
+    res.setImage(user.getImage());
+    res.setTotalCredit(user.getTotalCredit());
+    res.setCredit(user.getCredit());
     return res;
   }
 
