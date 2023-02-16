@@ -76,10 +76,12 @@ public class EvaluationController {
         FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
         Long evaluatorId = userDetails.getUser().getId();
 
-        System.out.println(interviewRoomId);
-        System.out.println(applicantId);
-        System.out.println(memo);
-        System.out.println(evaluationItemInfoList);
+        
+        System.out.println("==================================================================================>"+interviewRoomId);
+        System.out.println("==================================================================================>"+applicantId);
+        System.out.println("==================================================================================>"+memo);
+        System.out.println("==================================================================================>"+evaluationItemInfoList);
+
 
 //        List<ApplicantEvaluator> applicantEvaluatorList = interviewRoomRepository.findById(evaluationApplicantReq.getInterviewRoomId()).get().getApplicantEvaluatorList();
 //
