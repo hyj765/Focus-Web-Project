@@ -51,23 +51,6 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
-const companyUserName = ref('');
-const getCompanyUserName = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  axios
-    .get(`${BASE_URL}/companyusers/me`, {
-      headers: {
-        Authorization: `Bearer ${user.accessToken}`,
-      },
-    })
-    .then(res => {
-      console.log(res.data);
-      companyUserName.value = res.data.companyName;
-    })
-    .catch(err => {
-      console.log(err.message);
-    });
-};
 
 const processList = ref([]);
 const getProgressprocess = () => {
