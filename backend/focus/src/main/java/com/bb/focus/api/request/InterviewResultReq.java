@@ -21,4 +21,10 @@ public class InterviewResultReq {
   @NotBlank(message="지원자의 합불 여부(p, np)를 입력해주세요.")
   @ApiModelProperty(name="합불 여부", example = "p, np")
   String pass;
+
+
+  public InterviewResultReq(Long applicantId, String pass){
+    this.applicantId = applicantId;
+    this.pass = pass;
+  }
 }
