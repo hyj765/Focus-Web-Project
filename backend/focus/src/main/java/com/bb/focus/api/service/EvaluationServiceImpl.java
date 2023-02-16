@@ -175,7 +175,7 @@ public class EvaluationServiceImpl implements EvaluationService{
     for(Applicant applicant :applicantList){
       ApplicantDecisionRes applicantDecisionRes = new ApplicantDecisionRes(applicant);
       for(ApplicantPassLog applicantPassLog:applicant.getApplicantPassLogList()){
-        applicantDecisionRes.getScoreList().put(applicantPassLog.getName(),applicantPassLog.getScore());
+        applicantDecisionRes.getScoreList().put(applicantPassLog.getProcessName(),applicantPassLog.getScore());
       }
       applicantDecisionResList.add(applicantDecisionRes);
     }
