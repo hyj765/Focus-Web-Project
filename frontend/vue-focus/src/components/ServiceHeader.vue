@@ -57,7 +57,7 @@
             <h4
               class="font-semibold tracking-wide text-gray-700 capitalize font-poppins"
             >
-              김토끼
+              {{ serviceUserName }}
             </h4>
             <!-- 로그아웃 -->
             <li class="rounded-lg bg-white/60" @click="logout()">
@@ -74,8 +74,29 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue';
+import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+const serviceUserName = ref('');
+const getServiceUserName = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/serviceusers/me`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log(res.data);
+      serviceUserName.value = res.data.name;
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
 
 const router = useRouter();
 const store = useStore();
@@ -97,6 +118,10 @@ const logout = () => {
     router.push({ name: 'Login' });
   });
 };
+
+onMounted(() => {
+  getServiceUserName();
+});
 </script>
 
 <style lang="scss" scoped></style>
