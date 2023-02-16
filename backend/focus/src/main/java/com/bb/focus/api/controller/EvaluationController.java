@@ -102,7 +102,19 @@ public class EvaluationController {
         return new ResponseEntity<String>("합불여부 처리 성공", HttpStatus.OK);
     }
 
+    @PostMapping("/interview-result")
+    public ResponseEntity<String> saveInterviewResult(@RequestBody List<Map<String, Object>> dataList) {
+        for (Map<String, Object> data : dataList) {
+            Long processId = Long.valueOf(data.get("processId").toString());
+            Map<String, Object> interviewResultReq = (Map<String, Object>) data.get("interviewResultReq");
+            Long applicantId = Long.valueOf(interviewResultReq.get("applicantId").toString());
+            boolean pass = Boolean.parseBoolean(interviewResultReq.get("pass").toString());
 
+        // Here you can process the data and save it to the database or do any other necessary operations.
+    }
+    
+    return ResponseEntity.ok("Interview results saved successfully");
+    }
 
     //평가지랑 점수
     @ApiOperation(value = "전형 현재 진행사항에 따른 합격자 값 가져오기", notes = "cur_step의 값을 통하여 이전 n차 면접 합격자 값을 가져오는 API")
