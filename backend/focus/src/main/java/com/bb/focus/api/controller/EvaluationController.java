@@ -78,6 +78,14 @@ public class EvaluationController {
         FocusUserDetails userDetails = (FocusUserDetails) authentication.getDetails();
         Long evaluatorId = userDetails.getUser().getId();
 
+        List<EvaluationInfo> evaluationItemInfoList = evaluationApplicantReq.getEvaluationItemInfoList();
+        for(EvaluationInfo data : evaluationItemInfoList){
+            System.out.println("evaluationItemId..............................."+data.getEvaluationItemId());
+            System.out.println("content........................................"+data.getContent());
+            System.out.println("score........................................."+data.getScore());
+        }
+
+
    
 //        System.out.println("==================================================================================>"+interviewRoomId);
 //        System.out.println("==================================================================================>"+applicantId);
