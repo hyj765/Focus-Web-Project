@@ -1,157 +1,246 @@
 <template>
-  <!-- <CorporateHeader></CorporateHeader> -->
-  <div class="flex">
-    <CorporateNavbar></CorporateNavbar>
-    <div class="w-screen">
-      <h1 class="font-bold">면접정보 수정</h1>
-      <div>
-        <p>면접명</p>
-        <input type="text" v-model="interviewName" /><br />
-        <input
-          v-model="interviewDate"
-          type="date"
-          id="interviewDate"
-          required="true"
-        />
-        <br />
-        <input type="text" v-model="startHour" />시
-        <input type="text" v-model="startMinute" />분<br />
-        <input type="text" v-model="endHour" />시
-        <input type="text" v-model="endMinute" />분<br />
+  <div>
+    <CorporateHeader></CorporateHeader>
+    <div class="flex">
+      <CorporateNavbar></CorporateNavbar>
+      <div class="w-screen">
+        <div class="flex flex-col space-y-5">
+          <!-- 
+          # 네이버님 안녕하세요
+          -->
+          <nav class="flex flex-wrap justify-between p-8 text-gray-800">
+            <h1 class="font-bold">네이버 님, 안녕하세요</h1>
+            <h3 class="font-bold text-gray-500">Interview</h3>
+          </nav>
+          <p class="px-10 text-2xl font-medium">예정된 전형</p>
+          <p class="px-10 pt-1 text-gray-700 font-regular">
+            각각의 전형에 면접 일정을 추가해주세요
+          </p>
+          <div class="flex items-center p-10">
+            <div
+              class="p-5 space-y-5 bg-white divide-y divide-gray-200 rounded-lg shadow-lg"
+            >
+              <div>
+                <p class="pb-2 text-xl font-bold text-gray-900">
+                  면접정보 수정
+                </p>
+                <p class="text-lg font-medium text-gray-900">면접명</p>
+                <input
+                  class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  type="text"
+                  v-model="interviewName"
+                />
+              </div>
+              <div class="flex flex-row space-x-4">
+                <div>
+                  <p class="text-lg font-medium text-gray-900">일시</p>
+                  <input
+                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    v-model="interviewDate"
+                    type="date"
+                    id="interviewDate"
+                    required="true"
+                  />
+                </div>
+                <div>
+                  <p class="text-lg font-medium text-gray-900">시작 시각</p>
+                  <div class="flex flex-row items-end">
+                    <input
+                      class="block w-12 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      v-model="startHour"
+                      type="text"
+                    />:
+                    <input
+                      class="block w-12 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      v-model="startMinute"
+                      type="text"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <p class="text-lg font-medium text-gray-900">종료 시각</p>
+                  <div class="flex flex-row items-end">
+                    <input
+                      class="block w-12 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      v-model="endHour"
+                      type="text"
+                    />:
+                    <input
+                      class="block w-12 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      v-model="endMinute"
+                      type="text"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="flex flex-row items-end justify-between pt-3 pb-2">
+                  <!-- 평가자 현황 -->
+                  <p class="text-lg font-medium text-gray-900">평가자 :</p>
+                  <!-- 평가자 선택 -->
+                  <Menu as="div" class="relative inline-block text-left">
+                    <div>
+                      <MenuButton
+                        class="inline-flex justify-center w-full px-4 py-2 font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm text-md hover:bg-gray-50"
+                      >
+                        {{ evaluatorLabel }}
+                        <ChevronDownIcon
+                          class="w-5 h-5 ml-2 -mr-1"
+                          aria-hidden="true"
+                        />
+                      </MenuButton>
+                    </div>
 
-        <!-- 평가자 현황 -->
-        <div>
-          <p>평가자</p>
-          <br />
-          <p v-for="evaluator in evaluators" :key="evaluator.id">
-            {{ evaluator.name }}({{ evaluator.id }})
-            <button @click.stop="deleteEvaluator(evaluator.id)">X</button>
-          </p>
-        </div>
-        <!-- 지원자 현황 -->
-        <div>
-          <p>지원자</p>
-          <br />
-          <p v-for="applicant in applicants" :key="applicant.id">
-            {{ applicant.name }}({{ applicant.id }})
-            <button @click.stop="deleteApplicant(applicant.id)">X</button>
-          </p>
+                    <transition
+                      enter-active-class="transition duration-100 ease-out"
+                      enter-from-class="transform scale-95 opacity-0"
+                      enter-to-class="transform scale-100 opacity-100"
+                      leave-active-class="transition duration-75 ease-in"
+                      leave-from-class="transform scale-100 opacity-100"
+                      leave-to-class="transform scale-95 opacity-0"
+                    >
+                      <MenuItems
+                        class="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                      >
+                        <div class="py-1">
+                          <MenuItem v-slot="{ active }">
+                            <p
+                              @click.stop="setEvaluatorDefault()"
+                              :class="[
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'block px-4 py-2 text-sm',
+                              ]"
+                            >
+                              ------
+                            </p>
+                          </MenuItem>
+                          <MenuItem
+                            v-slot="{ active }"
+                            v-for="evaluator in evaluatorsAll"
+                            :key="evaluator.id"
+                          >
+                            <p
+                              @click.stop="clickEvaluator(evaluator)"
+                              :class="[
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'block px-4 py-2 text-sm',
+                              ]"
+                            >
+                              {{ evaluator.name }}
+                            </p>
+                          </MenuItem>
+                        </div>
+                      </MenuItems>
+                    </transition>
+                    <button @click="addEvaluator()">평가자 추가</button>
+                  </Menu>
+                </div>
+                <div>
+                  <div class="flex flex-row p-1 space-x-1">
+                    <p v-for="evaluator in evaluators" :key="evaluator.id">
+                      {{ evaluator.name }}({{ evaluator.id }})
+                      <button @click.stop="deleteEvaluator(evaluator.id)">
+                        X
+                      </button>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex flex-row items-end justify-between pt-3 pb-2">
+                  <!-- 지원자 현황 -->
+                  <p class="text-lg font-medium text-gray-900">지원자 :</p>
+                  <!-- 지원자 선택 -->
+                  <Menu as="div" class="relative inline-block text-left">
+                    <div>
+                      <MenuButton
+                        class="inline-flex justify-center w-full px-4 py-2 font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm text-md hover:bg-gray-50"
+                      >
+                        {{ applicantLabel }}
+                        <ChevronDownIcon
+                          class="w-5 h-5 ml-2 -mr-1"
+                          aria-hidden="true"
+                        />
+                      </MenuButton>
+                    </div>
+
+                    <transition
+                      enter-active-class="transition duration-100 ease-out"
+                      enter-from-class="transform scale-95 opacity-0"
+                      enter-to-class="transform scale-100 opacity-100"
+                      leave-active-class="transition duration-75 ease-in"
+                      leave-from-class="transform scale-100 opacity-100"
+                      leave-to-class="transform scale-95 opacity-0"
+                    >
+                      <MenuItems
+                        class="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                      >
+                        <div class="py-1">
+                          <MenuItem v-slot="{ active }">
+                            <p
+                              @click="setApplicantDefault()"
+                              :class="[
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'block px-4 py-2 text-sm',
+                              ]"
+                            >
+                              ------
+                            </p>
+                          </MenuItem>
+                          <MenuItem
+                            v-slot="{ active }"
+                            v-for="applicant in applicantsAll"
+                            :key="applicant.id"
+                          >
+                            <p
+                              @click="clickApplicant(applicant)"
+                              :class="[
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'block px-4 py-2 text-sm',
+                              ]"
+                            >
+                              {{ applicant.name }}
+                            </p>
+                          </MenuItem>
+                        </div>
+                      </MenuItems>
+                    </transition>
+                    <button @click="addApplicant()">지원자 추가</button>
+                  </Menu>
+                </div>
+                <div>
+                  <div class="flex flex-row p-1 space-x-1">
+                    <p v-for="applicant in applicants" :key="applicant.id">
+                      {{ applicant.name }}({{ applicant.id }})
+                      <button @click.stop="deleteApplicant(applicant.id)">
+                        X
+                      </button>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="flex justify-end space-x-2">
+                <button
+                  @click.stop="saveInterview()"
+                  type="button"
+                  class="inline-block rounded bg-indigo-600 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
+                >
+                  저장
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <button @click.stop="saveInterview()">저장</button>
-    </div>
-    <!-- 평가 -->
-    <div class="w-screen">
-      <h1 class="font-bold">평가자 지원자 단일 추가</h1>
-      <!-- 평가자 선택 -->
-      <Menu as="div" class="relative inline-block text-left">
-        <div>
-          <MenuButton
-            class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
-          >
-            {{ evaluatorLabel }}
-            <ChevronDownIcon class="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
-          </MenuButton>
-        </div>
-
-        <transition
-          enter-active-class="transition duration-100 ease-out"
-          enter-from-class="transform scale-95 opacity-0"
-          enter-to-class="transform scale-100 opacity-100"
-          leave-active-class="transition duration-75 ease-in"
-          leave-from-class="transform scale-100 opacity-100"
-          leave-to-class="transform scale-95 opacity-0"
-        >
-          <MenuItems
-            class="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-          >
-            <div class="py-1">
-              <MenuItem v-slot="{ active }">
-                <p
-                  @click.stop="setEvaluatorDefault()"
-                  :class="[
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm',
-                  ]"
-                >
-                  ------
-                </p>
-              </MenuItem>
-              <MenuItem
-                v-slot="{ active }"
-                v-for="evaluator in evaluatorsAll"
-                :key="evaluator.id"
-              >
-                <p
-                  @click.stop="clickEvaluator(evaluator)"
-                  :class="[
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm',
-                  ]"
-                >
-                  {{ evaluator.name }}
-                </p>
-              </MenuItem>
-            </div>
-          </MenuItems>
-        </transition>
-        <button @click="addEvaluator()">평가자 추가</button>
-      </Menu>
-
-      <!-- 지원자 선택 -->
-      <Menu as="div" class="relative inline-block text-left">
-        <div>
-          <MenuButton
-            class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
-          >
-            {{ applicantLabel }}
-            <ChevronDownIcon class="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
-          </MenuButton>
-        </div>
-
-        <transition
-          enter-active-class="transition duration-100 ease-out"
-          enter-from-class="transform scale-95 opacity-0"
-          enter-to-class="transform scale-100 opacity-100"
-          leave-active-class="transition duration-75 ease-in"
-          leave-from-class="transform scale-100 opacity-100"
-          leave-to-class="transform scale-95 opacity-0"
-        >
-          <MenuItems
-            class="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-          >
-            <div class="py-1">
-              <MenuItem v-slot="{ active }">
-                <p
-                  @click="setApplicantDefault()"
-                  :class="[
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm',
-                  ]"
-                >
-                  ------
-                </p>
-              </MenuItem>
-              <MenuItem
-                v-slot="{ active }"
-                v-for="applicant in applicantsAll"
-                :key="applicant.id"
-              >
-                <p
-                  @click="clickApplicant(applicant)"
-                  :class="[
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm',
-                  ]"
-                >
-                  {{ applicant.name }}
-                </p>
-              </MenuItem>
-            </div>
-          </MenuItems>
-        </transition>
-        <button @click="addApplicant()">지원자 추가</button>
-      </Menu>
     </div>
   </div>
 </template>
