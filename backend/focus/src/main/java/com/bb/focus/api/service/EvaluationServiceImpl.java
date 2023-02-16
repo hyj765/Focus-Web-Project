@@ -78,7 +78,8 @@ public class EvaluationServiceImpl implements EvaluationService{
   }
 
   // 면접 합격 결과를 로그로 찍는 함수. 결과에 들어갈 필요가 있음.
-  public boolean LoggingUserPass(Long processId, List<DecisionReq> decisionReqList){
+  public boolean LoggingUserPass(List<DecisionReq> decisionReqList){
+    Long processId = decisionReqList.get(0).getProcessId();
     // 로그 생성 후 -> process -> applicant -> interview를 통하여 각자 데이터 추출 이 때 status가 p라면 applicant의 현재 합격 여부 +1;
     Process process =processRepo.findById(processId).orElseThrow(IllegalAccessError::new);
 

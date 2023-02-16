@@ -12,6 +12,7 @@ import com.bb.focus.db.entity.helper.ApplicantEvaluator;
 import com.bb.focus.db.repository.InterviewRoomRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.ArrayList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
@@ -91,20 +93,31 @@ public class EvaluationController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
-    @ApiOperation(value = "합불여부 체크", notes = "각 인터뷰 마지막에 합불여부를 결정하는 API")
+      @ApiOperation(value = "합불여부 체크", notes = "각 인터뷰 마지막에 합불여부를 결정하는 API")
     @Transactional
     @PostMapping("/decision/pass")
-    public ResponseEntity<?> FinishInterview(@RequestBody List<DecisionReq> decisionReq) {
-        Long processId = decisionReq.get(0).getProcessId();
-        if(!evaluationService.LoggingUserPass(processId,decisionReq)){
-            return new ResponseEntity<String>("데이터 합불여부 처리 실패",HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> FinishInterview(@RequestBody List<Map<String, Object>> dataList) {
+        List<DecisionReq> decisionReqList = new ArrayList<>();
+        for (Map<String, Object> data : dataList) {
+            Long processId = Long.valueOf(data.get("processId").toString());
+            Map<String, Object> interviewResultReq = (Map<String, Object>) data.get("interviewResultReq");
+            Long applicantId = Long.valueOf(interviewResultReq.get("applicantId").toString());
+            String pass = interviewResultReq.get("pass").toString();
+            InterviewResultReq interviewResultReq1 = new InterviewResultReq(applicantId,pass);
+            DecisionReq decisionReq = new DecisionReq();
+            decisionReq.setProcessId(processId);
+            decisionReq.setInterviewResultReq(interviewResultReq1);
+            decisionReqList.add(decisionReq);
         }
-        return new ResponseEntity<String>("합불여부 처리 성공", HttpStatus.OK);
+
+        if(!evaluationService.LoggingUserPass(decisionReqList)){
+            return new ResponseEntity<String>("실패",HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<String>("성공",HttpStatus.OK);
     }
 
-
-
-    //평가지랑 점수
+    
     @ApiOperation(value = "전형 현재 진행사항에 따른 합격자 값 가져오기", notes = "cur_step의 값을 통하여 이전 n차 면접 합격자 값을 가져오는 API")
     @GetMapping("/interview/applicants/{process-Id}")
     public ResponseEntity<?> GetApplicantPerPass(@PathVariable(name = "process-Id") Long processId) {
