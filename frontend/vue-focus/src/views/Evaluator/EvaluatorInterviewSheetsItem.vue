@@ -2,7 +2,7 @@
   <div>
     <!-- component -->
     <div class="flex items-center justify-center p-5">
-      <div class="mx-auto w-full max-w-[550px]">
+      <div class="w-full h-screen pb-20 mx-auto overflow-auto">
         <form v-on:submit.prevent="submitSheet" method="POST">
           <!-- ---------------------------------- 문항 --------------------------------- -->
           <div
