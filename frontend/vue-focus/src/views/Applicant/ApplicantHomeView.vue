@@ -49,7 +49,7 @@
                   <router-link
                     :to="{
                       name: 'InterviewRoom',
-                      params: { id: 3 },
+                      params: { id: 7 },
                     }"
                   >
                     입장
