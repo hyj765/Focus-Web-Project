@@ -1,54 +1,69 @@
 <template>
   <div>
-    <!-- <CorporateHeader></CorporateHeader> -->
-    <div>
-      <!-- <CorporateNavbar></CorporateNavbar> -->
-      <!-- 현재 프로세스 정보 -->
-      <div>
-        {{ currentProcessName }} | {{ currentProcessStartDate.slice(0, 10) }} ~
-        {{ currentProcessEndDate.slice(0, 10) }} | 총
-        {{ currentProcessInterviewCount }} 차
-      </div>
-    </div>
+    <CorporateHeader></CorporateHeader>
     <div class="flex">
-      <div>
-        <!-- 1, 2, 3차 탭 -->
-        <div>
-          <ul
-            class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400"
-          >
-            <li class="mr-2" v-for="tabnumber in 3" :key="tabnumber">
-              <a
-                @click="getInterviewSchedule(tabnumber)"
-                class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
-                aria-current="page"
-                >{{ tabnumber }} 차</a
-              >
-            </li>
-          </ul>
-        </div>
-        <!-- 해당 프로세스 해당 차수의 면접 일정들 -->
-        <div
-          v-for="schedule in currentSchedules"
-          :key="schedule.id"
-          @click.stop="goScheduleSetting(processId, schedule.id)"
-        >
-          <p>{{ schedule.name }}</p>
-          <p>{{ schedule.date }}</p>
-          <p>
-            {{ schedule.startTime.slice(11, 16) }} ~
-            {{ schedule.endTime.slice(11, 16) }}
+      <CorporateNavbar></CorporateNavbar>
+      <div class="w-screen">
+        <div class="flex flex-col space-y-10">
+          <!-- 
+          # 네이버님 안녕하세요
+          -->
+          <nav class="flex flex-wrap justify-between p-8 text-gray-800">
+            <h1 class="font-bold">네이버 님, 안녕하세요</h1>
+            <h3 class="font-bold text-gray-500">Applicant</h3>
+          </nav>
+          <p class="px-10 text-2xl font-medium">예정된 전형</p>
+          <p class="px-10 pt-1 text-gray-700 font-regular">
+            각각의 전형에 지원자를 배정해주세요
           </p>
-          <button @click.stop="deleteSchedule(currentStep, schedule.id)">
-            삭제
-          </button>
-          <hr />
+          <div>
+            {{ currentProcessName }} |
+            {{ currentProcessStartDate.slice(0, 10) }} ~
+            {{ currentProcessEndDate.slice(0, 10) }} | 총
+            {{ currentProcessInterviewCount }} 차
+          </div>
         </div>
-      </div>
-      <!-- 면접 일정 생성 -->
-      <div>
-        <h1>면접 일정 생성</h1>
-        <button @click.stop="createInterview()">면접 생성</button>
+        <div class="flex">
+          <div>
+            <!-- 1, 2, 3차 탭 -->
+            <div>
+              <ul
+                class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400"
+              >
+                <li class="mr-2" v-for="tabnumber in 3" :key="tabnumber">
+                  <a
+                    @click="getInterviewSchedule(tabnumber)"
+                    class="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+                    aria-current="page"
+                    >{{ tabnumber }} 차</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <!-- 해당 프로세스 해당 차수의 면접 일정들 -->
+            <div
+              v-for="schedule in currentSchedules"
+              :key="schedule.id"
+              @click.stop="goScheduleSetting(processId, schedule.id)"
+            >
+              <p>{{ schedule.name }}</p>
+              <p>{{ schedule.date }}</p>
+              <p>
+                {{ schedule.startTime.slice(11, 16) }} ~
+                {{ schedule.endTime.slice(11, 16) }}
+              </p>
+              <button @click.stop="deleteSchedule(currentStep, schedule.id)">
+                삭제
+              </button>
+              <hr />
+            </div>
+          </div>
+          <!-- 면접 일정 생성 -->
+          <div>
+            <h1>면접 일정 생성</h1>
+            <button @click.stop="createInterview()">면접 생성</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -22,9 +22,7 @@
           style="overflow: auto"
           class="absolute"
           v-show="currentTab == scheduledApplicants[1][key].id"
-        >
-          <SheetTest></SheetTest>
-        </div>
+        ></div>
       </ul>
     </div>
   </div>
@@ -33,8 +31,6 @@
 <script setup>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
-
-import SheetTest from './SheetTest.vue';
 
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 

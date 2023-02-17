@@ -24,9 +24,9 @@
             >
               <div
                 @click="goDetail(process.id)"
-                class="flex flex-row items-center justify-center px-4 py-2 space-x-4 text-gray-600 bg-white rounded-md shadow-md"
+                class="flex flex-row items-center justify-center px-24 py-4 space-x-4 text-xl font-bold text-gray-600 bg-white rounded-md shadow-md hover:bg-gray-100"
               >
-                <p class="text-lg font-bold">{{ process.name }}</p>
+                <p class="text-2xl font-black">{{ process.name }}</p>
                 <p>|</p>
                 <p>
                   {{ process.startDate.slice(0, 10) }} ~
