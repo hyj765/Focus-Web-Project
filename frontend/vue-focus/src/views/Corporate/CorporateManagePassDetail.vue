@@ -56,7 +56,6 @@
                         >
                           평가총점
                         </th>
-
                         <th
                           scope="col"
                           class="px-6 py-4 text-sm font-medium text-left text-gray-900"
@@ -102,12 +101,44 @@
                         <td
                           class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                         >
-                          {{ applicant.scoreList[applicant.name] }}
+                          평가내역 보기
                         </td>
                         <td
                           class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                         >
-                          자소서 보기
+                          <!-- # 모달 -->
+                          <!-- <div class="pt-4">
+                            <button
+                              class="px-4 py-2 text-white bg-indigo-900 rounded"
+                              @click="showModal = true"
+                            >
+                              자소서 보기
+                            </button>
+                            <div
+                              class="fixed top-0 left-0 z-50 w-full h-full bg-white"
+                              v-if="showModal"
+                            >
+                              <div
+                                class="fixed -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 z-60"
+                              >
+                                <div class="bg-white p=2 relative">
+                                  <button
+                                    class="absolute top-0 right-0 p-0.5"
+                                    @click="showModal = false"
+                                  >
+                                    X
+                                  </button>
+                                  <img
+                                    @click="showModal = false"
+                                    id="introduce"
+                                    src="@/assets/introduce.png"
+                                    alt="Modal Image"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div> -->
+                          <!-- # 모달 창 끝 -->
                         </td>
                         <td
                           class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
@@ -145,7 +176,7 @@
 import CorporateHeader from '@/components/CorporateHeader.vue';
 import CorporateNavbar from '@/components/CorporateNavbar.vue';
 
-import { onMounted, ref } from '@vue/runtime-core';
+import { onMounted, ref, computed } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 
@@ -199,9 +230,9 @@ const DecisionPassApplicantList = () => {
 };
 
 const passapplicantIds = ref([]);
+
 const getPassApplicant = () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  console.log(user.accessToken);
   axios
     .get(`${BASE_URL}/companyusers/process/pass/${route.params.id}`, {
       headers: {
@@ -209,14 +240,13 @@ const getPassApplicant = () => {
       },
     })
     .then(data => {
-      console.log(data.data);
+      console.log('data: ', data.data);
       applicantlist.value = data.data;
       passapplicantIds.value = applicantlist.value.map(
         applicant => applicant.id,
       );
     });
 };
-
 onMounted(() => {
   getPassApplicant();
 });
