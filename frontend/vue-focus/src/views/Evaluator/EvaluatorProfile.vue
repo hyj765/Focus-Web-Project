@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col space-y-10">
+    <EvaluatorHeader></EvaluatorHeader>
     <!-- 
     # 네이버님 안녕하세요
     -->
@@ -44,6 +45,7 @@
 <script setup>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
+import EvaluatorHeader from '@/components/EvaluatorHeader.vue';
 
 const myinfo = ref(null);
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
