@@ -18,33 +18,41 @@
             class="flex flex-col items-center p-4 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0"
           >
             <!-- # FAQ -->
-            <li class="bg-white/60 rounded-lg">
-              <span
-                class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
-                ><i class="bx bx-question-mark"></i
-              ></span>
+            <li
+              @click="changeCurrentComp(ServiceFAQ)"
+              class="rounded-lg bg-white/60"
+            >
+              <button
+                class="inline-flex items-center justify-center w-12 h-12 text-2xl text-gray-800"
+              >
+                <i class="bx bx-question-mark"></i>
+              </button>
             </li>
 
             <!-- # 메일보내기 -->
-            <li class="bg-white/60 rounded-lg">
+            <li class="rounded-lg bg-white/60">
               <span
-                class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
+                class="inline-flex items-center justify-center w-12 h-12 text-2xl text-gray-800"
                 ><i class="bx bx-paper-plane"></i
               ></span>
             </li>
             <!-- # 메일함 -->
-            <li class="bg-white/60 rounded-lg">
+            <li class="rounded-lg bg-white/60">
               <span
-                class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
+                class="inline-flex items-center justify-center w-12 h-12 text-2xl text-gray-800"
                 ><i class="bx bxs-inbox"></i
               ></span>
             </li>
             <!-- # 종 -->
-            <li class="bg-white/60 rounded-lg">
-              <span
-                class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
-                ><i class="bx bx-bell"></i
-              ></span>
+            <li
+              @click="changeCurrentComp(ServiceNotice)"
+              class="rounded-lg bg-white/60"
+            >
+              <button
+                class="inline-flex items-center justify-center w-12 h-12 text-2xl text-gray-800"
+              >
+                <i class="bx bx-bell"></i>
+              </button>
             </li>
 
             <!-- 로그아웃 -->
@@ -57,7 +65,7 @@
 
 
             <!-- # 프로필 -->
-            <div class="flex items-center space-x-2 pl-2">
+            <div class="flex items-center pl-2 space-x-2">
               <img
                 class="h-8 rounded-full"
                 src="http://www.gravatar.com/avatar/2acfb745ecf9d4dccb3364752d17f65f?s=260&d=mp"
@@ -65,14 +73,14 @@
               />
 
               <h4
-                class="font-semibold text-gray-700 capitalize font-poppins tracking-wide"
+                class="font-semibold tracking-wide text-gray-700 capitalize font-poppins"
               >
                 James Smith
               </h4>
               <!-- 로그아웃 -->
-              <li class="bg-white/60 rounded-lg" @click="logout()">
+              <li class="rounded-lg bg-white/60" @click="logout()">
                 <span
-                  class="inline-flex items-center justify-center h-12 w-12 text-2xl text-gray-800"
+                  class="inline-flex items-center justify-center w-12 h-12 text-2xl text-gray-800"
                   ><i class="bx bx-log-out"></i
                 ></span>
               </li>
@@ -114,18 +122,32 @@
                 </a>
               </li>
             </div>
-            <li @click="changeCurrentComp(ServiceNotice)">
-              <a
-                href="#"
-                class="flex flex-row items-center h-12 text-gray-500 transition-transform duration-200 ease-in transform hover:translate-x-2 hover:text-gray-800"
-              >
-                <span
-                  class="inline-flex items-center justify-center w-12 h-12 text-lg text-gray-400"
-                  ><i class="bx bxs-megaphone"></i
-                ></span>
-                <span class="text-sm font-medium">공지기능</span>
-              </a>
-            </li>
+            <div>
+              <li @click="changeCurrentComp(ServiceNotice)">
+                <a
+                  href="#"
+                  class="flex flex-row items-center h-12 text-gray-500 transition-transform duration-200 ease-in transform hover:translate-x-2 hover:text-gray-800"
+                >
+                  <span
+                    class="inline-flex items-center justify-center w-12 h-12 text-lg text-gray-400"
+                    ><i class="bx bxs-megaphone"></i
+                  ></span>
+                  <span class="text-sm font-medium">공지기능</span>
+                </a>
+              </li>
+              <li @click="changeCurrentComp(ServiceFAQ)">
+                <a
+                  href="#"
+                  class="flex flex-row items-center h-12 text-gray-500 transition-transform duration-200 ease-in transform hover:translate-x-2 hover:text-gray-800"
+                >
+                  <span
+                    class="inline-flex items-center justify-center w-12 h-12 text-lg text-gray-400"
+                    ><i class="bx bx-question-mark"></i
+                  ></span>
+                  <span class="text-sm font-medium">FAQ</span>
+                </a>
+              </li>
+            </div>
           </ul>
         </div>
       </div>
@@ -156,6 +178,7 @@ import ServiceDashboard from '@/views/ServiceDashboard.vue';
 import ServiceNotice from './ServiceNotice.vue';
 import ServiceAccountCreate from '@/views/ServiceAccountCreate.vue';
 import ServiceNoticeCreate from './ServiceNoticeCreate.vue';
+import ServiceFAQ from './ServiceFAQ.vue';
 
 const currentComp = shallowRef(ServiceDashboard);
 const changeCurrentComp = comp => (currentComp.value = comp);
