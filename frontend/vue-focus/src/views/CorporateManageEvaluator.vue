@@ -1,7 +1,334 @@
 <template>
-  <div>1CorporateManageEvaluator</div>
+  <div>
+    <!-- 
+    # 네이버님 안녕하세요
+    -->
+    <nav class="flex flex-wrap justify-between p-8 text-gray-800">
+      <h1 class="font-bold">네이버 님, 안녕하세요</h1>
+      <h3 class="font-bold text-gray-500">Evaluator</h3>
+    </nav>
+    <p class="px-10 text-2xl font-medium">평가자 리스트 조회</p>
+    <div class="flex flex-col py-5">
+      <div class="flex flex-col justify-center">
+        <div class="inline-block w-auto space-y-4 sm:px-6 lg:px-8">
+          <div class="flex flex-wrap justify-between px-5">
+            <div class="flex justify-center space-x-2">
+              <!-- # 부서별 필터 -->
+              <Menu as="div" class="relative inline-block text-left">
+                <div>
+                  <MenuButton
+                    class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+                  >
+                    부서별
+                    <ChevronDownIcon
+                      class="w-5 h-5 ml-2 -mr-1"
+                      aria-hidden="true"
+                    />
+                  </MenuButton>
+                </div>
+
+                <transition
+                  enter-active-class="transition duration-100 ease-out"
+                  enter-from-class="transform scale-95 opacity-0"
+                  enter-to-class="transform scale-100 opacity-100"
+                  leave-active-class="transition duration-75 ease-in"
+                  leave-from-class="transform scale-100 opacity-100"
+                  leave-to-class="transform scale-95 opacity-0"
+                >
+                  <MenuItems
+                    class="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  >
+                    <div class="py-1">
+                      <MenuItem v-slot="{ active }">
+                        <a
+                          href="#"
+                          :class="[
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700',
+                            'block px-4 py-2 text-sm',
+                          ]"
+                          >Account settings</a
+                        >
+                      </MenuItem>
+                      <MenuItem v-slot="{ active }">
+                        <a
+                          href="#"
+                          :class="[
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700',
+                            'block px-4 py-2 text-sm',
+                          ]"
+                          >Support</a
+                        >
+                      </MenuItem>
+                      <MenuItem v-slot="{ active }">
+                        <a
+                          href="#"
+                          :class="[
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700',
+                            'block px-4 py-2 text-sm',
+                          ]"
+                          >License</a
+                        >
+                      </MenuItem>
+                      <form method="POST" action="#">
+                        <MenuItem v-slot="{ active }">
+                          <button
+                            type="submit"
+                            :class="[
+                              active
+                                ? 'bg-gray-100 text-gray-900'
+                                : 'text-gray-700',
+                              'block w-full px-4 py-2 text-left text-sm',
+                            ]"
+                          >
+                            Sign out
+                          </button>
+                        </MenuItem>
+                      </form>
+                    </div>
+                  </MenuItems>
+                </transition>
+              </Menu>
+              <!-- # 이름 검색 -->
+              <div class="flex justify-center">
+                <div
+                  class="relative flex flex-row items-stretch w-auto px-4 rounded input-group"
+                >
+                  <input
+                    type="search"
+                    class="relative flex-auto block w-full min-w-0 px-3 m-0 text-base font-normal text-gray-700 transition ease-in-out bg-white border border-gray-300 border-solid rounded form-control bg-clip-padding focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    placeholder="이름 검색"
+                    aria-label="Search"
+                    aria-describedby="button-addon2"
+                  />
+                  <span
+                    class="input-group-text flex items-center px-3 py-1.5 text-base font-normal text-gray-700 text-center whitespace-nowrap rounded"
+                    id="basic-addon2"
+                  >
+                    <i class="w-4 text-lg bx bx-search"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-center space-x-2">
+              <button
+                type="button"
+                class="inline-block h-10 px-6 font-medium leading-tight text-gray-700 uppercase transition duration-150 ease-in-out bg-white rounded shadow-md text-md hover:bg-gray-100 hover:shadow-lg focus:bg-gray-100 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-200 active:shadow-lg"
+              >
+                리스트 편집
+              </button>
+              <button
+                type="button"
+                class="inline-block h-10 px-6 font-medium leading-tight text-white uppercase transition duration-150 ease-in-out bg-blue-700 rounded shadow-md text-md hover:bg-blue-800 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg"
+              >
+                계정 할당
+              </button>
+            </div>
+          </div>
+          <div class="overflow-hidden rounded-md shadow-lg">
+            <table class="min-w-full">
+              <thead class="bg-white border-b">
+                <tr>
+                  <th
+                    scope="col"
+                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                  >
+                    <i class="text-lg bx bx-square"></i>
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                  >
+                    사진
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                  >
+                    이름
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                  >
+                    사번
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                  >
+                    부서
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                  >
+                    직급
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                  >
+                    전화번호
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                  >
+                    이메일
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
+                >
+                  <td
+                    class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
+                  >
+                    <i class="text-lg bx bx-check-square"></i>
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    사진
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    김민경
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    2846172
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    인사부
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    대리
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    010-7337-3460
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    minofficial13@gmail.com
+                  </td>
+                </tr>
+                <tr
+                  class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
+                >
+                  <td
+                    class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
+                  >
+                    <i class="text-lg bx bx-check-square"></i>
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    사진
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    김민경
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    2846172
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    인사부
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    대리
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    010-7337-3460
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    minofficial13@gmail.com
+                  </td>
+                </tr>
+                <tr
+                  class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
+                >
+                  <td
+                    class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
+                  >
+                    <i class="text-lg bx bx-check-square"></i>
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    사진
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    김민경
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    2846172
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    인사부
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    대리
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    010-7337-3460
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    minofficial13@gmail.com
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
+import { ChevronDownIcon } from '@heroicons/vue/20/solid';
+</script>
 
 <style lang="scss" scoped></style>
