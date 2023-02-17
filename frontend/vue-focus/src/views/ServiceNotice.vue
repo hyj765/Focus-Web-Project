@@ -68,7 +68,7 @@
                     <td
                       class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                     >
-                      <a @click="goDetail" :data="item">
+                      <a @click="goDetail()" :data="item">
                         {{ item.title }}
                       </a>
                     </td>
@@ -91,6 +91,7 @@
 
 <script setup>
 import { ref, onMounted, shallowRef } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
