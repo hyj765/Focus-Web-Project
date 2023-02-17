@@ -92,7 +92,7 @@
                   <span class="text-sm font-medium">홈 / 대시보드</span>
                 </a>
               </li>
-              <li @click="changeCurrentComp(ServiceAccountManage)">
+              <li @click="changeCurrentComp(ServiceAccount)">
                 <a
                   href="#"
                   class="flex flex-row items-center h-12 text-gray-500 transition-transform duration-200 ease-in transform hover:translate-x-2 hover:text-gray-800"
@@ -136,7 +136,7 @@ import { ref, shallowRef } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-import ServiceAccountManage from '@/views/ServiceAccountManage.vue';
+import ServiceAccount from '@/views/ServiceAccount.vue';
 import ServiceDashboard from '@/views/ServiceDashboard.vue';
 import ServiceNotice from './ServiceNotice.vue';
 

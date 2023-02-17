@@ -10,8 +10,8 @@
       </nav>
       <!-- 
 # 현재 인원
- -->
-      <div class="px-20 flex space-x-10 justify-center items-center">
+-->
+      <div class="px-20 flex flex-row space-x-10 justify-center items-center">
         <div class="flex flex-col space-y-6">
           <div
             class="bg-white shadow-lg w-40 justify-center text-sm rounded-lg"

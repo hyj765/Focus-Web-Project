@@ -131,7 +131,7 @@
 <script setup>
 import { ref, shallowRef } from 'vue';
 
-import ServiceAccountManage from '@/views/ServiceAccountManage.vue';
+import ServiceAccountManage from '@/views/ServiceAccount.vue';
 import ServiceDashboard from '@/views/ServiceDashboard.vue';
 
 const currentComp = shallowRef(ServiceDashboard);
