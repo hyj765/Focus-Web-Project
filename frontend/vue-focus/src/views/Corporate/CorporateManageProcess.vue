@@ -57,13 +57,6 @@
                   <i class="text-xl bx bx-copy"></i>
                 </button> -->
                   <button
-                    @click="processDetail(interview.id)"
-                    type="button"
-                    class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
-                  >
-                    Go Detail
-                  </button>
-                  <button
                     @click="deleteProcess(interview.id)"
                     type="button"
                     class="inline-block leading-normal text-white uppercase transition duration-150 ease-in-out bg-red-400 rounded-full shadow-lg hover:bg-red-500 hover:shadow-lg focus:bg-red-500 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-500 active:shadow-lg w-9 h-9"
@@ -72,8 +65,7 @@
                   </button>
                 </div>
               </div>
-            </div>
-            <!-- <div class="flex flex-row items-center justify-center space-x-10">
+              <!-- <div class="flex flex-row items-center justify-center space-x-10">
             <div
               class="flex flex-row items-center justify-center px-4 py-2 space-x-4 text-gray-600 bg-transparent border-4 border-white rounded-md shadow-md opacity-80"
             >
@@ -84,8 +76,8 @@
               <p>총 N 차</p>
             </div> -->
 
-            <!-- # 버튼 그룹 -->
-            <!-- <div class="flex flex-row">
+              <!-- # 버튼 그룹 -->
+              <!-- <div class="flex flex-row">
               <div class="flex justify-center pr-20">
                 <button
                   type="button"
@@ -96,6 +88,7 @@
               </div>
             </div>
           </div> -->
+            </div>
           </div>
         </div>
       </div>
