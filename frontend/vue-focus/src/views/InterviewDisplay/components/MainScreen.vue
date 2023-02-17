@@ -1,8 +1,6 @@
 <template>
-  <div class="main">
-    <div id="main-video">
-      <user-video :stream-manager="streamManager" :main-stream="true" />
-    </div>
+  <div>
+    <user-video :stream-manager="streamManager" :main-stream="true" />
   </div>
 </template>
 
@@ -23,9 +21,9 @@ export default {
 };
 </script>
 <style scoped>
-.main {
+/* .main {
   height: 70vh;
-  width: 100%;
+  width: 120%;
   border-radius: 0.7rem;
-}
+} */
 </style>

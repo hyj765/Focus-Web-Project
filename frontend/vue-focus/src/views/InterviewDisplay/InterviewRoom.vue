@@ -47,66 +47,92 @@
     </div>
 
     <!-- ----------------------------------------------------------- 채팅방 들어가면 나오는 화면 ------------------------------------------------------------ -->
-
-    <div v-if="session" id="session">
-      <p>NAME : {{ this.myName }}</p>
-      <p>Real_Code : {{ interviewRoomCode }}</p>
-      <!------------------- 채팅 기능 Start ---------------------->
-      <div>
+    <div class="flex flex-row">
+      <div class="w-1/2" v-if="session" id="session">
+        <!------------------- 채팅 기능 Start ---------------------->
+        <!-- <div>
         <h5>{{ getEvaluatorSheets.content }}</h5>
-      </div>
-      <div
-        v-if="chatmodal == true"
-        class="black-bg"
-        style="
-          position: absolute;
-          left: 990px;
-          padding-right: 5px;
-          padding-top: 0px;
-        "
-      >
-        <UserChat
-          id="user-chat"
-          :chat-log="chatLog"
-          value="보내기"
-          @send-message="sendMessage"
-        />
-      </div>
-      <!------------------- 채팅 기능 End ------------------------>
-
-      <div id="video-container" class="">
-        <div v-if="publisher">
-          <user-video
-            :stream-manager="publisher"
-            :is-speak="
-              isSpeakList.includes(publisher.stream.connection.connectionId)
-            "
-            @click.enter="updateMainVideoStreamManager(publisher)"
+      </div> -->
+        <div
+          v-if="chatmodal == true"
+          class="black-bg"
+          style="
+            position: absolute;
+            left: 990px;
+            padding-right: 5px;
+            padding-top: 0px;
+          "
+        >
+          <UserChat
+            id="user-chat"
+            :chat-log="chatLog"
+            value="보내기"
+            @send-message="sendMessage"
           />
         </div>
+        <!------------------- 채팅 기능 End ------------------------>
 
+        <!------------------- 참가자 목록 Start -------------------->
         <div
-          v-for="sub in subscribers"
-          :key="sub.stream.connection.connectionId"
-          :stream-manager="sub"
+          v-if="participantsmodal == true"
+          class="black-bg"
+          style="position: absolute; left: 1096px"
         >
-          <div class="">
-            <user-video
-              :stream-manager="sub"
-              :is-speak="
-                isSpeakList.includes(sub.stream.connection.connectionId)
-              "
-              @click.enter="updateMainVideoStreamManager(sub)"
-            />
+          <div class="participants-div" style="width: 25rem; height: 30rem">
+            <div class="right_label_participant white-bg">
+              <li style="text-align: center; font-size: 18px">참가자 목록</li>
+              <br />
+              <hr />
+            </div>
+            <div class="participant_list">
+              <!-- 참가자 리스트 -->
+              <UserList :stream-manager="publisher" />
+              <UserList
+                v-for="sub in subscribers"
+                :key="sub.stream.connection.connectionId"
+                :stream-manager="sub"
+              />
+            </div>
           </div>
         </div>
-      </div>
+        <!-------------------- 참가자 목록 End --------------------->
 
-      <div id="main-video">
-        <MainScreen :stream-manager="mainStreamManager" />
-        <div id="tool-bar">
+        <div class="flex flex-col justify-center pl-10 space-y-5 py-5">
+          <!------------------- Sub Screen 출력 Start -------------------->
+          <div id="video-container" class="">
+            <div v-if="publisher">
+              <user-video
+                :stream-manager="publisher"
+                :is-speak="
+                  isSpeakList.includes(publisher.stream.connection.connectionId)
+                "
+                @click.enter="updateMainVideoStreamManager(publisher)"
+              />
+            </div>
+
+            <div
+              v-for="sub in subscribers"
+              :key="sub.stream.connection.connectionId"
+              :stream-manager="sub"
+            >
+              <div class="">
+                <user-video
+                  :stream-manager="sub"
+                  :is-speak="
+                    isSpeakList.includes(sub.stream.connection.connectionId)
+                  "
+                  @click.enter="updateMainVideoStreamManager(sub)"
+                />
+              </div>
+            </div>
+          </div>
+          <!------------------- Sub Screen 출력 End -------------------->
+          <!------------------- Mian Screen 출력 Start ------------------->
+          <MainScreen :stream-manager="mainStreamManager" />
+          <!-------------------- Mian Screen 출력 End -------------------->
+
           <!------------------- Camera/Voice On/Off Start ------------------->
-          <div id="tools">
+          <div class="w-10 ml-44 flex text-center flex-row space-x-2">
             <img
               v-if="!mute"
               id="mute_img"
@@ -165,27 +191,9 @@
           <!------------------- Camera/Voice On/Off End ---------------------->
         </div>
       </div>
-      <!------------------- 화면 출력 End ----------------------->
-
-      <!------------------- 채팅 기능 Start ---------------------->
-      <div v-if="chatmodal == true" class="black-bg">
-        <div class="side_chat">
-          <UserChat
-            id="user-chat"
-            :chat-log="chatLog"
-            value="보내기"
-            @send-message="sendMessage"
-          />
-          <button
-            class="btn btn-primary"
-            style="position: absolute; right: 0px; top: 0px"
-            @click="closeChat"
-          >
-            닫기
-          </button>
-        </div>
+      <div v-if="session" class="w-1/2">
+        <EvaluatorInteviewSheets></EvaluatorInteviewSheets>
       </div>
-      <!------------------- 채팅 기능 End ------------------------>
     </div>
   </div>
 </template>
@@ -207,7 +215,12 @@ import UserChat from './components/UserChat';
 import MainScreen from './components/MainScreen.vue';
 
 import SwitchCamera from './components/SwitchCamera.vue';
-import router from '@/router';
+
+import UserList from './components/UserList.vue';
+
+import EvaluatorInteviewSheets from './components/EvaluatorInteviewSheets.vue';
+
+import { useStore } from 'vuex';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -229,6 +242,13 @@ export default {
     MainScreen,
 
     SwitchCamera,
+    // <--------------- Camera/Microphoe 변경 End -------------->
+
+    // <------------------ 참가자 목록 Start ------------------->
+    UserList,
+    // <------------------- 참가자 목록 End -------------------->
+
+    EvaluatorInteviewSheets,
   },
 
   data() {
@@ -381,7 +401,7 @@ export default {
               videoSource: undefined, // The source of video. If undefined default webcam
               publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
               publishVideo: true, // Whether you want to start publishing with your video enabled or not
-              resolution: '640x720', // The resolution of your video
+              resolution: '640x400', // The resolution of your video
               frameRate: 30, // The frame rate of your video
               insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
@@ -657,21 +677,38 @@ div {
   justify-content: center;
 }
 
-#tool-bar {
-  display: flex;
-  justify-content: center;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 10%;
-  width: 100%;
+/* #tools>img{
+		width: 8%;
+	}
+
+	#chat-div{
+		position: absolute;
+		left: 65%;
+		bottom: 20%;
+		background-color: bisque;
+
+		width: 30%;
+		height: 70%;
+	} */
+
+.participants-div {
+  background-color: white;
 }
 
-#tools {
-  display: flex;
-  justify-content: center;
-  height: 50%;
-}
+/* #chat_input{
+		position: absolute;
+		display: flex;
+		bottom: 0;
+		width: 100%;
+	}
+
+	#chat_input>input{
+		width: 95%;
+	}
+
+	#chat_input>img{
+		width: 5%;
+	} */
 
 #user-chat {
   margin-left: 1rem;

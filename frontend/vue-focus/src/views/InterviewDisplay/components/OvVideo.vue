@@ -40,8 +40,8 @@ export default {
 
 <style scoped>
 .main {
-  height: 70vh;
-  /* width: 100%; */
+  /* height: 70vh; */
+  width: 100%;
   border-radius: 0.7rem;
 }
 .sub {

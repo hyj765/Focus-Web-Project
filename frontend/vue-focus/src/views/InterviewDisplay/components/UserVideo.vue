@@ -1,6 +1,6 @@
 <template>
-  <div v-if="streamManager" id="UserVideo">
-    <div class="subVideo">
+  <div v-if="streamManager">
+    <div>
       <ov-video
         :stream-manager="streamManager"
         :is-speak="isSpeak"
@@ -49,10 +49,10 @@ export default {
 
 <style scoped>
 #UserVideo {
-  display: inline-block;
+  /* display: inline-block; */
   margin: 0;
-  width: auto;
-  height: auto;
+  /* width: auto; */
+  /* height: auto; */
 }
 .user-name {
   margin-bottom: 0;
@@ -60,6 +60,6 @@ export default {
 }
 
 .subVideo {
-  padding-left: 4rem;
+  /* padding-left: 4rem; */
 }
 </style>
