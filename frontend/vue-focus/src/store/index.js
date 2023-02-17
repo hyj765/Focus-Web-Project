@@ -6,6 +6,8 @@ const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 export default createStore({
   state: {
     user: null,
+    currentDepartments: null,
+    currentApplicantProcessId: null,
   },
   getters: {
     loggedIn(state) {
@@ -29,7 +31,17 @@ export default createStore({
       localStorage.removeItem('user');
       axios.defaults.headers.common['Authorization'] = null;
     },
-    CREATE(state) {},
+    SAVE_DEPARTMENTS(state, departments) {
+      state.currentDepartments = departments;
+      console.log('currentDepartments: ', state.currentDepartments);
+    },
+    SAVE_CURRENT_APPLICANT_PROCESS_ID(state, processId) {
+      state.currentApplicantProcessId = processId;
+      console.log(
+        'currentApplicantProcessId: ',
+        state.currentApplicantProcessId,
+      );
+    },
   },
   actions: {
     login({ commit }, credentials) {
@@ -67,17 +79,8 @@ export default createStore({
           console.log(err.message);
         });
     },
-    // getCorporateInfos() {
-    //   const user = JSON.parse(localStorage.getItem('user'));
-    //   console.log(user.accessToken);
-    //   axios
-    //     .get(`${BASE_URL}/serviceusers/accounts`, {
-    //       Authorization: `Bearer ${user.accessToken}`,
-    //     })
-    //     .then(res => {
-    //       this.state.corporates = res.data;
-    //       console.log('ACTIONS state: ', this.state.corporates);
-    //     });
-    // },
+    saveCurrentApplicantProcessId({ commit }, processId) {
+      commit('SAVE_CURRENT_APPLICANT_PROCESS_ID', processId);
+    },
   },
 });

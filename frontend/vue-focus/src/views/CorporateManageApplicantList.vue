@@ -5,21 +5,21 @@
     -->
     <nav class="flex flex-wrap justify-between p-8 text-gray-800">
       <h1 class="font-bold">네이버 님, 안녕하세요</h1>
-      <h3 class="font-bold text-gray-500">Evaluator</h3>
+      <h3 class="font-bold text-gray-500">Applicant</h3>
     </nav>
-    <p class="px-10 text-2xl font-medium">평가자 리스트 조회</p>
+    <p class="px-10 text-2xl font-medium">지원자 리스트 조회</p>
     <div class="flex flex-col py-5">
       <div class="flex flex-col justify-center">
         <div class="inline-block w-auto space-y-4 sm:px-6 lg:px-8">
           <div class="flex flex-wrap justify-between px-5">
             <div class="flex justify-center space-x-2">
-              <!-- # 부서별 필터 -->
+              <!-- # 할당별 필터 -->
               <Menu as="div" class="relative inline-block text-left">
                 <div>
                   <MenuButton
                     class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
                   >
-                    부서별
+                    {{ userIdFilterLabel }}
                     <ChevronDownIcon
                       class="w-5 h-5 ml-2 -mr-1"
                       aria-hidden="true"
@@ -40,66 +40,57 @@
                   >
                     <div class="py-1">
                       <MenuItem v-slot="{ active }">
-                        <a
-                          href="#"
+                        <p
+                          @click="deactivateFilters()"
                           :class="[
                             active
                               ? 'bg-gray-100 text-gray-900'
                               : 'text-gray-700',
                             'block px-4 py-2 text-sm',
                           ]"
-                          >Account settings</a
                         >
+                          전체 (Show All)
+                        </p>
                       </MenuItem>
                       <MenuItem v-slot="{ active }">
-                        <a
-                          href="#"
+                        <p
+                          @click="filterApplicantByUserId(false)"
                           :class="[
                             active
                               ? 'bg-gray-100 text-gray-900'
                               : 'text-gray-700',
                             'block px-4 py-2 text-sm',
                           ]"
-                          >Support</a
                         >
+                          ID 할당 계정
+                        </p>
                       </MenuItem>
                       <MenuItem v-slot="{ active }">
-                        <a
-                          href="#"
+                        <p
+                          @click="filterApplicantByUserId(true)"
                           :class="[
                             active
                               ? 'bg-gray-100 text-gray-900'
                               : 'text-gray-700',
                             'block px-4 py-2 text-sm',
                           ]"
-                          >License</a
                         >
+                          ID 미할당 계정
+                        </p>
                       </MenuItem>
-                      <form method="POST" action="#">
-                        <MenuItem v-slot="{ active }">
-                          <button
-                            type="submit"
-                            :class="[
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'block w-full px-4 py-2 text-left text-sm',
-                            ]"
-                          >
-                            Sign out
-                          </button>
-                        </MenuItem>
-                      </form>
                     </div>
                   </MenuItems>
                 </transition>
               </Menu>
+
               <!-- # 이름 검색 -->
               <div class="flex justify-center">
                 <div
                   class="relative flex flex-row items-stretch w-auto px-4 rounded input-group"
                 >
                   <input
+                    v-model="searchName"
+                    @keyup.enter="getApplicantsInfoByName(searchName)"
                     type="search"
                     class="relative flex-auto block w-full min-w-0 px-3 m-0 text-base font-normal text-gray-700 transition ease-in-out bg-white border border-gray-300 border-solid rounded form-control bg-clip-padding focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     placeholder="이름 검색"
@@ -107,6 +98,7 @@
                     aria-describedby="button-addon2"
                   />
                   <span
+                    @click="getApplicantsInfoByName(searchName)"
                     class="input-group-text flex items-center px-3 py-1.5 text-base font-normal text-gray-700 text-center whitespace-nowrap rounded"
                     id="basic-addon2"
                   >
@@ -116,18 +108,18 @@
               </div>
             </div>
             <div class="flex justify-center space-x-2">
-              <button
+              <!-- <button
                 type="button"
                 class="inline-block h-10 px-6 font-medium leading-tight text-gray-700 uppercase transition duration-150 ease-in-out bg-white rounded shadow-md text-md hover:bg-gray-100 hover:shadow-lg focus:bg-gray-100 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-200 active:shadow-lg"
               >
                 리스트 편집
-              </button>
+              </button> -->
               <button
                 type="button"
                 class="inline-block h-10 px-6 font-medium leading-tight text-white uppercase transition duration-150 ease-in-out bg-blue-700 rounded shadow-md text-md hover:bg-blue-800 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg"
-                @click="$emit('update:comp')"
+                @click="createApplicant()"
               >
-                계정 할당
+                지원자 생성
               </button>
             </div>
           </div>
@@ -135,41 +127,23 @@
             <table class="min-w-full">
               <thead class="bg-white border-b">
                 <tr>
-                  <th
-                    scope="col"
-                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
-                  >
-                    <i class="text-lg bx bx-square"></i>
-                  </th>
-                  <th
+                  <!-- <th
                     scope="col"
                     class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                   >
                     사진
+                  </th> -->
+                  <th
+                    scope="col"
+                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                  >
+                    수험번호
                   </th>
                   <th
                     scope="col"
                     class="px-6 py-4 text-sm font-medium text-left text-gray-900"
                   >
                     이름
-                  </th>
-                  <th
-                    scope="col"
-                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
-                  >
-                    사번
-                  </th>
-                  <th
-                    scope="col"
-                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
-                  >
-                    부서
-                  </th>
-                  <th
-                    scope="col"
-                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
-                  >
-                    직급
                   </th>
                   <th
                     scope="col"
@@ -183,51 +157,66 @@
                   >
                     이메일
                   </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                  >
+                    ID
+                  </th>
                 </tr>
               </thead>
-              <tbody v-for="(evaluator, index) in evaluators" :key="index">
+              <tbody
+                v-for="(applicant, index) in currentApplicants"
+                :key="index"
+              >
                 <tr
                   class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
                 >
-                  <td
-                    class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    <i class="text-lg bx bx-check-square"></i>
-                  </td>
-                  <td
+                  <!-- <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
                     image url: {{ evaluator.image }}
+                  </td> -->
+                  <td
+                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                  >
+                    {{ applicant.code }}
                   </td>
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    {{ evaluator.name }}
+                    {{ applicant.name }}
                   </td>
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    {{ evaluator.code }}
+                    {{ applicant.tel }}
                   </td>
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    {{ evaluator.department }}
+                    {{ applicant.email }}
                   </td>
                   <td
                     class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                   >
-                    {{ evaluator.position }}
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    {{ evaluator.tel }}
-                  </td>
-                  <td
-                    class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                  >
-                    {{ evaluator.email }}
+                    <div>
+                      <div
+                        v-if="applicant.userId"
+                        class="flex justify-center space-x-2"
+                      >
+                        {{ applicant.userId }}
+                      </div>
+                      <div v-else class="flex justify-center space-x-2">
+                        <button
+                          @click="assignApplicantId(applicant)"
+                          type="button"
+                          class="inline-block rounded bg-indigo-900 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
+                        >
+                          계정 할당
+                        </button>
+                      </div>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -239,11 +228,11 @@
               <ul class="flex list-style-none">
                 <li
                   class="page-item"
-                  :class="hasPrevPage"
-                  @click="[pageMinus(), updatePage()]"
+                  :class="firstPage"
+                  @click.prevent="[pageMinus(), updatePage()]"
                 >
                   <a
-                    class="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-500 pointer-events-none focus:shadow-none"
+                    class="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
                     href="#"
                     tabindex="-1"
                     aria-disabled="true"
@@ -252,8 +241,8 @@
                 </li>
                 <li
                   class="page-item"
-                  :class="hasLastPage"
-                  @click="[pagePlus(), updatePage()]"
+                  :class="lastPage"
+                  @click.prevent="[pagePlus(), updatePage()]"
                 >
                   <a
                     class="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
@@ -275,98 +264,71 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/20/solid';
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
+import { useStore } from 'vuex';
 
-defineEmits(['update:comp']);
+const emit = defineEmits(['create-applicant']);
+const createApplicant = () => {
+  emit('create-applicant', processId.value);
+};
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
-const evaluators = ref(null);
-const currentEvaluators = ref(null);
+const applicants = ref(null);
+const currentApplicants = ref(null);
+const processId = ref(null);
+const store = useStore();
 
 // 계정 할당 여부
 const userIdFilterLabel = ref('계정 할당 여부');
-const filterEvaluatorByUserId = needId => {
-  currentEvaluators.value = evaluators.value;
-  if (departmentFilterLabel.value !== '부서별') {
-    currentEvaluators.value = currentEvaluators.value.filter(
-      evaluator => evaluator.department === departmentFilterLabel.value,
-    );
-  }
+const filterApplicantByUserId = needId => {
+  currentApplicants.value = applicants.value;
   if (needId === true) {
-    currentEvaluators.value = currentEvaluators.value.filter(
-      evaluator => evaluator.userId === null,
+    currentApplicants.value = currentApplicants.value.filter(
+      applicant => applicant.userId === null,
     );
     userIdFilterLabel.value = 'ID 미할당 인원';
   } else {
-    currentEvaluators.value = currentEvaluators.value.filter(
-      evaluator => evaluator.userId !== null,
+    currentApplicants.value = currentApplicants.value.filter(
+      applicant => applicant.userId !== null,
     );
     userIdFilterLabel.value = 'ID 할당 인원';
   }
-  console.log('filterByUserId currentEvaluators: ', currentEvaluators.value);
-};
-
-// 부서별
-const departments = ref([]);
-const departmentFilterLabel = ref('부서별');
-const filterEvaluatorsByDepartment = department => {
-  departmentFilterLabel.value = department;
-  currentEvaluators.value = evaluators.value;
-  currentEvaluators.value = currentEvaluators.value.filter(
-    evaluator => evaluator.department === department,
-  );
-  console.log(
-    'filterByDepartment currentEvaluators: ',
-    currentEvaluators.value,
-  );
-  userIdFilterLabel.value = '계정 할당 여부';
-  searchName.value = null;
+  console.log('filterByUserId currentApplicants: ', currentApplicants.value);
 };
 
 // 필터 해제
 const deactivateFilters = () => {
   userIdFilterLabel.value = '계정 할당 여부';
-  departmentFilterLabel.value = '부서별';
-  currentEvaluators.value = evaluators.value;
+  currentApplicants.value = applicants.value;
   searchName.value = null;
 };
 
 // 이름별
 const searchName = ref('');
-const filterEvaluatorsByName = name => {
-  if (
-    departmentFilterLabel.value === '부서별' &&
-    userIdFilterLabel.value === '계정 할당 여부'
-  ) {
-    currentEvaluators.value = evaluators.value;
-  } else if (userIdFilterLabel.value === '계정 할당 여부') {
-    currentEvaluators.value = evaluators.value.filter(
-      evaluator => evaluator.department === departmentFilterLabel.value,
-    );
-  } else if (
-    departmentFilterLabel.value === '부서별' &&
-    userIdFilterLabel.value === 'ID 할당 인원'
-  ) {
-    currentEvaluators.value = evaluators.value.filter(
-      evaluator => evaluator.userId !== null,
-    );
-  } else if (
-    departmentFilterLabel.value === '부서별' &&
-    userIdFilterLabel.value === 'ID 미할당 인원'
-  ) {
-    currentEvaluators.value = evaluators.value.filter(
-      evaluator => evaluator.userId === null,
-    );
-  }
-  console.log('filterByName currentEvaluators: ', currentEvaluators.value);
-  currentEvaluators.value = currentEvaluators.value.filter(
-    evaluator => evaluator.name === name,
-  );
+const getApplicantsInfoByName = searchName => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  processId.value = store.state.currentApplicantProcessId;
+  axios
+    .get(
+      `${BASE_URL}/companyusers/applicants/${processId.value}/list/${searchName}`,
+      {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      },
+    )
+    .then(res => {
+      console.log('getApplicantsByName: ', res.data);
+      console.log('current page: ', currentPage.value);
+      console.log('isFirstPage: ', isFirstPage.value);
+      console.log('isLastPage: ', isLastPage.value);
+      applicants.value = res.data.content;
+      currentApplicants.value = res.data.content;
+    });
 };
 
 // Pagination
 const currentPage = ref(1);
 const isFirstPage = ref(true);
 const isLastPage = ref(false);
-
 const pagePlus = () => {
   currentPage.value++;
 };
@@ -375,13 +337,14 @@ const pageMinus = () => {
 };
 const updatePage = () => {
   const user = JSON.parse(localStorage.getItem('user'));
+  processId.value = store.state.currentApplicantProcessId;
   if (currentPage.value === 1) {
     isFirstPage.value = true;
   } else {
     isFirstPage.value = false;
   }
   axios
-    .get(`${BASE_URL}/companyusers/evaluators/list`, {
+    .get(`${BASE_URL}/companyusers/applicants/${processId.value}/list`, {
       params: {
         size: 15,
         page: currentPage.value + 1,
@@ -398,23 +361,22 @@ const updatePage = () => {
       }
     })
     .then(() => {
-      getEvaluatorsInfo();
+      getApplicantsInfo();
     });
 };
-
-const hasPrevPage = computed(() => {
-  return { disabled: !(isFirstPage.value === true) };
+const firstPage = computed(() => {
+  return { disabled: isFirstPage.value === true };
 });
-const hasLastPage = computed(() => {
-  return { disabled: !(isLastPage.value === true) };
+const lastPage = computed(() => {
+  return { disabled: isLastPage.value === true };
 });
 
-const getEvaluatorsInfo = () => {
+// 현 페이지 계정 리스트
+const getApplicantsInfo = () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  // let evaluatorCount = 0;
-  // let remainder = 0;
+  processId.value = store.state.currentApplicantProcessId;
   axios
-    .get(`${BASE_URL}/companyusers/evaluators/list`, {
+    .get(`${BASE_URL}/companyusers/applicants/${processId.value}/list`, {
       params: {
         size: 15,
         page: currentPage.value,
@@ -424,51 +386,46 @@ const getEvaluatorsInfo = () => {
       },
     })
     .then(res => {
-      console.log('getEvaluators: ', res.data);
+      console.log('getapplicants: ', res.data);
       console.log('current page: ', currentPage.value);
-      evaluators.value = res.data.content;
-      currentEvaluators.value = res.data.content;
-
-      // Departments Filter
-      const tempDepartments = evaluators.value.map(
-        evaluator => evaluator.department,
-      );
-      for (const department of tempDepartments) {
-        if (!departments.value.includes(department)) {
-          departments.value.push(department);
-        }
-      }
-      // console.log('departments: ', departments.value);
+      console.log('isFirstPage: ', isFirstPage.value);
+      console.log('isLastPage: ', isLastPage.value);
+      applicants.value = res.data.content;
+      currentApplicants.value = res.data.content;
     });
+};
 
 // 계정 할당
-const assignEvaluatorId = evaluator => {
+const assignApplicantId = applicant => {
   const user = JSON.parse(localStorage.getItem('user'));
   console.log(user.accessToken);
-  const evaluatorId = evaluator.id;
-  console.log('evaluatorId: ', evaluatorId);
+  const applicantId = applicant.id;
+  console.log('applicantId: ', applicantId);
   axios
-    .get(`${BASE_URL}/companyusers/evaluators/list`, {
-      params: {
-        size: pageSize,
-        page: pageNumber,
-      },
+    .post(`${BASE_URL}/companyusers/applicants/create/${applicantId}`, {
       headers: {
         Authorization: `Bearer ${user.accessToken}`,
       },
     })
     .then(res => {
-      // console.log('evaluators list: ', res.data.content);
-      evaluators.value = res.data.content;
-      console.log('evaluators: ', evaluators.value);
+      console.log('id assign success! ', res.data);
+      getApplicantsInfo();
+    })
+    .catch(err => {
+      console.log('id assign failed! ', err.message);
     });
 };
 
 onMounted(() => {
   currentPage.value = 1;
   updatePage();
-  getEvaluatorsInfo();
+  getApplicantsInfo();
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+</style>
