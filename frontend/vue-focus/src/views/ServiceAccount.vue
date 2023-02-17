@@ -248,6 +248,31 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+defineEmits(['update:comp']);
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+
+const corporates = ref(null);
+const getCorporateInfos = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  console.log(user.accessToken);
+  axios
+    .get(`${BASE_URL}/serviceusers/accounts`, {
+      Authorization: `Bearer ${user.accessToken}`,
+    })
+    .then(res => {
+      console.log('res.data: ', res.data);
+      corporates.value = res.data;
+      console.log('corporates.value: ', corporates.value);
+    });
+};
+
+onMounted(() => {
+  getCorporateInfos();
+});
+</script>
 
 <style lang="scss" scoped></style>

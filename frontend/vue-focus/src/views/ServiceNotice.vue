@@ -248,18 +248,19 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-const notices = ref([]);
+// const BASE_URL = 'http://localhost:8082/api';
 
-onMounted(() => {
-  axios
-    .get('http://localhost:3000/notices')
-    .then(({ data }) => {
-      notices.value = data.notices.notices;
-    })
-    .catch(err => {
-      console.log(err.message);
-    });
-});
+// const notices = ref(null);
+// const getCorporateNotices = () => {
+//   const user = JSON.parse(localStorage.getItem('user'));
+//   axios
+//     .get(`${BASE_URL}/serviceusers/notices`, {
+//       Authoriation: `Bearer ${user.accessToken}`,
+//     })
+//     .then(res => {
+//       console.log('res.data: ', res.data);
+//     });
+// };
 </script>
 
 <style lang="scss" scoped></style>
