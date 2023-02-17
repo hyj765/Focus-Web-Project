@@ -6,7 +6,7 @@
       <div class="w-screen">
         <div class="flex flex-col space-y-10">
           <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-            <h1 class="font-bold">네이버 님, 안녕하세요</h1>
+            <h1 class="font-bold">{{ companyUserName }} 님, 안녕하세요</h1>
             <h3 class="font-bold text-gray-500">Evaluator</h3>
           </nav>
           <p class="px-10 text-xl font-gray-900">평가자 계정을 생성하세요</p>
@@ -197,7 +197,23 @@ const createEvaluator = () => {
       console.log(err.message);
     });
 };
-
+const companyUserName = ref('');
+const getCompanyUserName = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/companyusers/me`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log(res.data);
+      companyUserName.value = res.data.companyName;
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
 // let evalutorFormIdNum = 0;
 // const copyEvaluatorForm = () => {
 //   const evaluatorForm = document.getElementById('evaluator-form');
@@ -210,6 +226,7 @@ const createEvaluator = () => {
 onMounted(() => {
   console.log(store.state.currentDepartments);
   console.log(departments);
+  getCompanyUserName();
 });
 </script>
 

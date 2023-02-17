@@ -6,7 +6,7 @@
 
       <div class="w-screen">
         <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-          <h1 class="font-bold">네이버 님, 안녕하세요</h1>
+          <h1 class="font-bold">{{ serviceUserName }} 님, 안녕하세요</h1>
           <h3 class="font-bold text-gray-500">DASHBOARD</h3>
         </nav>
         <p class="px-10 text-xl font-gray-900">기업 계정을 생성하세요</p>
@@ -162,7 +162,7 @@
 import ServiceHeader from '@/components/ServiceHeader.vue';
 import ServiceNavbar from '@/components/ServiceNavbar.vue';
 
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
@@ -177,6 +177,23 @@ const getToday = date => {
   return year + '-' + month + '-' + day;
 };
 
+const serviceUserName = ref('');
+const getServiceUserName = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/serviceusers/me`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log(res.data);
+      serviceUserName.value = res.data.name;
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
 // 요청 시 'yyyy-mm-dd' 뒤에 'T00:00:00.000000'이 붙지 않으면 에러남
 const changeDateFormat = date => {
   return date + 'T00:00:00.000000';
@@ -261,6 +278,10 @@ const createCompanyAdmin = () => {
       console.log(err.message);
     });
 };
+
+onMounted(() => {
+  getServiceUserName();
+});
 
 const router = useRouter();
 const moveToServiceAccount = () => {

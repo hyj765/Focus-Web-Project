@@ -10,18 +10,18 @@
     # 네이버님 안녕하세요
     -->
           <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-            <h1 class="font-bold">네이버 님, 안녕하세요</h1>
+            <h1 class="font-bold">{{ companyUserName }} 님, 안녕하세요</h1>
             <h3 class="font-bold text-gray-500">DASHBOARD</h3>
           </nav>
           <!-- 
 # 현재 인원
 -->
-          <div class="flex space-x-2 justify-center">
+          <div class="flex justify-center space-x-2">
             <div
-              class="bg-white shadow-lg mx-auto w-2/5 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block"
+              class="block w-2/5 max-w-full mx-auto text-sm bg-white rounded-lg shadow-lg pointer-events-auto bg-clip-padding"
             >
               <div
-                class="bg-white flex justify-between items-center py-2 px-3 bg-clip-padding border-b border-gray-200 rounded-t-lg"
+                class="flex items-center justify-between px-3 py-2 bg-white border-b border-gray-200 rounded-t-lg bg-clip-padding"
               >
                 <p class="font-bold text-gray-500">현재 인원</p>
               </div>
@@ -29,7 +29,7 @@
         # 총 평가자 총 지원자
         -->
               <div
-                class="space-x-3 flex flex-row justify-center p-3 text-lg bg-white rounded-b-lg break-words text-gray-700 text-center"
+                class="flex flex-row justify-center p-3 space-x-3 text-lg text-center text-gray-700 break-words bg-white rounded-b-lg"
               >
                 <p>총 평가자 {{ evaluatorsCount }}명</p>
                 <p>|</p>
@@ -40,12 +40,12 @@
           <!-- 
     # 면접진행률
 -->
-          <!-- <div class="flex space-x-2 justify-center">
+          <!-- <div class="flex justify-center space-x-2">
       <div
-        class="bg-white shadow-lg mx-auto w-2/5 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block"
+        class="block w-2/5 max-w-full mx-auto text-sm bg-white rounded-lg shadow-lg pointer-events-auto bg-clip-padding"
       >
         <div
-          class="bg-white flex justify-between items-center py-2 px-3 bg-clip-padding border-b border-gray-200 rounded-t-lg"
+          class="flex items-center justify-between px-3 py-2 bg-white border-b border-gray-200 rounded-t-lg bg-clip-padding"
         >
           <p class="font-bold text-gray-500">면접 진행률</p>
         </div>
@@ -64,12 +64,12 @@
           <!--     
     # 예정된 면접
 -->
-          <div class="flex space-x-2 justify-center">
+          <div class="flex justify-center space-x-2">
             <div
-              class="bg-white shadow-lg mx-auto w-2/5 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block"
+              class="block w-2/5 max-w-full mx-auto text-sm bg-white rounded-lg shadow-lg pointer-events-auto bg-clip-padding"
             >
               <div
-                class="bg-white flex justify-between items-center py-2 px-3 bg-clip-padding border-b border-gray-200 rounded-t-lg"
+                class="flex items-center justify-between px-3 py-2 bg-white border-b border-gray-200 rounded-t-lg bg-clip-padding"
               >
                 <p class="font-bold text-gray-500">예정된 면접</p>
               </div>
@@ -82,10 +82,10 @@
               >
                 <!-- # 면접리스트 1 -->
                 <li
-                  class="p-5 text-lg bg-white rounded-b-lg break-words text-gray-700"
+                  class="p-5 text-lg text-gray-700 break-words bg-white rounded-b-lg"
                 >
-                  <section class="flex flex-row px-2 items-center">
-                    <div class="flex flex-col space-y-2 w-1/2 justify-center">
+                  <section class="flex flex-row items-center px-2">
+                    <div class="flex flex-col justify-center w-1/2 space-y-2">
                       <p class="text-xl font-bold">
                         {{ scheduledInterviewList.name }}
                       </p>
@@ -107,9 +107,9 @@
 
                       <li class="flex flex-row items-center">
                         <div
-                          class="animate-bounce bg-blue-500 w-5 h-5 ring-1 ring-slate-900/5 shadow-lg rounded-full flex items-center justify-center"
+                          class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full shadow-lg animate-bounce ring-1 ring-slate-900/5"
                         >
-                          <i class="bx bx-right-arrow-alt text-white"></i>
+                          <i class="text-white bx bx-right-arrow-alt"></i>
                         </div>
                         <div class="px-2">
                           <p>
@@ -148,7 +148,23 @@ const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 
 const router = useRouter();
 const store = useStore();
-
+const companyUserName = ref('');
+const getCompanyUserName = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/companyusers/me`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log(res.data);
+      companyUserName.value = res.data.companyName;
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
 const logout = () => {
   store.dispatch('logout').then(() => {
     router.push({ name: 'Login' });
@@ -213,6 +229,7 @@ onMounted(() => {
   getEvaluators();
   getApplicants();
   getScheduledInterviewLists();
+  getCompanyUserName();
 });
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-      <h1 class="font-bold">네이버 님, 안녕하세요</h1>
+      <h1 class="font-bold">{{ companyUserName }} 님, 안녕하세요</h1>
       <h3 class="font-bold text-gray-500">Sheet</h3>
     </nav>
     <p class="px-10 text-xl font-gray-900">평가지를 수정하세요</p>

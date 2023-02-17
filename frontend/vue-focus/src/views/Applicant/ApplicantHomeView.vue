@@ -9,7 +9,7 @@
     # 네이버님 안녕하세요
     -->
           <nav class="flex flex-wrap justify-between px-8 py-4 text-gray-800">
-            <h1 class="font-bold">김호준 님, 안녕하세요</h1>
+            <h1 class="font-bold">{{ applicantsName }} 님, 안녕하세요</h1>
             <h3 class="font-bold text-gray-500">DASHBOARD</h3>
           </nav>
         </div>
@@ -73,6 +73,24 @@ import { useRouter } from 'vue-router';
 import ApplicantHeader from '@/components/ApplicantHeader.vue';
 import ApplicantNavbar from '@/components/ApplicantNavbar.vue';
 
+const applicantsName = ref('');
+const getapplicantsName = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/applicants/me`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log(res.data);
+      applicantsName.value = res.data.name;
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
+
 const router = useRouter();
 
 const name = ref('');
@@ -110,6 +128,7 @@ const getApplicantRecentlySchedule = () => {
 
 onMounted(() => {
   getApplicantRecentlySchedule();
+  getapplicantsName();
 });
 </script>
 

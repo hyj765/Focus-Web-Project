@@ -6,7 +6,7 @@
       <div class="w-screen">
         <div class="flex flex-col space-y-10">
           <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-            <h1 class="font-bold">{{ companyUserName }}님, 안녕하세요</h1>
+            <h1 class="font-bold">{{ companyUserName }} 님, 안녕하세요</h1>
             <h3 class="font-bold text-gray-500">Pass</h3>
           </nav>
           <p class="px-10 text-2xl font-medium">기업 전체전형</p>
@@ -83,7 +83,6 @@ const getProgressprocess = () => {
       console.log(err.data);
     });
 };
-
 const router = useRouter();
 const goDetail = processId => {
   router.push({ name: 'CorporateManagePassDetail', params: { id: processId } });
@@ -91,6 +90,7 @@ const goDetail = processId => {
 onMounted(() => {
   getCompanyUserName();
   getProgressprocess();
+  getCompanyUserName();
 });
 </script>
 

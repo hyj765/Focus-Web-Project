@@ -15,7 +15,7 @@
     -->
           <div v-if="Number(props.id) === schedule.id">
             <nav class="flex flex-wrap justify-between px-8 py-4 text-gray-800">
-              <h1 class="font-bold">네이버 님, 안녕하세요</h1>
+              <h1 class="font-bold">{{ evaluatorsName }} 님, 안녕하세요</h1>
               <h3 class="font-bold text-gray-500">Time</h3>
             </nav>
             <div class="flex">
@@ -169,10 +169,27 @@ const getScheduledApplicant = () => {
       console.log('scheduledApplicants.value ', scheduledApplicants.value);
     });
 };
-
+const evaluatorsName = ref('');
+const getevaluatorsName = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/evaluators/me`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log(res.data);
+      evaluatorsName.value = res.data.name;
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
 onMounted(() => {
   getScheduleList();
   getScheduledApplicant();
+  getevaluatorsName();
 });
 </script>
 

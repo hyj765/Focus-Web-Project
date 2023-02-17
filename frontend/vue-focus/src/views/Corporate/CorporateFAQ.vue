@@ -9,7 +9,7 @@
     # 네이버님 안녕하세요
     -->
           <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-            <h1 class="font-bold">삼성물산 님, 안녕하세요</h1>
+            <h1 class="font-bold">{{ companyUserName }} 님, 안녕하세요</h1>
             <h3 class="font-bold text-gray-500">FAQ</h3>
           </nav>
           <div class="flex flex-col">
@@ -95,7 +95,27 @@ const boardList = ref([]);
 
 onMounted(() => {
   getContextList();
+  getCompanyUserName();
 });
+
+const companyUserName = ref('');
+const getCompanyUserName = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/companyusers/me`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log(res.data);
+      companyUserName.value = res.data.companyName;
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
+
 const list = [];
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 const user = JSON.parse(localStorage.getItem('user'));

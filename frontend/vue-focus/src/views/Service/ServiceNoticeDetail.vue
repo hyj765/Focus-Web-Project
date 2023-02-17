@@ -7,7 +7,7 @@
       <div class="w-screen">
         <div class="flex flex-col space-y-10">
           <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-            <h1 class="font-bold">김토끼 님, 안녕하세요</h1>
+            <h1 class="font-bold">{{ serviceUserName }} 님, 안녕하세요</h1>
             <h3 class="font-bold text-gray-500">Notice</h3>
           </nav>
           <p class="px-10 text-xl font-medium font-gray-900">
@@ -59,7 +59,23 @@ import ServiceNavbar from '@/components/ServiceNavbar.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
-
+const serviceUserName = ref('');
+const getServiceUserName = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/serviceusers/me`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log(res.data);
+      serviceUserName.value = res.data.name;
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 const route = useRoute();
 const router = useRouter();
@@ -94,6 +110,7 @@ const moveToServiceNotice = () => {
 
 onMounted(() => {
   getNoticeDetail();
+  getServiceUserName();
 });
 </script>
 

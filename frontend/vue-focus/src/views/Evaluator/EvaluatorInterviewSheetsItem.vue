@@ -61,7 +61,7 @@
             <button
               @click="sendEvaluationRecords"
               type="submit"
-              class="hover:shadow-form rounded-md bg-indigo-600 py-3 px-8 text-base font-semibold text-white outline-none"
+              class="px-8 py-3 text-base font-semibold text-white bg-indigo-600 rounded-md outline-none hover:shadow-form"
             >
               제출
             </button>

@@ -6,7 +6,7 @@
       <div class="w-screen">
         <div class="flex flex-col space-y-10">
           <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-            <h1 class="font-bold">{{ companyUserName }}님, 안녕하세요</h1>
+            <h1 class="font-bold">{{ companyUserName }} 님, 안녕하세요</h1>
             <h3 class="font-bold text-gray-500">Pass</h3>
           </nav>
           <p class="px-10 text-lg font-medium">
@@ -270,9 +270,11 @@ const getPassApplicant = () => {
       );
     });
 };
+
 onMounted(() => {
   getCompanyUserName();
   getPassApplicant();
+  getCompanyUserName();
 });
 </script>
 

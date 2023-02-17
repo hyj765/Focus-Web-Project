@@ -9,7 +9,7 @@
     # 네이버님 안녕하세요
     -->
           <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-            <h1 class="font-bold">지원자 님, 안녕하세요</h1>
+            <h1 class="font-bold">{{ applicantsName }} 님, 안녕하세요</h1>
             <h3 class="font-bold text-gray-500">FAQ</h3>
           </nav>
           <div class="flex flex-col">
@@ -94,9 +94,28 @@ const boardList = ref([]);
 
 onMounted(() => {
   getContextList();
+  getapplicantsName();
 });
 const list = [];
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+
+const applicantsName = ref('');
+const getapplicantsName = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/applicants/me`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log(res.data);
+      applicantsName.value = res.data.name;
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
 const user = JSON.parse(localStorage.getItem('user'));
 const getContextList = () => {
   axios

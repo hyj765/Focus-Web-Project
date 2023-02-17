@@ -1,10 +1,12 @@
 <template>
-  <div v-for="sheet in sheets" :key="sheet.id">
-    <CorporateSheetListItem
-      @click="goSheetDetail(sheet.id)"
-      :title="sheet.title"
-    ></CorporateSheetListItem>
-    <RouterView></RouterView>
+  <div>
+    <div v-for="sheet in sheets" :key="sheet.id">
+      <CorporateSheetListItem
+        @click="goSheetDetail(sheet.id)"
+        :title="sheet.title"
+      ></CorporateSheetListItem>
+      <RouterView></RouterView>
+    </div>
   </div>
 </template>
 

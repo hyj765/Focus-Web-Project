@@ -12,7 +12,7 @@
         # 네이버님 안녕하세요
         -->
           <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-            <h1 class="font-bold">네이버 님, 안녕하세요</h1>
+            <h1 class="font-bold">{{ serviceUserName }} 님, 안녕하세요</h1>
             <h3 class="font-bold text-gray-500">DASHBOARD</h3>
           </nav>
           <div class="flex flex-col">
@@ -101,6 +101,23 @@ import { useRouter } from 'vue-router';
 
 defineEmits(['update:compnotice']);
 
+const serviceUserName = ref('');
+const getServiceUserName = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/serviceusers/me`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log(res.data);
+      serviceUserName.value = res.data.name;
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
 const boardList = ref([]);
 // const BASE_URL = 'http://localhost:8082/api';
 
@@ -120,6 +137,7 @@ const boardList = ref([]);
 
 onMounted(() => {
   getContextList();
+  getServiceUserName();
 });
 const list = [];
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
