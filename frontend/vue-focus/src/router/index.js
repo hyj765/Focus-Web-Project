@@ -285,10 +285,12 @@ const routes = [
     component: ApplicantHomeView,
     beforeEnter: [checkLogin],
   },
+  // 화상면접방
   {
-    path: '/interviewroom',
+    path: '/interviewroom/:id/',
     name: 'InterviewRoom',
     component: InterviewRoom,
+    props: true,
   },
   {
     path: '/evaluation/sheets/:id',

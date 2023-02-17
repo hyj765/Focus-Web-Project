@@ -4,6 +4,8 @@
     <div v-if="!session" id="join">
       <div>
         <SwitchCamera @set-device="setDevice($event)" />
+        <!-- <p>유저 이름 : {{ this.myName }}</p>
+        <p>방 코드 : {{ this.realRoomCode }}</p> -->
         <div class="form-group">
           <h3>- 이름과 코드를 입력해주세요 -</h3>
           <p>
@@ -51,8 +53,9 @@
       <div class="w-1/2" v-if="session" id="session">
         <!------------------- 채팅 기능 Start ---------------------->
         <!-- <div>
-        <h5>{{ getEvaluatorSheets.content }}</h5>
-      </div> -->
+          <p>유저 이름 : {{ this.myName }}</p>
+          <p>방 코드 : {{ this.realRoomCode }}</p>
+        </div> -->
         <div
           v-if="chatmodal == true"
           class="black-bg"
@@ -192,7 +195,7 @@
         </div>
       </div>
       <div v-if="session" class="w-1/2">
-        <EvaluatorInteviewSheets></EvaluatorInteviewSheets>
+        <EvaluatorInteviewSheets :roomid="roomid"></EvaluatorInteviewSheets>
       </div>
     </div>
   </div>
@@ -220,8 +223,6 @@ import UserList from './components/UserList.vue';
 
 import EvaluatorInteviewSheets from './components/EvaluatorInteviewSheets.vue';
 
-import { useStore } from 'vuex';
-
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const OPENVIDU_SERVER_URL = 'https://' + 'i8a106.p.ssafy.io';
@@ -229,6 +230,12 @@ const OPENVIDU_SERVER_SECRET = 'cKlIVFkVgNinXpF';
 
 export default {
   name: 'InterviewRoom',
+
+  props: {
+    id: {
+      type: String,
+    },
+  },
 
   components: {
     // <------------------- 화면 출력 Start -------------------->
@@ -259,8 +266,11 @@ export default {
       publisher: undefined,
       subscribers: [],
 
-      mySessionId: 'Room' + Math.floor(Math.random() * 100),
-      myUserName: '지원자' + Math.floor(Math.random() * 100),
+      // mySessionId: 'Room' + Math.floor(Math.random() * 100),
+      // myUserName: '지원자' + Math.floor(Math.random() * 100),
+      realRoomCode: '',
+      myName: '',
+      roomid: this.$route.params.id,
 
       // <------------------- 비디오/보이스 On/Off Start ---------->
       mute: false,
@@ -286,9 +296,8 @@ export default {
   },
 
   created() {
-    this.getRoomCodeInfo();
+    this.getScheduleList();
     this.getMyName();
-    // this.getEvaluatorSheets();
   },
 
   methods: {
@@ -307,26 +316,41 @@ export default {
       }
     },
 
-    getRoomCodeInfo() {
+    getScheduleList() {
       const user = JSON.parse(localStorage.getItem('user'));
       axios({
         method: 'get',
-        url: `${BASE_URL}/interviewrooms/enter/real/1/`,
+        url: `${BASE_URL}/interviewrooms/enter/real`,
+        params: { interviewRoomId: this.$route.params.id },
         headers: {
           Authorization: `Bearer ${user.accessToken}`,
         },
       })
         .then(res => {
-          this.interviewRoomCode = res.data;
-          console.log('interviewRoomCode : ', this.interviewRoomCode);
+          this.realRoomCode = res.data;
+          console.log('RoomCode : ', this.realRoomCode);
         })
         .catch(err => {
           console.log(err);
         });
     },
 
-    // getEvaluatorSheets() {
-    //   this.$store.dispatch('getEvaluatorSheets');
+    // getRoomCodeInfo() {
+    //   const user = JSON.parse(localStorage.getItem('user'));
+    //   axios({
+    //     method: 'get',
+    //     url: `${BASE_URL}/interviewrooms/enter/real/1/`,
+    //     headers: {
+    //       Authorization: `Bearer ${user.accessToken}`,
+    //     },
+    //   })
+    //     .then(res => {
+    //       this.interviewRoomCode = res.data;
+    //       console.log('interviewRoomCode : ', this.interviewRoomCode);
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //     });
     // },
 
     joinSession() {
@@ -390,7 +414,7 @@ export default {
 
       // 'getToken' method is simulating what your server-side should do.
       // 'token' parameter should be retrieved and returned by your own backend
-      this.getToken(this.mySessionId).then(token => {
+      this.getToken(this.realRoomCode).then(token => {
         this.session
           .connect(token, { clientData: this.myUserName })
           .then(() => {
@@ -443,8 +467,8 @@ export default {
       this.mainStreamManager = stream;
     },
 
-    getToken(mySessionId) {
-      return this.createSession(mySessionId).then(sessionId =>
+    getToken(realRoomCode) {
+      return this.createSession(realRoomCode).then(sessionId =>
         this.createToken(sessionId),
       );
     },
@@ -524,7 +548,7 @@ export default {
       this.screenOV = new OpenVidu();
       this.screenSession = this.screenOV.initSession();
       (this.screenShareName = this.myUserName + "'s Screen"),
-        this.getToken(this.mySessionId)
+        this.getToken(this.realRoomCode)
           .then(token => {
             this.screenSession
               .connect(token, { clientData: this.screenShareName })

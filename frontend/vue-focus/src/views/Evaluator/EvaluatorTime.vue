@@ -69,7 +69,14 @@
                     type="button"
                     class="place-content-center inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
                   >
-                    입장
+                    <router-link
+                      :to="{
+                        name: 'InterviewRoom',
+                        params: { id: schedule.id },
+                      }"
+                    >
+                      입장
+                    </router-link>
                   </button>
                 </div>
               </div>
@@ -82,25 +89,11 @@
               >
                 <p class="pb-5 text-2xl font-medium">평가 예정 지원자</p>
 
-                <!-- <li
-                  v-for="(scheduledApplicant, index) in scheduledApplicants"
-                  :key="index"
-                >
-                  <div>
-                    <p>1. {{ index }}</p>
-                    <p>2. {{ scheduledApplicant }}</p>
-                    <p>3. {{ scheduledApplicants.value }}</p>
-                    <p>4. {{ scheduledApplicants[key][index].name }}</p>
-                    <p>5. {{ scheduledApplicant[index].name }}</p>
-                    <p>5. {{ scheduledApplicant[index].name }}</p>
-                  </div>
-                </li> -->
-
                 <div
                   class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
                 >
                   <a
-                    v-for="(i, key) in scheduledApplicants[props.id].length"
+                    v-for="(i, key) in scheduledApplicants[props.id]"
                     :key="i"
                     class="group"
                   >
@@ -110,7 +103,6 @@
                         alt=""
                         class="object-cover object-center w-full h-full group-hover:opacity-75"
                       />
-                      <!-- {{ scheduledApplicants[props.id][key].image }} -->
                     </div>
                     <p class="flex flex-row">
                       {{ scheduledApplicants[props.id][key].name }} <br />
@@ -140,8 +132,8 @@ import EvaluatorNavbar from '@/components/EvaluatorNavbar.vue';
 
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 
-const scheduledList = ref(null);
-const scheduledApplicants = ref(null);
+const scheduledList = ref([]);
+const scheduledApplicants = ref([]);
 
 const props = defineProps({
   id: String,
@@ -158,7 +150,8 @@ const getScheduleList = () => {
     .then(res => {
       // console.log('res.data: ', res.data);
       scheduledList.value = res.data['2023-02-17'];
-      // console.log(scheduledList.value);
+      // console.log('scheduledList : ', scheduledList.value);
+      // console.log('>>>>>>>>>>>>>. id: ', scheduledList.value.id);
     });
 };
 
@@ -173,12 +166,7 @@ const getScheduledApplicant = () => {
     .then(response => {
       console.log('response.data : ', response.data);
       scheduledApplicants.value = response.data;
-      console.log('scheduledApplicants.vule ', scheduledApplicants.value);
-      console.log('Length : ', scheduledApplicants.value.length);
-      console.log(
-        'scheduledApplicants : ',
-        Object.values(scheduledApplicants.value),
-      );
+      console.log('scheduledApplicants.value ', scheduledApplicants.value);
     });
 };
 
