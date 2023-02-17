@@ -6,7 +6,7 @@
 
       <!-- NOTICE -->
 
-      <div>
+      <div class="w-screen">
         <div class="flex flex-col space-y-10">
           <!-- 
         # 네이버님 안녕하세요
@@ -17,7 +17,7 @@
           </nav>
           <div class="flex flex-col">
             <div class="flex flex-col justify-center">
-              <div class="inline-block py-2 space-y-4 sm:px-6 lg:px-8">
+              <div class="inline-block w-auto py-2 space-y-4 sm:px-6 lg:px-8">
                 <div class="flex flex-wrap justify-between px-5">
                   <p class="text-2xl font-medium">공지 게시판</p>
                   <div class="flex justify-center space-x-2">
@@ -30,19 +30,19 @@
                     </button>
                   </div>
                 </div>
-                <div class="rounded-md shadow-lg">
-                  <table class="w-screen">
+                <div class="overflow-hidden rounded-md shadow-lg">
+                  <table class="min-w-full">
                     <thead class="bg-white border-b">
                       <tr>
                         <th
                           scope="col"
-                          class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                          class="w-1/6 px-6 py-4 text-sm font-medium text-left text-gray-900"
                         >
                           카테고리
                         </th>
                         <th
                           scope="col"
-                          class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                          class="w-4/6 px-6 py-4 text-sm font-medium text-left text-gray-900"
                         >
                           공지명
                         </th>

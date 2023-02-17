@@ -3,190 +3,194 @@
     <CorporateHeader></CorporateHeader>
     <div class="flex">
       <CorporateNavbar></CorporateNavbar>
-      <div>
-        <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-          <h1 class="font-bold">네이버 님, 안녕하세요</h1>
-          <h3 class="font-bold text-gray-500">DASHBOARD</h3>
-        </nav>
-        <p class="px-10 text-xl font-gray-900">지원자 계정을 생성하세요</p>
-        <div class="flex items-center p-10">
-          <div
-            class="p-5 space-y-5 bg-white divide-y divide-gray-200 rounded-lg shadow-lg"
-          >
-            <div class="m-1">
-              <!-- <p class="p-2 text-xl font-medium text-black">소속</p> -->
-              <div class="flex flex-row space-x-5">
-                <div class="flex flex-col p-2">
-                  <p class="text-lg font-medium text-gray-900">수험번호</p>
-                  <input
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    v-model="code"
-                    type="text"
-                    id="code"
-                    required="true"
-                  />
-                </div>
-                <div class="flex flex-col p-2">
-                  <p class="text-lg font-medium text-gray-900">이름</p>
-                  <input
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    v-model="name"
-                    type="text"
-                    id="name"
-                    required="true"
-                  />
-                </div>
-                <div class="flex flex-col p-2">
-                  <p class="text-lg font-medium text-gray-900">전화번호</p>
-                  <input
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    v-model="tel"
-                    type="text"
-                    id="tel"
-                    required="true"
-                    placeholder="010-xxxx-xxxx"
-                  />
-                </div>
-                <div class="p-2">
-                  <p class="text-lg font-medium text-gray-900">이메일</p>
-                  <input
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    v-model="email"
-                    type="email"
-                    id="email"
-                    required="true"
-                    placeholder="example@blackbunny.com"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="m-1">
-              <!-- <p class="p-2 text-xl font-medium text-black">담당자 정보</p> -->
-              <div class="flex flex-row space-x-5">
-                <div class="flex flex-col p-2">
-                  <p class="text-lg font-medium text-gray-900">생년월일</p>
-                  <input
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    v-model="birth"
-                    type="date"
-                    id="birth"
-                    required="true"
-                  />
-                </div>
-                <div class="flex flex-col p-2">
-                  <p class="text-lg font-medium text-gray-900">성별</p>
-                  <select
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border0indigo-500 focus:ring=indigo-500 sm:text-sm"
-                    v-model="genderKR"
-                    id="gender"
-                  >
-                    <option
-                      v-for="gender in genders"
-                      :value="gender.value"
-                      :key="gender.id"
-                    >
-                      {{ gender.value }}
-                    </option>
-                  </select>
-                </div>
-                <div class="flex flex-col p-2">
-                  <p class="text-lg font-medium text-gray-900">학력</p>
-                  <select
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border0indigo-500 focus:ring=indigo-500 sm:text-sm"
-                    v-model="degreeKR"
-                    id="degree"
-                  >
-                    <option
-                      v-for="degree in degrees"
-                      :value="degree.value"
-                      :key="degree.id"
-                    >
-                      {{ degree.value }}
-                    </option>
-                  </select>
-                </div>
-                <div class="flex flex-col p-2">
-                  <p class="text-lg font-medium text-gray-900">대학교</p>
-                  <input
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    v-model="univId"
-                    type="text"
-                    id="univ"
-                    required="true"
-                  />
-                </div>
-                <div class="flex flex-col p-2">
-                  <p class="text-lg font-medium text-gray-900">전공</p>
-                  <input
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    v-model="major"
-                    type="text"
-                    id="major"
-                    required="true"
-                  />
+      <div class="w-screen">
+        <div class="flex flex-col space-y-10">
+          <nav class="flex flex-wrap justify-between p-8 text-gray-800">
+            <h1 class="font-bold">네이버 님, 안녕하세요</h1>
+            <h3 class="font-bold text-gray-500">DASHBOARD</h3>
+          </nav>
+          <p class="px-10 text-xl font-gray-900">지원자 계정을 생성하세요</p>
+          <div class="flex items-center p-10">
+            <div
+              class="p-5 space-y-5 bg-white divide-y divide-gray-200 rounded-lg shadow-lg"
+            >
+              <div class="m-1">
+                <!-- <p class="p-2 text-xl font-medium text-black">소속</p> -->
+                <div class="flex flex-row space-x-5">
+                  <div class="flex flex-col p-2">
+                    <p class="text-lg font-medium text-gray-900">수험번호</p>
+                    <input
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      v-model="code"
+                      type="text"
+                      id="code"
+                      required="true"
+                    />
+                  </div>
+                  <div class="flex flex-col p-2">
+                    <p class="text-lg font-medium text-gray-900">이름</p>
+                    <input
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      v-model="name"
+                      type="text"
+                      id="name"
+                      required="true"
+                    />
+                  </div>
+                  <div class="flex flex-col p-2">
+                    <p class="text-lg font-medium text-gray-900">전화번호</p>
+                    <input
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      v-model="tel"
+                      type="text"
+                      id="tel"
+                      required="true"
+                      placeholder="010-xxxx-xxxx"
+                    />
+                  </div>
+                  <div class="p-2">
+                    <p class="text-lg font-medium text-gray-900">이메일</p>
+                    <input
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      v-model="email"
+                      type="email"
+                      id="email"
+                      required="true"
+                      placeholder="example@blackbunny.com"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="m-1">
-              <!-- <p class="p-2 text-xl font-medium text-black">담당자 정보</p> -->
-              <div class="flex flex-row space-x-5">
-                <div class="flex flex-col p-2">
-                  <p class="text-lg font-medium text-gray-900">총학점</p>
-                  <select
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border0indigo-500 focus:ring=indigo-500 sm:text-sm"
-                    v-model="totalCredit"
-                    id="totalCredit"
-                  >
-                    <option
-                      v-for="totalCredit in totalCredits"
-                      :value="totalCredit.value"
-                      :key="totalCredit.id"
+              <div class="m-1">
+                <!-- <p class="p-2 text-xl font-medium text-black">담당자 정보</p> -->
+                <div class="flex flex-row space-x-5">
+                  <div class="flex flex-col p-2">
+                    <p class="text-lg font-medium text-gray-900">생년월일</p>
+                    <input
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      v-model="birth"
+                      type="date"
+                      id="birth"
+                      required="true"
+                    />
+                  </div>
+                  <div class="flex flex-col p-2">
+                    <p class="text-lg font-medium text-gray-900">성별</p>
+                    <select
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border0indigo-500 focus:ring=indigo-500 sm:text-sm"
+                      v-model="genderKR"
+                      id="gender"
                     >
-                      {{ totalCredit.value }}
-                    </option>
-                  </select>
-                </div>
-                <div class="flex flex-col p-2">
-                  <p class="text-lg font-medium text-gray-900">학점</p>
-                  <input
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    v-model="credit"
-                    type="text"
-                    id="credit"
-                    required="true"
-                  />
-                </div>
-                <div class="flex flex-col p-2">
-                  <p class="text-lg font-medium text-gray-900">수상횟수</p>
-                  <input
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    v-model="awardCount"
-                    type="text"
-                    id="awardCount"
-                    required="true"
-                  />
-                </div>
-                <div class="flex flex-col p-2">
-                  <p class="text-lg font-medium text-gray-900">대외활동 횟수</p>
-                  <input
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    v-model="activityCount"
-                    type="text"
-                    id="activityCount"
-                    required="true"
-                  />
+                      <option
+                        v-for="gender in genders"
+                        :value="gender.value"
+                        :key="gender.id"
+                      >
+                        {{ gender.value }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="flex flex-col p-2">
+                    <p class="text-lg font-medium text-gray-900">학력</p>
+                    <select
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border0indigo-500 focus:ring=indigo-500 sm:text-sm"
+                      v-model="degreeKR"
+                      id="degree"
+                    >
+                      <option
+                        v-for="degree in degrees"
+                        :value="degree.value"
+                        :key="degree.id"
+                      >
+                        {{ degree.value }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="flex flex-col p-2">
+                    <p class="text-lg font-medium text-gray-900">대학교</p>
+                    <input
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      v-model="univId"
+                      type="text"
+                      id="univ"
+                      required="true"
+                    />
+                  </div>
+                  <div class="flex flex-col p-2">
+                    <p class="text-lg font-medium text-gray-900">전공</p>
+                    <input
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      v-model="major"
+                      type="text"
+                      id="major"
+                      required="true"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <div class="flex justify-end pt-5">
-                <button
-                  @click="createApplicant()"
-                  type="button"
-                  class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
-                >
-                  계정생성
-                </button>
+              <div class="m-1">
+                <!-- <p class="p-2 text-xl font-medium text-black">담당자 정보</p> -->
+                <div class="flex flex-row space-x-5">
+                  <div class="flex flex-col p-2">
+                    <p class="text-lg font-medium text-gray-900">총학점</p>
+                    <select
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border0indigo-500 focus:ring=indigo-500 sm:text-sm"
+                      v-model="totalCredit"
+                      id="totalCredit"
+                    >
+                      <option
+                        v-for="totalCredit in totalCredits"
+                        :value="totalCredit.value"
+                        :key="totalCredit.id"
+                      >
+                        {{ totalCredit.value }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="flex flex-col p-2">
+                    <p class="text-lg font-medium text-gray-900">학점</p>
+                    <input
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      v-model="credit"
+                      type="text"
+                      id="credit"
+                      required="true"
+                    />
+                  </div>
+                  <div class="flex flex-col p-2">
+                    <p class="text-lg font-medium text-gray-900">수상횟수</p>
+                    <input
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      v-model="awardCount"
+                      type="text"
+                      id="awardCount"
+                      required="true"
+                    />
+                  </div>
+                  <div class="flex flex-col p-2">
+                    <p class="text-lg font-medium text-gray-900">
+                      대외활동 횟수
+                    </p>
+                    <input
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      v-model="activityCount"
+                      type="text"
+                      id="activityCount"
+                      required="true"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-end pt-5">
+                  <button
+                    @click="createApplicant()"
+                    type="button"
+                    class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
+                  >
+                    계정생성
+                  </button>
+                </div>
               </div>
             </div>
           </div>

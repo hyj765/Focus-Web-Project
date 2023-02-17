@@ -6,7 +6,7 @@
 
       <!-- FAQ -->
 
-      <div>
+      <div class="w-screen">
         <div class="flex flex-col space-y-10">
           <!-- 
         # 네이버님 안녕하세요
