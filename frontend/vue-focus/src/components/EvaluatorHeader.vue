@@ -38,7 +38,7 @@
               <h4
                 class="font-semibold tracking-wide text-gray-700 capitalize font-poppins"
               >
-                {{ userId }} {{ name }}
+                {{ name }}
               </h4>
             </button>
             <!-- 로그아웃 -->

@@ -3,6 +3,14 @@
     <div class="flex flex-col w-56 overflow-hidden bg-white/50">
       <ul class="flex flex-col py-4 divide-y space-y-60">
         <div>
+          <!-- <div v-show="false">
+            <EvaluatorTime
+              v-for="(item, index) in scheduledList"
+              :content="item.value"
+              :key="index"
+              :item="item"
+            ></EvaluatorTime>
+          </div> -->
           <li @click="moveToEvaluatorHome()">
             <a
               href="#"
@@ -15,10 +23,11 @@
               <span class="text-sm font-medium">홈 / 대시보드</span>
             </a>
           </li>
-          <li @click="moveToEvaluatorTime()">
+          <!-- @click="moveToEvaluatorTime()" -->
+          <li>
             <a
-              v-for="(item, index) in scheduledList"
-              :content="item.value"
+              v-for="(schedule, index) in scheduledList"
+              :content="schedule.value"
               :key="index"
               href="#"
               class="flex flex-row items-center h-12 text-gray-500 transition-transform duration-200 ease-in transform hover:translate-x-2 hover:text-gray-800"
@@ -28,8 +37,12 @@
                 ><i class="bx bx-time-five"></i
               ></span>
               <span class="text-sm font-medium">
-                {{ item.startTime.slice(11, 16) }} ~
-                {{ item.endTime.slice(11, 16) }}
+                <router-link
+                  :to="{ name: 'EvaluatorTime', params: { id: schedule.id } }"
+                >
+                  {{ schedule.startTime.slice(11, 16) }} ~
+                  {{ schedule.endTime.slice(11, 16) }}
+                </router-link>
               </span>
             </a>
           </li>
@@ -66,9 +79,16 @@
 </template>
 
 <script setup>
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
+import EvaluatorTime from '@/views/Evaluator/EvaluatorTime.vue';
+
 const router = useRouter();
+const scheduledList = ref(null);
+
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 
 const moveToEvaluatorHome = () => {
   router.push({ name: 'Evaluator' });
@@ -84,6 +104,25 @@ const moveToEvaluatorRecord = () => {
 const moveToEvaluatorFAQ = () => {
   router.push({ name: 'EvaluatorFAQ' });
 };
+
+const getScheduleList = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .get(`${BASE_URL}/evaluators/list`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log('res.data: ', res.data);
+      scheduledList.value = res.data['2023-02-17'];
+      console.log(scheduledList.value);
+    });
+};
+
+onMounted(() => {
+  getScheduleList();
+});
 </script>
 
 <style lang="scss" scoped></style>

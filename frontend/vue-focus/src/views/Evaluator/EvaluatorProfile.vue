@@ -64,12 +64,13 @@ const getMyInfo = () => {
       },
     })
     .then(res => {
-      console.log('myInfo : ', res.data);
+      // console.log('myInfo : ', res.data);
       myinfo.value = res;
       name.value = myinfo.value.data.name;
       email.value = myinfo.value.data.email;
       tel.value = myinfo.value.data.tel;
       userId.value = myinfo.value.data.userId;
+      console.log('userId : ', userId.value);
     });
 };
 

@@ -12,11 +12,13 @@ export default createStore({
     roomID: [],
     roomCodeInfo: [],
   },
+
   getters: {
     loggedIn(state) {
       return !!state.user;
     },
   },
+
   mutations: {
     SET_USER_DATA(state, userData) {
       state.user = userData;
@@ -59,6 +61,7 @@ export default createStore({
       state.sheets = sheets;
     },
   },
+
   actions: {
     login({ commit }, credentials) {
       return axios
@@ -98,7 +101,6 @@ export default createStore({
     saveCurrentApplicantProcessId({ commit }, processId) {
       commit('SAVE_CURRENT_APPLICANT_PROCESS_ID', processId);
     },
-
     getRoomId(context) {
       const user = JSON.parse(localStorage.getItem('user'));
       axios({
