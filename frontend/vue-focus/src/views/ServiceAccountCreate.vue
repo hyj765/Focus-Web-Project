@@ -118,7 +118,7 @@
         <div>
           <div class="flex justify-end pt-5">
             <button
-              @click="createCompanyAdmin()"
+              @click="[createCompanyAdmin(), emitCompanyCreated()]"
               type="button"
               class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
             >
@@ -138,7 +138,21 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 
-const items = ref([
+const emit = defineEmits(['company-created']);
+
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+const getToday = date => {
+  const year = date.getFullYear();
+  const month = ('0' + (1 + date.getMonth())).slice(-2);
+  const day = ('0' + date.getDate()).slice(-2);
+  return year + '-' + month + '-' + day;
+};
+
+// 요청 시 'yyyy-mm-dd' 뒤에 'T00:00:00.000000'이 붙지 않으면 에러남
+const changeDateFormat = date => {
+  return date + 'T00:00:00.000000';
+};
+const sizeCategories = ref([
   { id: 1, value: '대기업' },
   { id: 2, value: '중견기업' },
   { id: 3, value: '중소기업' },
@@ -192,6 +206,9 @@ const createCompanyAdmin = () => {
     .then(data => {
       console.log(data);
     });
+};
+const emitCompanyCreated = () => {
+  emit('company-created');
 };
 </script>
 

@@ -139,6 +139,7 @@
         class="flex-auto"
         :is="currentComp"
         @update:comp="changeCurrentComp(ServiceAccountCreate)"
+        @company-created="changeCurrentComp(ServiceAccount)"
         @update:compnotice="changeCurrentComp(ServiceNoticeCreate)"
       />
     </div>
