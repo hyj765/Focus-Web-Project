@@ -14,7 +14,7 @@
             aria-current="page"
             class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500"
           >
-            {{ scheduledApplicants[props.roomid][key].code }} /
+            {{ scheduledApplicants[props.roomid][key].id }} /
             {{ scheduledApplicants[props.roomid][key].name }}
           </button>
         </li>
@@ -23,7 +23,10 @@
           class="absolute"
           v-show="currentTab == scheduledApplicants[props.roomid][key].id"
         >
-          <EvaluatorInterviewSheetsItem></EvaluatorInterviewSheetsItem>
+          <EvaluatorInterviewSheetsItem
+            :interviewRoomId="props.roomid"
+            :applicantId="scheduledApplicants[props.roomid][key].id"
+          ></EvaluatorInterviewSheetsItem>
         </div>
       </ul>
     </div>
