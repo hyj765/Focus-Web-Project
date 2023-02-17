@@ -143,14 +143,9 @@
 </template>
 
 <script setup>
-import { shallowRef } from 'vue';
 import router from '@/router';
-import { useRouter } from 'vue-router';
-
-import InterviewRoom from './InterviewDisplay/InterviewRoom.vue';
-
-const currentComp = shallowRef(InterviewRoom);
-const changeCurrentComp = comp => (currentComp.value = comp);
+import EvaluateHomeRecentlySchedule from './EvaluateHomeRecentlySchedule.vue';
+import EvaluateHomeSchedule from './EvaluateHomeSchedule.vue';
 
 const goSettingRoom = () => router.push({ name: 'InterviewRoom' });
 </script>
