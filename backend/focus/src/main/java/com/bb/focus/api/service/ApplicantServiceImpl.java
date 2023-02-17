@@ -2,6 +2,7 @@ package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.ApplicantInfoReq;
 import com.bb.focus.api.response.ApplicantRes;
+import com.bb.focus.common.util.EncryptionUtils;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.applicant.school.ApplicantCollege;
 import com.bb.focus.db.entity.applicant.school.ApplicantGraduate;
@@ -113,8 +114,8 @@ public class ApplicantServiceImpl implements ApplicantService{
     mailService.sendAccountMail(applicant.getEmail(), content);
 
     //암호화
-//    String encodedPwd = EncryptionUtils.encryptSHA256(newPwd);
-    String encodedPwd = newPwd;
+    String encodedPwd = EncryptionUtils.encryptSHA256(newPwd);
+//    String encodedPwd = newPwd;
 
     applicant.setUserId(newId);
     applicant.setPwd(encodedPwd);

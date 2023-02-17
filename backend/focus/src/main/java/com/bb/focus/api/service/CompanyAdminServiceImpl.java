@@ -4,6 +4,7 @@ import com.bb.focus.api.request.CompanyAdminRegisterPostReq;
 import com.bb.focus.api.response.ApplicantLogRes;
 import com.bb.focus.api.response.InterviewRoomRes;
 import com.bb.focus.api.response.ProcessRes;
+import com.bb.focus.common.util.EncryptionUtils;
 import com.bb.focus.db.entity.applicant.ApplicantPassLog;
 import com.bb.focus.db.entity.applicant.Status;
 import com.bb.focus.db.entity.company.CompanyAdmin;
@@ -50,8 +51,8 @@ public class CompanyAdminServiceImpl implements CompanyAdminService {
         userRegisterInfo.getCompanyName() + "CA" + userRegisterInfo.getStartDate().toLocalDate()
             .format(
                 DateTimeFormatter.ofPattern("yyyyMMdd"));
-    String pwd = getRandomString();
-//    String pwd = EncryptionUtils.encryptSHA256(getRandomString());
+//    String pwd = getRandomString();
+    String pwd = EncryptionUtils.encryptSHA256(getRandomString());
 
     companyAdmin.setUserId(userId);
     companyAdmin.setPwd(pwd);
