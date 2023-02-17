@@ -233,6 +233,37 @@
               </tbody>
             </table>
           </div>
+          <!-- Pagination -->
+          <div class="flex justify-center">
+            <nav aria-label="Page navigation example">
+              <ul class="flex list-style-none">
+                <li
+                  class="page-item"
+                  :class="hasPrevPage"
+                  @click="[pageMinus(), updatePage()]"
+                >
+                  <a
+                    class="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-500 pointer-events-none focus:shadow-none"
+                    href="#"
+                    tabindex="-1"
+                    aria-disabled="true"
+                    >Previous</a
+                  >
+                </li>
+                <li
+                  class="page-item"
+                  :class="hasLastPage"
+                  @click="[pagePlus(), updatePage()]"
+                >
+                  <a
+                    class="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
+                    href="#"
+                    >Next</a
+                  >
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
       </div>
     </div>
@@ -242,50 +273,187 @@
 <script setup>
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/20/solid';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 
 defineEmits(['update:comp']);
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
-
 const evaluators = ref(null);
-// 총 페이지 값 (페이징 구현할 때 필요할 것으로 예상)
-let totalPageCount = 0;
-const pageSize = 5;
-// 페이징 컴포넌트에 따라 달라지는 반응형으로 교체
-const pageNumber = 1;
+const currentEvaluators = ref(null);
+
+// 계정 할당 여부
+const userIdFilterLabel = ref('계정 할당 여부');
+const filterEvaluatorByUserId = needId => {
+  currentEvaluators.value = evaluators.value;
+  if (departmentFilterLabel.value !== '부서별') {
+    currentEvaluators.value = currentEvaluators.value.filter(
+      evaluator => evaluator.department === departmentFilterLabel.value,
+    );
+  }
+  if (needId === true) {
+    currentEvaluators.value = currentEvaluators.value.filter(
+      evaluator => evaluator.userId === null,
+    );
+    userIdFilterLabel.value = 'ID 미할당 인원';
+  } else {
+    currentEvaluators.value = currentEvaluators.value.filter(
+      evaluator => evaluator.userId !== null,
+    );
+    userIdFilterLabel.value = 'ID 할당 인원';
+  }
+  console.log('filterByUserId currentEvaluators: ', currentEvaluators.value);
+};
+
+// 부서별
+const departments = ref([]);
+const departmentFilterLabel = ref('부서별');
+const filterEvaluatorsByDepartment = department => {
+  departmentFilterLabel.value = department;
+  currentEvaluators.value = evaluators.value;
+  currentEvaluators.value = currentEvaluators.value.filter(
+    evaluator => evaluator.department === department,
+  );
+  console.log(
+    'filterByDepartment currentEvaluators: ',
+    currentEvaluators.value,
+  );
+  userIdFilterLabel.value = '계정 할당 여부';
+  searchName.value = null;
+};
+
+// 필터 해제
+const deactivateFilters = () => {
+  userIdFilterLabel.value = '계정 할당 여부';
+  departmentFilterLabel.value = '부서별';
+  currentEvaluators.value = evaluators.value;
+  searchName.value = null;
+};
+
+// 이름별
+const searchName = ref('');
+const filterEvaluatorsByName = name => {
+  if (
+    departmentFilterLabel.value === '부서별' &&
+    userIdFilterLabel.value === '계정 할당 여부'
+  ) {
+    currentEvaluators.value = evaluators.value;
+  } else if (userIdFilterLabel.value === '계정 할당 여부') {
+    currentEvaluators.value = evaluators.value.filter(
+      evaluator => evaluator.department === departmentFilterLabel.value,
+    );
+  } else if (
+    departmentFilterLabel.value === '부서별' &&
+    userIdFilterLabel.value === 'ID 할당 인원'
+  ) {
+    currentEvaluators.value = evaluators.value.filter(
+      evaluator => evaluator.userId !== null,
+    );
+  } else if (
+    departmentFilterLabel.value === '부서별' &&
+    userIdFilterLabel.value === 'ID 미할당 인원'
+  ) {
+    currentEvaluators.value = evaluators.value.filter(
+      evaluator => evaluator.userId === null,
+    );
+  }
+  console.log('filterByName currentEvaluators: ', currentEvaluators.value);
+  currentEvaluators.value = currentEvaluators.value.filter(
+    evaluator => evaluator.name === name,
+  );
+};
+
+// Pagination
+const currentPage = ref(1);
+const isFirstPage = ref(true);
+const isLastPage = ref(false);
+
+const pagePlus = () => {
+  currentPage.value++;
+};
+const pageMinus = () => {
+  currentPage.value--;
+};
+const updatePage = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (currentPage.value === 1) {
+    isFirstPage.value = true;
+  } else {
+    isFirstPage.value = false;
+  }
+  axios
+    .get(`${BASE_URL}/companyusers/evaluators/list`, {
+      params: {
+        size: 15,
+        page: currentPage.value + 1,
+      },
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      if (res.data.totalElements === 0) {
+        isLastPage.value = true;
+      } else {
+        isLastPage.value = false;
+      }
+    })
+    .then(() => {
+      getEvaluatorsInfo();
+    });
+};
+
+const hasPrevPage = computed(() => {
+  return { disabled: !(isFirstPage.value === true) };
+});
+const hasLastPage = computed(() => {
+  return { disabled: !(isLastPage.value === true) };
+});
 
 const getEvaluatorsInfo = () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  // 1. 기업관리자 id값 요청
-  // 임의로 아이디 값 배정
-  const companyId = 2;
-  // axios
-  //   .get(`${BASE_URL}/companyusers/me`, {
-  //     Authorization: `Bearer ${user.accessToken}`,
-  //   })
-  //   .then(res => {
-  //     console.log('id: ', res);
-  //   });
-
-  // 2. 기업관리자 id값을 바탕으로 평가자 계정 수 가져오기
-  let evaluatorCount = 0;
-  let remainder = 0;
+  // let evaluatorCount = 0;
+  // let remainder = 0;
   axios
-    .get(`${BASE_URL}/companyusers/evaluatorCount/${companyId}`)
+    .get(`${BASE_URL}/companyusers/evaluators/list`, {
+      params: {
+        size: 15,
+        page: currentPage.value,
+      },
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
     .then(res => {
-      // 필요한 총 페이지 수 계산
-      evaluatorCount = res.data;
-      remainder = evaluatorCount % pageSize;
-      if (remainder === 0) {
-        totalPageCount = parseInt(evaluatorCount / pageSize);
-      } else {
-        totalPageCount = parseInt(evaluatorCount / pageSize) + 1;
+      console.log('getEvaluators: ', res.data);
+      // evaluatorCount = res.data.totalElements;
+      // remainder = evaluatorCount % pageSize;
+      // if (remainder === 0) {
+      //   totalPageCount = parseInt(evaluatorCount / pageSize);
+      // } else {
+      //   totalPageCount = parseInt(evaluatorCount / pageSize) + 1;
+      // }
+      console.log('current page: ', currentPage.value);
+      evaluators.value = res.data.content;
+      currentEvaluators.value = res.data.content;
+
+      // Departments Filter
+      const tempDepartments = evaluators.value.map(
+        evaluator => evaluator.department,
+      );
+      for (const department of tempDepartments) {
+        if (!departments.value.includes(department)) {
+          departments.value.push(department);
+        }
       }
-      console.log(totalPageCount);
+      // console.log('departments: ', departments.value);
     });
 
-  // 3. 조회
+// 계정 할당
+const assignEvaluatorId = evaluator => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  console.log(user.accessToken);
+  const evaluatorId = evaluator.id;
+  console.log('evaluatorId: ', evaluatorId);
   axios
     .get(`${BASE_URL}/companyusers/evaluators/list`, {
       params: {
@@ -304,6 +472,8 @@ const getEvaluatorsInfo = () => {
 };
 
 onMounted(() => {
+  currentPage.value = 1;
+  updatePage();
   getEvaluatorsInfo();
 });
 </script>
