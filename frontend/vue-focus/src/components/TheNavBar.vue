@@ -102,7 +102,7 @@
                 </a>
               </li>
             </div>
-            <li @click="changeCurrentComp(ServiceNotice)">
+            <li>
               <a
                 href="#"
                 class="flex flex-row items-center h-12 text-gray-500 transition-transform duration-200 ease-in transform hover:translate-x-2 hover:text-gray-800"
@@ -133,7 +133,6 @@ import { ref, shallowRef } from 'vue';
 
 import ServiceAccountManage from '@/views/ServiceAccountManage.vue';
 import ServiceDashboard from '@/views/ServiceDashboard.vue';
-import ServiceNotice from './ServiceNotice.vue';
 
 const currentComp = shallowRef(ServiceDashboard);
 const changeCurrentComp = comp => (currentComp.value = comp);
