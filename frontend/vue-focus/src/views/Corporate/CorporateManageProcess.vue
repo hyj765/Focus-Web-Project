@@ -3,70 +3,72 @@
     <CorporateHeader></CorporateHeader>
     <div class="flex">
       <CorporateNavbar></CorporateNavbar>
-      <div>
-        <nav class="flex flex-wrap justify-between p-8 text-gray-800">
-          <h1 class="font-bold">네이버 님, 안녕하세요</h1>
-          <h3 class="font-bold text-gray-500">Process</h3>
-        </nav>
-        <div class="flex justify-end mx-5">
-          <button
-            @click="createProcess()"
-            type="button"
-            class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
-          >
-            전형 추가
-          </button>
-        </div>
-        <p class="px-10 text-2xl font-medium">예정된 전형</p>
-        <div
-          v-for="interview in interviews"
-          :key="interview.id"
-          class="space-y-5"
-        >
-          <!-- 전형목록 -->
+
+      <div class="w-screen">
+        <div class="flex flex-col space-y-10">
+          <nav class="flex flex-wrap justify-between p-8 text-gray-800">
+            <h1 class="font-bold">네이버 님, 안녕하세요</h1>
+            <h3 class="font-bold text-gray-500">Process</h3>
+          </nav>
+          <div class="flex justify-end mx-5">
+            <button
+              @click="createProcess()"
+              type="button"
+              class="inline-block rounded bg-indigo-500 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg"
+            >
+              전형 추가
+            </button>
+          </div>
+          <p class="px-10 text-2xl font-medium">예정된 전형</p>
           <div
-            @click.stop="processDetail(interview.id)"
-            class="flex flex-row items-center justify-center space-x-10 my-5"
+            v-for="interview in interviews"
+            :key="interview.id"
+            class="space-y-5"
           >
+            <!-- 전형목록 -->
             <div
+              @click.stop="processDetail(interview.id)"
               class="flex flex-row items-center justify-center space-x-10 my-5"
             >
-              <p class="text-lg font-bold">{{ interview.name }}</p>
-              <p>|</p>
-              <p>
-                {{ interview.startDate.slice(0, 10) }} ~
-                {{ interview.endDate.slice(0, 10) }}
-              </p>
-              <p>|</p>
-              <p>총 {{ interview.interviewCount }} 차</p>
-            </div>
+              <div
+                class="flex flex-row items-center justify-center px-4 py-2 space-x-4 text-gray-600 bg-white hover:bg-gray-100 rounded-md shadow-md"
+              >
+                <p class="text-lg font-bold">{{ interview.name }}</p>
+                <p>|</p>
+                <p>
+                  {{ interview.startDate.slice(0, 10) }} ~
+                  {{ interview.endDate.slice(0, 10) }}
+                </p>
+                <p>|</p>
+                <p>총 {{ interview.interviewCount }} 차</p>
+              </div>
 
-            <!-- # 버튼 그룹 -->
-            <div class="flex flex-row">
-              <div class="flex justify-center space-x-2">
-                <!-- <button
+              <!-- # 버튼 그룹 -->
+              <div class="flex flex-row">
+                <div class="flex justify-center space-x-2">
+                  <!-- <button
                   type="button"
                   class="inline-block leading-normal text-white uppercase transition duration-150 ease-in-out bg-gray-400 rounded-full shadow-lg hover:bg-gray-500 hover:shadow-lg focus:bg-gray-500 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-500 active:shadow-lg w-9 h-9"
                 >
                   <i class="text-xl bx bx-plus"></i>
                 </button> -->
-                <!-- <button
+                  <!-- <button
                   type="button"
                   class="inline-block leading-normal text-white uppercase transition duration-150 ease-in-out bg-gray-400 rounded-full shadow-lg hover:bg-gray-500 hover:shadow-lg focus:bg-gray-500 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-500 active:shadow-lg w-9 h-9"
                 >
                   <i class="text-xl bx bx-copy"></i>
                 </button> -->
-                <button
-                  @click.stop="deleteProcess(interview.id)"
-                  type="button"
-                  class="inline-block leading-normal text-white uppercase transition duration-150 ease-in-out bg-red-400 rounded-full shadow-lg hover:bg-red-500 hover:shadow-lg focus:bg-red-500 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-500 active:shadow-lg w-9 h-9"
-                >
-                  <i class="text-xl bx bx-x"></i>
-                </button>
+                  <button
+                    @click.stop="deleteProcess(interview.id)"
+                    type="button"
+                    class="inline-block leading-normal text-white uppercase transition duration-150 ease-in-out bg-red-400 rounded-full shadow-lg hover:bg-red-500 hover:shadow-lg focus:bg-red-500 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-500 active:shadow-lg w-9 h-9"
+                  >
+                    <i class="text-xl bx bx-x"></i>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          <!-- <div class="flex flex-row items-center justify-center space-x-10">
+            <!-- <div class="flex flex-row items-center justify-center space-x-10">
             <div
               class="flex flex-row items-center justify-center px-4 py-2 space-x-4 text-gray-600 bg-transparent border-4 border-white rounded-md shadow-md opacity-80"
             >
@@ -77,8 +79,8 @@
               <p>총 N 차</p>
             </div> -->
 
-          <!-- # 버튼 그룹 -->
-          <!-- <div class="flex flex-row">
+            <!-- # 버튼 그룹 -->
+            <!-- <div class="flex flex-row">
               <div class="flex justify-center pr-20">
                 <button
                   type="button"
@@ -89,6 +91,7 @@
               </div>
             </div>
           </div> -->
+          </div>
         </div>
       </div>
     </div>
