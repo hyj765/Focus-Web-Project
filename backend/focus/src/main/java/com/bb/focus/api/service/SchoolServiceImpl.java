@@ -47,13 +47,13 @@ public class SchoolServiceImpl extends ApplicantUniv implements SchoolService{
     }
 
     public List<ApplicantUniv> GetUnivbyLikeName(String name){
-        return univRepo.findByNameLike(name);
+        return univRepo.findByNameContainingIgnoreCase(name);
     }
     public List<ApplicantCollege> GetCollegebyLikeName(String name){
-        return collegeRepo.findByNameLike(name);
+        return collegeRepo.findByNameContainingIgnoreCase(name);
     }
     public List<ApplicantGraduate> GetGraduateSchoolbyLikeName(String name){
-        return graduateRepo.findByNameLike(name);
+        return graduateRepo.findByNameContainingIgnoreCase(name);
     }
 
     @Transactional

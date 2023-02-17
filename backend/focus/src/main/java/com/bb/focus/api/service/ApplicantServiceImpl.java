@@ -1,24 +1,32 @@
 package com.bb.focus.api.service;
 
 import com.bb.focus.api.request.ApplicantInfoReq;
+import com.bb.focus.api.response.ApplicantRes;
+import com.bb.focus.common.util.EncryptionUtils;
 import com.bb.focus.db.entity.applicant.Applicant;
 import com.bb.focus.db.entity.applicant.school.ApplicantCollege;
 import com.bb.focus.db.entity.applicant.school.ApplicantGraduate;
 import com.bb.focus.db.entity.applicant.school.ApplicantUniv;
 import com.bb.focus.db.entity.company.CompanyAdmin;
+import com.bb.focus.db.entity.process.Process;
 import com.bb.focus.db.repository.ApplicantRepository;
 import com.bb.focus.db.repository.CollegeRepository;
 import com.bb.focus.db.repository.CompanyAdminRepository;
 import com.bb.focus.db.repository.GraduateSchoolRepository;
+import com.bb.focus.db.repository.ProcessRepository;
 import com.bb.focus.db.repository.UniversityRepository;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.security.util.Password;
+
+import javax.mail.MessagingException;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,40 +42,46 @@ public class ApplicantServiceImpl implements ApplicantService{
   private final UniversityRepository universityRepository;
 
   private final GraduateSchoolRepository graduateSchoolRepository;
+  private final MailService mailService;
+  private final ProcessRepository processRepository;
 
 
   /**
    * 지원자 계정 생성
    */
   @Transactional
-  public Long create(Long comapnyAdminId, ApplicantInfoReq applicantInfoReq) {
+  public Long create(Long comapnyAdminId, ApplicantInfoReq applicantInfoReq, Long processId) {
     Applicant applicant = new Applicant();
 
     applicant.setName(applicantInfoReq.getName());
     applicant.setCode(applicantInfoReq.getCode());
     applicant.setGender(applicantInfoReq.getGender());
     applicant.setBirth(applicantInfoReq.getBirth());
-    applicant.setImage(applicantInfoReq.getImage());
     applicant.setEmail(applicantInfoReq.getEmail());
     applicant.setTel(applicantInfoReq.getTel());
-    applicant.setResume(applicantInfoReq.getResume());
     applicant.setDegree(applicantInfoReq.getDegree());
     applicant.setAwardCount(applicantInfoReq.getAwardCount());
     applicant.setActivityCount(applicantInfoReq.getActivityCount());
+    applicant.setMajor(applicantInfoReq.getMajor());
+    applicant.setTotalCredit(applicantInfoReq.getTotalCredit());
+    applicant.setCredit(applicantInfoReq.getCredit());
 
-    if(applicantInfoReq.getCollegeId() != 1){
+    Process process = processRepository.findById(processId).orElseThrow(IllegalArgumentException::new);
+    applicant.setProcess(process);
+
+    if(applicantInfoReq.getCollegeId() != null){
       ApplicantCollege applicantCollege = collegeRepository.findById(applicantInfoReq.getCollegeId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicationCollege(applicantCollege);
     }
 
-    if(applicantInfoReq.getUnivId() != 1){
+    if(applicantInfoReq.getUnivId() != null){
       ApplicantUniv applicantUniv = universityRepository.findById(applicantInfoReq.getUnivId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicantsUniv(applicantUniv);
     }
 
-    if(applicantInfoReq.getGraduateId() != 1){
+    if(applicantInfoReq.getGraduateId() != null){
       ApplicantGraduate applicantGraduate = graduateSchoolRepository.findById(applicantInfoReq.getGraduateId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicantsGraduate(applicantGraduate);
@@ -86,7 +100,7 @@ public class ApplicantServiceImpl implements ApplicantService{
    *          비밀번호 : 랜덤 생성 문자열
    */
   @Transactional
-  public void autoAssignAccount(Long id) {
+  public void autoAssignAccount(Long id) throws MessagingException {
 
     Applicant applicant = applicantRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 
@@ -94,14 +108,14 @@ public class ApplicantServiceImpl implements ApplicantService{
     String newPwd = getRandomString();
 
     //메일
-//    Map<String, String> content = new HashMap<>();
-//    content.put("id", newId);
-//    content.put("pwd", newPwd);
-//    mailService.sendAccountMail(evaluator.getEmail(), content);
+    Map<String, String> content = new HashMap<>();
+    content.put("id", newId);
+    content.put("pwd", newPwd);
+    mailService.sendAccountMail(applicant.getEmail(), content);
 
     //암호화
-//    String encodedPwd = passwordEncoder.encode(newPwd);
-    String encodedPwd = newPwd;
+    String encodedPwd = EncryptionUtils.encryptSHA256(newPwd);
+//    String encodedPwd = newPwd;
 
     applicant.setUserId(newId);
     applicant.setPwd(encodedPwd);
@@ -119,28 +133,29 @@ public class ApplicantServiceImpl implements ApplicantService{
     applicant.setCode(applicantInfoReq.getCode());
     applicant.setGender(applicantInfoReq.getGender());
     applicant.setBirth(applicantInfoReq.getBirth());
-    applicant.setImage(applicantInfoReq.getImage());
     applicant.setEmail(applicantInfoReq.getEmail());
     applicant.setTel(applicantInfoReq.getTel());
-    applicant.setResume(applicantInfoReq.getResume());
     applicant.setDegree(applicantInfoReq.getDegree());
     applicant.setAwardCount(applicantInfoReq.getAwardCount());
     applicant.setActivityCount(applicantInfoReq.getActivityCount());
+    applicant.setMajor(applicantInfoReq.getMajor());
+    applicant.setTotalCredit(applicantInfoReq.getTotalCredit());
+    applicant.setCredit(applicantInfoReq.getCredit());
 
     //대학 정보 수정..
-    if(applicantInfoReq.getCollegeId() != 1){
+    if(applicantInfoReq.getCollegeId() != null){
       ApplicantCollege applicantCollege = collegeRepository.findById(applicantInfoReq.getCollegeId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicationCollege(applicantCollege);
     }
 
-    if(applicantInfoReq.getUnivId() != 1){
+    if(applicantInfoReq.getUnivId() != null){
       ApplicantUniv applicantUniv = universityRepository.findById(applicantInfoReq.getUnivId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicantsUniv(applicantUniv);
     }
 
-    if(applicantInfoReq.getGraduateId() != 1){
+    if(applicantInfoReq.getGraduateId() != null){
       ApplicantGraduate applicantGraduate = graduateSchoolRepository.findById(applicantInfoReq.getGraduateId())
           .orElseThrow(IllegalArgumentException::new);
       applicant.setApplicantsGraduate(applicantGraduate);
@@ -176,6 +191,19 @@ public class ApplicantServiceImpl implements ApplicantService{
   public Applicant getApplicantByUserId(String userId) {
     Applicant applicant = applicantRepository.findApplicantByUserId(userId);
     return applicant;
+  }
+
+  @Override
+  public Applicant getApplicantById(Long id) {
+    Applicant applicant = applicantRepository.findApplicantById(id);
+    return applicant;
+  }
+
+  @Override
+  public Page<ApplicantRes> findAllApplicantsUsePaging(Pageable pageable, String search, Long companyAdminId, Long processId) {
+    Page<ApplicantRes> applicants = applicantRepository.findAllApplicantsWithPaging(pageable, search, companyAdminId, processId);
+    return applicants;
+
   }
 
   /**

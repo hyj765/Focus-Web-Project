@@ -28,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
+
   private FocusUserDetailService focusUserDetailService;
 
   @Autowired

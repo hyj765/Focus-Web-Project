@@ -13,5 +13,7 @@ public interface UniversityRepository extends JpaRepository<ApplicantUniv, Long>
     ApplicantUniv findByName(String name);
     List<ApplicantUniv> findByNameLike(String name);
 
+    List<ApplicantUniv> findByNameContainingIgnoreCase(String name);
+
 
 }

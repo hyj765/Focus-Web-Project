@@ -21,7 +21,7 @@ public class EvaluationResult {
     @Column(name = "evaluation_result_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="evaluation_item_id")
     private EvaluationItem evaluationItem;
 

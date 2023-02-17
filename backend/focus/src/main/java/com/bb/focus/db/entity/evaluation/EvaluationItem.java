@@ -1,6 +1,8 @@
 package com.bb.focus.db.entity.evaluation;
 
 import com.sun.istack.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +26,9 @@ public class EvaluationItem {
     @JoinColumn(name="evaluation_sheet_id")
     private EvaluationSheet evaluationSheet;
 
-    @OneToOne(mappedBy = "evaluationItem", fetch = FetchType.LAZY)
-    private EvaluationResult evaluationResult;
+    @OneToMany(targetEntity = com.bb.focus.db.entity.evaluation.EvaluationResult.class,
+        mappedBy = "evaluationItem")
+    private List<EvaluationResult> evaluationResultList = new ArrayList<>();
 
     @NotNull
     @Column(length = 500)
