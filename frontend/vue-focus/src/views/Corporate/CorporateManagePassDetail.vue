@@ -56,12 +56,7 @@
                         >
                           평가총점
                         </th>
-                        <th
-                          scope="col"
-                          class="px-6 py-4 text-sm font-medium text-left text-gray-900"
-                        >
-                          평가내역
-                        </th>
+
                         <th
                           scope="col"
                           class="px-6 py-4 text-sm font-medium text-left text-gray-900"
@@ -87,9 +82,11 @@
                           class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                         >
                           <input
+                            :id="'checkbox' + applicant.id"
                             type="checkbox"
-                            id="{{ applicant.id }}"
-                            class="w-4 h-4 text-indigo-900 justify-end border-gray-300 rounded focus:ring-indigo-900"
+                            true-value="p"
+                            false-value="np"
+                            class="w-4 h-4 text-indigo-900 border-gray-300 rounded focus:ring-indigo-900"
                           />
                         </td>
                         <td
@@ -110,44 +107,7 @@
                         <td
                           class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                         >
-                          평가내역 보기
-                        </td>
-                        <td
-                          class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
-                        >
-                          <!-- # 모달 -->
-                          <div class="pt-4">
-                            <button
-                              class="px-4 py-2 text-white bg-indigo-900 rounded"
-                              @click="showModal = true"
-                            >
-                              자소서 보기
-                            </button>
-                            <div
-                              class="fixed top-0 left-0 z-50 w-full h-full bg-white"
-                              v-if="showModal"
-                            >
-                              <div
-                                class="fixed -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 z-60"
-                              >
-                                <div class="bg-white p=2 relative">
-                                  <button
-                                    class="absolute top-0 right-0 p-0.5"
-                                    @click="showModal = false"
-                                  >
-                                    X
-                                  </button>
-                                  <img
-                                    @click="showModal = false"
-                                    id="introduce"
-                                    src="@/assets/introduce.png"
-                                    alt="Modal Image"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <!-- # 모달 창 끝 -->
+                          자소서 보기
                         </td>
                         <td
                           class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
@@ -170,6 +130,7 @@
                       전형 종료 [결과확정]
                     </button>
                   </div> -->
+                  <!-- <button @click="DecisionPassApplicantList()">출력</button> -->
                 </div>
               </div>
             </div>
@@ -193,15 +154,18 @@ const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 // {사용자 번호 Long, process번호  Long, 합불여부=문자  "p" or "np"}
 //
 const route = useRoute();
-
 const applicantlist = ref([]);
-const applicantResult = ref([]);
+
 const decisionNextStep = () => {
+  DecisionPassApplicantList();
   const user = JSON.parse(localStorage.getItem('user'));
+  let endResult = JSON.stringify(passapplicantlist.value);
+  console.log(passapplicantlist);
   axios
-    .post(`${BASE_URL}/interview/decision/pass`, applicantResult, {
+    .post(`${BASE_URL}/interview/decision/pass`, endResult, {
       headers: {
         Authorization: `Bearer ${user.accessToken}`,
+        'Content-Type': 'application/json',
       },
     })
     .then(data => {
@@ -212,7 +176,30 @@ const decisionNextStep = () => {
     });
 };
 
-const getPassAplicant = () => {
+const convertPNP = id => {
+  if (document.getElementById('checkbox' + id).checked) {
+    return 'P';
+  }
+  return 'NP';
+};
+
+const passapplicantlist = ref([]);
+const DecisionPassApplicantList = () => {
+  passapplicantIds.value.forEach(element => {
+    let pass = convertPNP(element);
+    let applicantData = {
+      processId: route.params.id,
+      interviewResultReq: {
+        applicantId: element,
+        pass: pass,
+      },
+    };
+    passapplicantlist.value.push(applicantData);
+  });
+};
+
+const passapplicantIds = ref([]);
+const getPassApplicant = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   console.log(user.accessToken);
   axios
@@ -222,13 +209,15 @@ const getPassAplicant = () => {
       },
     })
     .then(data => {
-      console.log(data.data);
       applicantlist.value = data.data;
+      passapplicantIds.value = applicantlist.value.map(
+        applicant => applicant.id,
+      );
     });
 };
 
 onMounted(() => {
-  getPassAplicant();
+  getPassApplicant();
 });
 </script>
 
