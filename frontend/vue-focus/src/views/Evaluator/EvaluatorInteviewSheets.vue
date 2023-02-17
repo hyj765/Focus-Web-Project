@@ -2,7 +2,7 @@
   <div class="flex flex-row">
     <div v-for="(i, key) in scheduledApplicants[props.roomid]" :key="i">
       <ul
-        class="inline-block text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400"
+        class="inline-block text-sm font-medium text-center text-gray-500 border-b border-gray-200"
       >
         <li class="mr-2">
           <button
@@ -12,7 +12,7 @@
             v-on:click="currentTab = scheduledApplicants[props.roomid][key].id"
             href="#"
             aria-current="page"
-            class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500"
+            class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active"
           >
             {{ scheduledApplicants[props.roomid][key].id }} /
             {{ scheduledApplicants[props.roomid][key].name }}

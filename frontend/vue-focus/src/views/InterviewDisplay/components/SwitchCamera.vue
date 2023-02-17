@@ -4,39 +4,47 @@
       <video class="myVideo" autoplay :poster="posterImgSrc"></video>
       <!-- <img src="~@/assets/guide_image.jpg" alt="Guide_Image" /> -->
     </div>
-    <div class="flex flex-row justify-center">
+    <div class="flex flex-row p-5 space-x-3 ml-44">
       <div>
         <div
-          class="flex justify-center w-16 space-x-2 rounded"
+          class="flex items-center justify-start w-auto p-4 space-x-2 text-2xl rounded"
           :class="cameraBackground"
         >
-          <button @click="onClickCameraBtn" type="button">
+          <button class="pl-1" @click="onClickCameraBtn" type="button">
             <i :class="cameraIcon"></i>
           </button>
-          <button @click="selectsOnCamera = !selectsOnCamera">
+          <p class="text-sm text-gray-500">|</p>
+          <button
+            class="flex flex-row items-center"
+            @click="selectsOnCamera = !selectsOnCamera"
+          >
+            <p class="text-sm">카메라 변경</p>
             <i class="bx bx-chevron-down"></i>
           </button>
         </div>
       </div>
       <div>
         <div
-          class="flex justify-center w-16 space-x-2 rounded"
+          class="flex items-center justify-center w-auto p-4 space-x-2 text-2xl rounded"
           :class="muteBackground"
         >
-          <button @click="onClickMuteBtn" type="button">
+          <button class="pl-1" @click="onClickMuteBtn" type="button">
             <i :class="mutedIcon"></i>
           </button>
-          <button @click="selectsOn = !selectsOn">
+          <p class="text-sm text-gray-500">|</p>
+
+          <button
+            class="flex flex-row items-center"
+            @click="selectsOn = !selectsOn"
+          >
+            <p class="text-sm">마이크 변경</p>
+
             <i class="bx bx-chevron-down"></i>
           </button>
         </div>
       </div>
 
       <div class="flex flex-col">
-        <button class="btn btn-secondary" @click="selectsOn = !selectsOn">
-          <img src="~@/assets/settings.png" alt="setting" class="w-6 setting" />
-          <!-- <font-awesome-icon :icon="['fas', 'cog']" /> -->
-        </button>
         <div v-if="selectsOnCamera" class="fixed my-2 select-container w-72">
           <Listbox
             v-model="deviceSetting.currentVideoId"
@@ -83,6 +91,7 @@
                       ]"
                     >
                       <span
+                        @click="selectsOnCamera = !selectsOnCamera"
                         :class="[
                           selected ? 'font-medium' : 'font-normal',
                           'block truncate',
@@ -148,6 +157,7 @@
                       ]"
                     >
                       <span
+                        @click="selectsOn = !selectsOn"
                         :class="[
                           selected ? 'font-medium' : 'font-normal',
                           'block truncate',

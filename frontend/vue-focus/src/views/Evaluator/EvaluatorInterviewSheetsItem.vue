@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div class="flex justify-center">
-      <div class="overflow-hidden rounded-md"></div>
-    </div>
     <!-- component -->
     <div class="flex items-center justify-center p-5">
       <div class="mx-auto w-full max-w-[550px]">
@@ -15,7 +12,7 @@
           >
             <label
               for="name"
-              class="mb-3 block text-base font-medium text-[#07074D]"
+              class="mb-3 text-start block text-base font-medium text-[#07074D]"
             >
               {{ evaluationSheet.id }}
               {{ evaluationSheet.content }}
