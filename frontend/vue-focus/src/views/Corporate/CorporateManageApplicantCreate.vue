@@ -47,6 +47,12 @@
                       required="true"
                       placeholder="010-xxxx-xxxx"
                     />
+                    <p
+                      v-show="!telvalid"
+                      class="text-lg font-medium text-red-900"
+                    >
+                      올바른 전화번호 양식을 적어주세요.
+                    </p>
                   </div>
                   <div class="p-2">
                     <p class="text-lg font-medium text-gray-900">이메일</p>
@@ -58,6 +64,12 @@
                       required="true"
                       placeholder="example@blackbunny.com"
                     />
+                    <p
+                      v-show="!emailvalid"
+                      class="text-lg font-medium text-red-900"
+                    >
+                      올바른 이메일 양식을 적어주세요.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -108,13 +120,13 @@
                   </div>
                   <div class="flex flex-col p-2">
                     <p class="text-lg font-medium text-gray-900">대학교</p>
-                    <input
+                    <vue3-simple-typeahead
                       class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      v-model="univId"
-                      type="text"
-                      id="univ"
-                      required="true"
-                    />
+                      id="typeahead_id"
+                      :items="currentnamelist"
+                      :minInputLength="1"
+                    >
+                    </vue3-simple-typeahead>
                   </div>
                   <div class="flex flex-col p-2">
                     <p class="text-lg font-medium text-gray-900">전공</p>
@@ -206,7 +218,7 @@ import CorporateNavbar from '@/components/CorporateNavbar.vue';
 // 1. 수험번호(텍스트) 2. 이름(텍스트) 3. 전화번호(텍스트) 4. 생년월일(달력) 5. 이메일(텍스트) 6. 성(선택) 7. 학위(드랍다운)
 // 8. 대학교(??) 9. 전공(텍스트) 10. 학점(int) 11. 총학점(드랍다운) 12. 대외활동 횟수(텍스트->int) 13. 수상 횟수(텍스트->int)
 
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import axios from 'axios';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -253,7 +265,7 @@ const degreeEN = () => {
     return 'invalid degree!';
   }
 };
-const univId = ref(null);
+const univname = ref('');
 const major = ref('');
 const credit = ref('');
 const totalCredits = ref([
@@ -265,6 +277,7 @@ const activityCount = ref('');
 const awardCount = ref('');
 
 const getApplicantInfo = () => {
+  convertkeyword();
   const applicantInfo = {
     code: code.value,
     name: name.value,
@@ -283,16 +296,131 @@ const getApplicantInfo = () => {
   return applicantInfo;
 };
 
+const univlist = ref([]);
+const univnamelist = ref([]);
+const graduate = ref([]);
+const graduatenamelist = ref([]);
+const college = ref([]);
+const collegenamelist = ref([]);
+const result = ref([]);
+
+const currentnamelist = ref([]);
+const getCurrentUnivList = () => {
+  if (degreeKR.value === '대학원 박사' || degreeKR.value === '대학원 석사') {
+    currentnamelist.value = graduatenamelist.value;
+  } else if (degreeKR.value === '4년제 학사') {
+    currentnamelist.value = univnamelist.value;
+  } else {
+    currentnamelist.value = collegenamelist.value;
+  }
+};
+
+// const autoComplete = keyword => {
+//   result = univlist.value.filter("가천") => {
+//     return skill.match(new RegExp("^",univId.value,"i"))
+//   }
+// }
+const selunivname = ref('');
+const selcampus = ref('');
+const univId = ref(0);
+const convertkeyword = () => {
+  let text = document.getElementById('typeahead_id').value;
+  text = text.split('(');
+  selunivname.value = text[0];
+  selcampus.value = text[1].slice(0, text[1].length - 1);
+
+  getunivId();
+};
+
+const getunivId = () => {
+  if (degreeKR.value === '대학원 박사' || degreeKR.value === '대학원 석사') {
+    graduate.value.forEach(element => {
+      if (
+        element.name === selunivname.value &&
+        element.campus === selcampus.value
+      ) {
+        univId.value = element.id;
+      }
+
+      return;
+    });
+  } else if (degreeKR.value === '4년제 학사') {
+    univlist.value.forEach(element => {
+      if (
+        element.name === selunivname.value &&
+        element.campus === selcampus.value
+      ) {
+        univId.value = element.id;
+      }
+      return;
+    });
+  } else {
+    college.value.forEach(element => {
+      if (
+        element.name === selunivname.value &&
+        element.campus === selcampus.value
+      ) {
+        univId.value = element.id;
+      }
+      return;
+    });
+  }
+};
+
+const getuniv = () => {
+  if (localStorage.getItem('univ') != null) {
+    univlist.value = JSON.parse(localStorage.getItem('univ'));
+    for (const univ of univlist.value) {
+      // console.log('univ testing: ', univ);
+      univnamelist.value.push(univ.name + '(' + univ.campus + ')');
+    }
+
+    return;
+  }
+  axios.get(`${BASE_URL}/data/univs`).then(data => {
+    data.data.shift;
+    univlist.value = data.data;
+    localStorage.setItem('univ', JSON.stringify(data.data));
+  });
+};
+
+const getcollege = () => {
+  if (localStorage.getItem('college') != null) {
+    college.value = JSON.parse(localStorage.getItem('college'));
+    for (const col of college.value) {
+      // console.log('univ testing: ', univ);
+      collegenamelist.value.push(col.name + '(' + col.campus + ')');
+    }
+    return;
+  }
+  axios.get(`${BASE_URL}/data/colleges`).then(data => {
+    data.data.shift;
+    college.value = data.data;
+    localStorage.setItem('college', JSON.stringify(data.data));
+  });
+};
+
+const getgraduate = () => {
+  if (localStorage.getItem('graduate') != null) {
+    graduate.value = JSON.parse(localStorage.getItem('graduate'));
+    for (const grad of graduate.value) {
+      // console.log('univ testing: ', univ);
+      graduatenamelist.value.push(grad.name + '(' + grad.campus + ')');
+    }
+    return;
+  }
+  axios.get(`${BASE_URL}/data/graduates`).then(data => {
+    data.data.shift;
+    graduate.value = data.data;
+    localStorage.setItem('graduate', JSON.stringify(data.data));
+  });
+};
 const createApplicant = () => {
   const applicantInfo = getApplicantInfo();
   let applicantInfos = [];
   applicantInfos.push(applicantInfo);
   const applicantInfosJson = JSON.stringify(applicantInfos);
   const user = JSON.parse(localStorage.getItem('user'));
-  console.log('applicantInfo: ', applicantInfo);
-  console.log('applicantInfos: ', applicantInfos);
-  console.log('applicantInfosJson: ', applicantInfosJson);
-  console.log(user.accessToken);
   axios
     .post(
       `${BASE_URL}/companyusers/applicants/${processId}`,
@@ -314,6 +442,25 @@ const createApplicant = () => {
       console.log(err.message);
     });
 };
+
+onMounted(() => {
+  getuniv();
+  getcollege();
+  getgraduate();
+});
+const emailvalid = ref(false);
+const telvalid = ref(false);
+watch(degreeKR, (newValue, oldValue) => {
+  getCurrentUnivList();
+});
+watch(tel, (newValue, oldValue) => {
+  const validation = /^\d{2,3}-\d{3,4}-\d{4}$/;
+  telvalid.value = validation.test(tel.value);
+});
+watch(email, (newValue, oldValue) => {
+  const validation = /^[A-Za-z0-9_\\.\\-]+@[A-Za-z0-9\\-]+\.[A-Za-z0-9\\-]+/;
+  emailvalid.value = validation.test(email.value);
+});
 </script>
 
 <style lang="scss" scoped></style>
