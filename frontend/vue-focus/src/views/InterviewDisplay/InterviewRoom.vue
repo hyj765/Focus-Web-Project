@@ -554,7 +554,7 @@ export default {
     startScreenShare() {
       this.screenOV = new OpenVidu();
       this.screenSession = this.screenOV.initSession();
-      (this.screenShareName = this.myUserName + "'s Screen"),
+      (this.screenShareName = this.myName + '님의 화면 공유'),
         this.getToken(this.realRoomCode)
           .then(token => {
             this.screenSession
