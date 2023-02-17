@@ -8,6 +8,9 @@ export default createStore({
     user: null,
     currentDepartments: null,
     currentApplicantProcessId: null,
+    sheets: [],
+    roomID: [],
+    roomCodeInfo: [],
   },
   getters: {
     loggedIn(state) {
@@ -41,6 +44,18 @@ export default createStore({
         'currentApplicantProcessId: ',
         state.currentApplicantProcessId,
       );
+    },
+    GET_ROOMID(state, roomID) {
+      state.roomID = roomID;
+      console.log('state.roomID : ', state.roomID);
+      console.log('roomID[0] : ', state.roomID[0].id);
+    },
+    GET_ROOMCODE_INFO(state, roomCodeInfo) {
+      state.roomCodeInfo = roomCodeInfo;
+      console.log('roomCodeInfo : ', state.roomCodeInfo);
+    },
+    GET_EVALUATOR_SHEET(state, sheets) {
+      state.sheets = sheets;
     },
   },
   actions: {
@@ -81,6 +96,40 @@ export default createStore({
     },
     saveCurrentApplicantProcessId({ commit }, processId) {
       commit('SAVE_CURRENT_APPLICANT_PROCESS_ID', processId);
+    },
+
+    getRoomId(context) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      axios({
+        method: 'get',
+        url: `${BASE_URL}/interview/schedule/1/`,
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      })
+        .then(res => {
+          context.commit('GET_ROOMID', res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    getEvaluatorSheets(context) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      axios({
+        method: 'get',
+        url: `${BASE_URL}/evaluation/sheets/1/`,
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      })
+        .then(res => {
+          console.log('평가지 잘 불러옴?', res.data);
+          context.commit('GET_EVALUATOR_SHEET', res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
   },
 });

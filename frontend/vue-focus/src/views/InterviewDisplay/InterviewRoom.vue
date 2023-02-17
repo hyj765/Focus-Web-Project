@@ -49,7 +49,30 @@
     <!-- ----------------------------------------------------------- 채팅방 들어가면 나오는 화면 ------------------------------------------------------------ -->
 
     <div v-if="session" id="session">
-      <!------------------- 화면 출력 Start -------------------->
+      <p>NAME : {{ this.myName }}</p>
+      <p>Real_Code : {{ interviewRoomCode }}</p>
+      <!------------------- 채팅 기능 Start ---------------------->
+      <div>
+        <h5>{{ getEvaluatorSheets.content }}</h5>
+      </div>
+      <div
+        v-if="chatmodal == true"
+        class="black-bg"
+        style="
+          position: absolute;
+          left: 990px;
+          padding-right: 5px;
+          padding-top: 0px;
+        "
+      >
+        <UserChat
+          id="user-chat"
+          :chat-log="chatLog"
+          value="보내기"
+          @send-message="sendMessage"
+        />
+      </div>
+      <!------------------- 채팅 기능 End ------------------------>
 
       <div id="video-container" class="">
         <div v-if="publisher">
@@ -242,7 +265,50 @@ export default {
     };
   },
 
+  created() {
+    this.getRoomCodeInfo();
+    this.getMyName();
+    // this.getEvaluatorSheets();
+  },
+
   methods: {
+    getMyName() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      console.log('current user : ', user);
+      console.log('userRole : ', user.userRole);
+      if (user.userRole === 1) {
+        this.myName = '서비스 관리자';
+      } else if (user.userRole === 2) {
+        this.myName = '기업 관리자';
+      } else if (user.userRole === 3) {
+        this.myName = '면접관';
+      } else if (user.userRole === 4) {
+        this.myName = '지원자';
+      }
+    },
+
+    getRoomCodeInfo() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      axios({
+        method: 'get',
+        url: `${BASE_URL}/interviewrooms/enter/real/1/`,
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      })
+        .then(res => {
+          this.interviewRoomCode = res.data;
+          console.log('interviewRoomCode : ', this.interviewRoomCode);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+
+    // getEvaluatorSheets() {
+    //   this.$store.dispatch('getEvaluatorSheets');
+    // },
+
     joinSession() {
       // --- Get an OpenVidu object ---
       this.OV = new OpenVidu();
