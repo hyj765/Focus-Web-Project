@@ -7,7 +7,7 @@
         :main-stream="mainStream"
       />
 
-      <p class="user-name">
+      <p>
         {{ clientData }}
       </p>
     </div>

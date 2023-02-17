@@ -4,8 +4,6 @@
     <div v-if="!session" id="join">
       <div>
         <SwitchCamera @set-device="setDevice($event)" />
-        <!-- <p>유저 이름 : {{ this.myName }}</p>
-        <p>방 코드 : {{ this.realRoomCode }}</p> -->
         <div class="form-group">
           <p class="space-x-5 text-center">
             <button
@@ -33,10 +31,7 @@
     <div class="flex flex-row">
       <div class="w-1/2" v-if="session" id="session">
         <!------------------- 채팅 기능 Start ---------------------->
-        <!-- <div>
-          <p>유저 이름 : {{ this.myName }}</p>
-          <p>방 코드 : {{ this.realRoomCode }}</p>
-        </div> -->
+
         <div
           v-if="chatmodal == true"
           class="black-bg"
@@ -273,11 +268,15 @@ export default {
       // Speech Detection
       isSpeakList: [],
       isSpeak: false,
+      // <----------------- 발언자 하이라이팅 End ----------------->
+      username: '',
+      applicantMyInfo: '',
     };
   },
 
   created() {
     this.getScheduleList();
+    this.getApplicantMyInfo();
     this.getMyName();
   },
 
@@ -293,7 +292,7 @@ export default {
       } else if (user.userRole === 3) {
         this.myName = '면접관';
       } else if (user.userRole === 4) {
-        this.myName = '박신혜';
+        this.myName = this.username;
       }
     },
 
@@ -310,6 +309,26 @@ export default {
         .then(res => {
           this.realRoomCode = res.data;
           console.log('RoomCode : ', this.realRoomCode);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+
+    getApplicantMyInfo() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      axios({
+        method: 'get',
+        url: `${BASE_URL}/applicants/me`,
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      })
+        .then(res => {
+          this.applicantMyInfo = res.data;
+          console.log('applicantMyInfo : ', this.applicantMyInfo);
+          this.username = this.applicantMyInfo.name;
+          console.log('username : ', this.username);
         })
         .catch(err => {
           console.log(err);
