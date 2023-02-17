@@ -1,6 +1,16 @@
 <template>
   <div>
-    <CorporateHeader></CorporateHeader>
+    <!-- <CorporateHeader></CorporateHeader> -->
+    <div>
+      <!-- <CorporateNavbar></CorporateNavbar> -->
+
+      <!-- 현재 프로세스 정보 -->
+      <div>
+        {{ currentProcessName }} | {{ currentProcessStartDate.slice(0, 10) }} ~
+        {{ currentProcessEndDate.slice(0, 10) }} | 총
+        {{ currentProcessInterviewCount }} 차
+      </div>
+    </div>
     <div class="flex">
       <CorporateNavbar></CorporateNavbar>
       <div class="w-screen">
@@ -65,6 +75,149 @@
           </div>
         </div>
       </div>
+
+      <!-- 해당 차수의 면접 일정 생성란 (1차, 2차, 3차 선택해야 뜸) -->
+      <div v-if="currentInterviewId">
+        <!-- 면접 일정 생성 -->
+        <div>
+          <h1>면접 일정 생성</h1>
+          <div>
+            <p>면접명</p>
+            <input type="text" v-model="interviewName" /><br />
+            <input
+              v-model="interviewStartDate"
+              type="date"
+              id="interviewStartDate"
+              required="true"
+            />
+            <input
+              v-model="interviewEndDate"
+              type="date"
+              id="interviewEndDate"
+              required="true"
+            />
+            <br />
+            <input type="text" v-model="startHour" />시
+            <input type="text" v-model="startMinute" />분<br />
+            <input type="text" v-model="endHour" />시
+            <input type="text" v-model="endMinute" />분<br />
+
+            <!-- 평가자 현황 -->
+            <div>
+              <p>평가자</p>
+              <br />
+              <p v-for="evaluator in currentEvaluatorState" :key="evaluator.id">
+                {{ evaluator.name }}({{ evaluator.id }})
+              </p>
+            </div>
+            <!-- 지원자 현황 -->
+            <div>
+              <p>지원자</p>
+              <br />
+              <p v-for="applicant in currentApplicantState" :key="applicant.id">
+                {{ applicant.name }}({{ applicant.id }})
+              </p>
+            </div>
+
+            <!-- 평가자 선택 -->
+            <Menu as="div" class="relative inline-block text-left">
+              <div>
+                <MenuButton
+                  class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+                >
+                  평가자
+                  <ChevronDownIcon
+                    class="w-5 h-5 ml-2 -mr-1"
+                    aria-hidden="true"
+                  />
+                </MenuButton>
+              </div>
+
+              <transition
+                enter-active-class="transition duration-100 ease-out"
+                enter-from-class="transform scale-95 opacity-0"
+                enter-to-class="transform scale-100 opacity-100"
+                leave-active-class="transition duration-75 ease-in"
+                leave-from-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-95 opacity-0"
+              >
+                <MenuItems
+                  class="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                >
+                  <div class="py-1">
+                    <MenuItem
+                      v-slot="{ active }"
+                      v-for="evaluator in evaluators"
+                      :key="evaluator.id"
+                    >
+                      <p
+                        @click="clickEvaluator(evaluator)"
+                        :class="[
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
+                          'block px-4 py-2 text-sm',
+                        ]"
+                      >
+                        {{ evaluator.name }}
+                      </p>
+                    </MenuItem>
+                  </div>
+                </MenuItems>
+              </transition>
+            </Menu>
+
+            <!-- 지원자 선택 -->
+            <Menu as="div" class="relative inline-block text-left">
+              <div>
+                <MenuButton
+                  class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+                >
+                  지원자
+                  <ChevronDownIcon
+                    class="w-5 h-5 ml-2 -mr-1"
+                    aria-hidden="true"
+                  />
+                </MenuButton>
+              </div>
+
+              <transition
+                enter-active-class="transition duration-100 ease-out"
+                enter-from-class="transform scale-95 opacity-0"
+                enter-to-class="transform scale-100 opacity-100"
+                leave-active-class="transition duration-75 ease-in"
+                leave-from-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-95 opacity-0"
+              >
+                <MenuItems
+                  class="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                >
+                  <div class="py-1">
+                    <MenuItem
+                      v-slot="{ active }"
+                      v-for="applicant in applicants"
+                      :key="applicant.id"
+                    >
+                      <p
+                        @click="clickApplicant(applicant)"
+                        :class="[
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
+                          'block px-4 py-2 text-sm',
+                        ]"
+                      >
+                        {{ applicant.name }}
+                      </p>
+                    </MenuItem>
+                  </div>
+                </MenuItems>
+              </transition>
+            </Menu>
+          </div>
+          <button @click.stop="createInterview()">면접 생성</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -73,9 +226,13 @@
 import CorporateHeader from '@/components/CorporateHeader.vue';
 import CorporateNavbar from '@/components/CorporateNavbar.vue';
 
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
+import { ChevronDownIcon } from '@heroicons/vue/20/solid';
+
 import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 const companyId = JSON.parse(localStorage.getItem('user')).id;
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
@@ -160,10 +317,15 @@ const deleteSchedule = (currentStep, interviewRoomId) => {
 
 // 면접 일정 생성 ("applicants": [1,2,3], "endTime": "2021-11-09T11:44:30.327959", "evaluators": [1,2,3], "interviewId": 1, "name": "두나무 FE1-1", "startTime": "2021-11-09T11:44:30.327959"}
 
+const store = useStore();
 const evaluators = ref([]);
-const evalutorCount = ref(0);
+// const evalutorCount = ref(0);
 const applicants = ref([]);
-const applicantCount = ref(0);
+// const applicantCount = ref(0);
+
+const saveEvaluators = () => {
+  store.dispatch('saveEvaluators', evaluators);
+};
 
 const getEvaluatorsInfo = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -176,29 +338,39 @@ const getEvaluatorsInfo = () => {
     .then(res => {
       // console.log('getEvaluators: ', res.data);
       evaluators.value = res.data.content;
-      evalutorCount.value = res.data.totalElements;
+      // evalutorCount.value = res.data.totalElements;
       console.log('evaluators: ', evaluators.value);
-      console.log('evalutorCount: ', evalutorCount.value);
+      // console.log('evalutorCount: ', evalutorCount.value);
+    })
+    .then(res => {
+      saveEvaluators();
     })
     .catch(err => {
       console.log(err.message);
     });
 };
 
+const saveApplicants = () => {
+  store.dispatch('saveApplicants', applicants);
+};
+
 const getApplicantsInfo = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   axios
-    .get(`${BASE_URL}/companyusers/applicants/${route.params.id}/list`, {
+    .get(`${BASE_URL}/interview/interview/applicants/${route.params.id}`, {
       headers: {
         Authorization: `Bearer ${user.accessToken}`,
       },
     })
     .then(res => {
       // console.log('getApplicants: ', res.data);
-      applicants.value = res.data.content;
-      applicantCount.value = res.data.totalElements;
-      console.log('evaluators: ', applicants.value);
-      console.log('evalutorCount: ', applicantCount.value);
+      applicants.value = res.data;
+      // applicantCount.value = res.data.totalElements;
+      console.log('applicants: ', applicants.value);
+      // console.log('evalutorCount: ', applicantCount.value);
+    })
+    .then(res => {
+      saveApplicants();
     })
     .catch(err => {
       console.log(err.message);
@@ -209,6 +381,8 @@ const getApplicantsInfo = () => {
 const currentInterviewId = ref(0);
 const currentInterview = ref(null);
 const interviewName = ref('');
+const interviewStartDate = ref('');
+const interviewEndDate = ref('');
 watch(currentInterviewId, (newvalue, oldvalue) => {
   // console.log('currentInterviewList: ', currentInterviewList.value);
   currentInterview.value = currentInterviewList.value.filter(
@@ -216,8 +390,11 @@ watch(currentInterviewId, (newvalue, oldvalue) => {
   );
   console.log('currentInterview: ', currentInterview.value);
   interviewName.value = currentInterview.value[0].name;
+  interviewStartDate.value = currentInterview.value[0].startDate.slice(0, 10);
+  interviewEndDate.value = currentInterview.value[0].endDate.slice(0, 10);
   console.log('interviewName: ', interviewName.value);
 });
+
 const startHour = ref('15');
 const startMinute = ref('30');
 const endHour = ref('16');
@@ -225,7 +402,7 @@ const endMinute = ref('00');
 
 const makeInterviewStartTime = () => {
   return (
-    currentProcessStartDate.value.slice(0, 10) +
+    interviewStartDate.value +
     'T' +
     startHour.value +
     ':' +
@@ -235,19 +412,82 @@ const makeInterviewStartTime = () => {
 };
 const makeInterviewEndTime = () => {
   return (
-    currentProcessEndDate.value.slice(0, 10) +
-    'T' +
-    startHour.value +
-    ':' +
-    startMinute.value +
-    ':00'
+    interviewEndDate.value + 'T' + endHour.value + ':' + endMinute.value + ':00'
   );
 };
 
+// 입력란 현황
+const currentEvaluatorState = ref([]);
+const currentApplicantState = ref([]);
+
+// 드롭다운 탭 누르면 추가, 삭제
+const clickEvaluator = evaluator => {
+  if (currentEvaluatorState.value.includes(evaluator)) {
+    currentEvaluatorState.value = currentEvaluatorState.value.filter(
+      checkEvaluator => checkEvaluator != evaluator,
+    );
+  } else {
+    currentEvaluatorState.value.push(evaluator);
+  }
+};
+const clickApplicant = applicant => {
+  if (currentApplicantState.value.includes(applicant)) {
+    currentApplicantState.value = currentApplicantState.value.filter(
+      checkApplicant => checkApplicant != applicant,
+    );
+  } else {
+    currentApplicantState.value.push(applicant);
+  }
+};
+
+// 면접 생성 시 넘겨줄 값
+const interviewEvaluators = ref([]);
+const interviewApplicants = ref([]);
+const mapToEvaluatorId = () => {
+  interviewEvaluators.value = currentEvaluatorState.value.map(
+    evaluator => evaluator.id,
+  );
+};
+const mapToApplicantId = () => {
+  interviewApplicants.value = currentApplicantState.value.map(
+    applicant => applicant.id,
+  );
+};
+
+const getInterviewInfo = () => {
+  mapToApplicantId();
+  mapToEvaluatorId();
+  const interviewInfo = {
+    startTime: makeInterviewStartTime(),
+    endTime: makeInterviewEndTime(),
+    name: interviewName.value,
+    interviewId: currentInterviewId.value,
+    applicants: interviewApplicants.value,
+    evaluators: interviewEvaluators.value,
+  };
+  return interviewInfo;
+};
+
 const createInterview = () => {
-  const startTime = makeInterviewStartTime();
-  const endTime = makeInterviewEndTime();
-  console.log(startTime, endTime);
+  const interviewInfo = JSON.stringify(getInterviewInfo());
+  console.log('interviewInfo: ', interviewInfo);
+  const user = JSON.parse(localStorage.getItem('user'));
+  axios
+    .post(`${BASE_URL}/interview/schedule/${processId}`, interviewInfo, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+    .then(res => {
+      console.log('interview created! ', res.data);
+      router.push({
+        name: 'CorporateManageInterviewList',
+        params: { id: processId },
+      });
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
 };
 
 onMounted(() => {

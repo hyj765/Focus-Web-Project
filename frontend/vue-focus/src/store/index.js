@@ -7,6 +7,8 @@ export default createStore({
   state: {
     user: null,
     currentDepartments: null,
+    currentEvaluators: null,
+    currentApplicants: null,
     currentApplicantProcessId: null,
     sheets: [],
     roomID: [],
@@ -39,7 +41,15 @@ export default createStore({
     },
     SAVE_DEPARTMENTS(state, departments) {
       state.currentDepartments = departments;
-      console.log('currentDepartments: ', state.currentDepartments);
+      console.log('state.currentDepartments: ', state.currentDepartments);
+    },
+    SAVE_EVALUATORS(state, evaluators) {
+      state.currentEvaluators = evaluators;
+      console.log('state.currentEvaluators: ', state.currentEvaluators);
+    },
+    SAVE_APPLICANTS(state, applicants) {
+      state.currentApplicants = applicants;
+      console.log('state.currentApplicants: ', state.currentApplicants);
     },
     SAVE_CURRENT_APPLICANT_PROCESS_ID(state, processId) {
       state.currentApplicantProcessId = processId;
@@ -97,6 +107,12 @@ export default createStore({
         .catch(err => {
           console.log(err.message);
         });
+    },
+    saveEvaluators({ commit }, evaluators) {
+      commit('SAVE_EVALUATORS', evaluators);
+    },
+    saveApplicants({ commit }, applicants) {
+      commit('SAVE_APPLICANTS', applicants);
     },
     saveCurrentApplicantProcessId({ commit }, processId) {
       commit('SAVE_CURRENT_APPLICANT_PROCESS_ID', processId);
