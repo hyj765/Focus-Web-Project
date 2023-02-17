@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>2CorporateManageProcess</div>
 </template>
 
 <script setup></script>

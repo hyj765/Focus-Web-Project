@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>CorporateNotice</div>
 </template>
 
 <script setup></script>
