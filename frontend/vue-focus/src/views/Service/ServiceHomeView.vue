@@ -29,7 +29,7 @@
                 <div
                   class="p-3 text-lg text-center text-gray-700 break-words bg-white rounded-b-lg"
                 >
-                  {{ currentinterview }}개
+                  {{ currentInterviewCount }}개
                 </div>
               </div>
               <div
@@ -43,7 +43,7 @@
                 <div
                   class="p-3 text-lg text-center text-gray-700 break-words bg-white rounded-b-lg"
                 >
-                  {{ currentcontract }} 개
+                  {{ currentContractCount }} 개
                 </div>
               </div>
               <div
@@ -57,7 +57,7 @@
                 <div
                   class="p-3 text-lg text-center text-gray-700 break-words bg-white rounded-b-lg"
                 >
-                  {{ todayprocess }} 개
+                  {{ todayProcessCount }} 개
                 </div>
               </div>
             </div>
@@ -97,10 +97,8 @@
                         </tr>
                       </thead>
                       <tbody
-                        v-for="(
-                          currentcontractlist, index
-                        ) in currentcontractlists"
-                        :key="currentcontractlist.id"
+                        v-for="(corporate, index) in corporatesInContract"
+                        :key="corporate.id"
                       >
                         <tr
                           class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
@@ -128,12 +126,12 @@
                           <td
                             class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                           >
-                            {{ currentcontractlist.companyName }}
+                            {{ corporate.companyName }}
                           </td>
                           <td
                             class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                           >
-                            {{ currentcontractlist.size }}
+                            {{ corporate.size }}
                           </td>
                         </tr>
                       </tbody>
@@ -202,16 +200,23 @@
                             </svg>
                           </td> -->
                           <td
+                            v-for="name in corporateNamesInProcess"
+                            :key="name.id"
                             class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                           >
-                            Google
+                            {{ name }}
                           </td>
                           <td
                             class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
                           >
-                            <p>1차 2022.02.15 ~ 2022.12.14</p>
-                            <p>1차 2022.02.15 ~ 2022.12.14</p>
-                            <p>1차 2022.02.15 ~ 2022.12.14</p>
+                            <p
+                              v-for="interview in interviews"
+                              :key="interview.id"
+                            >
+                              {{ interview.processName }} |
+                              {{ interview.startDate.slice(0, 10) }} ~
+                              {{ interview.endDate.slice(0, 10) }}
+                            </p>
                           </td>
                         </tr>
                       </tbody>
@@ -237,13 +242,13 @@ import axios from 'axios';
 const BASE_URL = 'https://i8a106.p.ssafy.io/api';
 
 // 현재 면접 진행중 기업 개수
-const currentinterview = ref(null);
-const getCurrentInterview = () => {
+const currentInterviewCount = ref(0);
+const getCurrentInterviewCount = () => {
   axios
     .get(`${BASE_URL}/servicedashboard/proceeding/companies/count/`)
     .then(res => {
       // console.log(res.data);
-      currentinterview.value = res.data.count;
+      currentInterviewCount.value = res.data.count;
     })
     .catch(err => {
       console.log(err.message);
@@ -251,13 +256,13 @@ const getCurrentInterview = () => {
 };
 
 // 전체 계약 중인 기업 개수
-const currentcontract = ref(null);
-const getCurrentContract = () => {
+const currentContractCount = ref(0);
+const getCurrentContractCount = () => {
   axios
     .get(`${BASE_URL}/serviceusers/accounts/contracts/number`)
     .then(res => {
       // console.log(res.data);
-      currentcontract.value = res.data;
+      currentContractCount.value = res.data;
     })
     .catch(err => {
       console.log(err.message);
@@ -265,13 +270,13 @@ const getCurrentContract = () => {
 };
 
 // 오늘 예정된 프로세스 개수
-const todayprocess = ref(null);
-const getTodayProcess = () => {
+const todayProcessCount = ref(null);
+const getTodayProcessCount = () => {
   axios
     .get(`${BASE_URL}/serviceusers/dashboard/process/number`)
     .then(res => {
-      // console.log(res);
-      todayprocess.value = res.data;
+      // console.log(res.data);
+      todayProcessCount.value = res.data;
     })
     .catch(err => {
       console.log(err.message);
@@ -279,13 +284,13 @@ const getTodayProcess = () => {
 };
 
 // 전체 계약 중인 기업 리스트
-const currentcontractlists = ref(null);
-const getCurrentContractLists = () => {
+const corporatesInContract = ref([]);
+const getCorporatesInContract = () => {
   axios
     .get(`${BASE_URL}/serviceusers/accounts/contracts`)
     .then(res => {
-      // console.log(res.data);
-      currentcontractlists.value = res.data.slice(0, 5);
+      console.log(res.data);
+      corporatesInContract.value = res.data.slice(0, 5);
       // console.log(currentcontractlists.value);
     })
     .catch(err => {
@@ -294,12 +299,24 @@ const getCurrentContractLists = () => {
 };
 
 // 현재 면접 진행 중 기업 리스트
-const currentinterviewList = ref(null);
-const getCurrentInterviewList = () => {
+const corporateNamesInProcess = ref(null);
+const corporateInterviews = ref(null);
+const interviews = ref(null);
+const getCorporatesInProcess = () => {
   axios
-    .get(`${BASE_URL}/serviceusers/dashboard/proceeding/companies`)
+    .get(`${BASE_URL}/servicedashboard/proceeding/companies/`)
     .then(res => {
-      console.log(res);
+      // console.log(Object.keys(res.data));
+      // console.log(Object.values(res.data));
+      corporateNamesInProcess.value = Object.keys(res.data);
+      corporateInterviews.value = Object.values(res.data);
+      console.log(corporateNamesInProcess.value);
+      console.log('corporateInterviews: ', corporateInterviews.value[0]);
+      interviews.value = corporateInterviews.value[0];
+      console.log('interviews: ', interviews.value);
+      // for (interview of corporateInterviews.value[0]) {
+      //   interviews.value.push(interview);
+      // }
     })
     .catch(err => {
       console.log(err.message);
@@ -307,11 +324,11 @@ const getCurrentInterviewList = () => {
 };
 
 onMounted(() => {
-  getCurrentInterview();
-  getCurrentContract();
-  getTodayProcess();
-  getCurrentContractLists();
-  getCurrentInterviewList();
+  getCurrentInterviewCount();
+  getCurrentContractCount();
+  getTodayProcessCount();
+  getCorporatesInContract();
+  getCorporatesInProcess();
 });
 </script>
 
