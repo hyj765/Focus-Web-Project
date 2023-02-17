@@ -209,6 +209,7 @@ const getPassApplicant = () => {
       },
     })
     .then(data => {
+      console.log(data.data);
       applicantlist.value = data.data;
       passapplicantIds.value = applicantlist.value.map(
         applicant => applicant.id,
