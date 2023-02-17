@@ -87,26 +87,8 @@ export default createStore({
     logout({ commit }) {
       commit('LOGOUT');
     },
-    createcompanyaccount({ commit }, companyinfo) {
-      console.log('store user data: ', this.state.user);
-      console.log('companyinfo: ', companyinfo);
-      axios
-        .post(
-          `${BASE_URL}/serviceusers/accounts`,
-          { body: companyinfo },
-          {
-            headers: {
-              Authorization: `Bearer ${this.state.user.accessToken}`,
-            },
-          },
-        )
-        .then(({ data }) => {
-          console.log(data);
-          commit('CREATE');
-        })
-        .catch(err => {
-          console.log(err.message);
-        });
+    saveDepartments({ commit }, departments) {
+      commit('SAVE_DEPARTMENTS', departments);
     },
     saveEvaluators({ commit }, evaluators) {
       commit('SAVE_EVALUATORS', evaluators);

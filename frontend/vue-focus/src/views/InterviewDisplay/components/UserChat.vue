@@ -3,9 +3,19 @@
     <div class="chat">
       <div class="chat-history">
         <ul>
-          <li class="text-color">면접관의 지시에 따라 마이크를 켜주세요.</li>
+          <li
+            class="text-color"
+            style="
+              margin-bottom: 10px;
+              text-align: center;
+              margin-right: 20px;
+              background-color: whitesmoke;
+            "
+          >
+            ※ 면접관의 지시에 따라 마이크를 켜주세요.
+          </li>
           <text v-for="chat in chatLog" :key="chat.id" class="clearfix pt-4">
-            <div class="message-data align-right">
+            <div class="message-data align-right" style="padding-right: 17px">
               <span class="message-data-name">{{ chat[1].clientData }}</span>
             </div>
             <div class="message other-message float-right">
@@ -23,8 +33,16 @@
             name="message-to-send"
             placeholder="메세지를 입력하세요."
             rows="3"
+            style="
+              background-color: whitesmoke;
+              padding-left: 10px;
+              padding-right: 5px;
+            "
           ></textarea>
-          <button type="submit">전송</button>
+
+          <button type="submit" style="padding-left: 5px; padding-right: 5px">
+            전송
+          </button>
         </form>
       </div>
     </div>
@@ -53,6 +71,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700);
 *,
@@ -61,23 +80,23 @@ export default {
   box-sizing: border-box;
 }
 .chat {
-  width: 490px;
+  width: 510px;
+  height: 670px;
   float: left;
-  background: #f2f5f8;
+  background: white;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   color: #434651;
 }
 .chat {
   padding: 20px;
-  border-bottom: 2px solid white;
+  /* border-bottom: 2px solid white; */
 }
 .chat {
   float: left;
 }
 .chat {
   float: left;
-  padding-left: 10px;
   margin-top: 0px;
 }
 .chat {
@@ -85,7 +104,7 @@ export default {
   font-size: 16px;
 }
 .chat {
-  color: #92959e;
+  color: black;
 }
 
 .text-color {
@@ -100,10 +119,10 @@ export default {
   margin-top: 12px;
 }
 .chat .chat-history {
-  padding: 30px 30px 20px;
+  /* padding: 30px 30px 0px; */
   border-bottom: 2px solid white;
   overflow-y: scroll;
-  height: 575px;
+  height: 490px;
 }
 .chat .chat-history .message-data {
   margin-bottom: 15px;
@@ -113,14 +132,16 @@ export default {
   padding-left: 6px;
 }
 .chat .chat-history .message {
-  color: white;
-  padding: 18px 20px;
+  color: black;
+  margin-right: 17px;
+  padding-left: 12px;
+  padding-right: 12px;
   line-height: 26px;
   font-size: 16px;
   border-radius: 7px;
-  margin-bottom: 30px;
-  width: 90%;
-  position: relative;
+  margin-bottom: 20px;
+  /* width: 90%; */
+  /* position: relative; */
 }
 .chat .chat-history .message:after {
   bottom: 100%;
@@ -139,10 +160,10 @@ export default {
   background: #86bb71;
 }
 .chat .chat-history .other-message {
-  background: #94c2ed;
+  background: whitesmoke;
 }
 .chat .chat-history .other-message:after {
-  border-bottom-color: #94c2ed;
+  border-bottom-color: white;
   left: 93%;
 }
 .chat .chat-message {
@@ -151,9 +172,9 @@ export default {
 .chat .chat-message textarea {
   width: 100%;
   border: none;
-  padding: 10px 20px;
-  font: 14px/22px 'Lato', Arial, sans-serif;
-  margin-bottom: 10px;
+  padding: 10px 10px;
+  /* font: 14px/22px 'Lato', Arial, sans-serif; */
+  /* margin-bottom: 10px; */
   border-radius: 5px;
   resize: none;
 }
@@ -165,7 +186,7 @@ export default {
 }
 .chat .chat-message button {
   float: right;
-  color: #94c2ed;
+  color: black;
   font-size: 16px;
   text-transform: uppercase;
   border: none;

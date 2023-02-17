@@ -19,8 +19,8 @@
           >
             {{ title }}
           </button>
-          <p>{{ content }}</p>
-          <p>{{ score }}</p>
+          <!-- <p>{{ content }}</p> -->
+          <!-- <p>{{ score }}</p> -->
         </li>
       </ul>
     </div>
@@ -33,14 +33,14 @@ defineProps({
     type: String,
     required: true,
   },
-  content: {
-    type: String,
-    required: true,
-  },
-  score: {
-    type: Number,
-    required: true,
-  },
+  // content: {
+  //   type: String,
+  //   required: true,
+  // },
+  // score: {
+  //   type: Number,
+  //   required: true,
+  // },
   createdAt: {
     type: [String, Date, Number],
   },

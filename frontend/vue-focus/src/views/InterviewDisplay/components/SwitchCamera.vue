@@ -1,5 +1,10 @@
 <template>
   <div>
+    <img
+      src="@/assets/실루엣.png"
+      alt="실루엣"
+      class="absolute z-10 opacity-60 left-36"
+    />
     <div class="videoInput" style="display: flex; margin-left: 13%">
       <video class="myVideo" autoplay :poster="posterImgSrc"></video>
       <!-- <img src="~@/assets/guide_image.jpg" alt="Guide_Image" /> -->

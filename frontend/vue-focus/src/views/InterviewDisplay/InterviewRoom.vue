@@ -3,6 +3,7 @@
   <div id="main-container" class="container">
     <div v-if="!session" id="join">
       <div>
+        <!-- <PracticeRoom /> -->
         <SwitchCamera @set-device="setDevice($event)" />
         <div class="form-group">
           <!-- <p v-show="false">
@@ -17,15 +18,14 @@
             >
               입장하기
             </button>
-
             <router-link :to="{ name: 'Evaluator' }">
               <button
                 type="button"
                 class="inline-block rounded bg-red-600 px-6 py-2.5 text-md font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg"
               >
                 뒤로
-              </button>
-            </router-link>
+              </button></router-link
+            >
           </p>
         </div>
       </div>
@@ -166,9 +166,31 @@
             />
 
             <img
+              v-if="chatmodal"
               id="openchat_img"
-              src="~@/assets/openchat.png"
+              src="~@/assets/closechat.png"
               @click="startChat"
+            />
+
+            <img
+              v-else
+              id="closechat_img"
+              src="~@/assets/openchat.png"
+              @click="closeChat"
+            />
+
+            <img
+              v-if="participantsmodal"
+              id="closeparticipants_img"
+              src="~@/assets/closeparticipants.png"
+              @click="checkParticipants"
+            />
+
+            <img
+              v-else
+              id="checkparticipants_img"
+              src="~@/assets/checkparticipants.png"
+              @click="closeParticipants"
             />
           </div>
           <!------------------- Camera/Voice On/Off End ---------------------->
@@ -208,8 +230,10 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 const OPENVIDU_SERVER_URL = 'https://' + 'i8a106.p.ssafy.io';
 const OPENVIDU_SERVER_SECRET = 'cKlIVFkVgNinXpF';
 
+const BASE_URL = 'https://i8a106.p.ssafy.io/api';
+
 export default {
-  name: 'InterviewRoom',
+  name: 'App',
 
   props: {
     id: {
@@ -226,8 +250,11 @@ export default {
     UserChat,
     // <------------------- 채팅 기능 End ---------------------->
 
+    // <---------------- Mian Screen 출력 Start ---------------->
     MainScreen,
+    // <----------------- Mian Screen 출력 End ----------------->
 
+    // <-------------- Camera/Microphoe 변경 Start ------------->
     SwitchCamera,
     // <--------------- Camera/Microphoe 변경 End -------------->
 
@@ -267,9 +294,14 @@ export default {
       chatLog: [],
       chatmodal: false,
       // <------------------- 채팅 기능 End ---------------------->
-      active: false,
 
-      // Speech Detection
+      active: false, // tool bar
+
+      // <------------------ 참가자 목록 Start ------------------->
+      participantsmodal: false,
+      // <------------------- 참가자 목록 End -------------------->
+
+      // <---------------- 발언자 하이라이팅 Start ---------------->
       isSpeakList: [],
       isSpeak: false,
       // <----------------- 발언자 하이라이팅 End ----------------->
@@ -400,6 +432,14 @@ export default {
       });
       // <------------------- 채팅 기능 End ---------------------->
 
+      // this.session.on('publisherStartSpeaking', (event) => {
+      //   console.log('User' + event.connection.connectionId + ' start speaking');
+      // });
+
+      // this.session.on('publisherStopSpeaking', (event) => {
+      //   console.log('User' + event.connection.connectionId + ' stop speaking');
+      // });
+
       // Speech Start Detection
       this.session.on('publisherStartSpeaking', event => {
         this.isSpeakList.push(event.connection.connectionId);
@@ -458,6 +498,7 @@ export default {
     },
 
     leaveSession() {
+      // --- Leave the session by calling 'disconnect' method over the Session object ---
       if (this.session) this.session.disconnect();
 
       this.session = undefined;
@@ -480,6 +521,7 @@ export default {
       );
     },
 
+    // See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-openviduapisessions
     createSession(sessionId) {
       return new Promise((resolve, reject) => {
         axios
@@ -517,6 +559,7 @@ export default {
       });
     },
 
+    // See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-openviduapisessionsltsession_idgtconnection
     createToken(sessionId) {
       return new Promise((resolve, reject) => {
         axios
@@ -636,10 +679,18 @@ export default {
       this.closecamera = !this.closecamera;
     },
     startChat() {
-      this.chatmodal = true;
+      this.chatmodal = !this.chatmodal;
     },
     closeChat() {
-      this.chatmodal = false;
+      this.chatmodal = !this.chatmodal;
+    },
+
+    checkParticipants() {
+      this.participantsmodal = !this.participantsmodal;
+    },
+
+    closeParticipants() {
+      this.participantsmodal = !this.participantsmodal;
     },
     // <------------------- 비디오/보이스 On/Off End ------------------->
   },
@@ -666,6 +717,7 @@ div {
 #video-container video {
   display: inline-block;
   position: relative;
+  /* float: left; */
   width: 50%;
   cursor: pointer;
 }
@@ -673,6 +725,7 @@ div {
 #video-container video + div {
   float: left;
   width: 50%;
+  /* position: relative; */
   margin-left: -50%;
 }
 
