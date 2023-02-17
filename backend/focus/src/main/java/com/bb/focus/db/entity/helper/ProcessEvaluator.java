@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Table(name = "process_evaluators")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProcessEvaluator {
 
     @Id

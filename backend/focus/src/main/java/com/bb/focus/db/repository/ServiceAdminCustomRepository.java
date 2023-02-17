@@ -6,6 +6,5 @@ import java.util.Optional;
 public interface ServiceAdminCustomRepository {
 
   ServiceAdmin findServiceAdminByUserId(String userId);
-  ServiceAdmin findServiceAdminById(Long id);
 
 }

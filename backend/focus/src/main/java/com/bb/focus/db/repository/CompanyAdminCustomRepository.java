@@ -6,12 +6,9 @@ import java.util.List;
 public interface CompanyAdminCustomRepository {
 
   CompanyAdmin findCompanyAdminByUserId(String userId);
-  CompanyAdmin findCompanyAdminById(Long id);
 
   List<CompanyAdmin> findAll();
 
   Long updateCompanyAdminByUserId(CompanyAdmin companyAdmin);
-
-  List<CompanyAdmin> findAllContainsToday();
 
 }

@@ -16,10 +16,6 @@ import java.time.LocalDateTime;
 @Setter
 @ApiModel("CompanyAdminResponse")
 public class CompanyAdminRes {
-
-    @ApiModelProperty(name = "User Sequence Number")
-    Long id;
-
     @ApiModelProperty(name = "User ID")
     String userId;
 
@@ -59,7 +55,6 @@ public class CompanyAdminRes {
 
     public static CompanyAdminRes of(CompanyAdmin user) {
         CompanyAdminRes res = new CompanyAdminRes();
-        res.setId(user.getId());
         res.setUserId(user.getUserId());
         res.setCompanyName(user.getCompanyName());
         res.setStartDate(user.getStartDate());
@@ -71,6 +66,7 @@ public class CompanyAdminRes {
         res.setSize(user.getSize());
         res.setLogoImage(user.getLogoImage());
         res.setSkinColor(user.getSkinColor());
+        res.setExpired(user.isExpired());
         return res;
     }
 }
