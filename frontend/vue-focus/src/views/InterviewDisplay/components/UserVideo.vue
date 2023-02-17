@@ -58,8 +58,4 @@ export default {
   margin-bottom: 0;
   font-size: 1.8vh;
 }
-
-.subVideo {
-  /* padding-left: 4rem; */
-}
 </style>

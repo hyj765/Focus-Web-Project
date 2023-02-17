@@ -5,6 +5,10 @@
       <div>
         <SwitchCamera @set-device="setDevice($event)" />
         <div class="form-group">
+          <!-- <p v-show="false">
+            <label>참여자 성함</label>
+            <input v-model="myName" class="form-control" type="text" required />
+          </p> -->
           <p class="space-x-5 text-center">
             <button
               type="button"
@@ -245,7 +249,7 @@ export default {
       // mySessionId: 'Room' + Math.floor(Math.random() * 100),
       // myUserName: '지원자' + Math.floor(Math.random() * 100),
       realRoomCode: '',
-      myName: '',
+      myName: this.username,
       roomid: this.$route.params.id,
 
       // <------------------- 비디오/보이스 On/Off Start ---------->
@@ -284,15 +288,18 @@ export default {
     getMyName() {
       const user = JSON.parse(localStorage.getItem('user'));
       console.log('current user : ', user);
-      console.log('userRole : ', user.userRole);
+      console.log('userRole : ', user.id);
+      console.log('userid : ', user.id);
       if (user.userRole === 1) {
         this.myName = '서비스 관리자';
       } else if (user.userRole === 2) {
         this.myName = '기업 관리자';
       } else if (user.userRole === 3) {
         this.myName = '면접관';
-      } else if (user.userRole === 4) {
-        this.myName = this.username;
+      } else if (user.id === 2004) {
+        this.myName = '김수현';
+      } else if (user.id === 2005) {
+        this.myName = '박보검';
       }
     },
 
