@@ -69,7 +69,7 @@
                         <td
                           class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                         >
-                          <a @click="goDetail()" :data="item">
+                          <a @click="goDetail(item.id)" :data="item">
                             {{ item.title }}
                           </a>
                         </td>
@@ -145,8 +145,11 @@ const router = useRouter();
 const moveToNoticeCreate = () => {
   router.push({ name: 'ServiceNoticeCreate' });
 };
-const goDetail = data => {
-  router.push(`${BASE_URL}/service/notice/${data.id}`);
+const goDetail = serviceNoticeId => {
+  router.push({
+    name: 'ServiceNoticeDetail',
+    params: { id: serviceNoticeId },
+  });
 };
 </script>
 

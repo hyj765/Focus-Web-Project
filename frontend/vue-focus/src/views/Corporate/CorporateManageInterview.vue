@@ -22,14 +22,18 @@
             <div
               class="flex flex-row items-center justify-center px-4 py-2 space-x-4 text-gray-600 bg-white hover:bg-gray-100 rounded-md shadow-md"
             >
-              <p class="text-lg font-bold">{{ interview.name }}</p>
-              <p>|</p>
-              <p>
-                {{ interview.startDate.slice(0, 10) }} ~
-                {{ interview.endDate.slice(0, 10) }}
-              </p>
-              <p>|</p>
-              <p>총 {{ interview.interviewCount }} 차</p>
+              <div
+                class="flex flex-row items-center justify-center px-24 py-4 space-x-4 text-xl font-bold text-gray-600 bg-white rounded-md shadow-md hover:bg-gray-100"
+              >
+                <p class="text-2xl font-black">{{ interview.name }}</p>
+                <p>|</p>
+                <p>
+                  {{ interview.startDate.slice(0, 10) }} ~
+                  {{ interview.startDate.slice(0, 10) }}
+                </p>
+                <p>|</p>
+                <p>총 {{ interview.interviewCount }} 차</p>
+              </div>
             </div>
           </div>
         </div>

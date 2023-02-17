@@ -49,7 +49,7 @@
                         <td
                           class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
                         >
-                          <a href="">
+                          <a @click="goDetail(item.id)" :data="item">
                             {{ item.title }}
                           </a>
                         </td>
@@ -77,6 +77,7 @@ import ServiceNavbar from '@/components/ServiceNavbar.vue';
 
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const boardList = ref([]);
 // const BASE_URL = 'http://localhost:8082/api';
@@ -120,6 +121,14 @@ const getContextList = () => {
     .catch(err => {
       console.log(err);
     });
+};
+
+const router = useRouter();
+const goDetail = faqId => {
+  router.push({
+    name: 'ServiceFAQDetail',
+    params: { id: faqId },
+  });
 };
 </script>
 

@@ -109,25 +109,25 @@
                             <tr>
                               <th
                                 scope="col"
-                                class="px-6 py-4 text-sm font-bold text-left text-gray-900"
+                                class="px-6 py-4 text-lg font-bold text-left text-gray-900"
                               >
                                 세부전형 리스트
                               </th>
                               <th
                                 scope="col"
-                                class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                                class="px-6 py-4 text-lg font-medium text-left text-gray-900"
                               >
                                 전형명
                               </th>
                               <th
                                 scope="col"
-                                class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                                class="px-6 py-4 text-lg font-medium text-left text-gray-900"
                               >
                                 전형기간
                               </th>
                               <th
                                 scope="col"
-                                class="px-6 py-4 text-sm font-medium text-left text-gray-900"
+                                class="px-6 py-4 text-lg font-medium text-left text-gray-900"
                               >
                                 전형차수
                               </th>
@@ -141,23 +141,23 @@
                               class="transition duration-300 ease-in-out bg-white border-b hover:bg-gray-100"
                             >
                               <td
-                                class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap"
+                                class="px-6 py-4 text-lg font-medium text-gray-900 whitespace-nowrap"
                               >
                                 {{ index + 1 }}
                               </td>
                               <td
-                                class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                                class="px-6 py-4 text-lg font-light text-gray-900 whitespace-nowrap"
                               >
                                 {{ interview.name }}
                               </td>
                               <td
-                                class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                                class="px-6 py-4 text-lg font-light text-gray-900 whitespace-nowrap"
                               >
                                 {{ interview.startDate.slice(0, 10) }} ~
                                 {{ interview.endDate.slice(0, 10) }}
                               </td>
                               <td
-                                class="px-6 py-4 text-sm font-light text-gray-900 whitespace-nowrap"
+                                class="px-6 py-4 text-lg font-light text-gray-900 whitespace-nowrap"
                               >
                                 {{ interview.step }} 차
                               </td>

@@ -3,8 +3,10 @@ import LoginView from '@/views/LoginView';
 // 서비스관리자
 import ServiceHomeView from '@/views/Service/ServiceHomeView';
 import ServiceFAQ from '@/views/Service/ServiceFAQ';
+import ServiceFAQDetail from '@/views/Service/ServiceFAQDetail';
 import ServiceNotice from '@/views/Service/ServiceNotice';
 import ServiceNoticeCreate from '@/views/Service/ServiceNoticeCreate';
+import ServiceNoticeDetail from '@/views/Service/ServiceNoticeDetail.vue';
 import ServiceAccount from '@/views/Service/ServiceAccount';
 import ServiceAccountCreate from '@/views/Service/ServiceAccountCreate';
 // 기업관리자
@@ -65,6 +67,12 @@ const routes = [
     beforeEnter: [checkLogin],
   },
   {
+    path: '/service/faq/:id',
+    name: 'ServiceFAQDetail',
+    component: ServiceFAQDetail,
+    beforeEnter: [checkLogin],
+  },
+  {
     path: '/service/notice',
     name: 'ServiceNotice',
     component: ServiceNotice,
@@ -74,6 +82,12 @@ const routes = [
     path: '/service/notice/create',
     name: 'ServiceNoticeCreate',
     component: ServiceNoticeCreate,
+    beforeEnter: [checkLogin],
+  },
+  {
+    path: '/service/notice/:id',
+    name: 'ServiceNoticeDetail',
+    component: ServiceNoticeDetail,
     beforeEnter: [checkLogin],
   },
   {
